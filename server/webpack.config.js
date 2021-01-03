@@ -1,6 +1,7 @@
 'use strict';
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 const { DefinePlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const packageJson = require('./package.json');
@@ -37,6 +38,7 @@ module.exports = (env = {}) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
+      new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
       new DefinePlugin({
         VERSION: JSON.stringify(packageJson.version),
         DEVELOP: env.development,
