@@ -1,5 +1,7 @@
-export const DB_USER : string = 'postgres';
-export const DB_NAME : string = 'hearthstoneClone';
-export const DB_PASSWORD : string = 'password';
-export const DB_PORT : number = 5432;
-
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.DB_PORT = exports.DB_PASSWORD = exports.DB_NAME = exports.DB_USER = void 0;
+exports.DB_USER = 'postgres';
+exports.DB_NAME = 'hearthstoneClone';
+exports.DB_PASSWORD = 'password';
+exports.DB_PORT = 5432;

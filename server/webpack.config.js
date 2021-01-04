@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const { DefinePlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const packageJson = require('./package.json');
+const path = require('path')
 
 module.exports = (env = {}) => {
   const config = {
@@ -30,8 +31,19 @@ module.exports = (env = {}) => {
     module: {
       rules: [
         {
-          test: /\.ts$/,
-          use: 'ts-loader',
+          test: /.ts$/,
+          use:[
+            {
+              loader:'ts-loader'
+            },
+            {
+              loader: 'eslint-loader',
+              options: {
+                configFile: '.eslintrc',
+                fix: true,
+              },
+            },
+          ],
           exclude: /node_modules/,
         },
       ],
