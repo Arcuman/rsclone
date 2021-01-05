@@ -1,10 +1,7 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
-exports.config = void 0;
-const constants_1 = require('../constants/constants');
+const constants = require('../constants/constants');
 exports.config = {
-  user: constants_1.DB_USER,
-  database: constants_1.DB_NAME,
-  password: constants_1.DB_PASSWORD,
-  port: constants_1.DB_PORT,
+  user: constants.DB_USER,
+  database: constants.DB_NAME,
+  password: constants.DB_PASSWORD,
+  port: constants.DB_PORT,
 };
