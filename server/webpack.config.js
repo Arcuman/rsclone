@@ -1,11 +1,9 @@
 'use strict';
-
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const { DefinePlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const packageJson = require('./package.json');
-const path = require('path')
 
 module.exports = (env = {}) => {
   const config = {
