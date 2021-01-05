@@ -1,7 +1,8 @@
-const constants = require('../constants/constants');
-exports.config = {
-  user: constants.DB_USER,
-  database: constants.DB_NAME,
-  password: constants.DB_PASSWORD,
-  port: constants.DB_PORT,
+import {DB_USER, DB_NAME, DB_PASSWORD, DB_PORT} from '@/constants/constants';
+
+export default {
+  user: DB_USER,
+  database: DB_NAME,
+  password: DB_PASSWORD,
+  port: DB_PORT,
 };
