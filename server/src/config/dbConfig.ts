@@ -1,4 +1,4 @@
-import {DB_USER, DB_NAME, DB_PASSWORD, DB_PORT} from '../constants/constants';
+import {DB_USER, DB_NAME, DB_PASSWORD, DB_PORT} from '@/constants/constants';
 
 export default {
   user: DB_USER,
