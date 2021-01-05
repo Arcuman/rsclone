@@ -1,5 +1,4 @@
-export const DB_USER : string = 'postgres';
-export const DB_NAME : string = 'hearthstoneClone';
-export const DB_PASSWORD : string = 'password';
-export const DB_PORT : number = 5432;
-
+exports.DB_USER = 'postgres';
+exports.DB_NAME = 'hearthstoneClone';
+exports.DB_PASSWORD = 'password';
+exports.DB_PORT = 5432;

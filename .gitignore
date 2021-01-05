@@ -1,4 +1,7 @@
 node_modules
 dist
+build
+dist/
+build/
 .idea/
 .vscode/
