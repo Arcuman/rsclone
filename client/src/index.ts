@@ -1,3 +1,3 @@
-window.addEventListener('DOMContentLoaded', (): void => {
-  document.write('sd');
-});
+import test from '@/services/gameSockets.services';
+
+test();
