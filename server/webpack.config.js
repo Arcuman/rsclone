@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const { DefinePlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const packageJson = require('./package.json');
+const path = require('path');
 
 module.exports = (env = {}) => {
   const config = {
@@ -23,6 +24,10 @@ module.exports = (env = {}) => {
     resolve: {
       extensions: ['.ts', '.js'],
       modules: ['node_modules', 'src'],
+      alias: {
+        '@models': path.resolve(__dirname, 'src/models'),
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
     stats: {
       modules: false, // We don't need to see this
@@ -30,18 +35,18 @@ module.exports = (env = {}) => {
     module: {
       rules: [
         {
-          test: /\.ts$/,
+          test: /.ts$/,
           use:[
-             {
-               loader:'ts-loader'
-              },
-             {
+            {
+              loader:'ts-loader'
+            },
+            {
               loader: 'eslint-loader',
               options: {
-                  configFile: '.eslintrc',
-                  fix: true,
+                configFile: '.eslintrc',
+                fix: true,
               },
-            }
+            },
           ],
           exclude: /node_modules/,
         },

@@ -16,6 +16,6 @@
     "module": "CommonJS",
     "target": "ES6",
     "jsx": "react",
-    "jsxFactory": "React.createElement",
+    "jsxFactory": "React.createElement"
   }
 }

@@ -7,4 +7,3 @@ connectToDB(() => {
     //console.log(`App is running on http://localhost:${PORT}`)
   );
 });
-
