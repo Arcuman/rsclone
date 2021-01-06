@@ -1,17 +1,18 @@
 {
-	"compilerOptions": {
-	  "target": "esnext",
-	  "module": "esnext",
-	  "moduleResolution": "node",
-	  "lib": ["dom", "es2018"],
-	  "allowSyntheticDefaultImports": true,
-	  "experimentalDecorators": true,
-	  "noUnusedLocals": true,
-	  "removeComments": true,
-	  "strict": true,
-	  "typeRoots": ["node_modules/@types"]
-	},
-	"exclude": ["node_modules"],
-	"include": ["src/**/*.ts"]
- }
- 
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "rootDir": "./",
+    "module": "CommonJS",
+    "target": "ES6"
+  }
+}

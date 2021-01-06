@@ -31,7 +31,18 @@ module.exports = (env = {}) => {
       rules: [
         {
           test: /\.ts$/,
-          use: 'ts-loader',
+          use:[
+             {
+               loader:'ts-loader'
+              },
+             {
+              loader: 'eslint-loader',
+              options: {
+                  configFile: '.eslintrc',
+                  fix: true,
+              },
+            }
+          ],
           exclude: /node_modules/,
         },
       ],

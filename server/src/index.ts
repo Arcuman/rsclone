@@ -1,11 +1,10 @@
-const { Client } = require('pg');
-const { config } = require('./config/dbConfig');
+import { connectToDB }  from '../db/db.client';
+import { config } from './config/dbConfig';
+import {app} from './app';
 
-const client = new Client(config);
-client.connect();
-client.query('SELECT NOW()', ( err: any , res : any ) => {
-  // eslint-disable-next-line no-console
-  console.log(err, res);
-  client.end();
+connectToDB(() => {
+  app.listen(config.port, () =>
+    //console.log(`App is running on http://localhost:${PORT}`)
+  );
 });
 
