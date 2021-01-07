@@ -61,11 +61,9 @@ module.exports = (env = {}) => {
       }),
     ],
   };
-
   if (env.nodemon) {
     config.watch = true;
     config.plugins.push(new NodemonPlugin());
   }
-
   return config;
 };
