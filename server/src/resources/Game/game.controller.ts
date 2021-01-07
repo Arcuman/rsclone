@@ -7,11 +7,11 @@ import {
   getOpenedRoom,
   isOpenedRoomExist,
 } from '@/resources/Game/game.servicies';
-import {IRoom} from '@/resources/Game/game.models';
+import {Room} from '@/resources/Game/game.models';
 
-export default function gameLogic(io: Server, socket : Socket, rooms: Array<IRoom>) : void {
+export default function gameLogic(io: Server, socket : Socket, rooms: Array<Room>) : void {
   const player = createPlayer(socket);
-  let openRoom : IRoom;
+  let openRoom : Room;
 
   if (isOpenedRoomExist(rooms)) {
     openRoom = getOpenedRoom(rooms);
@@ -29,16 +29,13 @@ export default function gameLogic(io: Server, socket : Socket, rooms: Array<IRoo
     io.to(openRoom.id).emit('waitSecondPlayer');
   }
 
-  socket.on('closeSocket', () => {
+  player.socket.on('closeSocket', () => {
     deletePlayerFromRoom(openRoom.players, player);
     if (openRoom.players.length === 0){
       deleteRoom(rooms, openRoom);
     } else {
       openRoom.players[0].socket.emit('opponentDisconnected');
     }
-    player.socket.disconnect();
-  });
-  player.socket.on('closeSocket', ()=>{
     player.socket.disconnect();
   });
 }

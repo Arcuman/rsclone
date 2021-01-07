@@ -1,10 +1,10 @@
 import { Socket } from 'socket.io';
 
-export interface IPlayer{
+export interface Player{
   socket: Socket;
 }
 
-export interface IRoom {
+export interface Room {
   id: string;
-  players: Array<IPlayer>;
+  players: Array<Player>;
 }
