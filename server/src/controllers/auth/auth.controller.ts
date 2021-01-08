@@ -1,4 +1,4 @@
-import {UserProps} from '../users/user.model';
+import {User} from '../users/user.model';
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -45,7 +45,7 @@ passport.use(
 );
 
 const authenticate = (req:any, res:any, next:any) => {
-  passport.authenticate('bearer', { session: false }, (err:string, user:UserProps) => {
+  passport.authenticate('bearer', { session: false }, (err:string, user:User) => {
     if (err) {
       return next(err);
     }
@@ -65,7 +65,7 @@ const authenticateLocal = (req:any, res:any, next:any) => {
       failureRedirect: '/login',
       session: false,
     },
-    (err:any, user:UserProps) => {
+    (err:any, user:User) => {
       if (err) {
         return next(err);
       }

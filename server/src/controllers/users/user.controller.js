@@ -35,8 +35,7 @@ const findOneByToken = async token => {
   const { user } = await webToken.getDataFromToken(token);
   return await getUserById(user);
 };
-
-module.exports = {
+export const usersService =   {
   getAll,
   getUserById,
   setUser,
@@ -45,3 +44,4 @@ module.exports = {
   checkUserAuth,
   findOneByToken,
 };
+

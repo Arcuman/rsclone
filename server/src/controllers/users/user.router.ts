@@ -1,9 +1,10 @@
 import statusCodes from './user.constants';
+import {usersService} from './user.controller';
+import {User} from './user.model';
+
+const HttpStatus = require('http-status-codes');
 
 const router = require('express').Router();
-// const User = require('./user.model');
-const HttpStatus = require('http-status-codes');
-const usersService = require('./user.controller');
 const { ErrorHandler, catchError } = require('../../helpers/errorHandler');
 const { isUUID } = require('../../helpers/validator');
 
@@ -12,17 +13,17 @@ router
   .get(
     catchError(async (req, res, next) => {
       const users = await usersService.getAll();
-      console.log('user=', statusCodes);
-      res.statusMessage = statusCodes[HttpStatus.OK].all;
+      console.log('user=', users);
+      res.statusMessage = statusCodes[200].all;
       res.contentType = 'application/json';
       res
-        .json(users.map())
-        .status(HttpStatus.OK)
+        .json(users)
+        .status('200')
         .end(); 
       next();
     }),
-  )
-
+  );
+/*
   .post(
     catchError(async (req, res, next) => {
       const newUser = req.body;
@@ -37,7 +38,7 @@ router
       next();
     }),
   );
-
+*/
 router
   .route('/:id')
   .get(
@@ -57,14 +58,14 @@ router
         res.statusMessage = statusCodes[HttpStatus.OK].all;
         res.contentType = 'application/json';
         res
-          .json(User.toResponse(user))
+          .json(user)
           .status(HttpStatus.OK)
           .end();
       }
       next();
     }),
-  )
-
+  );
+/*
   .put(
     catchError(async (req, res, next) => {
       const newUserData = req.body;
@@ -114,5 +115,6 @@ router
       next();
     }),
   );
+  */
 
-module.exports = router;
+export {router};

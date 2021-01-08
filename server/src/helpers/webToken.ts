@@ -1,5 +1,5 @@
 import { JWT_SECRET_KEY } from '../config/config';
-import {UserProps} from '../controllers/users/user.model';
+import {User} from '../controllers/users/user.model';
 
 const jwt = require('jsonwebtoken');
 
@@ -8,7 +8,7 @@ const getDataFromToken = async (token:string) => {
   return { user, login };
 };
 
-const createToken = (user:UserProps) => {
+const createToken = (user:User) => {
   const payload = { user: user.id, login: user.login };
   const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: 1000 });
   return token;

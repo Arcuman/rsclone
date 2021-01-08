@@ -1,7 +1,7 @@
 import { db } from '../../../db';
 import  config  from '../../config/dbConfig';
 
-export interface UserProps {
+export interface User{
   id: string;
   login: string;
   name:string;
@@ -12,29 +12,35 @@ const getAll = async () => {
   let users;
   
   try {
-    console.log('clll=', db);
-    const { rows } = await db.query('Select * from Users', []);
+    const { rows } = await db.query('Select user_id, login,name from "Users"', []);
     
     users = rows; 
   } catch (error) {
-    // throw new Error('500');
+    throw new Error('500');
 
-  } /* finally {
-    db.end();
-  } */
+  } 
   return users;
  
 };
 
-const getUserById = async (id:string) => {
-  // return User.findById(id);
+const getUserById = async (id:string)=> {
+  let user;
+  
+  try {
+    const { rows } = await db.query('Select user_id, login,name from "Users" Where user_id=$1', [id]);
+    user = rows; 
+  } catch (error) {
+    throw new Error('500');
+
+  } 
+  return user; 
 };
 
-const setUser = async (userData:UserProps) => {
+const setUser = async (userData:User) => {
   // return User.create(userData);
 };
 
-const updateUserById = async (id:string, userData:UserProps) => {
+const updateUserById = async (id:string, userData:User) => {
   // return User.updateOne({ _id: id }, userData);
 };
 
