@@ -1,6 +1,7 @@
-const jwt = require('jsonwebtoken');
 import { JWT_SECRET_KEY } from '../config/config';
-import {UserProps} from '../models/user.model';
+import {UserProps} from '../controllers/users/user.model';
+
+const jwt = require('jsonwebtoken');
 
 const getDataFromToken = async (token:string) => {
   const { user, login } = await jwt.verify(token, JWT_SECRET_KEY);

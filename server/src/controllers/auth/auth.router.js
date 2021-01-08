@@ -1,12 +1,12 @@
 const router = require('express').Router();
 
-const usersService = require('../users/user.service');
-//const User = require('../users/user.model');
+const HttpStatus = require('http-status-codes');
+const usersService = require('../users/user.controller');
+// const User = require('../users/user.model');
 
 const { authenticate, authenticateLocal } = require('./auth.controller');
 
-const webToken = require('../helpers/webToken');
-const HttpStatus = require('http-status-codes');
+const webToken = require('../../helpers/webToken');
 
 router.route('/').post(authenticateLocal, async (req, res) => {
   if (!req.user) {

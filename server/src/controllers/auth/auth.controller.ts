@@ -1,5 +1,6 @@
-const passport = require('passport');
 import {UserProps} from '../users/user.model';
+
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 
@@ -22,8 +23,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.use(
@@ -40,7 +41,7 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  })
+  }),
 );
 
 const authenticate = (req:any, res:any, next:any) => {
@@ -73,7 +74,7 @@ const authenticateLocal = (req:any, res:any, next:any) => {
       }
       req.user = user;
       return next();
-    }
+    },
   )(req, res, next);
 };
 

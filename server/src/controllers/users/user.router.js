@@ -1,10 +1,10 @@
 const router = require('express').Router();
-//const User = require('./user.model');
+// const User = require('./user.model');
+const HttpStatus = require('http-status-codes');
 const usersService = require('./user.controller');
 const statusCodes = require('./user.constants.js');
-const { ErrorHandler, catchError } = require('./../../helpers/errorHandler');
-const { isUUID } = require('./../../helpers/validator');
-const HttpStatus = require('http-status-codes');
+const { ErrorHandler, catchError } = require('../../helpers/errorHandler');
+const { isUUID } = require('../../helpers/validator');
 
 router
   .route('/')
@@ -18,7 +18,7 @@ router
         .status(HttpStatus.OK)
         .end();
       next();
-    })
+    }),
   )
 
   .post(
@@ -33,7 +33,7 @@ router
         .status(HttpStatus.OK)
         .end();
       next();
-    })
+    }),
   );
 
 router
@@ -49,7 +49,7 @@ router
       if (!user) {
         throw new ErrorHandler(
           HttpStatus.NOT_FOUND,
-          statusCodes[HttpStatus.NOT_FOUND]
+          statusCodes[HttpStatus.NOT_FOUND],
         );
       } else {
         res.statusMessage = statusCodes[HttpStatus.OK].all;
@@ -60,7 +60,7 @@ router
           .end();
       }
       next();
-    })
+    }),
   )
 
   .put(
@@ -76,7 +76,7 @@ router
       if (!user) {
         throw new ErrorHandler(
           HttpStatus.NOT_FOUND,
-          statusCodes[HttpStatus.NOT_FOUND]
+          statusCodes[HttpStatus.NOT_FOUND],
         );
       } else {
         res.statusMessage = statusCodes[HttpStatus.OK].update;
@@ -87,7 +87,7 @@ router
           .end();
       }
       next();
-    })
+    }),
   )
 
   .delete(
@@ -103,14 +103,14 @@ router
       if (deleteCount === 0) {
         throw new ErrorHandler(
           HttpStatus.NOT_FOUND,
-          statusCodes[HttpStatus.NOT_FOUND]
+          statusCodes[HttpStatus.NOT_FOUND],
         );
       } else {
         res.statusMessage = statusCodes[HttpStatus.NO_CONTENT];
         res.status(HttpStatus.NO_CONTENT).end();
       }
       next();
-    })
+    }),
   );
 
 module.exports = router;
