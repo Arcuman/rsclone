@@ -1,8 +1,9 @@
+import statusCodes from './user.constants';
+
 const router = require('express').Router();
 // const User = require('./user.model');
 const HttpStatus = require('http-status-codes');
 const usersService = require('./user.controller');
-const statusCodes = require('./user.constants.js');
 const { ErrorHandler, catchError } = require('../../helpers/errorHandler');
 const { isUUID } = require('../../helpers/validator');
 
@@ -11,12 +12,13 @@ router
   .get(
     catchError(async (req, res, next) => {
       const users = await usersService.getAll();
+      console.log('user=', statusCodes);
       res.statusMessage = statusCodes[HttpStatus.OK].all;
       res.contentType = 'application/json';
       res
         .json(users.map())
         .status(HttpStatus.OK)
-        .end();
+        .end(); 
       next();
     }),
   )

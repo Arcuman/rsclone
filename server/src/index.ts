@@ -1,10 +1,10 @@
 import connectToDB  from '../db/db.client';
-import config from './config/dbConfig';
+import {PORT} from './config/config';
 import app from './app';
 
-connectToDB(() => {
-  app.listen(config.port, () =>{
-    // console.log(`App is running on http://localhost:${PORT}`)
-  },
-  );
-});
+// connectToDB(() => {
+app.listen(Number(PORT), () =>{
+  // console.log(`App is running on http://localhost:${PORT}`)
+},
+);
+// });

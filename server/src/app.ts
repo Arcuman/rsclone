@@ -14,7 +14,7 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-app.use(passportObj.initialize());
+// app.use(passportObj.initialize());
 
 app.use('/', (req:any, res:any, next:any) => {
   if (req.originalUrl === '/') {
@@ -26,6 +26,6 @@ app.use('/', (req:any, res:any, next:any) => {
 
 // app.use('/users', authenticate, userRouter);
 app.use('/users', userRouter);
-app.use('/login', authRouter);
-app.use('*', authenticate);
+// app.use('/login', authRouter);
+// app.use('*', authenticate);
 export default app;

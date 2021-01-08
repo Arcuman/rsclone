@@ -1,3 +1,6 @@
+import { db } from '../../../db';
+import  config  from '../../config/dbConfig';
+
 export interface UserProps {
   id: string;
   login: string;
@@ -5,8 +8,22 @@ export interface UserProps {
 }
 
 const getAll = async () => {
+  
+  let users;
+  
+  try {
+    console.log('clll=', db);
+    const { rows } = await db.query('Select * from Users', []);
+    
+    users = rows; 
+  } catch (error) {
+    // throw new Error('500');
 
-  // return users;
+  } /* finally {
+    db.end();
+  } */
+  return users;
+ 
 };
 
 const getUserById = async (id:string) => {

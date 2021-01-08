@@ -1,4 +1,4 @@
-export const status = {
+const statusCodes = {
   '200': {
     all: 'Successful operation',
     create: 'The user has been created',
@@ -7,3 +7,4 @@ export const status = {
   '204': 'The user has been deleted',
   '404': 'User not found',
 };
+export default statusCodes;
