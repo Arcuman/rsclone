@@ -1,12 +1,12 @@
 {
+  "root": true,
   "env": {
-    "es6": true,
     "browser": true,
+    "es6": true,
     "node": true
   },
   "extends": [
-    "airbnb-typescript",
-    "airbnb/hooks",
+    "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
@@ -16,53 +16,11 @@
     "project": "./tsconfig.json",
     "ecmaVersion": 6,
     "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "createDefaultProgram": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react-hooks",
-    "jsx-a11y",
-    "import",
-    "react",
-    "prettier"
-  ],
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
-    },
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true,
-        "project": "tsconfig.json"
-      },
-      "webpack": {
-        "config": "./webpack.config.ts"
-      },
-      "node": {
-        "paths": ["src"]
-      }
-    }
-  },
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/indent": ["error", 2],
-    "@typescript-eslint/no-this-alias": "error",
-    "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
-    "@typescript-eslint/no-unused-expressions": ["error"],
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true
-      }
-    ],
-    "@typescript-eslint/semi": [
-      "error",
-      "always"
-    ],
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
@@ -76,105 +34,20 @@
         }
       }
     ],
-    "@typescript-eslint/dot-notation": "off",
-    "arrow-parens": [
+    "@typescript-eslint/quotes": [
       "error",
-      "as-needed"
-    ],
-    "camelcase": "error",
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "eol-last": "error",
-    "semi": "error",
-    "id-blacklist": [
-      "error",
-      "any",
-      "Number",
-      "number",
-      "String",
-      "string",
-      "Boolean",
-      "boolean",
-      "Undefined"
-    ],
-    "id-match": "error",
-    "import/order": ["error", {
-      "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-      "pathGroups": [
-        {
-          "pattern": "@/**/*.pcss",
-          "group": "index"
-        },
-        {
-          "pattern": "@/**",
-          "group": "internal"
-        }
-      ],
-      "newlines-between": "always",
-      "alphabetize": {
-        "order": "asc",
-        "caseInsensitive": false
-      }
-    }],
-    "max-len": [
-      "error",
+      "single",
       {
-        "code": 100,
-        "ignorePattern": "\\s*<",
-        "ignoreComments": true,
-        "ignoreRegExpLiterals": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreTrailingComments": true,
-        "ignoreUrls": true
+        "avoidEscape": true
       }
     ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "dot-notation":"off",
+    "@typescript-eslint/semi": ["error", "always"],
+    "comma-dangle": ["error", "always-multiline"],
+    "max-classes-per-file": "off",
     "no-console": "error",
-    "no-alert": "error",
-    "no-var": "error",
-    "no-multiple-empty-lines": "error",
-    "no-await-in-loop": "off",
-    "prefer-const": "error",
-    "prefer-destructuring": [
-      "error",
-      {
-        "array": false,
-        "object": true
-      }
-    ],
-    "radix": "error",
-    "react/prop-types": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "react/jsx-filename-extension": [1, {
-      "extensions": [".ts", ".tsx"]
-      }
-    ],
-    "react/jsx-fragments" : ["error", "element"],
-    "react/jsx-props-no-spreading": "off",
-    "react/require-default-props": "off",
-    "space-before-function-paren": [
-      "error",
-      {
-        "anonymous": "always",
-        "named": "never"
-      }
-    ],
-    "spaced-comment": [
-      "error",
-      "always",
-      {
-        "markers": [
-          "/"
-        ]
-      }
-    ]
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-redeclare": "error",
+    "no-return-await": "error",
+    "prefer-const": "error"
   }
 }

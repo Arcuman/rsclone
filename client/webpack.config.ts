@@ -9,6 +9,7 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 const isProduction = process.env.NODE_ENV === 'production';
 const isAnalyze = process.env.analyze;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const nothing = () => {};
 
 const formStylesRule = (useModules = false) => ({
@@ -36,7 +37,7 @@ const formStylesRule = (useModules = false) => ({
 const config: Configuration = {
   mode: isProduction ? 'production' : 'development',
   devtool: isProduction ? false : 'source-map',
-  entry: './src/index.tsx',
+  entry: './src/index.ts',
   output: {
     path: resolve(__dirname, 'build'),
     publicPath: '/',
@@ -46,12 +47,18 @@ const config: Configuration = {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+          {
+            loader: 'eslint-loader',
+            options: {
+              configFile: '.eslintrc',
+              fix: true,
+            },
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -80,16 +87,6 @@ const config: Configuration = {
       },
       formStylesRule(false),
       formStylesRule(true),
-      {
-        test: /\.svg$/,
-        loader: 'react-svg-loader',
-        options: {
-          svgo: {
-            plugins: [{ removeUselessStrokeAndFill: false }],
-            floatPrecision: 2,
-          },
-        },
-      },
     ],
   },
   resolve: {
@@ -104,16 +101,14 @@ const config: Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './src/index.html',
     }),
     new MiniCssExtractPlugin({
       chunkFilename: '[id].css',
       filename: '[name].css',
     }),
     isAnalyze ? new BundleAnalyzerPlugin() : nothing,
-    isProduction
-      ? new CopyWebpackPlugin({ patterns: [{ from: './src', to: '.' }] })
-      : nothing,
+    isProduction ? new CopyWebpackPlugin({ patterns: [{ from: './src', to: '.' }] }) : nothing,
   ],
 };
 

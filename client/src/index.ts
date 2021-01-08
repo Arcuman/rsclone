@@ -1,2 +1,3 @@
-const one = 1;
-console.log(one);
+import test from '@/services/gameSockets.services';
+
+test();
