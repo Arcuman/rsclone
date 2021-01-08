@@ -1,11 +1,4 @@
 import {Card} from '@/resources/Card/card.models';
-import { Player } from './Player/player.model';
-
-export interface Room {
-  id: string;
-  isPlayerOneTurn: boolean;
-  players: Array<Player>;
-}
 
 export interface GameState {
   health: number;
