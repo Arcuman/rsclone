@@ -11,12 +11,14 @@ export function generateInitialGameState(room:Room, curPlayer : Player) : GameSt
     currentMana: curPlayer.currentMana,
     deckCountCards: curPlayer.deckCards.length,
     handCards: curPlayer.handCards,
+    tableCards: curPlayer.tableCards,
     enemy: {
       health: enemyPlayer.health,
       maxMana: enemyPlayer.maxMana,
       currentMana:  enemyPlayer.currentMana,
       countCards: enemyPlayer.handCards.length,
       deckCountCards: enemyPlayer.deckCards.length,
+      tableCards: enemyPlayer.tableCards,
     },
     isPlayerOneTurn: room.isPlayerOneTurn,
   };

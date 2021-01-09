@@ -1,17 +1,18 @@
-import { Server, Socket } from 'socket.io';
-import {
-  generateInitialGameState,
-} from '@/resources/Game/game.servicies';
-import {createPlayer} from '@/resources/Game/Player/player.servicies';
+import {Server, Socket} from 'socket.io';
+import {generateInitialGameState} from '@/resources/Game/game.servicies';
+import {createPlayer, getCardById} from '@/resources/Game/Player/player.servicies';
 import {Room} from '@/resources/Game/Room/room.model';
 import {
   createRoom,
   deletePlayerFromRoom,
   deleteRoom,
+  getEnemyPlayer,
   getOpenedRoom,
   isOpenedRoomExist,
 } from '@/resources/Game/Room/room.servicies';
 import {COUNTDOWN_SEC} from '@/resources/Game/constants';
+import {Card} from '@/resources/Card/card.models';
+import {TargetType} from '@/resources/Game/game.models';
 
 function sendInitState(room: Room): void{
   room.players.forEach(player => {
@@ -57,8 +58,63 @@ export default async function gameLogic(io: Server, socket: Socket, rooms: Array
   }
 
   player.socket.on('nextTurn', ()=>{
+    if (openRoom.newRound) {
+      const enemy = getEnemyPlayer(openRoom, player);
+      player.maxMana += 1;
+      enemy.maxMana += 1;
+      player.currentMana = player.maxMana;
+      enemy.currentMana =  enemy.maxMana;
+      io.to(openRoom.id).emit('nextRound', player.maxMana, player.currentMana);
+    }
+    openRoom.newRound = !openRoom.newRound;
     openRoom.isPlayerOneTurn = !openRoom.isPlayerOneTurn;
     openRoom.countDown = COUNTDOWN_SEC + 1;
+    io.to(openRoom.id).emit('nextTurn', openRoom.isPlayerOneTurn);
+  });
+
+  player.socket.on('handCardPlay', (card: Card)=>{
+    if (player.currentMana >= card.manaCost) {
+      player.currentMana -= card.manaCost;
+      player.handCards
+        .splice(player.handCards.findIndex((handCard: Card) => handCard.id === card.id), 1);
+      player.tableCards.push(card);
+      io.to(openRoom.id).emit('handCardPlay', card, openRoom.isPlayerOneTurn);
+    } else {
+      player.socket.emit('notEnoughMana');
+    }
+  });
+
+  player.socket.on('tableCardPlay', (cardId:number, targetType: TargetType, targetId:number)=>{
+    const enemy = getEnemyPlayer(openRoom, player);
+    const playerCard =  getCardById(player, cardId);
+    let enemyCard : Card;
+    switch (targetType) {
+      case TargetType.enemyPlayer:
+        // eslint-disable-next-line no-console
+        console.log('here');
+        enemy.health -= playerCard.attack;
+        io.to(openRoom.id).emit('playerDamage', enemy.health, openRoom.isPlayerOneTurn);
+        break;
+      case TargetType.enemyCard:
+        enemyCard = getCardById(enemy, targetId);
+        enemyCard.health -= playerCard.attack;
+        io.to(openRoom.id).emit('tableCardDamage', enemyCard, !openRoom.isPlayerOneTurn);
+        playerCard.health -= enemyCard.attack;
+        io.to(openRoom.id).emit('tableCardDamage', playerCard, openRoom.isPlayerOneTurn);
+        if (enemyCard.health < 0){
+          enemy.tableCards
+            .splice(enemy.tableCards.findIndex((tableCard) => enemyCard.id === tableCard.id), 1);
+          io.to(openRoom.id).emit('tableCardDestroy', enemyCard, !openRoom.isPlayerOneTurn);
+        }
+        if (playerCard.health < 0){
+          player.tableCards
+            .splice(enemy.tableCards.findIndex((tableCard) => playerCard.id === tableCard.id), 1);
+          io.to(openRoom.id).emit('tableCardDestroy', enemyCard, openRoom.isPlayerOneTurn);
+        }
+        break;
+      default:
+        break;
+    }
   });
 
   player.socket.on('closeSocket', () => {

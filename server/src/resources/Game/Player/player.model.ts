@@ -9,4 +9,5 @@ export interface Player{
   maxMana: number;
   handCards: Array<Card>;
   deckCards: Array<Card>;
+  tableCards: Array<Card>;
 }

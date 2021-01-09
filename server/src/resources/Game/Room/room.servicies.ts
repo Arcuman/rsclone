@@ -24,6 +24,7 @@ export function createRoom(): Room{
     'isPlayerOneTurn': (Math.random() < 0.5),
     'players': [],
     'timer': null,
+    'newRound': false,
     'countDown': COUNTDOWN_SEC,
   };
 }
