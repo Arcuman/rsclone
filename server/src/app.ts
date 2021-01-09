@@ -10,17 +10,16 @@ const path = require('path');
 const YAML = require('yamljs');
 // const { returnError } = require('./helpers/errorHandler');
 
-// app.get('/', (req, res) => res.send('Express + TypeS
 const app = express();
 
+app.use(express.json());
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 app.use(cors());
-// app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 // app.use(passportObj.initialize());
 
-app.use('/', (req:any, res:any, next:any) => {
+app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
     res.send('Service is running!');
     return;

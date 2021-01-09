@@ -5,20 +5,18 @@ const webToken = require('../../helpers/webToken');
 const getAll = () => usersModel.getAll();
 const getUserById = async id => usersModel.getUserById(id);
 
-const setUser = async userData => {
-  const hash = await myCrypt.hashPassword(userData.password);
-  userData.password = hash;
-  return await usersModel.setUser(userData);
-};
+const setUser = async userData =>  await usersModel.setUser(userData);
+
+/* const hash = await myCrypt.hashPassword(userData.password);
+  userData.password = hash; */
 
 const updateUserById = async (id, userData) => {
-  const hash = await myCrypt.hashPassword(userData.password);
-  userData.password = hash;
+  /*const hash = await myCrypt.hashPassword(userData.password);
+  userData.password = hash;*/
   return await usersModel.updateUserById(id, userData);
 };
 
 const deleteUserById = async id => {
-  await tasks.deleteUserInTask(id);
   return await usersModel.deleteUserById(id);
 };
 

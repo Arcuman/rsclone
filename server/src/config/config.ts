@@ -8,7 +8,7 @@ dotenv.config({
 });
 
 const { SALT, JWT_SECRET_KEY } = process.env;
-const PORT = 3000;
+const PORT = 3001;
 
 export  {
   SALT,

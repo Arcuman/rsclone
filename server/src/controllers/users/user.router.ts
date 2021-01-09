@@ -1,6 +1,5 @@
 import statusCodes from './user.constants';
 import {usersService} from './user.controller';
-import {User} from './user.model';
 
 const HttpStatus = require('http-status-codes');
 
@@ -13,8 +12,8 @@ router
   .get(
     catchError(async (req, res, next) => {
       const users = await usersService.getAll();
-      console.log('user=', users);
-      res.statusMessage = statusCodes[200].all;
+      
+      res.statusMessage = statusCodes[HttpStatus.OK].all;
       res.contentType = 'application/json';
       res
         .json(users)
@@ -22,8 +21,8 @@ router
         .end(); 
       next();
     }),
-  );
-/*
+  )
+
   .post(
     catchError(async (req, res, next) => {
       const newUser = req.body;
@@ -32,19 +31,19 @@ router
       res.statusMessage = statusCodes[HttpStatus.OK].update;
       res.contentType = 'application/json';
       res
-        .json(User.toResponse(user))
+        .json(user)
         .status(HttpStatus.OK)
         .end();
       next();
     }),
   );
-*/
+
 router
   .route('/:id')
   .get(
     catchError(async (req, res, next) => {
       const userId = req.params.id;
-      if (!userId || !isUUID(userId)) {
+      if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
       const user = await usersService.getUserById(userId);
@@ -64,14 +63,14 @@ router
       }
       next();
     }),
-  );
-/*
+  )
+
   .put(
     catchError(async (req, res, next) => {
       const newUserData = req.body;
-      const userId = req.params.id;
+      const userId = Number(req.params.id);
 
-      if (!userId || !isUUID(userId)) {
+      if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
       const user = await usersService.updateUserById(userId, newUserData);
@@ -85,23 +84,23 @@ router
         res.statusMessage = statusCodes[HttpStatus.OK].update;
         res.contentType = 'application/json';
         res
-          .json(User.toResponse(user))
+          .json(user)
           .status(HttpStatus.OK)
           .end();
       }
       next();
     }),
-  )
+  ) 
 
   .delete(
     catchError(async (req, res, next) => {
       const userId = req.params.id;
 
-      if (!userId || !isUUID(userId)) {
+      if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
 
-      const deleteCount = await usersService.deleteUserById(userId);
+      const deleteCount:number = await usersService.deleteUserById(userId);
 
       if (deleteCount === 0) {
         throw new ErrorHandler(
@@ -115,6 +114,5 @@ router
       next();
     }),
   );
-  */
 
 export {router};

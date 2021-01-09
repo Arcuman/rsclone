@@ -1,10 +1,5 @@
-import express from 'express';
 import * as http from 'http';
-
 import bidding from './resources/Game/webSocketServer'; 
-import  {router} from './controllers/users/user.router';
-// rest of the code remains same
-
 import {PORT} from './config/config';	
 import app from './app';
 
