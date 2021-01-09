@@ -70,8 +70,17 @@ const deleteUserById = async (id:number):Promise<number>=> {
 };
 
 const getUserByLogin = async (login:string) => {
-  // return User.findOne({ login });
+  let user:User;
+  try {
+    ({ rows: [user]} = await db.query('Select * from "Users" Where login=$1', [login]));
+   
+  } catch (error) {
+    throw new Error('500');
+
+  } 
+  return user; 
 };
+
 export const usersModel = {
   getAll,
   getUserById,
