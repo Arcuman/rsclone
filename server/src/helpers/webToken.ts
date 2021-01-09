@@ -14,7 +14,7 @@ const createToken = (user:User) => {
   return token;
 };
 
-module.exports = {
+export const webToken = {
   getDataFromToken,
   createToken,
 };

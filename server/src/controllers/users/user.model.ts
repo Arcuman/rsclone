@@ -1,5 +1,4 @@
 import { db } from '../../../db';
-import  config  from '../../config/dbConfig';
 
 export interface User{
   id: number;
@@ -8,7 +7,7 @@ export interface User{
   password:string;
 }
 
-const getAll = async () => {
+const getAll = async ():Promise<User[]> => {
   
   let users;
   
@@ -24,7 +23,7 @@ const getAll = async () => {
  
 };
 
-const getUserById = async (id:number)=> {
+const getUserById = async (id:number):Promise<User>=> {
   let user;
   try {
     ({ rows: [user]} = await db.query('Select user_id, login,name from "Users" Where user_id=$1', [id]));
@@ -36,7 +35,7 @@ const getUserById = async (id:number)=> {
   return user; 
 };
 
-const setUser = async (userData:User) => {
+const setUser = async (userData:User):Promise<number> => {
   let user;
   try {
     const query = 'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
@@ -48,7 +47,7 @@ const setUser = async (userData:User) => {
   return  user.user_id;
 };
 
-const updateUserById = async (id:number, userData:User) => {
+const updateUserById = async (id:number, userData:User):Promise<User> => {
   let user;
   try {
     const query = 'UPDATE "Users" Set login=$2, name=$3, password= $4 WHERE user_id=$1  RETURNING *';
@@ -60,7 +59,7 @@ const updateUserById = async (id:number, userData:User) => {
   return  user;
 };
 
-const deleteUserById = async (id:number) => {
+const deleteUserById = async (id:number):Promise<number>=> {
   try {
     const {rowCount} = await db.query('DELETE FROM "Users" WHERE user_id=$1', [id]);
     return rowCount;
@@ -73,7 +72,7 @@ const deleteUserById = async (id:number) => {
 const getUserByLogin = async (login:string) => {
   // return User.findOne({ login });
 };
-export {
+export const usersModel = {
   getAll,
   getUserById,
   setUser,

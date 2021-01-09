@@ -1,11 +1,9 @@
+import HttpStatus from 'http-status-codes';
 import statusCodes from './user.constants';
 import {usersService} from './user.controller';
-
-const HttpStatus = require('http-status-codes');
+import  { ErrorHandler, catchError } from '../../helpers/errorHandler';
 
 const router = require('express').Router();
-const { ErrorHandler, catchError } = require('../../helpers/errorHandler');
-const { isUUID } = require('../../helpers/validator');
 
 router
   .route('/')
