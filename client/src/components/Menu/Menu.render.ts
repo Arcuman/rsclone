@@ -1,39 +1,19 @@
-import { MENU_PAGE_BGR_IMAGE, MENU_START_GAME, MENU_MY_CARDS, MENU_SETTINGS } from './constants';
+import { createHtmlElement } from '@/utils/utils';
+import { createMenuItem } from './MenuItem/MenuItem.render';
+import { MENU_PAGE_BGR_URL, menuItemInfo } from './constants';
+import '@/styles/menu.scss';
+import { MyCastomInterface } from './types';
 
-import createHtmlElement from '../../utils/utils';
-import createMenuItem from './MenuItem/MenuItem.render';
-
-const createMenuPage = (): HTMLElement => {
+export const createMenuPage = (): HTMLElement => {
   const menuBlock: HTMLElement = createHtmlElement('div', 'menu__wrapper');
 
-  const menuStartGameBut: HTMLElement = createMenuItem(
-    'div',
-    'menu__button',
-    MENU_START_GAME,
-    'start-game'
-  );
-  menuBlock.appendChild(menuStartGameBut);
+  menuItemInfo.forEach((elem: MyCastomInterface) => {
+    const menuItem: HTMLElement = createMenuItem('div', 'menu__button', elem.urlImg, elem.name);
+    menuBlock.appendChild(menuItem);
+  });
 
-  const menuCardsBut: HTMLElement = createMenuItem(
-    'div',
-    'menu__button',
-    MENU_MY_CARDS,
-    'my-cards'
-  );
-  menuBlock.appendChild(menuCardsBut);
-
-  const menuSettingBut: HTMLElement = createMenuItem(
-    'div',
-    'menu__button',
-    MENU_SETTINGS,
-    'settings'
-  );
-  menuBlock.appendChild(menuSettingBut);
-
-  document.body.style.background = `url(${MENU_PAGE_BGR_IMAGE}) no-repeat center center fixed`;
+  document.body.style.background = MENU_PAGE_BGR_URL;
   document.body.style.backgroundSize = 'cover';
 
   return menuBlock;
 };
-
-export default createMenuPage;

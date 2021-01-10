@@ -20,6 +20,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "import/prefer-default-export": "off",
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/member-delimiter-style": [
       "error",
@@ -48,6 +49,6 @@
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "no-redeclare": "error",
     "no-return-await": "error",
-    "prefer-const": "error"
+    "prefer-const": "error"    
   }
 }
