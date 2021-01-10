@@ -8,11 +8,8 @@ interface JwtData {
 
 }
 const getDataFromToken =  (token:string):number => {
-  const decodeData = jwt.verify(token, JWT_SECRET_KEY!);
-  // const {user} = JSON.parse(decodeData);
-  console.log('dec=', decodeData);
-  // return { user, login }
-  return 8;
+  const decodeData = <JwtData>jwt.verify(token, JWT_SECRET_KEY!);
+  return decodeData.user;
 }
 ;
 

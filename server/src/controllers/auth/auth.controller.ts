@@ -29,7 +29,6 @@ passport.use(
 
 passport.use(
   new BearerStrategy(async (token:string, done:any) => {
-    // console.log('in bear');
     if (!token) {
       return done(null, false);
     }

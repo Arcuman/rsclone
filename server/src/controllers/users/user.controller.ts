@@ -30,9 +30,7 @@ const checkUserAuth = async (login:string, password:string):Promise<User|null> =
 }; 
 
 const findOneByToken = async (token:string):Promise<User>=> {
-  // console.log('find token=', token);
   const userId = webToken.getDataFromToken(token);
-  // console.log('user=', userId);
   const user = await getUserById(userId);
   return user;
 }; 

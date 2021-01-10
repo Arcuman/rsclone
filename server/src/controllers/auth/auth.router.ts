@@ -14,7 +14,6 @@ declare module 'express' {
 const router = require('express').Router();
 
 router.route('/').post(authenticateLocal, async (req:Request, res:Response) => {
-  // console.log('in login');
   const userData = req.user!;
   if (!userData) {
     res
