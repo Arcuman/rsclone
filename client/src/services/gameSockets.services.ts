@@ -1,3 +1,4 @@
+import { WEBSOCKET_PATH, WEBSOCKET_HOST_PORT } from '@/constants/constants';
 import * as io from 'socket.io-client';
 
 interface Card {
@@ -33,8 +34,8 @@ export enum TargetType {
 }
 
 export default function test(): void {
-  const socket = io.connect('ws://localhost:3000', {
-    path: '/websocket',
+  const socket = io.connect(WEBSOCKET_HOST_PORT, {
+    path: WEBSOCKET_PATH,
   });
   let initialState: GameState;
   let isPlayerOne = false;
@@ -70,7 +71,11 @@ export default function test(): void {
           initialState.tableCards.length
         } `,
       );
-      if (isPlayerOne === isPlayerOneTurn && initialState.enemy.tableCards.length > 0) {
+      if (
+        isPlayerOne === isPlayerOneTurn &&
+        initialState.enemy.tableCards.length > 0 &&
+        initialState.tableCards.length > 0
+      ) {
         socket.emit(
           'tableCardPlay',
           initialState.tableCards[0].id,
