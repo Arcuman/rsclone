@@ -1,19 +1,19 @@
 
 import {myCrypt} from '@/helpers/myCrypt';
-// import {webToken} from '@/helpers/webToken';
+import {webToken} from '@/helpers/webToken';
 import {usersModel, User} from './user.model';
 
 const getAll = ():Promise<User[]> =>  usersModel.getAll();
 const getUserById = (id:number):Promise<User> => usersModel.getUserById(id);
 
 const setUser =  async (userData:User):Promise<number> =>  {
-  const hash =  await myCrypt.hashPassword(userData.password);
+  const hash =  myCrypt.hashPassword(userData.password);
   const newUserData = {...userData, password:hash};
   return usersModel.setUser(newUserData);
 };
 
 const updateUserById = async (id:number, userData:User):Promise<User> => {
-  const hash = await myCrypt.hashPassword(userData.password);
+  const hash = myCrypt.hashPassword(userData.password);
   const newUserData = {...userData, password:hash};
   return usersModel.updateUserById(id, newUserData);
 };
@@ -25,14 +25,18 @@ const checkUserAuth = async (login:string, password:string):Promise<User|null> =
   if (!user) {
     return null;
   }
-  const isCheck = await myCrypt.checkPassword(password, user.password);
+  const isCheck =  myCrypt.checkPassword(password, user.password);
   return isCheck ? user : null;
 }; 
-/*
-const findOneByToken = async (token):Promise<User>=> {
-  const { user } = await webToken.getDataFromToken(token);
-  return getUserById(user);
-}; */
+
+const findOneByToken = async (token:string):Promise<User>=> {
+  // console.log('find token=', token);
+  const userId = webToken.getDataFromToken(token);
+  // console.log('user=', userId);
+  const user = await getUserById(userId);
+  return user;
+}; 
+
 export const usersService =   {
   getAll,
   getUserById,
@@ -40,6 +44,6 @@ export const usersService =   {
   updateUserById,
   deleteUserById,
   checkUserAuth,
-  // findOneByToken,
+  findOneByToken,
 };
 

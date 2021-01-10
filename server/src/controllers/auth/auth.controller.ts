@@ -1,11 +1,11 @@
+import { Request, Response, NextFunction } from 'express';
+import passport from 'passport';
 import {User} from '../users/user.model';
+import {usersService} from '../users/user.controller';
+import statusCodes from '../users/user.constants';
 
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
-
-const usersService = require('../users/user.controller');
-const statusCodes = require('../users/user.constants');
 
 passport.use(
   new LocalStrategy(
@@ -28,7 +28,8 @@ passport.use(
 );
 
 passport.use(
-  new BearerStrategy(async (token:any, done:any) => {
+  new BearerStrategy(async (token:string, done:any) => {
+    // console.log('in bear');
     if (!token) {
       return done(null, false);
     }
@@ -44,7 +45,7 @@ passport.use(
   }),
 );
 
-const authenticate = (req:any, res:any, next:any) => {
+const authenticate = (req:Request, res:Response, next:NextFunction) => {
   passport.authenticate('bearer', { session: false }, (err:string, user:User) => {
     if (err) {
       return next(err);
@@ -58,14 +59,14 @@ const authenticate = (req:any, res:any, next:any) => {
   })(req, res, next);
 };
 
-const authenticateLocal = (req:any, res:any, next:any) => {
+const authenticateLocal = (req:Request, res:Response, next:NextFunction) => {
   passport.authenticate(
     'local',
     {
       failureRedirect: '/login',
       session: false,
     },
-    (err:any, user:User) => {
+    (err:string, user:User) => {
       if (err) {
         return next(err);
       }
@@ -78,4 +79,4 @@ const authenticateLocal = (req:any, res:any, next:any) => {
   )(req, res, next);
 };
 
-module.exports = { authenticate, authenticateLocal };
+export { authenticate, authenticateLocal };

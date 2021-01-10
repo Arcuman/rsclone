@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status-codes';
+import { Request, Response, NextFunction} from 'express';
 import statusCodes from './user.constants';
 import {usersService} from './user.controller';
 import  { ErrorHandler, catchError } from '../../helpers/errorHandler';
@@ -8,27 +9,28 @@ const router = require('express').Router();
 router
   .route('/')
   .get(
-    catchError(async (req, res, next) => {
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
       const users = await usersService.getAll();
       
       res.statusMessage = statusCodes[HttpStatus.OK].all;
-      res.contentType = 'application/json';
+      // res.contentType = res.type('application/json');
       res
+        .type('application/json')
         .json(users)
-        .status('200')
+        .status(200)
         .end(); 
       next();
     }),
   )
 
   .post(
-    catchError(async (req, res, next) => {
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
       const newUser = req.body;
       const user = await usersService.setUser(newUser);
 
       res.statusMessage = statusCodes[HttpStatus.OK].update;
-      res.contentType = 'application/json';
       res
+        .type('application/json')
         .json(user)
         .status(HttpStatus.OK)
         .end();
@@ -39,8 +41,8 @@ router
 router
   .route('/:id')
   .get(
-    catchError(async (req, res, next) => {
-      const userId = req.params.id;
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
+      const userId = Number(req.params.id);
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
@@ -53,8 +55,8 @@ router
         );
       } else {
         res.statusMessage = statusCodes[HttpStatus.OK].all;
-        res.contentType = 'application/json';
         res
+          .type('application/json')
           .json(user)
           .status(HttpStatus.OK)
           .end();
@@ -64,7 +66,7 @@ router
   )
 
   .put(
-    catchError(async (req, res, next) => {
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
       const newUserData = req.body;
       const userId = Number(req.params.id);
 
@@ -80,8 +82,8 @@ router
         );
       } else {
         res.statusMessage = statusCodes[HttpStatus.OK].update;
-        res.contentType = 'application/json';
         res
+          .type('application/json')
           .json(user)
           .status(HttpStatus.OK)
           .end();
@@ -91,8 +93,8 @@ router
   ) 
 
   .delete(
-    catchError(async (req, res, next) => {
-      const userId = req.params.id;
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
+      const userId = Number(req.params.id);
 
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);

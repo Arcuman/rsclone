@@ -3,11 +3,13 @@
 // const passportObj = require('passport');
 import express from 'express';
 import cors from 'cors';
+import swaggerUI from 'swagger-ui-express';
+import path from 'path';
+import YAML from 'yamljs';
+import passport from 'passport';
 import  {router} from './controllers/users/user.router';
+import { authRouter, authenticate } from './controllers/auth/auth.router';
 
-const swaggerUI = require('swagger-ui-express');
-const path = require('path');
-const YAML = require('yamljs');
 // const { returnError } = require('./helpers/errorHandler');
 
 const app = express();
@@ -17,7 +19,7 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 app.use(cors());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-// app.use(passportObj.initialize());
+app.use(passport.initialize());
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
@@ -27,8 +29,8 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-// app.use('/users', authenticate, userRouter);
-app.use('/users', router);
-// app.use('/login', authRouter);
-// app.use('*', authenticate);
+app.use('/users', authenticate, router);
+// app.use('/users', router);
+app.use('/login', authRouter);
+app.use('*', authenticate);
 export default app;

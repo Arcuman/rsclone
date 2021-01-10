@@ -1,7 +1,7 @@
 import { db } from '../../../db';
 
 export interface User{
-  id: number;
+  user_id: number;
   login: string;
   name:string;
   password:string;
@@ -24,7 +24,7 @@ const getAll = async ():Promise<User[]> => {
 };
 
 const getUserById = async (id:number):Promise<User>=> {
-  let user;
+  let user:User;
   try {
     ({ rows: [user]} = await db.query('Select user_id, login,name from "Users" Where user_id=$1', [id]));
    
@@ -36,7 +36,7 @@ const getUserById = async (id:number):Promise<User>=> {
 };
 
 const setUser = async (userData:User):Promise<number> => {
-  let user;
+  let user:User;
   try {
     const query = 'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
     ({ rows:[user] }  = await db.query(query, [userData.login, userData.name, userData.password]));
@@ -48,7 +48,7 @@ const setUser = async (userData:User):Promise<number> => {
 };
 
 const updateUserById = async (id:number, userData:User):Promise<User> => {
-  let user;
+  let user:User;
   try {
     const query = 'UPDATE "Users" Set login=$2, name=$3, password= $4 WHERE user_id=$1  RETURNING *';
     ({ rows:[user] } = await db.query(query, [id.toString(), userData.login, userData.name, userData.password ]));
@@ -69,7 +69,7 @@ const deleteUserById = async (id:number):Promise<number>=> {
   return  0;
 };
 
-const getUserByLogin = async (login:string) => {
+const getUserByLogin = async (login:string):Promise<User> => {
   let user:User;
   try {
     ({ rows: [user]} = await db.query('Select * from "Users" Where login=$1', [login]));
