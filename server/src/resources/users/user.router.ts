@@ -13,7 +13,6 @@ router
       const users = await usersService.getAll();
       
       res.statusMessage = statusCodes[HttpStatus.OK].all;
-      // res.contentType = res.type('application/json');
       res
         .type('application/json')
         .json(users)

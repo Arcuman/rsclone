@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import {User} from '../users/user.model';
 import {usersService} from '../users/user.controller';
+import {ERR_LOGIN_MESSAGE,AUTH_FORM_FIELDS,AUTH_FAILURE_REDIRECT_URL} from './constants';
 import statusCodes from '../users/user.constants';
 
 const LocalStrategy = require('passport-local').Strategy;
@@ -9,13 +10,13 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 
 passport.use(
   new LocalStrategy(
-    { usernameField: 'login', passwordField: 'password' },
+    { usernameField: AUTH_FORM_FIELDS.usernameField, passwordField:AUTH_FORM_FIELDS.usernameField },
     async (username:string, password:string, done:any) => {
       try {
         const user = await usersService.checkUserAuth(username, password);
         if (!user) {
           return done(null, false, {
-            message: 'Bad login/password combination',
+            message: ERR_LOGIN_MESSAGE,
           });
         }
 
@@ -62,7 +63,7 @@ const authenticateLocal = (req:Request, res:Response, next:NextFunction) => {
   passport.authenticate(
     'local',
     {
-      failureRedirect: '/login',
+      failureRedirect: AUTH_FAILURE_REDIRECT_URL,
       session: false,
     },
     (err:string, user:User) => {

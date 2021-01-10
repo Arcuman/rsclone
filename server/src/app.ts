@@ -1,6 +1,3 @@
-// import { authRouter, authenticate } from './controllers/auth/auth.router';
-
-// const passportObj = require('passport');
 import express from 'express';
 import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
@@ -9,8 +6,6 @@ import YAML from 'yamljs';
 import passport from 'passport';
 import  {router} from './resources/users/user.router';
 import { authRouter, authenticate } from './resources/auth/auth.router';
-
-// const { returnError } = require('./helpers/errorHandler');
 
 const app = express();
 
@@ -30,7 +25,6 @@ app.use('/', (req, res, next) => {
 });
 
 app.use('/users', authenticate, router);
-// app.use('/users', router);
 app.use('/login', authRouter);
 app.use('*', authenticate);
 export default app;
