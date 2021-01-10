@@ -1,8 +1,8 @@
 import HttpStatus from 'http-status-codes';
 import { Request, Response, NextFunction} from 'express';
+import  { ErrorHandler, catchError } from '@/helpers/errorHandler';
 import statusCodes from './user.constants';
 import {usersService} from './user.controller';
-import  { ErrorHandler, catchError } from '../../helpers/errorHandler';
 
 const router = require('express').Router();
 

@@ -7,8 +7,8 @@ import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
 import passport from 'passport';
-import  {router} from './controllers/users/user.router';
-import { authRouter, authenticate } from './controllers/auth/auth.router';
+import  {router} from './resources/users/user.router';
+import { authRouter, authenticate } from './resources/auth/auth.router';
 
 // const { returnError } = require('./helpers/errorHandler');
 

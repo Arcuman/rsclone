@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../config/config';
-import {User} from '../controllers/users/user.model';
+import {User} from '../resources/users/user.model';
 
 interface JwtData {
   user:number;
