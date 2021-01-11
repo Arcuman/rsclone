@@ -13,7 +13,7 @@
     "url": "git+https://github.com/Alexey-Koren/webpack-boilerplate.git"
   },
   "scripts": {
-		"start": "webpack-dev-server --open --hot -d",
+    "start": "webpack-dev-server --open --hot -d",
     "build": "cross-env NODE_ENV=production webpack -p",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -f -r build",
