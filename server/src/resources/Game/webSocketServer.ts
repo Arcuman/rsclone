@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { Server, Socket } from 'socket.io';
 import gameLogic from '@/resources/Game/game.controller';
-import {Room} from '@/resources/Game/game.models';
+import {Room} from '@/resources/Game/Room/room.model';
 
 export default (server : http.Server ) : void => {
   const rooms : Array<Room> = [];
@@ -12,8 +12,9 @@ export default (server : http.Server ) : void => {
         origin: '*',
         methods: ['GET', 'POST'],
       }});
-
+  let id = 0;
   io.on('connection', (socket : Socket) : void =>{
-    gameLogic(io, socket, rooms);
+    id = id === 2 ? 1 : id += 1 ;
+    gameLogic(io, socket, rooms, id);
   });
 };
