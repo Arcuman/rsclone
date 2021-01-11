@@ -11,13 +11,13 @@ router
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
       const users = await usersService.getAll();
-      
+
       res.statusMessage = statusCodes[HttpStatus.OK].all;
       res
         .type('application/json')
         .json(users)
         .status(200)
-        .end(); 
+        .end();
       next();
     }),
   )
@@ -89,7 +89,7 @@ router
       }
       next();
     }),
-  ) 
+  )
 
   .delete(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
@@ -113,5 +113,4 @@ router
       next();
     }),
   );
-
 export {router};
