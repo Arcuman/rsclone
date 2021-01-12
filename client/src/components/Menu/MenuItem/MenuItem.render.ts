@@ -1,9 +1,9 @@
 import { createHtmlElement } from '@/utils/utils';
-import { MenuItemType } from './MenuItem.model';
+import { MenuItem } from './MenuItem.model';
 import './menuItem.scss';
 
 const addEventOnButton = (
-  elem: MenuItemType,
+  elem: MenuItem,
   menuItem: HTMLElement,
   menuItemImg: HTMLElement,
 ): void => {
@@ -16,11 +16,7 @@ const addEventOnButton = (
   });
 };
 
-export const createMenuItem = (
-  tagName: string,
-  className = '',
-  elem: MenuItemType,
-): HTMLElement => {
+export const createMenuItem = (tagName: string, className = '', elem: MenuItem): HTMLElement => {
   const menuItem: HTMLElement = createHtmlElement(tagName, className);
   const menuItemImg: HTMLElement = createHtmlElement('img');
 
