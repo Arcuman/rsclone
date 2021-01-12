@@ -17,12 +17,5 @@ const config:ClientConfig = {
   password: DB_PASSWORD,
   port: Number(DB_PORT),
 };
-/*
-export interface DbConfig {
-  user: string | undefined;
-  database: string| undefined;
-  password: string| undefined;
-  port: number| undefined;
-} */
 
 export default config;

@@ -1,8 +1,8 @@
-import {Card, getUserDeckCards} from '@/resources/Card/card.models';
+import {Card, getUserDeckCards} from '@/resources/card/card.models';
 import { Socket } from 'socket.io';
-import {Player} from '@/resources/Game/Player/player.model';
-import {MAX_HEALTH, NUMBER_OF_HAND_CARDS, START_MANA} from '@/resources/Game/constants';
-import {playerDoesntHaveCard} from '@/resources/Game/Player/constants';
+import {Player} from '@/resources/game/player/player.model';
+import {MAX_HEALTH, NUMBER_OF_HAND_CARDS, START_MANA} from '@/resources/game/constants';
+import {playerDoesntHaveCard} from '@/resources/game/player/constants';
 
 function shuffleCards(array:Card[]):Card[] {
   return array.map(a  => [Math.random(), a])
@@ -22,7 +22,7 @@ export async function createPlayer(userId:number, socket: Socket) : Promise<Play
   const cards : Array<Card> = await getUserDeckCards(userId);
   const deckCards : Array<Card> = shuffleCards(cards);
   const handCards : Array<Card> = deckCards.splice(0, NUMBER_OF_HAND_CARDS);
-  return {
+  return <Player>{
     userId,
     health: MAX_HEALTH,
     maxMana: START_MANA,
@@ -31,5 +31,11 @@ export async function createPlayer(userId:number, socket: Socket) : Promise<Play
     deckCards,
     handCards,
     tableCards : [],
+    setMaxMana(value: number):void {
+      this.maxMana = value;
+    },
+    setCurrentMana(value: number):void {
+      this.currentMana = value;
+    },
   };
 }

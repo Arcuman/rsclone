@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import {User} from '../users/user.model';
 import {usersService} from '../users/user.controller';
-import {ERR_LOGIN_MESSAGE,AUTH_FORM_FIELDS,AUTH_FAILURE_REDIRECT_URL} from './constants';
+import {ERR_LOGIN_MESSAGE, AUTH_FORM_FIELDS, AUTH_FAILURE_REDIRECT_URL} from './constants';
 import statusCodes from '../users/user.constants';
 
 const LocalStrategy = require('passport-local').Strategy;

@@ -10,7 +10,8 @@ const TIMER = 'timer';
 const WAIT_SECOND_PLAYER = 'waitSecondPlayer';
 const NEXT_ROUND = 'nextRound';
 const HAND_CARD_PLAY = 'handCardPlay';
-const TABLE_CARD_PLAY = 'tableCardPlay';
+const TABLE_CARD_PLAY_PLAYER_TARGET = 'tableCardPlayTargerPlayer';
+const TABLE_CARD_PLAY_CARD_TARGET = 'tableCardPlayCardTarget';
 const PLAYER_DAMAGE = 'playerDamage';
 const TABLE_CARD_DAMAGE = 'tableCardDamage';
 const TABLE_CARD_DESTROY = 'tableCardDestroy';
@@ -25,7 +26,8 @@ export {
   WAIT_SECOND_PLAYER,
   NEXT_ROUND,
   HAND_CARD_PLAY,
-  TABLE_CARD_PLAY,
+  TABLE_CARD_PLAY_PLAYER_TARGET,
+  TABLE_CARD_PLAY_CARD_TARGET,
   PLAYER_DAMAGE,
   TABLE_CARD_DAMAGE,
   TABLE_CARD_DESTROY,

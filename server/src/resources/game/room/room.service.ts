@@ -1,8 +1,8 @@
-import {Room} from '@/resources/Game/Room/room.model';
+import {Room} from '@/resources/game/room/room.model';
 import {v4 as uuidv4} from 'uuid';
-import {Player} from '@/resources/Game/Player/player.model';
-import {COUNTDOWN_SEC} from '@/resources/Game/constants';
-import {MAX_ROOM_PLAYERS_COUNT, NO_SECOND_PLAYER} from '@/resources/Game/Room/constants';
+import {Player} from '@/resources/game/player/player.model';
+import {COUNTDOWN_SEC} from '@/resources/game/constants';
+import {MAX_ROOM_PLAYERS_COUNT, NO_SECOND_PLAYER} from '@/resources/game/room/constants';
 
 export function getEnemyPlayer(room: Room, curPlayer: Player) : Player{
   const enemyPlayer = room.players.find((player:Player) => player.userId !== curPlayer.userId);
@@ -27,7 +27,27 @@ export function createRoom(): Room{
     'timer': null,
     'newRound': false,
     'countDown': COUNTDOWN_SEC,
+    setCountDown(value: number) {
+      this.countDown = value;
+    },
+    setIsPlayerOneTurn(value: boolean) {
+      this.isPlayerOneTurn = value;
+    },
+    setNewRound(value: boolean) {
+      this.newRound = value;
+    },
   };
+}
+
+export function getOrCreateOpenRoom(rooms: Array<Room>) : Room {
+  let openRoom : Room;
+  if (isOpenedRoomExist(rooms)) {
+    openRoom = getOpenedRoom(rooms);
+  } else {
+    openRoom = createRoom();
+    rooms.push(openRoom);
+  }
+  return openRoom;
 }
 
 export function deleteRoom(rooms : Array<Room>, openRoom : Room) : void{
@@ -36,6 +56,7 @@ export function deleteRoom(rooms : Array<Room>, openRoom : Room) : void{
   );
   rooms.splice(openRoomIndex, 1);
 }
+
 export function deletePlayerFromRoom(players : Array<Player>, player : Player) : void{
   const indexOfPlayer = players.findIndex(
     (roomPlayer) =>

@@ -77,9 +77,8 @@ export default function test(): void {
         initialState.tableCards.length > 0
       ) {
         socket.emit(
-          'tableCardPlay',
+          'tableCardPlayCardTarget',
           initialState.tableCards[0].id,
-          TargetType.enemyCard,
           initialState.enemy.tableCards[0].id,
         );
         // eslint-disable-next-line no-console
