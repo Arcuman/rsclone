@@ -5,10 +5,12 @@ import thunk from 'redux-thunk';
 import { createTable } from './components/GameBoard/Table/Table.render';
 import { testAction } from './redux/actions';
 import { rootReducer } from './redux/rootReducer';
+import { renderMain } from '@/components/Main/Main.render';
 import './styles/styles.scss';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
+renderMain();
 test();
 createTable();
 

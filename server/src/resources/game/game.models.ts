@@ -1,4 +1,4 @@
-import {Card} from '@/resources/Card/card.models';
+import {Card} from '@/resources/card/card.models';
 
 export enum TargetType {
   enemyCard,
