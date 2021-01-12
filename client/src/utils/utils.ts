@@ -12,7 +12,7 @@ export const createHtmlFormElement = (
   method = 'get',
   name = '',
   action = '',
-  className = ''
+  className = '',
 ): HTMLFormElement => {
   const form: HTMLFormElement = document.createElement('form');
 

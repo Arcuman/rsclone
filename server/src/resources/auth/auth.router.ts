@@ -2,7 +2,7 @@ import HttpStatus from 'http-status-codes';
 import {webToken} from '@/helpers/webToken';
 import { Request, Response } from 'express';
 import {usersService} from '../users/user.controller';
-import { authenticate, authenticateLocal } from './auth.controller';
+import { authenticate, clientAuth } from './auth.controller';
 import {User} from '../users/user.model';
 
 declare module 'express' {
@@ -13,13 +13,14 @@ declare module 'express' {
 
 const router = require('express').Router();
 
-router.route('/').post(authenticateLocal, async (req:Request, res:Response) => {
+router.route('/').post(clientAuth, async (req:Request, res:Response) => {
   const userData = req.user!;
   if (!userData) {
     res
       .status(HttpStatus.FORBIDDEN)
       .send(HttpStatus.getStatusText(HttpStatus.FORBIDDEN));
   }
+
   const userId = userData.user_id;
   const user = await usersService.getUserById(userId);
 
@@ -29,7 +30,15 @@ router.route('/').post(authenticateLocal, async (req:Request, res:Response) => {
       .send(HttpStatus.getStatusText(HttpStatus.FORBIDDEN));
   } else {
     const token = webToken.createToken(user);
-    res.send({ user, token });
+    const body = JSON.stringify({user, token });
+    console.log('body=', body);
+ 
+    res
+      .type('application/json')
+      .json(body)
+      .status(HttpStatus.OK)
+      .end();
+    
   }
 });
 

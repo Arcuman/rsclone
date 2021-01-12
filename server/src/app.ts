@@ -11,10 +11,19 @@ const app = express();
 
 app.use(express.json());
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
-app.use(cors());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(passport.initialize());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,Authorization,Origin');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
+app.use(cors());
+app.options('*', cors());
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
@@ -26,5 +35,6 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', authenticate, router);
 app.use('/login', authRouter);
-app.use('*', authenticate);
+app.use('/register', authRouter);
+
 export default app;
