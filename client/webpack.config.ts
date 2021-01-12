@@ -14,24 +14,8 @@ const nothing = () => {};
 
 const formStylesRule = (useModules = false) => ({
   test: /\.(css|scss|sass)$/,
-  [useModules ? 'exclude' : 'include']: /assets\/stylesheets|node_modules/,
-  use: [
-    isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-    {
-      loader: 'css-loader',
-      options: {
-        url: false,
-        importLoaders: 1,
-        sourceMap: true,
-        ...(useModules && {
-          modules: {
-            localIdentName: '[local]-[hash:base64:5]',
-          },
-        }),
-      },
-    },
-    'sass-loader',
-  ],
+  [useModules ? 'exclude' : 'include']: /styles|node_modules/,
+  use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
 });
 
 const config: Configuration = {
