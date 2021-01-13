@@ -19,7 +19,7 @@ import { createHtmlElement } from './utils/utils';
 const routes = [
   { name: 'home', path: '/home', action: () => renderMain('default') },
   { name: 'test-page', path: '/home/test-page', action: () => renderMain('/test-1') },
-  { name: 'test-page-hoba', path: '/home/test-page/hoba', action: () => renderMain('/test-2') },
+  { name: 'hoba', path: '/home/hoba', action: () => renderMain('/test-2') },
 ];
 
 const router = new UniversalRouter(routes);
@@ -28,15 +28,15 @@ const url = generateUrls(router);
 
 const homePage = router.resolve({ pathname: url('home') }).then(res => res);
 homePage.then(res => document.body.append(res!));
-const testPage = router.resolve({ pathname: url('test-page') }).then(res => res);
-const hoba = router.resolve({ pathname: url('test-page-hoba') }).then(res => res);
 
-const oldMain = document.body.lastChild;
+const testPage = router.resolve({ pathname: url('test-page') }).then(res => res);
+const hoba = router.resolve({ pathname: url('hoba') }).then(res => res);
 
 const linkHome = document.createElement('a');
 linkHome.setAttribute('href', '#/home');
 linkHome.append('HOME PAGE');
 linkHome.addEventListener('click', () => {
+  const oldMain = document.querySelector('.main');
   oldMain?.remove();
   homePage.then(res => document.body.append(res!));
 });
@@ -45,14 +45,17 @@ const linkTest = document.createElement('a');
 linkTest.setAttribute('href', '#/home/test-page');
 linkTest.append('TEST PAGE');
 linkTest.addEventListener('click', () => {
+  const oldMain = document.querySelector('.main');
   oldMain?.remove();
   testPage.then(res => document.body.append(res!));
 });
 
 const linkHoba = document.createElement('a');
-linkHoba.setAttribute('href', '#/home/test-page/hoba');
+linkHoba.setAttribute('href', '#/home/hoba');
 linkHoba.append('HOBA');
 linkHoba.addEventListener('click', () => {
+  const oldMain = document.querySelector('.main');
+  console.log('oll=', oldMain);
   oldMain?.remove();
   hoba.then(res => document.body.append(res!));
 });
