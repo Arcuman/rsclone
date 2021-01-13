@@ -36,5 +36,6 @@ app.use('/', (req, res, next) => {
 app.use('/users', authenticate, router);
 app.use('/login', authRouter);
 app.use('/register', authRouter);
+app.use('/refresh-tokens', authRouter);
 
 export default app;

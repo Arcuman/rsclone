@@ -3,11 +3,12 @@ import passport from 'passport';
 import { StatusCodes } from 'http-status-codes';
 import {User} from '../users/user.model';
 import {usersService} from '../users/user.controller';
-import {ERR_LOGIN_MESSAGE, AUTH_FORM_FIELDS, AUTH_FAILURE_REDIRECT_URL} from './constants';
+import {ERR_LOGIN_MESSAGE, AUTH_FORM_FIELDS, AUTH_FAILURE_REDIRECT_URL, AUTH_REFRESH_TOKEN, AUTH_REGISTER} from './constants';
 import statusCodes from '../users/user.constants';
 
 const LocalStrategy = require('passport-local').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+
 
 passport.use(
   'local',
@@ -22,7 +23,7 @@ passport.use(
             message: ERR_LOGIN_MESSAGE,
           });
         }
-
+       
         return done(null, user);
      
       } catch (error) {
@@ -101,11 +102,17 @@ const registerUser = async (req:Request, res:Response, next:NextFunction):Promis
   return next();
 };
 
+const refreshToken =  async (req:Request, res:Response, next:NextFunction):Promise<void> =>{
+  
+};
+
 const clientAuth = (req:Request, res:Response, next:NextFunction):void =>{
-  if (req.baseUrl === AUTH_FAILURE_REDIRECT_URL){
-    authenticateLocal(req, res, next);
-  } else {
+  if (req.baseUrl === AUTH_REGISTER){
     registerUser(req, res, next);
+  } else if (req.baseUrl === AUTH_REFRESH_TOKEN){
+    refreshToken(req, res, next);
+  } else {
+    authenticateLocal(req, res, next);
   }
 
 };
