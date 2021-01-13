@@ -11,9 +11,9 @@ export const renderMain = (): void => {
   const mainEl: HTMLElement = createHtmlElement('main', 'main');
   document.body.appendChild(mainEl);
 
-  // if (isUserAuthenticate() && !isUserJustRegistered()) {
-  mainEl.appendChild(createMenuPage());
-  // } else {
-  //  mainEl.appendChild(renderAuthForms());
-  // }
+  if (isUserAuthenticate() && !isUserJustRegistered()) {
+    mainEl.appendChild(createMenuPage());
+  } else {
+    mainEl.appendChild(renderAuthForms());
+  }
 };
