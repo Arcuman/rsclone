@@ -84,7 +84,7 @@ const authenticateLocal = (req:Request, res:Response, next:NextFunction):void =>
   )(req, res, next);
 };
 
-const registerUser = async (req:Request, res:Response, next:NextFunction) =>{
+const registerUser = async (req:Request, res:Response, next:NextFunction):Promise<void> =>{
   try {
     await usersService.setUser(req.body);
 
