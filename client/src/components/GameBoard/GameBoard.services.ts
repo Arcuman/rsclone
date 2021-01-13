@@ -47,8 +47,8 @@ export function create(this: Phaser.Scene): void {
   const table = createConfig(640, 360, 800, 300, 0xff0088);
   const playerAvatar = createConfig(1040, 650, 100, 100, 0x005588);
   const enemyAvatar = createConfig(240, 70, 100, 100, 0x005588);
-  const timer = createConfig(1190, 360, 150, 150, 0xbb8c08);
-  const endTurnButton = createConfig(50, 360, 75, 75, 0xbbaa98);
+  const timer = createConfig(120, 360, 150, 150, 0xbb8c08);
+  const endTurnButton = createConfig(1160, 360, 75, 75, 0xbbaa98);
   const playerMana = createConfig(220, 650, 200, 50, 0x005588);
   const enemyMana = createConfig(1060, 70, 200, 50, 0x005588);
   const playerDeck = createConfig(1200, 600, 130, 150, 0x00ff88);
