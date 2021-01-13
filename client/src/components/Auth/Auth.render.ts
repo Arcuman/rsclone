@@ -7,7 +7,7 @@ interface RenderFunction {
   (): HTMLElement;
 }
 
-const renderFormField = (name: string, type: string) => {
+const renderFormField = (name: string, type: string): HTMLElement => {
   const label = createHtmlElement('label');
   label.innerHTML = <string>authForm[name];
   const input = createHtmlElement('input', name);
@@ -73,6 +73,7 @@ const setCurrAuthForm = (event: Event) => {
   const renderAuthForm: RenderFunction = <RenderFunction>renderFormFuncs[menuItemId!];
   authWrapper?.append(renderAuthForm());
 };
+
 const renderMenuAuth = (): HTMLElement => {
   const menuAuth = createHtmlElement('ul', 'auth-menu');
 

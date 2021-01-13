@@ -33,8 +33,9 @@ export const handleRegister = (): void => {
         store.dispatch(userRegistered());
       }
     })
-    // eslint-disable-next-line no-console
-    .catch(error => console.log('error=', error));
+    .catch(error => {
+      throw new Error(error);
+    });
 };
 
 export const handleLogin = (): void => {
@@ -56,8 +57,9 @@ export const handleLogin = (): void => {
     .then(obj => {
       store.dispatch(setAuthInformation(JSON.parse(obj)));
     })
-    // eslint-disable-next-line no-console
-    .catch(error => console.log('error=', error));
+    .catch(error => {
+      throw new Error(error);
+    });
 };
 
 export const handleClearForm = (): void => {
