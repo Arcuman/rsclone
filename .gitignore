@@ -6,3 +6,5 @@ build/
 .idea/
 .vscode/
 .env
+
+client/src/assets/images/

@@ -4,8 +4,9 @@ import './styles/styles.scss';
 import { store } from './redux/store/rootStore';
 
 renderMain();
-test();
+
+// test();
 
 store.subscribe(() => {
-  const state = store.getState();
+  renderMain();
 });

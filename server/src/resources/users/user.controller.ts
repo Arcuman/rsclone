@@ -22,10 +22,12 @@ const deleteUserById =  (id:number):Promise<number> => usersModel.deleteUserById
 
 const checkUserAuth = async (login:string, password:string):Promise<User|null> => {
   const user = await usersModel.getUserByLogin(login);
+ 
   if (!user) {
     return null;
   }
   const isCheck =  myCrypt.checkPassword(password, user.password);
+ 
   return isCheck ? user : null;
 }; 
 
