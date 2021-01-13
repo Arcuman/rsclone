@@ -1,6 +1,7 @@
 import test from '@/services/gameSockets.services';
-import { renderMain } from '@/components/Main/Main.render';
+import 'normalize.css';
+import { game } from './components/GameBoard/GameBoard.render';
 import './styles/styles.scss';
 
-renderMain();
+game();
 test();
