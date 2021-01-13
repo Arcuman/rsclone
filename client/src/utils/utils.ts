@@ -7,21 +7,3 @@ export const createHtmlElement = (tagName: string, className = ''): HTMLElement 
 
   return element;
 };
-
-export const createHtmlFormElement = (
-  method = 'get',
-  name = '',
-  action = '',
-  className = '',
-): HTMLFormElement => {
-  const form: HTMLFormElement = document.createElement('form');
-
-  form.method = method;
-  form.name = name;
-  form.action = action;
-  if (className !== '') {
-    form.className = className;
-  }
-
-  return form;
-};

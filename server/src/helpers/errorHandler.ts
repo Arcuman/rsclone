@@ -14,7 +14,7 @@ class ErrorHandler extends Error {
   }
 }
 
-const returnError = (err:ErrorHandler, res:Response) => {
+const returnError = (err:ErrorHandler, res:Response):void => {
   let { statusCode, message } = err;
   if (!statusCode) {
     statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
@@ -26,9 +26,9 @@ const returnError = (err:ErrorHandler, res:Response) => {
     message,
   });
 };
- 
+
 /* eslint consistent-return: 1 */
-const catchError =  (fn:any) => 
+const catchError =  (fn:any):any => 
   async (req:Request, res:Response, next:NextFunction)=> {
     try {
       await fn(req, res, next);

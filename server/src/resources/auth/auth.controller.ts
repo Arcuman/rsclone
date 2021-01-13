@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import { getReasonPhrase, StatusCodes } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import {User} from '../users/user.model';
 import {usersService} from '../users/user.controller';
 import {ERR_LOGIN_MESSAGE, AUTH_FORM_FIELDS, AUTH_FAILURE_REDIRECT_URL} from './constants';
@@ -35,7 +35,6 @@ passport.use(
 passport.use(
   'bearer',
   new BearerStrategy(async (token:string, done:any) => {
-    console.log('bear');
     if (!token) {
       return done(null, false);
     }
@@ -51,7 +50,7 @@ passport.use(
   }),
 );
 
-const authenticate = (req:Request, res:Response, next:NextFunction) => {
+const authenticate = (req:Request, res:Response, next:NextFunction):void => {
   passport.authenticate('bearer', { session: false }, (err:string, user:User) => {
     if (err) {
       return next(err);
@@ -65,7 +64,7 @@ const authenticate = (req:Request, res:Response, next:NextFunction) => {
   })(req, res, next);
 };
 
-const authenticateLocal = (req:Request, res:Response, next:NextFunction) => {
+const authenticateLocal = (req:Request, res:Response, next:NextFunction):void => {
   passport.authenticate(
     'local',
     {
@@ -86,10 +85,8 @@ const authenticateLocal = (req:Request, res:Response, next:NextFunction) => {
 };
 
 const registerUser = async (req:Request, res:Response, next:NextFunction) =>{
-  console.log('b2=', req.body);
   try {
-    const newUser = req.body;
-    const user = await usersService.setUser(req.body);
+    await usersService.setUser(req.body);
 
     res.statusMessage = statusCodes[StatusCodes.OK].create;
     res
@@ -104,12 +101,10 @@ const registerUser = async (req:Request, res:Response, next:NextFunction) =>{
   return next();
 };
 
-const clientAuth = (req:Request, res:Response, next:NextFunction) =>{
+const clientAuth = (req:Request, res:Response, next:NextFunction):void =>{
   if (req.baseUrl === AUTH_FAILURE_REDIRECT_URL){
-    console.log('login');
     authenticateLocal(req, res, next);
   } else {
-    console.log('register');
     registerUser(req, res, next);
   }
 

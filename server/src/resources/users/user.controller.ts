@@ -21,14 +21,13 @@ const updateUserById = async (id:number, userData:User):Promise<User> => {
 const deleteUserById =  (id:number):Promise<number> => usersModel.deleteUserById(id);
 
 const checkUserAuth = async (login:string, password:string):Promise<User|null> => {
-  console.log('check=', password, login);
   const user = await usersModel.getUserByLogin(login);
-  console.log('user =', user );
+ 
   if (!user) {
     return null;
   }
   const isCheck =  myCrypt.checkPassword(password, user.password);
-  console.log('is check=', isCheck);
+ 
   return isCheck ? user : null;
 }; 
 

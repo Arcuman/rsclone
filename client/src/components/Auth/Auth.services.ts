@@ -1,42 +1,23 @@
-import { LOGIN_ACTION, REGISTER_ACTION, HEADER_JSON, authForm } from './constants';
+import { store } from '@/redux/store/rootStore';
+import { setAuthInformation, userRegistered } from '@/redux/actions/actions';
+import { LOGIN_ACTION, REGISTER_ACTION, HEADER_JSON } from './constants';
 
-interface User{
-  user_id: number;
-  login: string;
-  name:string;
-  
-}
-
-interface AuthUser{
-  user:User;
-  token?:string;
-
-}
-
-const checkAuth = ():boolean =>true;
-
-const setUser = (user:User):void =>{
-
-};
-const setToken = (token:string):void =>{
-/*
-fetch(url, { 
-   method: 'POST', 
-   headers: new Headers({
-     'Authorization': 'Bearer ' + token,
-     'Content-Type': 'application/json'
-   }), 
-   body: {  }
-  });
-*/
+export const isUserAuthenticate = (): boolean => {
+  const { token } = store.getState().authUser;
+  return token !== '';
 };
 
-export const handleRegister = ():void =>{
+export const isUserJustRegistered = (): boolean => {
+  const user = store.getState().authUser;
+  return user.userRegistered;
+};
+
+export const handleRegister = (): void => {
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
-  const password =  <HTMLInputElement>document.getElementById('password');
+  const password = <HTMLInputElement>document.getElementById('password');
 
-  const body = JSON.stringify({ 'name':name.value, 'login':login.value, 'password':password.value });
+  const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
 
   const myInit: RequestInit = {
     method: 'POST',
@@ -45,24 +26,22 @@ export const handleRegister = ():void =>{
     cache: 'default',
     body,
   };
-  
+
   fetch(REGISTER_ACTION, myInit)
-    .then((response): Promise<AuthUser> => response.json())
-    .then(obj=>{
-      //! !! присвоить данные стейту
-      // eslint-disable-next-line no-console
-      console.log(obj);
+    .then((response): void => {
+      if (response.status === 200) {
+        store.dispatch(userRegistered());
+      }
     })
     // eslint-disable-next-line no-console
     .catch(error => console.log('error=', error));
-
 };
 
 export const handleLogin = (): void => {
   const login = <HTMLInputElement>document.getElementById('login');
-  const password =  <HTMLInputElement>document.getElementById('password');
+  const password = <HTMLInputElement>document.getElementById('password');
 
-  const body = JSON.stringify({ 'login':login.value, 'password':password.value });
+  const body = JSON.stringify({ login: login.value, password: password.value });
 
   const myInit: RequestInit = {
     method: 'POST',
@@ -73,21 +52,12 @@ export const handleLogin = (): void => {
   };
 
   fetch(LOGIN_ACTION, myInit)
-    .then((response): Promise<AuthUser> => response.json())
-    .then(obj=>{
-      //! !! присвоить данные стейту
-      if (obj.token){
-        setToken(obj.token);
-      }
-      if (obj.user){
-        setUser(obj.user);
-      }
-      // eslint-disable-next-line no-console
-      console.log(obj);
+    .then((response): Promise<string> => response.json())
+    .then(obj => {
+      store.dispatch(setAuthInformation(JSON.parse(obj)));
     })
     // eslint-disable-next-line no-console
     .catch(error => console.log('error=', error));
- 
 };
 
 export const handleClearForm = (): void => {
@@ -97,4 +67,3 @@ export const handleClearForm = (): void => {
   login.value = '';
   password.value = '';
 };
-

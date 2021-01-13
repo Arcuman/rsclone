@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { Server, Socket } from 'socket.io';
-import gameLogic from '@/resources/Game/game.controller';
-import {Room} from '@/resources/Game/Room/room.model';
+import gameLogic from '@/resources/game/game.controller';
+import {Room} from '@/resources/game/room/room.model';
 
 export default (server : http.Server ) : void => {
   /* const rooms : Array<Room> = [];

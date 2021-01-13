@@ -31,8 +31,7 @@ router.route('/').post(clientAuth, async (req:Request, res:Response) => {
   } else {
     const token = webToken.createToken(user);
     const body = JSON.stringify({user, token });
-    console.log('body=', body);
- 
+  
     res
       .type('application/json')
       .json(body)

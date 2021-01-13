@@ -1,0 +1,21 @@
+.menu__button {
+  width: 100%;
+  background: none;
+  border: none;
+  height: calc(50% / 3);
+  min-height: 6rem;
+  max-height: 11rem;
+}
+
+.menu__button:hover {
+  cursor: pointer;
+}
+
+.menu__button img {
+  height: 100%;
+}
+
+.menu__button:active,
+.menu__button:focus {
+  outline: none;
+}

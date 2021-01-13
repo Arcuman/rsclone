@@ -1,6 +1,11 @@
+import './auth.scss';
 import { createHtmlElement } from '@/utils/utils';
 import { authForm } from './constants';
 import { handleLogin, handleClearForm, handleRegister } from './Auth.services';
+
+interface RenderFunction {
+  (): HTMLElement;
+}
 
 const renderFormField = (name: string, type: string) => {
   const label = createHtmlElement('label');
@@ -14,10 +19,10 @@ const renderFormField = (name: string, type: string) => {
 
 const renderLoginForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
-  
+
   form.appendChild(renderFormField('login', 'text'));
   form.appendChild(renderFormField('password', 'password'));
-  
+
   const buttonOk = createHtmlElement('button', 'button-ok');
   buttonOk.innerHTML = 'Login';
   buttonOk.addEventListener('click', () => handleLogin());
@@ -51,22 +56,22 @@ const renderRegisterForm = (): HTMLElement => {
   return form;
 };
 
-const setCurrAuthForm = (event:Event)=>{
+const setCurrAuthForm = (event: Event) => {
   const target = <HTMLElement>event.target;
-  if (target.tagName !== 'LI'){
-    return ;
+  if (target.tagName !== 'LI') {
+    return;
   }
   const menuItemId = target.getAttribute('id');
-  if (!target.classList.contains('active')){
+  if (!target.classList.contains('active')) {
     target.classList.add('active');
     target.closest('li')?.classList.remove('active');
   }
   document.querySelector('.auth-form')?.remove();
   const authWrapper = document.querySelector('.auth-wrapper');
-  const renderFormFuncs = {loginItem:renderLoginForm, registerItem:renderRegisterForm};
-  const renderAuthForm = renderFormFuncs[menuItemId!];
-  authWrapper?.append(renderAuthForm());
 
+  const renderFormFuncs = { loginItem: renderLoginForm, registerItem: renderRegisterForm };
+  const renderAuthForm: RenderFunction = <RenderFunction>renderFormFuncs[menuItemId!];
+  authWrapper?.append(renderAuthForm());
 };
 const renderMenuAuth = (): HTMLElement => {
   const menuAuth = createHtmlElement('ul', 'auth-menu');
@@ -81,8 +86,8 @@ const renderMenuAuth = (): HTMLElement => {
   registerItem.innerHTML = 'Register';
   menuAuth.append(registerItem);
 
-  menuAuth.addEventListener('click', (event)=>setCurrAuthForm(event));
-  
+  menuAuth.addEventListener('click', event => setCurrAuthForm(event));
+
   return menuAuth;
 };
 
