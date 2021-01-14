@@ -1,7 +1,7 @@
 export function createLinkButton(
   link: string,
   nameButton: string,
-  routerType: Promise<HTMLElement | null | undefined>,
+  routerResponse: Promise<HTMLElement | null | undefined>,
 ): HTMLElement {
   const linkButton = document.createElement('a');
   linkButton.setAttribute('href', link);
@@ -9,7 +9,7 @@ export function createLinkButton(
   linkButton.addEventListener('click', () => {
     const oldMain = document.querySelector('.main');
     oldMain?.remove();
-    routerType.then(res => document.body.append(res!));
+    routerResponse.then((elementHTML: HTMLElement) => document.body.append(elementHTML));
   });
   return linkButton;
 }

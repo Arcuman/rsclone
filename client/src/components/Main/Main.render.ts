@@ -7,18 +7,18 @@ export const renderMain = (link: string): HTMLElement => {
   const mainEl: HTMLElement = createHtmlElement('main', 'main');
   mainEl.id = 'main';
 
-   if (isUserAuthenticate() && !isUserJustRegistered()) {
+  if (isUserAuthenticate() && !isUserJustRegistered()) {
     mainEl.appendChild(createMenuPage());
   } else {
     mainEl.appendChild(renderAuthForms());
   }
-  
+
   switch (link) {
-    case '/test-1':
-      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">HELLO WORLD</div>';
+    case '/test-page':
+      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
       break;
-    case '/test-2':
-      mainEl.innerHTML ='<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
+    case '/hoba-page':
+      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
       break;
     default:
       mainEl.appendChild(createMenuPage());

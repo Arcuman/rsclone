@@ -1,7 +1,8 @@
 import { renderMain } from '@/components/Main/Main.render';
+import { Routes } from './types';
 
-export const routes = [
+export const routes: Routes = [
   { name: 'home', path: '/home', action: (): HTMLElement => renderMain('default') },
-  { name: 'test-page', path: '/home/test-page', action: (): HTMLElement => renderMain('/test-1') },
-  { name: 'hoba', path: '/home/hoba', action: (): HTMLElement => renderMain('/test-2') },
+  { name: 'test', path: '/home/test', action: (): HTMLElement => renderMain('/test-page') },
+  { name: 'hoba', path: '/home/hoba', action: (): HTMLElement => renderMain('/hoba-page') },
 ];
