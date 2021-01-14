@@ -1,4 +1,3 @@
-import test from '@/services/gameSockets.services';
 import 'normalize.css';
 import { renderMain } from '@/components/Main/Main.render';
 import { game } from './components/GameBoard/GameBoard.render';
