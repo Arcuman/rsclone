@@ -4,11 +4,6 @@ import { isUserAuthenticate, isUserJustRegistered } from '@/components/Auth/Auth
 import { createMenuPage } from '@/components/Menu/Menu.render';
 
 export const renderMain = (link: string): HTMLElement => {
-  const oldMain = document.querySelector('.main');
-  if (oldMain) {
-    oldMain.remove();
-  }
-
   const mainEl: HTMLElement = createHtmlElement('main', 'main');
   mainEl.id = 'main';
 
