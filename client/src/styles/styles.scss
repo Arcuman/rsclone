@@ -26,3 +26,10 @@ html {
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
+
+.nav-bar{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background: white;
+}

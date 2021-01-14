@@ -3,17 +3,26 @@ import { renderAuthForms } from '@/components/Auth/Auth.render';
 import { isUserAuthenticate, isUserJustRegistered } from '@/components/Auth/Auth.services';
 import { createMenuPage } from '@/components/Menu/Menu.render';
 
-export const renderMain = (): void => {
-  const oldMain = document.querySelector('.main');
-  if (oldMain) {
-    oldMain.remove();
-  }
+export const renderMain = (link: string): HTMLElement => {
   const mainEl: HTMLElement = createHtmlElement('main', 'main');
-  document.body.appendChild(mainEl);
+  mainEl.id = 'main';
 
   if (isUserAuthenticate() && !isUserJustRegistered()) {
     mainEl.appendChild(createMenuPage());
   } else {
     mainEl.appendChild(renderAuthForms());
   }
+
+  switch (link) {
+    case '/test-page':
+      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
+      break;
+    case '/hoba-page':
+      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
+      break;
+    default:
+      mainEl.appendChild(createMenuPage());
+  }
+
+  return mainEl;
 };
