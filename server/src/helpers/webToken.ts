@@ -15,7 +15,7 @@ const getDataFromToken =  (token:string):number => {
 
 const createToken = (user:User):string => {
   const payload = { user: user.user_id, login: user.login };
-  const token =  jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: 1000 });
+  const token =  jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: 3600 });
   return token;
 };
 

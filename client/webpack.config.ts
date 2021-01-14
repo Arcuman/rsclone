@@ -14,7 +14,7 @@ const nothing = () => {};
 
 const formStylesRule = (useModules = false) => ({
   test: /\.(css|scss|sass)$/,
-  [useModules ? 'exclude' : 'include']: /assets\/stylesheets|node_modules/,
+  [useModules ? 'exclude' : 'include']: /styles|node_modules/,
   use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'sass-loader'],
 });
 
