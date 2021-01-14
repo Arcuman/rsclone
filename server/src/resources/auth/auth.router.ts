@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import {usersService} from '../users/user.controller';
 import { authenticate, clientAuth } from './auth.controller';
 import {User} from '../users/user.model';
-import {getNewRefreshToken,createCookieData} from './refreshToken';
+import {RefreshTokensAction, createCookieData} from './refreshToken';
 
 declare module 'express' {
   export interface Request {
@@ -32,8 +32,8 @@ router.route('/').post(clientAuth, async (req:Request, res:Response) => {
   } else {
     
     const accessToken = webToken.createToken(user);
-    const refreshToken = await getNewRefreshToken(userId);
-    const cookies = createCookieData(refreshToken);
+    const refreshToken = await RefreshTokensAction(req);
+    const cookies:Array<any> = createCookieData(refreshToken);
 
     const body = JSON.stringify({
       user, 
@@ -44,6 +44,7 @@ router.route('/').post(clientAuth, async (req:Request, res:Response) => {
     res
       .type('application/json')
       .json(body)
+      .cookie(cookies[0], cookies[1], cookies[2])
       .status(HttpStatus.OK)
       .end();
     
