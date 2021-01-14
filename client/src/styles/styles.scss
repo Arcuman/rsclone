@@ -2,14 +2,27 @@
   font-size: 10px;
 }
 
-* {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 .main {
   width: 100vw;
   height: 100vh;
   display: flex;
+}
+
+body,
+html {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
