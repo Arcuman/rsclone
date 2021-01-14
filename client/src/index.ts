@@ -1,12 +1,14 @@
-import test from '@/services/gameSockets.services';
-import { store } from './redux/store/rootStore';
-
+import 'normalize.css';
 import './styles/styles.scss';
+import { renderMain } from '@/components/Main/Main.render';
+import { game } from './components/GameBoard/GameBoard.render';
+import { store } from './redux/store/rootStore';
 import { createHtmlElement } from './utils/utils';
 import { hoba, homePage, testPage } from './router/routers';
 import { createLinkButton } from './router/createLinkButton';
 
-test();
+game();
+renderMain();
 
 window.onload = () => {
   window.location.replace('#/home');

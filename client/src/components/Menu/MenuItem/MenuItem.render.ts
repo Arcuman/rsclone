@@ -14,6 +14,14 @@ const addEventOnButton = (
   menuItem.addEventListener('mouseout', () => {
     menuItemImg.setAttribute('src', elem.urlImg);
   });
+
+  menuItem.addEventListener('mousedown', () => {
+    menuItemImg.setAttribute('src', elem.urlImgClick);
+  });
+
+  menuItem.addEventListener('mouseup', () => {
+    menuItemImg.setAttribute('src', elem.urlImgHover);
+  });
 };
 
 export const createMenuItem = (tagName: string, className = '', elem: MenuItem): HTMLElement => {

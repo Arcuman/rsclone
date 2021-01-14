@@ -16,5 +16,5 @@ export default (server : http.Server ) : void => {
   io.on('connection', (socket : Socket) : void =>{
     id = id === 2 ? 1 : id += 1 ;
     gameLogic(io, socket, rooms, id);
-  });
+  }); 
 };
