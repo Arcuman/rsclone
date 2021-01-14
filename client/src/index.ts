@@ -4,4 +4,3 @@ import { game } from './components/GameBoard/GameBoard.render';
 import './styles/styles.scss';
 
 game();
-test();
