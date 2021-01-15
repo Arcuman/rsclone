@@ -3,9 +3,9 @@ export interface State {
   user_id: number;
   login: string;
   name: string;
-  tokenExpDate:number;
+  tokenExpDate: number;
   userRegistered: boolean;
-  hasRefreshToken:boolean;
+  hasRefreshToken: boolean;
 }
 
 interface User {
@@ -14,13 +14,9 @@ interface User {
   name: string;
 }
 
-export interface loginUser {
-  login: string;
-}
-
 export interface AuthUser {
   user: User;
   accessToken: string;
-  tokenExpDate?:number;
-  hasRefreshToken:boolean;
+  tokenExpDate?: number;
+  hasRefreshToken: boolean;
 }

@@ -6,9 +6,9 @@ const initialState = {
   user_id: 0,
   login: '',
   name: '',
-  tokenExpDate:0,
+  tokenExpDate: 0,
   userRegistered: false,
-  hasRefreshToken:false,
+  hasRefreshToken: false,
 };
 
 export function authReducer(
@@ -22,7 +22,7 @@ export function authReducer(
         accessToken: action.payload.accessToken,
         tokenExpDate: <number>action.payload.tokenExpDate,
         ...action.payload.user,
-        hasRefreshToken:true,
+        hasRefreshToken: true,
         userRegistered: false,
       };
     case REMOVE_AUTH_USER:
