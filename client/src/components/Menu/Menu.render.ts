@@ -1,4 +1,5 @@
 import { createHtmlElement } from '@/utils/utils';
+import { handleLogout } from '@/components/Auth/Auth.services';
 import { createMenuItem } from './MenuItem/MenuItem.render';
 import { MENU_PAGE_BGR_URL, menuItemInfo } from './constants';
 import './menu.scss';
@@ -9,6 +10,10 @@ export const createMenuPage = (): HTMLElement => {
 
   menuItemInfo.forEach((elem: MenuItem) => {
     const menuItem: HTMLElement = createMenuItem('button', 'menu__button', elem);
+    menuItem.setAttribute('id', elem.name);
+    if (elem.name === 'exit') {
+      menuItem.addEventListener('click', () => handleLogout());
+    }
     menuBlock.appendChild(menuItem);
   });
 

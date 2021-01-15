@@ -9,11 +9,11 @@ const url = generateUrls(router);
 export const homePage: Promise<HTMLElement | null | undefined> = router
   .resolve({ pathname: url('home') })
   .then((response: RouteResult<HTMLElement>) => response);
-
+/*
 export const testPage: Promise<HTMLElement | null | undefined> = router
   .resolve({ pathname: url('test') })
   .then((response: RouteResult<HTMLElement>) => response);
 
 export const hobaPage: Promise<HTMLElement | null | undefined> = router
   .resolve({ pathname: url('hoba') })
-  .then((response: RouteResult<HTMLElement>) => response);
+  .then((response: RouteResult<HTMLElement>) => response); */

@@ -3,6 +3,6 @@ import { Routes } from './types';
 
 export const routes: Routes = [
   { name: 'home', path: '/home', action: (): HTMLElement => renderMain('default') },
-  { name: 'test', path: '/home/test', action: (): HTMLElement => renderMain('/test-page') },
-  { name: 'hoba', path: '/home/hoba', action: (): HTMLElement => renderMain('/hoba-page') },
+  /* { name: 'test', path: '/home/test', action: (): HTMLElement => renderMain('/test-page') },
+  { name: 'hoba', path: '/home/hoba', action: (): HTMLElement => renderMain('/hoba-page') }, */
 ];
