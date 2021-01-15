@@ -8,8 +8,6 @@ export const renderMain = (link: string): HTMLElement => {
   mainEl.id = 'main';
 
   if (isUserAuthenticate() && !isUserJustRegistered()) {
-    // eslint-disable-next-line no-console
-    console.log('2');
     switch (link) {
       case '/test-page':
         mainEl.innerHTML =
@@ -19,12 +17,14 @@ export const renderMain = (link: string): HTMLElement => {
         mainEl.innerHTML =
           '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
         break;
+      case '/auth':
+        mainEl.appendChild(renderAuthForms());
+        break;
       default:
         mainEl.appendChild(createMenuPage());
     }
   } else {
-    // eslint-disable-next-line no-console
-    console.log(1);
+    mainEl.appendChild(renderAuthForms());
   }
   return mainEl;
 };

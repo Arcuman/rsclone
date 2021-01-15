@@ -14,6 +14,8 @@ const options = {
   resolveRoute(context: RouteContext, params: RouteParams): RouteResult<HTMLElement> {
     // eslint-disable-next-line no-console
     console.log('resolveRoute');
+    // eslint-disable-next-line no-console
+    console.log(context);
     if (typeof context.route.action === 'function') {
       return <RouteResult<HTMLElement>>context.route.action(context, params);
     }
