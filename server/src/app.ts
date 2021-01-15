@@ -16,13 +16,12 @@ app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(passport.initialize());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,Authorization,Origin');
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
 
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
 app.options('*', cors());
 
 app.use('/', (req, res, next) => {
@@ -35,6 +34,8 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', authenticate, router);
 app.use('/login', authRouter);
+app.use('/logout', authRouter);
 app.use('/register', authRouter);
+app.use('/refresh-tokens', authRouter);
 
 export default app;

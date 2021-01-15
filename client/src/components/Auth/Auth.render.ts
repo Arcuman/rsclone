@@ -38,7 +38,7 @@ const renderLoginForm = (): HTMLElement => {
 
 const renderRegisterForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
-
+  form.appendChild(createHtmlElement('div', 'auth-message'));
   form.appendChild(renderFormField('name', 'text'));
   form.appendChild(renderFormField('login', 'text'));
   form.appendChild(renderFormField('password', 'password'));
@@ -46,6 +46,7 @@ const renderRegisterForm = (): HTMLElement => {
   const buttonOk = createHtmlElement('button', 'button-ok');
   buttonOk.innerHTML = 'Register';
   buttonOk.addEventListener('click', () => handleRegister());
+
   form.appendChild(buttonOk);
 
   const buttonCancel = createHtmlElement('button', 'button-cancel');

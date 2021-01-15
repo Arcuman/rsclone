@@ -29,12 +29,13 @@ const returnError = (err:ErrorHandler, res:Response):void => {
 
 /* eslint consistent-return: 1 */
 const catchError =  (fn:any):any => 
-  async (req:Request, res:Response, next:NextFunction)=> {
+  async (req:Request, res:Response, next:NextFunction):Promise<void>=> {
     try {
       await fn(req, res, next);
     } catch (error) {
       return next(error);
     }  
+    return next();
   };
 
 export  {
