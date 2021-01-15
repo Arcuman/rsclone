@@ -8,21 +8,23 @@ export const renderMain = (link: string): HTMLElement => {
   mainEl.id = 'main';
 
   if (isUserAuthenticate() && !isUserJustRegistered()) {
-    mainEl.appendChild(createMenuPage());
+    // eslint-disable-next-line no-console
+    console.log('2');
+    switch (link) {
+      case '/test-page':
+        mainEl.innerHTML =
+          '<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
+        break;
+      case '/hoba-page':
+        mainEl.innerHTML =
+          '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
+        break;
+      default:
+        mainEl.appendChild(createMenuPage());
+    }
   } else {
-    mainEl.appendChild(renderAuthForms());
+    // eslint-disable-next-line no-console
+    console.log(1);
   }
-
-  switch (link) {
-    case '/test-page':
-      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
-      break;
-    case '/hoba-page':
-      mainEl.innerHTML = '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
-      break;
-    default:
-      mainEl.appendChild(createMenuPage());
-  }
-
   return mainEl;
 };
