@@ -1,1 +1,1 @@
-export const EXPIRE_IN_TOKEN:number = 3600;
+export const EXPIRE_IN_TOKEN = 3600;

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import {EXPIRE_IN_TOKEN} from '@/constants/constants';
 import { JWT_SECRET_KEY } from '../config/config';
 import {User} from '../resources/users/user.model';
-import {EXPIRE_IN_TOKEN} from '@/constants/constants';
 
 interface JwtData {
   user:number;

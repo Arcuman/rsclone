@@ -1,10 +1,50 @@
 import { store } from '@/redux/store/rootStore';
-import { setAuthInformation, userRegistered } from '@/redux/actions/actions';
-import { LOGIN_ACTION, REGISTER_ACTION, HEADER_JSON } from './constants';
+import {AuthUser, loginUser} from '@/types/types';
+import { setAuthInformation, removeAuthInformation, userRegistered } from '@/redux/actions/actions';
+import { LOGIN_ACTION, LOGOUT_ACTION, REGISTER_ACTION, HEADER_JSON, REFRESH_TOKEN } from './constants';
+import {parseTokenData} from './webToken.service';
+
+const refreshTokenSession = async ():Promise<boolean> =>{
+  const myInit: RequestInit = {
+    method: 'POST',
+    headers: HEADER_JSON,
+    mode: 'cors',
+    cache: 'default',
+    credentials:'include',
+    body:'',
+  };
+  
+  return fetch(REFRESH_TOKEN, myInit)
+    .then((response): Promise<string> => response.json())
+    .then((obj:string)=> {
+      const authObj:AuthUser = JSON.parse(obj);
+      if (!authObj.accessToken){
+        return false;
+      }
+      const {exp} = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = <number>exp;
+      store.dispatch(setAuthInformation(authObj));
+      localStorage.setItem('refreshToken', '1');
+      return true;
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+
+};
 
 export const isUserAuthenticate = (): boolean => {
-  const { token } = store.getState().authUser;
-  return token !== '';
+  console.log('check auth');
+  const { accessToken } = store.getState().authUser;
+  if (accessToken !== ''){
+    return true;
+  }
+   
+  if (localStorage.getItem('refreshToken')){
+    const isAuth = refreshTokenSession();
+    console.log('token th ===', isAuth);
+  }
+  return false;
 };
 
 export const isUserJustRegistered = (): boolean => {
@@ -24,6 +64,7 @@ export const handleRegister = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
+    credentials:'include',
     body,
   };
 
@@ -49,13 +90,42 @@ export const handleLogin = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
+    credentials:'include',
     body,
   };
 
   fetch(LOGIN_ACTION, myInit)
     .then((response): Promise<string> => response.json())
-    .then(obj => {
-      store.dispatch(setAuthInformation(JSON.parse(obj)));
+    .then((obj:string)=> {
+      const authObj:AuthUser = JSON.parse(obj);
+      const {exp} = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = <number>exp;
+      store.dispatch(setAuthInformation(authObj));
+      localStorage.setItem('refreshToken', '1');
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+};
+
+export const handleLogout = (): void => {
+  const body = JSON.stringify({ login: store.getState().authUser.login});
+
+  const myInit: RequestInit = {
+    method: 'POST',
+    headers: HEADER_JSON,
+    mode: 'cors',
+    cache: 'default',
+    credentials:'include',
+    body,
+  };
+
+  fetch(LOGOUT_ACTION, myInit)
+    .then((response): Promise<string> => response.json())
+    .then((obj:string) => {
+      const loginUserObj:loginUser = JSON.parse(obj);
+      store.dispatch(removeAuthInformation(loginUserObj.login));
+      localStorage.removeItem('refreshToken');
     })
     .catch(error => {
       throw new Error(error);
@@ -69,3 +139,4 @@ export const handleClearForm = (): void => {
   login.value = '';
   password.value = '';
 };
+

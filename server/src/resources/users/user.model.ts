@@ -8,11 +8,10 @@ export interface User {
 }
 
 export interface Session {
-  refreshToken: string,
+  refreshToken: string;
   user_id: number;
   ip: string;
   expiresIn: number;
-  ua: string;
 }
 
 const getAll = async (): Promise<User[]> => {
@@ -28,7 +27,6 @@ const getAll = async (): Promise<User[]> => {
 
   }
   return users;
-
 };
 
 const getUserById = async (id: number): Promise<User> => {
@@ -89,22 +87,25 @@ const getUserByLogin = async (login: string): Promise<User> => {
   return user;
 };
 
-
 const getSessionByRefreshToken = async (token: string): Promise<Session> => {
+  console.log('in get');
   let session: Session;
+  console.log('in get');
   try {
-    ({ rows: [session] } = await db.query('Select * From "UsersRefreshSession" Where refreshToken=$1', [token]));
-
+    console.log('in get', token);
+    ({ rows: [session] } = await db.query('Select * From "UsersRefreshSession" Where "refreshToken"=$1', [token]));
+    console.log('in get');
   } catch (error) {
     throw new Error('500');
 
   }
+  console.log('sess=', session);
   return session;
 };
 
 const deleteSessionByRefreshToken = async (token: string): Promise<number> => {
   try {
-    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE refreshToken=$1', [token]);
+    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "refreshToken"=$1', [token]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -112,14 +113,14 @@ const deleteSessionByRefreshToken = async (token: string): Promise<number> => {
   return 0;
 };
 
-const addRefreshSession = async ({refreshToken,user_id,ip,expiresIn,ua}: Session): Promise<string> => {
+const addRefreshSession = async ({ refreshToken, user_id, ip, expiresIn}: Session): Promise<string> => {
   let session: Session;
+ 
   try {
-    const query = 'INSERT INTO "UsersRefreshSession" (refreshToken, user_id, ip,expiresIn,ua) VALUES ($1, $2, $3,$4,$5 ) RETURNING refreshToken';
-    ({ rows: [session] } = await db.query(query, [refreshToken, user_id, ip, expiresIn, ua]);
-
+    ({ rows: [session] } = await db.query(`INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn") 
+                                            VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`, []));
   } catch (error) {
-    throw new Error('500');
+    throw new Error(error);
   }
   return session.refreshToken;
 };
@@ -133,5 +134,5 @@ export const usersModel = {
   getUserByLogin,
   getSessionByRefreshToken,
   deleteSessionByRefreshToken,
-  addRefreshSession
+  addRefreshSession,
 };
