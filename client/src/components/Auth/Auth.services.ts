@@ -24,13 +24,17 @@ const refreshTokenSession = async (): Promise<boolean> => {
     .then((response): Promise<string> => response.json())
     .then((obj: string) => {
       const authObj: AuthUser = <AuthUser>JSON.parse(obj);
+
       if (!authObj.accessToken) {
         return false;
       }
+
       const { exp } = parseTokenData(authObj.accessToken);
       authObj.tokenExpDate = exp;
+
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', '1');
+
       return true;
     })
     .catch(error => {
@@ -38,16 +42,18 @@ const refreshTokenSession = async (): Promise<boolean> => {
     });
 };
 
-export const isUserAuthenticate = (): boolean => {
+export const isUserAuthenticate = async (): Promise<boolean> => {
   const { accessToken } = store.getState().authUser;
+
   if (accessToken !== '' && !isAccessTokenExpired()) {
     return true;
   }
 
   if (localStorage.getItem('refreshToken')) {
-    refreshTokenSession();
+    await refreshTokenSession();
     return store.getState().authUser.accessToken !== '';
   }
+
   return false;
 };
 
@@ -60,6 +66,7 @@ export const handleRegister = (): void => {
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
+  const message = <HTMLInputElement>document.querySelector('.auth-message');
 
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
 
@@ -80,8 +87,8 @@ export const handleRegister = (): void => {
 
       store.dispatch(userRegistered());
     })
-    .catch(error => {
-      throw new Error(error);
+    .catch(() => {
+      message.innerHTML = 'Error! Has already registered';
     });
 };
 

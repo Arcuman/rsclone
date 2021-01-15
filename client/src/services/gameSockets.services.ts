@@ -28,11 +28,6 @@ interface GameState {
   };
 }
 
-export enum TargetType {
-  enemyCard,
-  enemyPlayer,
-}
-
 export default function test(): void {
   const socket = io.connect(WEBSOCKET_HOST_PORT, {
     path: WEBSOCKET_PATH,

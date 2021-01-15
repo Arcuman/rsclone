@@ -82,7 +82,7 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
       }
      
       if (!user) {
-        res.status(403).send(statusCodes[403]);
+        return next();
       }
       req.user = user;
       return next();
@@ -162,12 +162,14 @@ const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
 
 export const sendAuthResponseToClient =  async (req:Request, res:Response):Promise<void>=> {
   const userData = req.user!;
-  
+
   if (!userData) {
     res
       .status(StatusCodes.FORBIDDEN)
       .send(getReasonPhrase(StatusCodes.FORBIDDEN));
+    return;
   }
+  
   let newRefreshToken =  req.baseUrl === '/refresh-tokens' ? JSON.parse(req.body)?.token : '';
   
   const userId = userData.user_id;
@@ -177,25 +179,27 @@ export const sendAuthResponseToClient =  async (req:Request, res:Response):Promi
     res
       .status(StatusCodes.FORBIDDEN)
       .send(getReasonPhrase(StatusCodes.FORBIDDEN));
-  } else {
-    const accessToken = webToken.createToken(user);
-    if (!newRefreshToken || newRefreshToken===''){
-      newRefreshToken =  await getNewRefreshToken(userId, req);
-    }
-    const cookies:Cookie = createCookieData(newRefreshToken);
-   
-    const body = JSON.stringify({
-      user, 
-      accessToken,
-      refreshToken:newRefreshToken,
-    });
-   
-    res
-      .cookie(cookies.name, cookies.value, cookies.options)
-      .type('application/json')
-      .json(body)      
-      .status(StatusCodes.OK)
-      .end();
+    return;
   }
+
+  const accessToken = webToken.createToken(user);
+  if (!newRefreshToken || newRefreshToken===''){
+    newRefreshToken =  await getNewRefreshToken(userId, req);
+  }
+  const cookies:Cookie = createCookieData(newRefreshToken);
+   
+  const body = JSON.stringify({
+    user, 
+    accessToken,
+    refreshToken:newRefreshToken,
+  });
+   
+  res
+    .cookie(cookies.name, cookies.value, cookies.options)
+    .type('application/json')
+    .json(body)      
+    .status(StatusCodes.OK)
+    .end();
+  
 };
 export { authenticate, authenticateLocal, clientAuth };

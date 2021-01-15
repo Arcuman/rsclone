@@ -38,7 +38,7 @@ const renderLoginForm = (): HTMLElement => {
 
 const renderRegisterForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
-
+  form.appendChild(createHtmlElement('div', 'auth-message'));
   form.appendChild(renderFormField('name', 'text'));
   form.appendChild(renderFormField('login', 'text'));
   form.appendChild(renderFormField('password', 'password'));
