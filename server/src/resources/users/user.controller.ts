@@ -1,12 +1,17 @@
 
 import {myCrypt} from '@/helpers/myCrypt';
 import {webToken} from '@/helpers/webToken';
-import {usersModel, User} from './user.model';
+import {usersModel, User, Session} from './user.model';
 
 const getAll = ():Promise<User[]> =>  usersModel.getAll();
 const getUserById = (id:number):Promise<User> => usersModel.getUserById(id);
+const getUserByLogin = (login:string):Promise<User> => usersModel.getUserByLogin(login);
 
 const setUser =  async (userData:User):Promise<number> =>  {
+  const user = await usersModel.getUserByLogin(userData.login);
+  if (user) {
+    return 0;
+  }
   const hash =  myCrypt.hashPassword(userData.password);
   const newUserData = {...userData, password:hash};
   return usersModel.setUser(newUserData);
@@ -37,13 +42,24 @@ const findOneByToken = async (token:string):Promise<User>=> {
   return user;
 }; 
 
+const getSessionByRefreshToken = (token:string):Promise<Session> => usersModel.getSessionByRefreshToken(token);
+const deleteSessionByRefreshToken =  (token:string):Promise<number> => usersModel.deleteSessionByRefreshToken(token);
+const deleteSessionByUserId =  (id:number):Promise<number> => usersModel.deleteSessionByUserId(id);
+
+const addRefreshSession =  async (newRefreshSession:Session):Promise<string> =>  usersModel.addRefreshSession(newRefreshSession);
+
 export const usersService =   {
   getAll,
   getUserById,
+  getUserByLogin,
   setUser,
   updateUserById,
   deleteUserById,
   checkUserAuth,
   findOneByToken,
+  getSessionByRefreshToken,
+  deleteSessionByRefreshToken,
+  deleteSessionByUserId,
+  addRefreshSession,
 };
 

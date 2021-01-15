@@ -1,28 +1,34 @@
 import { store } from '@/redux/store/rootStore';
-import {AuthUser, loginUser} from '@/types/types';
+import { AuthUser } from '@/types/types';
 import { setAuthInformation, removeAuthInformation, userRegistered } from '@/redux/actions/actions';
-import { LOGIN_ACTION, LOGOUT_ACTION, REGISTER_ACTION, HEADER_JSON, REFRESH_TOKEN } from './constants';
-import {parseTokenData} from './webToken.service';
+import {
+  LOGIN_ACTION,
+  LOGOUT_ACTION,
+  REGISTER_ACTION,
+  HEADER_JSON,
+  REFRESH_TOKEN,
+} from './constants';
+import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
-const refreshTokenSession = async ():Promise<boolean> =>{
+const refreshTokenSession = async (): Promise<boolean> => {
   const myInit: RequestInit = {
     method: 'POST',
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
-    credentials:'include',
-    body:'',
+    credentials: 'include',
+    body: '',
   };
-  
+
   return fetch(REFRESH_TOKEN, myInit)
     .then((response): Promise<string> => response.json())
-    .then((obj:string)=> {
-      const authObj:AuthUser = JSON.parse(obj);
-      if (!authObj.accessToken){
+    .then((obj: string) => {
+      const authObj: AuthUser = <AuthUser>JSON.parse(obj);
+      if (!authObj.accessToken) {
         return false;
       }
-      const {exp} = parseTokenData(authObj.accessToken);
-      authObj.tokenExpDate = <number>exp;
+      const { exp } = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = exp;
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', '1');
       return true;
@@ -30,19 +36,17 @@ const refreshTokenSession = async ():Promise<boolean> =>{
     .catch(error => {
       throw new Error(error);
     });
-
 };
 
 export const isUserAuthenticate = (): boolean => {
-  console.log('check auth');
   const { accessToken } = store.getState().authUser;
-  if (accessToken !== ''){
+  if (accessToken !== '' && !isAccessTokenExpired()) {
     return true;
   }
-   
-  if (localStorage.getItem('refreshToken')){
-    const isAuth = refreshTokenSession();
-    console.log('token th ===', isAuth);
+
+  if (localStorage.getItem('refreshToken')) {
+    refreshTokenSession();
+    return store.getState().authUser.accessToken !== '';
   }
   return false;
 };
@@ -64,15 +68,17 @@ export const handleRegister = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
-    credentials:'include',
+    credentials: 'include',
     body,
   };
 
   fetch(REGISTER_ACTION, myInit)
     .then((response): void => {
-      if (response.status === 200) {
-        store.dispatch(userRegistered());
+      if (response.status !== 200) {
+        throw new Error();
       }
+
+      store.dispatch(userRegistered());
     })
     .catch(error => {
       throw new Error(error);
@@ -90,16 +96,16 @@ export const handleLogin = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
-    credentials:'include',
+    credentials: 'include',
     body,
   };
 
   fetch(LOGIN_ACTION, myInit)
     .then((response): Promise<string> => response.json())
-    .then((obj:string)=> {
-      const authObj:AuthUser = JSON.parse(obj);
-      const {exp} = parseTokenData(authObj.accessToken);
-      authObj.tokenExpDate = <number>exp;
+    .then((obj: string) => {
+      const authObj: AuthUser = <AuthUser>JSON.parse(obj);
+      const { exp } = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = exp;
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', '1');
     })
@@ -109,22 +115,21 @@ export const handleLogin = (): void => {
 };
 
 export const handleLogout = (): void => {
-  const body = JSON.stringify({ login: store.getState().authUser.login});
+  const { login } = store.getState().authUser;
+  const body = JSON.stringify({ login });
 
   const myInit: RequestInit = {
     method: 'POST',
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
-    credentials:'include',
+    credentials: 'include',
     body,
   };
 
   fetch(LOGOUT_ACTION, myInit)
-    .then((response): Promise<string> => response.json())
-    .then((obj:string) => {
-      const loginUserObj:loginUser = JSON.parse(obj);
-      store.dispatch(removeAuthInformation(loginUserObj.login));
+    .then((): void => {
+      store.dispatch(removeAuthInformation(login));
       localStorage.removeItem('refreshToken');
     })
     .catch(error => {
@@ -139,4 +144,3 @@ export const handleClearForm = (): void => {
   login.value = '';
   password.value = '';
 };
-

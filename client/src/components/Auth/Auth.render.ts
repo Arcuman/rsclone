@@ -46,6 +46,7 @@ const renderRegisterForm = (): HTMLElement => {
   const buttonOk = createHtmlElement('button', 'button-ok');
   buttonOk.innerHTML = 'Register';
   buttonOk.addEventListener('click', () => handleRegister());
+
   form.appendChild(buttonOk);
 
   const buttonCancel = createHtmlElement('button', 'button-cancel');

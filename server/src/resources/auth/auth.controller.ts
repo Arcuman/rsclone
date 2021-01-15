@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { StatusCodes, getReasonPhrase} from 'http-status-codes';
 import {webToken} from '@/helpers/webToken';
+import {Cookie} from '@/types/types';
 import { User } from '../users/user.model';
 import { usersService } from '../users/user.controller';
 import { ERR_LOGIN_MESSAGE, AUTH_FORM_FIELDS, AUTH_FAILURE_REDIRECT_URL, AUTH_REFRESH_TOKEN, AUTH_REGISTER, AUTH_LOGOUT } from './constants';
@@ -89,32 +90,30 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
   )(req, res, next);
 };
 
-const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    await usersService.setUser(req.body);
-
+    const userID = await usersService.setUser(req.body);
+    if (userID===0){
+      throw new Error();
+    }
     res.statusMessage = statusCodes[StatusCodes.OK].create;
     res
       .status(StatusCodes.OK)
       .end();
   } catch (error) {
-    res.statusMessage = statusCodes[StatusCodes.BAD_REQUEST].create;
     res
       .status(StatusCodes.BAD_REQUEST)
-      .end();
+      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
   }
-  return next();
+  
 };
 
 const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  console.log('in refresh token');
   try {
     const authUser:AuthUser = await RefreshTokensAction(req);
 
     req.user = authUser.user;
     req.body =  JSON.stringify({token:authUser.token});
-    console.log('b=', req.body);
-    
   } catch (error) {
     res.statusMessage = statusCodes[StatusCodes.BAD_REQUEST];
     
@@ -126,21 +125,35 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction): Pr
   return next();
 };
 
-// delete sessiontoken
-const logoutUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const logoutUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await usersService.getUserByLogin(req.body.login);
+
+    if (!user){
+      throw new Error();
+    }
+    await usersService.deleteSessionByUserId(user.user_id);
+   
+    res
+      .cookie('refreshToken', '')
+      .status(StatusCodes.OK)
+      .send( getReasonPhrase(StatusCodes.OK));
+      
+  } catch (error) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
+  }
 
 };
 
 const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
-  console.log('base=', req.baseUrl);
-  
   if (req.baseUrl === AUTH_REGISTER) {
-    registerUser(req, res, next);
+    registerUser(req, res);
   } else if (req.baseUrl === AUTH_REFRESH_TOKEN) {
-    console.log('basewww=', req.baseUrl);
     refreshToken(req, res, next);
   } else if (req.baseUrl === AUTH_LOGOUT) {
-    logoutUser(req, res, next);    
+    logoutUser(req, res);    
   } else {
     authenticateLocal(req, res, next);
   }
@@ -148,8 +161,6 @@ const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
 };
 
 export const sendAuthResponseToClient =  async (req:Request, res:Response):Promise<void>=> {
-  console.log('bu=', req.baseUrl);
-  console.log('user=', req.user);
   const userData = req.user!;
   
   if (!userData) {
@@ -158,7 +169,7 @@ export const sendAuthResponseToClient =  async (req:Request, res:Response):Promi
       .send(getReasonPhrase(StatusCodes.FORBIDDEN));
   }
   let newRefreshToken =  req.baseUrl === '/refresh-tokens' ? JSON.parse(req.body)?.token : '';
-  console.log('f reftoken=', newRefreshToken);
+  
   const userId = userData.user_id;
   const user = await usersService.getUserById(userId);
 
@@ -167,31 +178,24 @@ export const sendAuthResponseToClient =  async (req:Request, res:Response):Promi
       .status(StatusCodes.FORBIDDEN)
       .send(getReasonPhrase(StatusCodes.FORBIDDEN));
   } else {
-    // не делать для регистрации и выхода
     const accessToken = webToken.createToken(user);
     if (!newRefreshToken || newRefreshToken===''){
       newRefreshToken =  await getNewRefreshToken(userId, req);
     }
-    const cookies:Array<any> = createCookieData(newRefreshToken);
-
+    const cookies:Cookie = createCookieData(newRefreshToken);
+   
     const body = JSON.stringify({
       user, 
       accessToken,
       refreshToken:newRefreshToken,
     });
    
-    console.log('body=', body);
-
     res
-      .cookie(cookies[0], cookies[1], cookies[2])
+      .cookie(cookies.name, cookies.value, cookies.options)
       .type('application/json')
       .json(body)      
       .status(StatusCodes.OK)
       .end();
-    
-    /* for logout
-      cookie('refreshToken', ''))
-      */
   }
 };
 export { authenticate, authenticateLocal, clientAuth };

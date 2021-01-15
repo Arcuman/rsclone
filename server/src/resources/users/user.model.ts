@@ -88,24 +88,30 @@ const getUserByLogin = async (login: string): Promise<User> => {
 };
 
 const getSessionByRefreshToken = async (token: string): Promise<Session> => {
-  console.log('in get');
   let session: Session;
-  console.log('in get');
+
   try {
-    console.log('in get', token);
     ({ rows: [session] } = await db.query('Select * From "UsersRefreshSession" Where "refreshToken"=$1', [token]));
-    console.log('in get');
   } catch (error) {
     throw new Error('500');
-
   }
-  console.log('sess=', session);
+
   return session;
 };
 
 const deleteSessionByRefreshToken = async (token: string): Promise<number> => {
   try {
     const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "refreshToken"=$1', [token]);
+    return rowCount;
+  } catch (error) {
+    throw new Error('500');
+  }
+  return 0;
+};
+
+const deleteSessionByUserId = async (user_id:number): Promise<number> => {
+  try {
+    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "user_id"=$1', [user_id]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -134,5 +140,6 @@ export const usersModel = {
   getUserByLogin,
   getSessionByRefreshToken,
   deleteSessionByRefreshToken,
+  deleteSessionByUserId,
   addRefreshSession,
 };
