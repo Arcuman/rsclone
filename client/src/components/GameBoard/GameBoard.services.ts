@@ -1,4 +1,5 @@
-import Phaser from 'phaser';
+import { cardBase } from '../Card/Card.render';
+import { CardCreateInfo } from '../Card/Card.model';
 
 function setBackground(game: Phaser.Scene) {
   const image = game.add.image(
@@ -13,7 +14,7 @@ function setBackground(game: Phaser.Scene) {
 }
 
 export function preload(this: Phaser.Scene): void {
-  this.load.image('background', 'assets/images/menu-bgr.jpg');
+  this.load.image('background', 'assets/images/game-bgr.jpg');
   this.load.image('agent', 'assets/images/agent.png');
   this.load.image('akama', 'assets/images/akama.png');
   this.load.image('assassinate', 'assets/images/assassinate.png');
@@ -29,7 +30,6 @@ export function preload(this: Phaser.Scene): void {
   this.load.image('stowaway', 'assets/images/stowaway.png');
   this.load.image('sweet_tooth', 'assets/images/sweet_tooth.png');
   this.load.image('vendetta', 'assets/images/vendetta.png');
-  this.load.image('test', 'assets/images/test.png');
 }
 
 interface ConfigOfRectangle {
@@ -145,5 +145,21 @@ export function create(this: Phaser.Scene): void {
     enemyDeck.color,
   );
 
-  const agent = this.add.image(640, 620, 'test').setScale(1, 1);
+  const gameWidth = this.game.config.width;
+  const gameHeight = this.game.config.height;
+
+  const containerX: number = <number>gameWidth / 2;
+  const containerY: number = <number>gameHeight - 80;
+
+  const cardInfo: CardCreateInfo = {
+    scene: this,
+    posX: containerX,
+    posY: containerY,
+    card: 'agent',
+    mana: '6',
+    attack: '2',
+    health: '3',
+  };
+
+  cardBase(cardInfo);
 }

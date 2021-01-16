@@ -21,7 +21,7 @@ const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({
 export const game = (): Phaser.Game => {
   const gameElement = createHtmlElement('div', 'game');
   document.body.innerHTML = '';
-  document.body.style.background = '#ff2342';
+  document.body.style.background = '#000000';
   document.body.appendChild(gameElement);
   const config = createConfig(gameElement);
   return new Phaser.Game(config);
