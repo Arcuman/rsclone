@@ -148,8 +148,8 @@ export function create(this: Phaser.Scene): void {
   const gameWidth = this.game.config.width;
   const gameHeight = this.game.config.height;
 
-  const containerX: number = gameWidth / 2;
-  const containerY: number = gameHeight - 80;
+  const containerX: number = <number>gameWidth / 2;
+  const containerY: number = <number>gameHeight - 80;
 
   const cardInfo: CardCreateInfo = {
     scene: this,
@@ -157,8 +157,8 @@ export function create(this: Phaser.Scene): void {
     posY: containerY,
     card: 'agent',
     mana: '6',
-    hit: '2',
-    life: '3',
+    attack: '2',
+    health: '3',
   };
 
   cardBase(cardInfo);

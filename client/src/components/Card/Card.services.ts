@@ -1,3 +1,5 @@
+import { CHANGE_POSITION_CARD_Y, SIZE_NORMAL_CARD, SIZE_LITTLE_CARD } from './constants';
+
 export const setDraggableOnCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
@@ -8,12 +10,12 @@ export const setDraggableOnCard = (
   scene.input.setDraggable(cardContainer);
 
   cardContainer.on('pointerover', () => {
-    cardContainer.setScale(1, 1);
-    cardContainer.setY(posY - 100);
+    cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
+    cardContainer.setY(posY - CHANGE_POSITION_CARD_Y);
   });
 
   cardContainer.on('pointerout', () => {
-    cardContainer.setScale(0.6, 0.6);
+    cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
     cardContainer.setY(posY);
   });
 
