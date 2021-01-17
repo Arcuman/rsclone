@@ -1,3 +1,4 @@
+
 import Phaser from 'phaser';
 import { IMAGES } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
@@ -116,4 +117,20 @@ export function create(game: Phaser.Scene): void {
     enemyDeck.height,
     enemyDeck.color,
   );
+  const gameWidth = this.game.config.width;
+  const gameHeight = this.game.config.height;
+
+  const containerX: number = <number>gameWidth / 2;
+  const containerY: number = <number>gameHeight - 80;
+
+  const cardInfo: CardCreateInfo = {
+    scene: this,
+    posX: containerX,
+    posY: containerY,
+    card: 'agent',
+    mana: '6',
+    attack: '2',
+    health: '3',
+  };
+  cardBase(cardInfo);
 }
