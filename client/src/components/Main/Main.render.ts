@@ -1,31 +1,19 @@
 import { createHtmlElement } from '@/utils/utils';
 import { renderAuthForms } from '@/components/Auth/Auth.render';
-import { isUserAuthenticate } from '@/components/Auth/Auth.services';
-import { createMenuPage } from '@/components/Menu/Menu.render';
+import { AUTH_URL, ERROR_404_URL } from '@/router/constants';
 
 export const renderMain = (link: string): HTMLElement => {
-  const mainEl: HTMLElement = createHtmlElement('main', 'main');
+  const mainEl = createHtmlElement('main', 'main');
   mainEl.id = 'main';
-
-  isUserAuthenticate().then(status => {
-    if (status) {
-      switch (link) {
-        case '/test-page':
-          mainEl.innerHTML =
-            '<div style="color:#fff; font-size:30px;font-weight:bold">TEST PAGE</div>';
-          break;
-        case '/hoba-page':
-          mainEl.innerHTML =
-            '<div style="color:#fff; font-size:30px;font-weight:bold">HOBA PAGE</div>';
-          break;
-
-        default:
-          mainEl.appendChild(createMenuPage());
-      }
-    } else {
+  switch (link) {
+    case AUTH_URL:
       mainEl.appendChild(renderAuthForms());
-    }
-  });
-
+      break;
+    case ERROR_404_URL:
+      mainEl.innerHTML = '<h1>Page Not Found</h1>';
+      break;
+    default:
+      mainEl.appendChild(renderAuthForms());
+  }
   return mainEl;
 };

@@ -1,4 +1,4 @@
-import {Pool, QueryResult} from 'pg';
+import {Client, Pool, QueryResult} from 'pg';
 import dbConfig from '@/config/dbConfig';
 
 const pool = new Pool(dbConfig);

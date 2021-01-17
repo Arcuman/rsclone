@@ -1,0 +1,83 @@
+{
+	"textures": [
+		{
+			"image": "my_cards_atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 402,
+				"h": 374
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "my-cards-button-hover-ru.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 400,
+						"h": 126
+					}
+				},
+				{
+					"filename": "my-cards-button-ru.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 393,
+						"h": 125
+					},
+					"frame": {
+						"x": 1,
+						"y": 129,
+						"w": 393,
+						"h": 125
+					}
+				},
+				{
+					"filename": "my-cards-button-click-ru.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 1,
+						"w": 385,
+						"h": 117
+					},
+					"frame": {
+						"x": 1,
+						"y": 256,
+						"w": 385,
+						"h": 117
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:9822d8e29edc109abe926ac671a9affb:26faab1ad41562fc0e691e6654807e66:ee6ad57fe9d792aceef7dc823e8225c6$"
+	}
+}

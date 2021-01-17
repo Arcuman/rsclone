@@ -1,6 +1,13 @@
 import { store } from '@/redux/store/rootStore';
 import { AuthUser } from '@/types/types';
-import { setAuthInformation, removeAuthInformation, userRegistered } from '@/redux/actions/actions';
+import {
+  setAuthInformation,
+  removeAuthInformation,
+  userRegistered,
+  endGame,
+} from '@/redux/actions/actions';
+import { browserHistory } from '@/router/history';
+import { AUTH_URL, MENU_URL } from '@/router/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
@@ -34,7 +41,6 @@ const refreshTokenSession = async (): Promise<boolean> => {
 
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', '1');
-
       return true;
     })
     .catch(error => {
@@ -115,6 +121,7 @@ export const handleLogin = (): void => {
       authObj.tokenExpDate = exp;
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', '1');
+      browserHistory.push(MENU_URL);
     })
     .catch(error => {
       throw new Error(error);
@@ -137,7 +144,9 @@ export const handleLogout = (): void => {
   fetch(LOGOUT_ACTION, myInit)
     .then((): void => {
       store.dispatch(removeAuthInformation(login));
+      store.dispatch(endGame());
       localStorage.removeItem('refreshToken');
+      browserHistory.push(AUTH_URL);
     })
     .catch(error => {
       throw new Error(error);
