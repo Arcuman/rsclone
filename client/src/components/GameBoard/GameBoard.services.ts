@@ -1,9 +1,8 @@
-
 import Phaser from 'phaser';
 import { IMAGES } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
-import {cardBase} from '../Card/Card.render';
-import { CardCreateInfo } from '../Card/Card.model';
+import { CardCreateInfo } from '@/components/Card/Card.model';
+import { cardBase } from '@/components/Card/Card.render';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -120,14 +119,14 @@ export function create(game: Phaser.Scene): void {
     enemyDeck.color,
   );
 
-  const gameWidth = this.game.config.width;
-  const gameHeight = this.game.config.height;
+  const gameWidth = game.game.config.width;
+  const gameHeight = game.game.config.height;
 
   const containerX: number = <number>gameWidth / 2;
   const containerY: number = <number>gameHeight - 80;
 
   const cardInfo: CardCreateInfo = {
-    scene: this,
+    scene: game,
     posX: containerX,
     posY: containerY,
     card: 'agent',
