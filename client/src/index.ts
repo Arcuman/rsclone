@@ -1,24 +1,40 @@
 import 'normalize.css';
 import './styles/styles.scss';
-import { game } from './components/GameBoard/GameBoard.render';
+import { browserHistory } from '@/router/history';
+import { Action, Update } from 'history';
+import { router } from '@/router/routers';
+import { isUserAuthenticate } from '@/components/Auth/Auth.services';
+import { RouteResultResponse } from '@/router/types';
+import { createGameObj, getGame } from '@/components/Game/Game.services';
+import { SCENES } from '@/components/Game/constant';
+import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
-import { createHtmlElement } from './utils/utils';
-import { setHobaPage, setHomePage, setTestPage } from './router/routers';
-import { createLinkButton } from './router/createLinkButton';
 
-// game();
-
-window.onload = () => {
-  setHomePage().then((elementHTML: HTMLElement) => document.body.append(elementHTML));
-};
-
-const linkHome: HTMLElement = createLinkButton('#/home', 'HOME PAGE', setHomePage);
-const linkTest: HTMLElement = createLinkButton('#/home/test-page', 'TEST PAGE', setTestPage);
-const linkHoba: HTMLElement = createLinkButton('#/home/hoba', 'HOBA', setHobaPage);
-
-const navBar: HTMLElement = createHtmlElement('div', 'nav-bar');
-navBar.append(linkHome, linkTest, linkHoba);
-document.body.append(navBar);
+async function onLocationChange(obj: Update): Promise<void> {
+  router
+    .resolve({
+      pathname: obj.location.pathname,
+      isUserAuthenticate: await isUserAuthenticate(),
+    })
+    .then(({ page, redirect, scene }: RouteResultResponse) => {
+      if (redirect) {
+        browserHistory.replace(redirect);
+      } else if (page) {
+        deleteOldMain();
+        document.body.appendChild(page);
+      } else if (scene) {
+        let game = getGame();
+        if (game) {
+          game.scene.start(scene);
+        } else {
+          game = createGameObj(scene);
+        }
+      }
+    });
+}
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+browserHistory.listen(onLocationChange);
+onLocationChange({ action: Action.Push, location: browserHistory.location });
 
 store.subscribe(() => {
   const state = store.getState();

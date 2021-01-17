@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import {EXPIRE_IN_TOKEN} from '@/constants/constants';
 import { JWT_SECRET_KEY } from '../config/config';
 import {User} from '../resources/users/user.model';
 
@@ -15,7 +16,7 @@ const getDataFromToken =  (token:string):number => {
 
 const createToken = (user:User):string => {
   const payload = { user: user.user_id, login: user.login };
-  const token =  jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: 3600 });
+  const token =  jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: EXPIRE_IN_TOKEN });
   return token;
 };
 

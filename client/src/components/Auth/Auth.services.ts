@@ -1,10 +1,66 @@
 import { store } from '@/redux/store/rootStore';
-import { setAuthInformation, userRegistered } from '@/redux/actions/actions';
-import { LOGIN_ACTION, REGISTER_ACTION, HEADER_JSON } from './constants';
+import { AuthUser } from '@/types/types';
+import {
+  setAuthInformation,
+  removeAuthInformation,
+  userRegistered,
+  endGame,
+} from '@/redux/actions/actions';
+import { browserHistory } from '@/router/history';
+import { AUTH_URL, MENU_URL } from '@/router/constants';
+import {
+  LOGIN_ACTION,
+  LOGOUT_ACTION,
+  REGISTER_ACTION,
+  HEADER_JSON,
+  REFRESH_TOKEN,
+} from './constants';
+import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
-export const isUserAuthenticate = (): boolean => {
-  const { token } = store.getState().authUser;
-  return token !== '';
+const refreshTokenSession = async (): Promise<boolean> => {
+  const myInit: RequestInit = {
+    method: 'POST',
+    headers: HEADER_JSON,
+    mode: 'cors',
+    cache: 'default',
+    credentials: 'include',
+    body: '',
+  };
+
+  return fetch(REFRESH_TOKEN, myInit)
+    .then((response): Promise<string> => response.json())
+    .then((obj: string) => {
+      const authObj: AuthUser = <AuthUser>JSON.parse(obj);
+
+      if (!authObj.accessToken) {
+        return false;
+      }
+
+      const { exp } = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = exp;
+
+      store.dispatch(setAuthInformation(authObj));
+      localStorage.setItem('refreshToken', '1');
+      return true;
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+};
+
+export const isUserAuthenticate = async (): Promise<boolean> => {
+  const { accessToken } = store.getState().authUser;
+
+  if (accessToken !== '' && !isAccessTokenExpired()) {
+    return true;
+  }
+
+  if (localStorage.getItem('refreshToken')) {
+    await refreshTokenSession();
+    return store.getState().authUser.accessToken !== '';
+  }
+
+  return false;
 };
 
 export const isUserJustRegistered = (): boolean => {
@@ -16,6 +72,7 @@ export const handleRegister = (): void => {
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
+  const message = <HTMLInputElement>document.querySelector('.auth-message');
 
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
 
@@ -24,17 +81,20 @@ export const handleRegister = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
+    credentials: 'include',
     body,
   };
 
   fetch(REGISTER_ACTION, myInit)
     .then((response): void => {
-      if (response.status === 200) {
-        store.dispatch(userRegistered());
+      if (response.status !== 200) {
+        throw new Error();
       }
+
+      store.dispatch(userRegistered());
     })
-    .catch(error => {
-      throw new Error(error);
+    .catch(() => {
+      message.innerHTML = 'Error! Has already registered';
     });
 };
 
@@ -49,13 +109,44 @@ export const handleLogin = (): void => {
     headers: HEADER_JSON,
     mode: 'cors',
     cache: 'default',
+    credentials: 'include',
     body,
   };
 
   fetch(LOGIN_ACTION, myInit)
     .then((response): Promise<string> => response.json())
-    .then(obj => {
-      store.dispatch(setAuthInformation(JSON.parse(obj)));
+    .then((obj: string) => {
+      const authObj: AuthUser = <AuthUser>JSON.parse(obj);
+      const { exp } = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = exp;
+      store.dispatch(setAuthInformation(authObj));
+      localStorage.setItem('refreshToken', '1');
+      browserHistory.push(MENU_URL);
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+};
+
+export const handleLogout = (): void => {
+  const { login } = store.getState().authUser;
+  const body = JSON.stringify({ login });
+
+  const myInit: RequestInit = {
+    method: 'POST',
+    headers: HEADER_JSON,
+    mode: 'cors',
+    cache: 'default',
+    credentials: 'include',
+    body,
+  };
+
+  fetch(LOGOUT_ACTION, myInit)
+    .then((): void => {
+      store.dispatch(removeAuthInformation(login));
+      store.dispatch(endGame());
+      localStorage.removeItem('refreshToken');
+      browserHistory.push(AUTH_URL);
     })
     .catch(error => {
       throw new Error(error);
