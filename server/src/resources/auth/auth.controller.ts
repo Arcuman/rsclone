@@ -20,7 +20,7 @@ passport.use(
     async (username: string, password: string, done: any) => {
       try {
         const user = await usersService.checkUserAuth(username, password);
-
+     
         if (!user) {
           return done(null, false, {
             message: ERR_LOGIN_MESSAGE,

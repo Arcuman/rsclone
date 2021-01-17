@@ -1,9 +1,8 @@
 
-import * as dotenv from 'dotenv';
-import  * as path from 'path';
 import {ClientConfig} from 'pg';
 
-const envPath = path.join(__dirname, '../.env');
+import dotenv from 'dotenv';
+import {envPath} from './config';
 
 dotenv.config({
   path: envPath,
@@ -12,10 +11,14 @@ dotenv.config({
 const { DB_USER, DB_NAME, DB_PASSWORD, DB_PORT, DB_HOST} =  process.env;
 
 const config:ClientConfig = {
-  port: Number(DB_PORT),
+  host:DB_HOST,
   user: DB_USER,
   database: DB_NAME,
   password: DB_PASSWORD,
+  port: Number(DB_PORT),
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
-
+ 
 export default config;

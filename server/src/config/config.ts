@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 import  path from 'path';
+import {ENV_NAME} from '@/constants/constants';
 
-const envPath = path.join(__dirname, '../.env');
+export const envPath = path.join(__dirname, ENV_NAME);
 
 dotenv.config({
   path: envPath,
-});
+}); 
 
 const { SALT, JWT_SECRET_KEY } = process.env;
 const PORT = 3000;

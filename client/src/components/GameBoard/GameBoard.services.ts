@@ -118,6 +118,7 @@ export function create(game: Phaser.Scene): void {
     enemyDeck.height,
     enemyDeck.color,
   );
+
   const gameWidth = game.game.config.width;
   const gameHeight = game.game.config.height;
 
