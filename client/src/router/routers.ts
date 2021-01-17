@@ -6,7 +6,7 @@ import UniversalRouter, {
   RouteParams,
 } from 'universal-router';
 import { renderMain } from '@/components/Main/Main.render';
-import { RouteResultResponse } from '@/router/types';
+import { RouteResultResponse } from '@/router/routes.model';
 import { ERROR_404_URL } from '@/router/constants';
 import { routes } from './routes';
 

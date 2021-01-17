@@ -1,17 +1,6 @@
 import Phaser from 'phaser';
 import { IMAGES } from '@/components/Game/constant';
-
-function setBackground(game: Phaser.Scene) {
-  const image = game.add.image(
-    game.cameras.main.width / 2,
-    game.cameras.main.height / 2,
-    IMAGES.LOAD_BACKGROUND.NAME
-  );
-  const scaleX = game.cameras.main.width / image.width;
-  const scaleY = game.cameras.main.height / image.height;
-  const scale = Math.max(scaleX, scaleY);
-  image.setScale(scale).setScrollFactor(0);
-}
+import { setBackground } from '@/utils/utils';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -27,7 +16,7 @@ function createConfig(
   posY: number,
   width: number,
   height: number,
-  color: number
+  color: number,
 ): ConfigOfRectangle {
   return {
     positionX: posX,
@@ -39,7 +28,7 @@ function createConfig(
 }
 
 export function create(game: Phaser.Scene): void {
-  setBackground(game);
+  setBackground(game, IMAGES.LOAD_BACKGROUND.NAME);
   const enemyCardsConfig = createConfig(640, 80, 600, 140, 0xff0022);
   const playerCardsConfig = createConfig(640, 640, 600, 140, 0xff0011);
   const table = createConfig(640, 360, 800, 300, 0xff0088);
@@ -57,7 +46,7 @@ export function create(game: Phaser.Scene): void {
     enemyCardsConfig.positionY,
     enemyCardsConfig.width,
     enemyCardsConfig.height,
-    enemyCardsConfig.color
+    enemyCardsConfig.color,
   );
 
   game.add.rectangle(
@@ -65,7 +54,7 @@ export function create(game: Phaser.Scene): void {
     playerCardsConfig.positionY,
     playerCardsConfig.width,
     playerCardsConfig.height,
-    playerCardsConfig.color
+    playerCardsConfig.color,
   );
 
   game.add.rectangle(table.positionX, table.positionY, table.width, table.height, table.color);
@@ -75,7 +64,7 @@ export function create(game: Phaser.Scene): void {
     playerAvatar.positionY,
     playerAvatar.width,
     playerAvatar.height,
-    playerAvatar.color
+    playerAvatar.color,
   );
 
   game.add.rectangle(
@@ -83,7 +72,7 @@ export function create(game: Phaser.Scene): void {
     enemyAvatar.positionY,
     enemyAvatar.width,
     enemyAvatar.height,
-    enemyAvatar.color
+    enemyAvatar.color,
   );
 
   game.add.rectangle(timer.positionX, timer.positionY, timer.width, timer.height, timer.color);
@@ -93,7 +82,7 @@ export function create(game: Phaser.Scene): void {
     endTurnButton.positionY,
     endTurnButton.width,
     endTurnButton.height,
-    endTurnButton.color
+    endTurnButton.color,
   );
 
   game.add.rectangle(
@@ -101,7 +90,7 @@ export function create(game: Phaser.Scene): void {
     playerMana.positionY,
     playerMana.width,
     playerMana.height,
-    playerMana.color
+    playerMana.color,
   );
 
   game.add.rectangle(
@@ -109,7 +98,7 @@ export function create(game: Phaser.Scene): void {
     enemyMana.positionY,
     enemyMana.width,
     enemyMana.height,
-    enemyMana.color
+    enemyMana.color,
   );
 
   game.add.rectangle(
@@ -117,7 +106,7 @@ export function create(game: Phaser.Scene): void {
     playerDeck.positionY,
     playerDeck.width,
     playerDeck.height,
-    playerDeck.color
+    playerDeck.color,
   );
 
   game.add.rectangle(
@@ -125,6 +114,6 @@ export function create(game: Phaser.Scene): void {
     enemyDeck.positionY,
     enemyDeck.width,
     enemyDeck.height,
-    enemyDeck.color
+    enemyDeck.color,
   );
 }

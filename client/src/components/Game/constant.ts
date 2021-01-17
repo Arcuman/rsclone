@@ -69,26 +69,9 @@ export const IMAGES = {
     NAME: 'vendetta',
     PATH: 'assets/images/vendetta.png',
   },
-  MENU_START_GAME: {
-    IDLE: 'start-game-button-ru.png',
-    HOVER: 'start-game-button-hover-ru.png',
-    CLICK: 'start-game-button-click-ru.png',
-  },
-  MENU_MY_CARDS: {
-    IDLE: 'my-cards-button-ru.png',
-    HOVER: 'my-cards-button-hover-ru.png',
-    CLICK: 'my-cards-button-click-ru.png',
-  },
-  MENU_SETTINGS: {
-    IDLE: 'settings-button-ru.png',
-    HOVER: 'settings-button-hover-ru.png',
-    CLICK: 'settings-button-click-ru.png',
-  },
-  MENU_EXIT: {
-    IDLE: 'exit-button-ru.png',
-    HOVER: 'exit-button-hover-ru.png',
-    CLICK: 'exit-button-click-ru.png',
-  },
+};
+
+export const ATLASES = {
   MENU_START_ATLAS: {
     NAME: 'menu_start_atlas',
     PATH: 'assets/images/menu/start_atlas.json',
@@ -108,6 +91,29 @@ export const IMAGES = {
     NAME: 'exit_atlas',
     PATH: 'assets/images/menu/exit_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
+  },
+};
+
+export const MENU_IMAGES = {
+  MENU_START_GAME: {
+    IDLE: 'start-game-button-ru.png',
+    HOVER: 'start-game-button-hover-ru.png',
+    CLICK: 'start-game-button-click-ru.png',
+  },
+  MENU_MY_CARDS: {
+    IDLE: 'my-cards-button-ru.png',
+    HOVER: 'my-cards-button-hover-ru.png',
+    CLICK: 'my-cards-button-click-ru.png',
+  },
+  MENU_SETTINGS: {
+    IDLE: 'settings-button-ru.png',
+    HOVER: 'settings-button-hover-ru.png',
+    CLICK: 'settings-button-click-ru.png',
+  },
+  MENU_EXIT: {
+    IDLE: 'exit-button-ru.png',
+    HOVER: 'exit-button-hover-ru.png',
+    CLICK: 'exit-button-click-ru.png',
   },
 };
 

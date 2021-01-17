@@ -4,16 +4,16 @@ import { browserHistory } from '@/router/history';
 import { Action, Update } from 'history';
 import { router } from '@/router/routers';
 import { isUserAuthenticate } from '@/components/Auth/Auth.services';
-import { RouteResultResponse } from '@/router/types';
+import { RouteResultResponse } from '@/router/routes.model';
 import { createGameObj, getGame } from '@/components/Game/Game.services';
 import { SCENES } from '@/components/Game/constant';
 import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
 
-async function onLocationChange(obj: Update): Promise<void> {
+async function onLocationChange(changes: Update): Promise<void> {
   router
     .resolve({
-      pathname: obj.location.pathname,
+      pathname: changes.location.pathname,
       isUserAuthenticate: await isUserAuthenticate(),
     })
     .then(({ page, redirect, scene }: RouteResultResponse) => {
@@ -23,17 +23,18 @@ async function onLocationChange(obj: Update): Promise<void> {
         deleteOldMain();
         document.body.appendChild(page);
       } else if (scene) {
-        let game = getGame();
+        const game = getGame();
         if (game) {
           game.scene.start(scene);
         } else {
-          game = createGameObj(scene);
+          createGameObj(scene);
         }
       }
     });
 }
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-browserHistory.listen(onLocationChange);
+browserHistory.listen((obj: Update) => {
+  onLocationChange(obj);
+});
 onLocationChange({ action: Action.Push, location: browserHistory.location });
 
 store.subscribe(() => {

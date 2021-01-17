@@ -1,6 +1,12 @@
 import { AuthUser } from '@/types/types';
 import { AnyAction } from 'redux';
-import { SET_AUTH_USER, USER_REGISTERED, REMOVE_AUTH_USER, CREATE_GAME } from './action.types';
+import {
+  SET_AUTH_USER,
+  USER_REGISTERED,
+  REMOVE_AUTH_USER,
+  CREATE_GAME,
+  END_GAME,
+} from './action.types';
 
 export function setAuthInformation(obj: AuthUser): AnyAction {
   return {
@@ -31,6 +37,6 @@ export function createGame(game: Phaser.Game): AnyAction {
 }
 export function endGame(): AnyAction {
   return {
-    type: CREATE_GAME,
+    type: END_GAME,
   };
 }
