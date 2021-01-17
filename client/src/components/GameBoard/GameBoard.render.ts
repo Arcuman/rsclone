@@ -10,6 +10,7 @@ export class GameBoardScene extends Phaser.Scene {
       visible: false,
     });
   }
+
   create(): void {
     create(this);
   }
