@@ -1,9 +1,0 @@
-NODE_ENV=development
-DB_HOST =ec2-54-75-199-252.eu-west-1.compute.amazonaws.com
-DB_USER =tzipuxanfcukvi
-DB_NAME =d30797aeadvhbi
-DB_PASSWORD =35e9e27e9e4206e50247b89b0e7d4ae0beb2a4eda3203ff9c2f32de462f41f12
-DB_PORT =5432
-SALT = 10
-JWT_SECRET_KEY=my-notordinary-skey
-депантол
