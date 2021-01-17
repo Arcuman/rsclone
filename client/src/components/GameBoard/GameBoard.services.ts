@@ -1,5 +1,6 @@
 import { cardBase } from '../Card/Card.render';
-import { CardCreateInfo } from '../Card/Card.model';
+import { createAvatar } from './UserAvatar/Avatar.render';
+import { createTable } from './Table/Table.render';
 
 function setBackground(game: Phaser.Scene) {
   const image = game.add.image(
@@ -30,6 +31,8 @@ export function preload(this: Phaser.Scene): void {
   this.load.image('stowaway', 'assets/images/stowaway.png');
   this.load.image('sweet_tooth', 'assets/images/sweet_tooth.png');
   this.load.image('vendetta', 'assets/images/vendetta.png');
+  this.load.image('avatar', 'assets/images/avatar.png');
+  this.load.image('game_board', 'assets/images/game_board.png');
 }
 
 interface ConfigOfRectangle {
@@ -151,15 +154,46 @@ export function create(this: Phaser.Scene): void {
   const containerX: number = <number>gameWidth / 2;
   const containerY: number = <number>gameHeight - 80;
 
-  const cardInfo: CardCreateInfo = {
+  cardBase({
     scene: this,
     posX: containerX,
     posY: containerY,
     card: 'agent',
     mana: '6',
     attack: '2',
-    health: '3',
-  };
+    health: '2',
+  });
 
-  cardBase(cardInfo);
+  cardBase({
+    scene: this,
+    posX: containerX + 50,
+    posY: containerY,
+    card: 'shiv',
+    mana: '1',
+  });
+
+  const createGameTable = createTable({
+    scene: this,
+    posX: <number>gameWidth / 2,
+    posY: <number>gameHeight / 2,
+    img: 'game_board',
+  });
+
+  const userAvatarExample = createAvatar({
+    scene: this,
+    posX: 1030,
+    posY: 620,
+    card: 'avatar',
+    userName: 'kittenhyu',
+    health: '30',
+  });
+
+  const enemyAvatarExample = createAvatar({
+    scene: this,
+    posX: 250,
+    posY: 100,
+    card: 'avatar',
+    userName: 'Spider',
+    health: '30',
+  });
 }

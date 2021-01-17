@@ -1,19 +1,26 @@
 import { TextDecoration, ShadowOptions } from '@/types/types';
-import { PositionInfo } from './Card.model';
+import { PositionInfo } from './Avatar.model';
 
 export const positionInfo: PositionInfo = {
   IMG_X: 0,
   IMG_Y: 0,
-  MANA_X: -60,
-  MANA_Y: -98,
-  ATTACK_X: -60,
-  ATTACK_Y: 60,
-  HEALTH_X: 48,
-  HEALTH_Y: 60,
+  USER_NAME_X: 0,
+  USER_NAME_Y: 72,
+  HEALTH_X: 60,
+  HEALTH_Y: 35,
 };
 
 export const textDecoration: TextDecoration = {
   FONT_SIZE: '32px',
+  FONT_FAMILY: 'number_font',
+  FONT_COLOR: '#ffffff',
+  TEXT_OUTLINE_COLOR: '#000000',
+  TEXT_OUTLINE_SIZE: 5,
+  TEXT_DEPTH: 2,
+};
+
+export const AvatarNameDecoration: TextDecoration = {
+  FONT_SIZE: '24px',
   FONT_FAMILY: 'number_font',
   FONT_COLOR: '#ffffff',
   TEXT_OUTLINE_COLOR: '#000000',
@@ -28,7 +35,4 @@ export const shadowOptions: ShadowOptions = {
   ALPHA: 0.6,
 };
 
-export const CHANGE_POSITION_CARD_Y = 100;
-export const SIZE_NORMAL_CARD = 1;
-export const SIZE_LITTLE_CARD = 0.6;
-export const CARD_CONTAINER_DEPTH = 1;
+export const SIZE_AVATAR = 0.7;

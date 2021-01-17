@@ -15,6 +15,7 @@ window.onload = () => {
 };
 
 const linkHome: HTMLElement = createLinkButton('#/home', 'HOME PAGE', homePage);
+
 /* const linkTest: HTMLElement = createLinkButton('#/home/test-page', 'TEST PAGE', testPage);
 const linkHoba: HTMLElement = createLinkButton('#/home/hoba', 'HOBA', hobaPage); */
 
