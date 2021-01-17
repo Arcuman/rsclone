@@ -1,0 +1,95 @@
+{
+	"textures": [
+		{
+			"image": "start_sprite.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 402,
+				"h": 374
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "start-game-button-hover-ru.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 400,
+						"h": 126
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "start-game-button-ru.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 393,
+						"h": 125
+					},
+					"frame": {
+						"x": 1,
+						"y": 129,
+						"w": 393,
+						"h": 125
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "start-game-button-click-ru.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 1,
+						"w": 385,
+						"h": 117
+					},
+					"frame": {
+						"x": 1,
+						"y": 256,
+						"w": 385,
+						"h": 117
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7dfc2bd3ad172656c9a4c7679b0dbe58:dd7fd2ed86253973bceda3e3c67b0714:071dd763f3f911326bf51dc23009761c$"
+	}
+}

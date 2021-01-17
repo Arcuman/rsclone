@@ -1,7 +1,14 @@
 import { store } from '@/redux/store/rootStore';
 import { AuthUser } from '@/types/types';
-import { setAuthInformation, removeAuthInformation, userRegistered } from '@/redux/actions/actions';
 import { StatusCodes} from 'http-status-codes';
+import {
+  setAuthInformation,
+  removeAuthInformation,
+  userRegistered,
+  endGame,
+} from '@/redux/actions/actions';
+import { browserHistory } from '@/router/history';
+import { AUTH_URL, MENU_URL } from '@/router/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
@@ -115,6 +122,7 @@ export const handleLogin = (): void => {
       authObj.tokenExpDate = exp;
       store.dispatch(setAuthInformation(authObj));
       localStorage.setItem('refreshToken', 'true');
+      browserHistory.push(MENU_URL);
     })
     .catch(() => {
       // eslint-disable-next-line no-console
@@ -131,7 +139,9 @@ export const handleLogout = (): void => {
   fetch(LOGOUT_ACTION, requestInit)
     .then((): void => {
       store.dispatch(removeAuthInformation(login));
+      store.dispatch(endGame());
       localStorage.removeItem('refreshToken');
+      browserHistory.push(AUTH_URL);
     })
     .catch(error => {
       throw new Error(error);

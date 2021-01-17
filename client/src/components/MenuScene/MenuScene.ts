@@ -1,11 +1,12 @@
-import Phaser from 'phaser';
 import { SCENES } from '@/components/Game/constant';
-import { create } from './GameBoard.services';
+import Phaser from 'phaser';
 
-export class GameBoardScene extends Phaser.Scene {
+import { create } from './MenuScene.services';
+
+export class MenuScene extends Phaser.Scene {
   constructor() {
     super({
-      key: SCENES.GAME,
+      key: SCENES.MENU,
       active: false,
       visible: false,
     });
