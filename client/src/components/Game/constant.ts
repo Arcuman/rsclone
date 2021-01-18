@@ -122,6 +122,8 @@ export const SCENES = {
   MENU: 'MENU',
   GAME: 'GAME',
   MY_CARDS: 'MY_CARDS',
+  FIND_ENEMY: 'FIND_ENEMY',
+  GAME_BOARD: 'GAME_BOARD',
 };
 
 export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({

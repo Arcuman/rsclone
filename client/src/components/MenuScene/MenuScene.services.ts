@@ -1,5 +1,5 @@
 import { setBackground } from '@/utils/utils';
-import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, SCENES } from '@/components/Game/constant';
 import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/constants';
 import { browserHistory } from '@/router/history';
 import { GAME_URL, MY_CARDS_URL } from '@/router/constants';
@@ -45,6 +45,7 @@ export function create(game: Phaser.Scene): void {
     MENU_IMAGES.MENU_START_GAME,
   );
   startButton.on('pointerup', () => {
+    // game.scene.start(SCENES.FIND_ENEMY);
     browserHistory.push(GAME_URL);
   });
   const myCardsButton = createButton(

@@ -35,7 +35,7 @@ export const routes: Route[] = [
       {
         path: GAME_URL,
         action: (context: ResolveContext): RouteResultResponse =>
-          createRouteResult(null, null, SCENES.GAME),
+          createRouteResult(null, null, SCENES.FIND_ENEMY),
         children: null,
       },
       {

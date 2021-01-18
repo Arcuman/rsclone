@@ -11,6 +11,7 @@ import {
   TEXT_FONT,
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
+import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
 import File = Phaser.Loader.File;
 
 function setLoadingBar(game: Phaser.Scene) {
@@ -85,6 +86,7 @@ function loadScenes(game: Phaser.Scene) {
   game.scene.add(SCENES.MENU, MenuScene, false);
   game.scene.add(SCENES.GAME, GameBoardScene, false);
   game.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
+  game.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
 }
 
 export function preload(game: Phaser.Scene, nextScene: string): void {
