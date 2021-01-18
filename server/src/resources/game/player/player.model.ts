@@ -1,5 +1,5 @@
 import {Socket} from 'socket.io';
-import {Card} from '@/resources/card/card.models';
+import {Card} from '@/resources/card/card.model';
 
 export interface Player{
   userId: number;

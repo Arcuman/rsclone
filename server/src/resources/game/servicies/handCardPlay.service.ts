@@ -1,4 +1,4 @@
-import {Card} from '@/resources/card/card.models';
+import {Card} from '@/resources/card/card.model';
 import {Player} from '@/resources/game/player/player.model';
 import {Room} from '@/resources/game/room/room.model';
 import {Server} from 'socket.io';

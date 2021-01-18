@@ -4,6 +4,7 @@ import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
 import passport from 'passport';
+import {decksRouter} from '@/resources/decks/decks.router';
 import  {router} from './resources/users/user.router';
 import { authRouter, authenticate } from './resources/auth/auth.router';
 
@@ -12,7 +13,9 @@ const app = express();
 app.use(express.json());
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use('/api-docs', swaggerUI.serve);
+app.get('/api-docs', swaggerUI.setup(swaggerDocument));
+
 app.use(passport.initialize());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,Authorization,Origin');
@@ -33,6 +36,7 @@ app.use('/', (req, res, next) => {
 });
 
 app.use('/users', authenticate, router);
+app.use('/decks', authenticate, decksRouter);
 app.use('/login', authRouter);
 app.use('/logout', authRouter);
 app.use('/register', authRouter);

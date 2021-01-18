@@ -1,4 +1,4 @@
-import {Card, getUserDeckCards} from '@/resources/card/card.models';
+import {Card, getUserDeckCards} from '@/resources/card/card.model';
 import { Socket } from 'socket.io';
 import {Player} from '@/resources/game/player/player.model';
 import {MAX_HEALTH, NUMBER_OF_HAND_CARDS, START_MANA} from '@/resources/game/constants';

@@ -11,7 +11,7 @@ import {
   START_GAME, TABLE_CARD_PLAY_CARD_TARGET, TABLE_CARD_PLAY_PLAYER_TARGET,
   WAIT_SECOND_PLAYER,
 } from '@/resources/game/constants';
-import {Card} from '@/resources/card/card.models';
+import {Card} from '@/resources/card/card.model';
 import {nextTurn} from '@/resources/game/servicies/nextTurn.service';
 import {countDownTimer} from '@/resources/game/servicies/timer.service';
 import {handCardPlay} from '@/resources/game/servicies/handCardPlay.service';
