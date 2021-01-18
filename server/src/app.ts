@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
+app.use(cors({credentials: true, origin: ['http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082']}));
 app.options('*', cors());
 
 app.use('/', (req, res, next) => {

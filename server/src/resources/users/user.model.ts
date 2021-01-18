@@ -48,6 +48,7 @@ const setUser = async (userData: User): Promise<number> => {
     ({ rows: [user] } = await db.query(query, [userData.login, userData.name, userData.password]));
 
   } catch (error) {
+    console.log(error);
     throw new Error('500');
   }
   return user.user_id;
@@ -121,9 +122,9 @@ const deleteSessionByUserId = async (user_id:number): Promise<number> => {
 
 const addRefreshSession = async ({ refreshToken, user_id, ip, expiresIn}: Session): Promise<string> => {
   let session: Session;
- 
+
   try {
-    ({ rows: [session] } = await db.query(`INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn") 
+    ({ rows: [session] } = await db.query(`INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
                                             VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`, []));
   } catch (error) {
     throw new Error(error);

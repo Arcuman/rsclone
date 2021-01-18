@@ -1,4 +1,4 @@
-import { State, AuthUser } from '@/types/types';
+import { AuthUser, AuthUserState } from '@/types/types';
 import { SET_AUTH_USER, REMOVE_AUTH_USER, USER_REGISTERED } from '../actions/action.types';
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
 export function authReducer(
   state = initialState,
   action: { type: string; payload: AuthUser },
-): State {
+): AuthUserState {
   switch (action.type) {
     case SET_AUTH_USER:
       return {

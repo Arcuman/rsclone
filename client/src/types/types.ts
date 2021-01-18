@@ -1,4 +1,4 @@
-export interface State {
+export interface AuthUserState {
   accessToken: string;
   user_id: number;
   login: string;
@@ -6,6 +6,10 @@ export interface State {
   tokenExpDate: number;
   userRegistered: boolean;
   hasRefreshToken: boolean;
+}
+
+export interface GameState {
+  game: Phaser.Game | null | undefined;
 }
 
 interface User {

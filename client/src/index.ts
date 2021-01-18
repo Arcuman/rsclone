@@ -1,27 +1,41 @@
 import 'normalize.css';
 import './styles/styles.scss';
-import { game } from './components/GameBoard/GameBoard.render';
+import { browserHistory } from '@/router/history';
+import { Action, Update } from 'history';
+import { router } from '@/router/routers';
+import { isUserAuthenticate } from '@/components/Auth/Auth.services';
+import { RouteResultResponse } from '@/router/routes.model';
+import { createGameObj, getGame } from '@/components/Game/Game.services';
+import { SCENES } from '@/components/Game/constant';
+import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
-import { createHtmlElement } from './utils/utils';
-// import { hobaPage, homePage, testPage } from './router/routers';
-import { homePage } from './router/routers';
-import { createLinkButton } from './router/createLinkButton';
 
-game();
-
-window.onload = () => {
-  window.location.replace('#/home');
-  homePage.then((elementHTML: HTMLElement) => document.body.append(elementHTML));
-};
-
-const linkHome: HTMLElement = createLinkButton('#/home', 'HOME PAGE', homePage);
-
-/* const linkTest: HTMLElement = createLinkButton('#/home/test-page', 'TEST PAGE', testPage);
-const linkHoba: HTMLElement = createLinkButton('#/home/hoba', 'HOBA', hobaPage); */
-
-const navBar: HTMLElement = createHtmlElement('div', 'nav-bar');
-navBar.append(linkHome); // , linkTest, linkHoba);
-document.body.append(navBar);
+async function onLocationChange(changes: Update): Promise<void> {
+  router
+    .resolve({
+      pathname: changes.location.pathname,
+      isUserAuthenticate: await isUserAuthenticate(),
+    })
+    .then(({ page, redirect, scene }: RouteResultResponse) => {
+      if (redirect) {
+        browserHistory.replace(redirect);
+      } else if (page) {
+        deleteOldMain();
+        document.body.appendChild(page);
+      } else if (scene) {
+        const game = getGame();
+        if (game) {
+          game.scene.start(scene);
+        } else {
+          createGameObj(scene);
+        }
+      }
+    });
+}
+browserHistory.listen((obj: Update) => {
+  onLocationChange(obj);
+});
+onLocationChange({ action: Action.Push, location: browserHistory.location });
 
 store.subscribe(() => {
   const state = store.getState();

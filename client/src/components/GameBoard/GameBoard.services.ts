@@ -1,39 +1,11 @@
-import { cardBase } from '../Card/Card.render';
+import Phaser from 'phaser';
+import { setBackground } from '@/utils/utils';
+import { cardBase } from '@/components/Card/Card.render';
+import { IMAGES } from '../Game/constant';
 import { createAvatar } from './UserAvatar/Avatar.render';
 import { createTable } from './Table/Table.render';
 
-function setBackground(game: Phaser.Scene) {
-  const image = game.add.image(
-    game.cameras.main.width / 2,
-    game.cameras.main.height / 2,
-    'background',
-  );
-  const scaleX = game.cameras.main.width / image.width;
-  const scaleY = game.cameras.main.height / image.height;
-  const scale = Math.max(scaleX, scaleY);
-  image.setScale(scale).setScrollFactor(0);
-}
-
-export function preload(this: Phaser.Scene): void {
-  this.load.image('background', 'assets/images/game-bgr.jpg');
-  this.load.image('agent', 'assets/images/agent.png');
-  this.load.image('akama', 'assets/images/akama.png');
-  this.load.image('assassinate', 'assets/images/assassinate.png');
-  this.load.image('master_disguise', 'assets/images/master_disguise.png');
-  this.load.image('pharaoh_cat', 'assets/images/pharaoh_cat.png');
-  this.load.image('prize_plunderer', 'assets/images/prize_plunderer.png');
-  this.load.image('sahket_sapper', 'assets/images/sahket_sapper.png');
-  this.load.image('seal_fate', 'assets/images/seal_fate.png');
-  this.load.image('shadow_sculptor', 'assets/images/shadow_sculptor.png');
-  this.load.image('shiv', 'assets/images/shiv.png');
-  this.load.image('sinister_strike', 'assets/images/sinister_strike.png');
-  this.load.image('skyvateer', 'assets/images/skyvateer.png');
-  this.load.image('stowaway', 'assets/images/stowaway.png');
-  this.load.image('sweet_tooth', 'assets/images/sweet_tooth.png');
-  this.load.image('vendetta', 'assets/images/vendetta.png');
-  this.load.image('avatar', 'assets/images/avatar.png');
-  this.load.image('game_board', 'assets/images/game_board.png');
-}
+export function preload(this: Phaser.Scene): void {}
 
 interface ConfigOfRectangle {
   positionX: number;
@@ -47,7 +19,7 @@ function createConfig(
   posY: number,
   width: number,
   height: number,
-  color: number,
+  color: number
 ): ConfigOfRectangle {
   return {
     positionX: posX,
@@ -58,8 +30,8 @@ function createConfig(
   };
 }
 
-export function create(this: Phaser.Scene): void {
-  setBackground(this);
+export function create(game: Phaser.Scene): void {
+  setBackground(game, IMAGES.LOAD_BACKGROUND.NAME);
   const enemyCardsConfig = createConfig(640, 80, 600, 140, 0xff0022);
   const playerCardsConfig = createConfig(640, 640, 600, 140, 0xff0011);
   const table = createConfig(640, 360, 800, 300, 0xff0088);
@@ -72,127 +44,131 @@ export function create(this: Phaser.Scene): void {
   const playerDeck = createConfig(1200, 600, 130, 150, 0x00ff88);
   const enemyDeck = createConfig(80, 120, 130, 150, 0x00ff88);
 
-  this.add.rectangle(
+  game.add.rectangle(
     enemyCardsConfig.positionX,
     enemyCardsConfig.positionY,
     enemyCardsConfig.width,
     enemyCardsConfig.height,
-    enemyCardsConfig.color,
+    enemyCardsConfig.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     playerCardsConfig.positionX,
     playerCardsConfig.positionY,
     playerCardsConfig.width,
     playerCardsConfig.height,
-    playerCardsConfig.color,
+    playerCardsConfig.color
   );
 
-  this.add.rectangle(table.positionX, table.positionY, table.width, table.height, table.color);
+  game.add.rectangle(table.positionX, table.positionY, table.width, table.height, table.color);
 
-  this.add.rectangle(
+  game.add.rectangle(
     playerAvatar.positionX,
     playerAvatar.positionY,
     playerAvatar.width,
     playerAvatar.height,
-    playerAvatar.color,
+    playerAvatar.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     enemyAvatar.positionX,
     enemyAvatar.positionY,
     enemyAvatar.width,
     enemyAvatar.height,
-    enemyAvatar.color,
+    enemyAvatar.color
   );
 
-  this.add.rectangle(timer.positionX, timer.positionY, timer.width, timer.height, timer.color);
+  game.add.rectangle(timer.positionX, timer.positionY, timer.width, timer.height, timer.color);
 
-  this.add.rectangle(
+  game.add.rectangle(
     endTurnButton.positionX,
     endTurnButton.positionY,
     endTurnButton.width,
     endTurnButton.height,
-    endTurnButton.color,
+    endTurnButton.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     playerMana.positionX,
     playerMana.positionY,
     playerMana.width,
     playerMana.height,
-    playerMana.color,
+    playerMana.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     enemyMana.positionX,
     enemyMana.positionY,
     enemyMana.width,
     enemyMana.height,
-    enemyMana.color,
+    enemyMana.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     playerDeck.positionX,
     playerDeck.positionY,
     playerDeck.width,
     playerDeck.height,
-    playerDeck.color,
+    playerDeck.color
   );
 
-  this.add.rectangle(
+  game.add.rectangle(
     enemyDeck.positionX,
     enemyDeck.positionY,
     enemyDeck.width,
     enemyDeck.height,
-    enemyDeck.color,
+    enemyDeck.color
   );
 
-  const gameWidth = this.game.config.width;
-  const gameHeight = this.game.config.height;
+  const gameWidth = game.game.config.width;
+  const gameHeight = game.game.config.height;
 
   const containerX: number = <number>gameWidth / 2;
   const containerY: number = <number>gameHeight - 80;
 
+  let cardImg: string = IMAGES.AGENT.NAME;
   cardBase({
-    scene: this,
+    scene: game,
     posX: containerX,
     posY: containerY,
-    card: 'agent',
+    card: cardImg,
     mana: '6',
     attack: '2',
     health: '2',
   });
 
+  cardImg = IMAGES.SHIV.NAME;
   cardBase({
-    scene: this,
+    scene: game,
     posX: containerX + 50,
     posY: containerY,
-    card: 'shiv',
+    card: cardImg,
     mana: '1',
   });
 
+  cardImg = IMAGES.GAME_BOARD.NAME;
   const createGameTable = createTable({
-    scene: this,
+    scene: game,
     posX: <number>gameWidth / 2,
     posY: <number>gameHeight / 2,
-    img: 'game_board',
+    img: cardImg,
   });
 
+  cardImg = IMAGES.AVATAR.NAME;
   const userAvatarExample = createAvatar({
-    scene: this,
+    scene: game,
     posX: 1030,
     posY: 620,
-    card: 'avatar',
-    userName: 'kittenhyu',
+    card: cardImg,
+    userName: 'Korolevishna',
     health: '30',
   });
 
   const enemyAvatarExample = createAvatar({
-    scene: this,
+    scene: game,
     posX: 250,
     posY: 100,
-    card: 'avatar',
+    card: cardImg,
     userName: 'Spider',
     health: '30',
   });
