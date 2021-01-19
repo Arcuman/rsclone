@@ -1,20 +1,18 @@
 import express from 'express';
 import cors from 'cors';
+import passport from 'passport';
+import {decksRouter} from '@/resources/decks/decks.router';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
-import passport from 'passport';
-import {decksRouter} from '@/resources/decks/decks.router';
-import  {router} from './resources/users/user.router';
 import { authRouter, authenticate } from './resources/auth/auth.router';
+import  {router} from './resources/users/user.router';
 
 const app = express();
-
-app.use(express.json());
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-app.use('/api-docs', swaggerUI.serve);
-app.get('/api-docs', swaggerUI.setup(swaggerDocument));
+app.use(express.json());
+app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(passport.initialize());
 app.use((req, res, next) => {

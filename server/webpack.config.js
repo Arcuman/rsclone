@@ -1,11 +1,13 @@
 'use strict';
-
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 const { DefinePlugin } = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const packageJson = require('./package.json');
 const path = require('path');
+
 
 module.exports = (env = {}) => {
   const config = {
@@ -50,6 +52,13 @@ module.exports = (env = {}) => {
           ],
           exclude: /node_modules/,
         },
+        {
+          test: /\.yaml$/,
+          use: [
+            { loader: 'json-loader' },
+            { loader: 'yaml-loader' }
+          ]
+        },
       ],
     },
     plugins: [
@@ -59,6 +68,24 @@ module.exports = (env = {}) => {
         VERSION: JSON.stringify(packageJson.version),
         DEVELOP: env.development,
       }),
+      new CopyPlugin({
+        patterns: [
+            './node_modules/swagger-ui-dist/swagger-ui.css',
+            './node_modules/swagger-ui-dist/swagger-ui-bundle.js',
+            './node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js',
+            './node_modules/swagger-ui-dist/favicon-16x16.png',
+            './node_modules/swagger-ui-dist/favicon-32x32.png'
+        ]
+    }),
+   /* new CopyPlugin({
+      patterns: [
+          {
+              from: path.resolve(__dirname, 'src/assets/'),
+              to: path.resolve(__dirname, 'dist/assets'),
+          },
+      ],
+  }),*/
+
     ],
   };
   if (env.nodemon) {
