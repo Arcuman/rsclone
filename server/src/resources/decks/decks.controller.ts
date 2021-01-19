@@ -22,33 +22,28 @@ const deleteDeckById =  async (id:number):Promise<number> => {
   return count;
 };
 
-const setDeckInfo =   (userData:Deck):number =>  0;
-
-const updateDeckById =  (id:number, userData:Deck):number => 0;
-/*
-const setUser =  async (userData:Deck):Promise<number> =>  {
-  const user = await decksModel.getUserByLogin(userData.login);
-  if (user) {
+const createDeck =   async (data:Deck):Promise<number> =>  {
+  const deckId = await decksModel.setDeckInfo(data);
+  
+  if (!deckId) {
     return 0;
   }
-  const hash =  myCrypt.hashPassword(userData.password);
-  const newUserData = {...userData, password:hash};
-  return decksModel.setUser(newUserData);
+  const cardsCount = await decksModel.setDeckCards(deckId, data.cards!);
+  return cardsCount;
 };
 
-const updateUserById = async (id:number, userData:Deck):Promise<Deck> => {
-  const hash = myCrypt.hashPassword(userData.password);
-  const newUserData = {...userData, password:hash};
-  return decksModel.updateUserById(id, newUserData);
+const updateDeckById =  async (id:number, data:Deck):Promise<number>=>{
+  await decksModel.deleteDeckCards(id);
+  await decksModel.updateDeckById(id, data);
+  const cardsCount = await decksModel.setDeckCards(id, data.cards!);
+  return cardsCount;
 };
-
-*/
 
 export const decksService =   {
   getAll,
   getDeckById,
   getDeckByIdCards,
-  setDeckInfo,
+  createDeck,
   updateDeckById,
   deleteDeckById, 
 };

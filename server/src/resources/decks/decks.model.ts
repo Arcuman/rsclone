@@ -1,9 +1,8 @@
 import {Card} from '@/resources/card/card.model';
-import { use } from 'passport';
 import { db } from '../../../db';
 
 export interface Deck {
-  user_deck_id: number;
+  user_deck_id?: number;
   user_id: number;
   name: string;
   cards_count?:number;
@@ -56,6 +55,18 @@ const getDeckCards = async (deck_id: number): Promise<Card[]> => {
   return cards;
 };
 
+const getDeckCardsIds = async (deck_id: number): Promise<number[]> => {
+  let cardsIds: number[];
+  try {
+    ({ rows: cardsIds } = await db.query('Select card_id From "UserDeckCards" Where user_deck_id=$1', [deck_id]));
+
+  } catch (error) {
+    throw new Error('500');
+
+  }
+  return cardsIds;
+};
+
 const deleteDeckById = async (id: number): Promise<number> => {
   try {
     const { rowCount } = await db.query('DELETE FROM "UserDecks" WHERE user_deck_id=$1', [id]);
@@ -81,11 +92,13 @@ const setDeckInfo = async (data: Deck): Promise<number> => {
   try {
     const query = 'INSERT INTO "UserDecks" (user_id, name) VALUES ($1, $2 ) RETURNING user_deck_id';
     ({ rows: [deck] } = await db.query(query, [data.user_id.toString(), data.name]));
-
+    if (!deck){
+      return 0;
+    }
   } catch (error) {
     throw new Error('500');
   }
-  return deck.user_deck_id;
+  return deck.user_deck_id!;
 };
 
 const updateDeckById = async (id: number, data: Deck): Promise<Deck> => {
@@ -100,18 +113,28 @@ const updateDeckById = async (id: number, data: Deck): Promise<Deck> => {
   return deck;
 };
 
-/*
- to do diff deck cards
-*/
-const updateDeckCards = async (id: number, data: Deck): Promise<void> => {
+const setDeckCards = async (deck_id: number, cards: Card[]): Promise<number> => {
+  try {
+    const cardsDecksPairs =  cards.reduce((prev, curr) => `${prev}, (${curr.id}, ${deck_id})`, '').slice(1);
+    
+    const query = `INSERT INTO "UserDeckCards" (card_id, user_deck_id) VALUES ${cardsDecksPairs}`;
+    const { rowCount }= await db.query(query, []);
+   
+    return rowCount;
+  
+  } catch (error) {
+    throw new Error('500');
+  }
 };
 
 export const decksModel = {
   getAll,
   getDeckById,
   getDeckCards,
+  getDeckCardsIds,
   setDeckInfo,
   updateDeckById,
+  setDeckCards,
   deleteDeckById, 
   deleteDeckCards,
 };

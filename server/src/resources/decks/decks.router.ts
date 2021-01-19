@@ -22,23 +22,23 @@ router
         .end();
       next();
     }),
-  );
-
-/* .post(
+  )
+  
+  .post(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-      const newUser = req.body;
-      const user = await decksService.setDeckInfo(newUser);
+      const newDeck:Deck = req.body;
+      const deck = await decksService.createDeck(newDeck);
 
       res.statusMessage = statusCodes[StatusCodes.OK].update;
       res
         .type('application/json')
-        .json(user)
+        .json(deck)
         .status(StatusCodes.OK)
         .end();
       next();
     }),
   );
-*/
+
 router
   .route('/:id')
   .get(
@@ -66,32 +66,32 @@ router
     }),
   )
 
-/* .put(
+  .put(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-      const newUserData = req.body;
-      const userId = Number(req.params.id);
+      const newDeck:Deck = req.body;
+      const deckId = Number(req.params.id);
 
-      if (!userId) {
-        throw new ErrorHandler(HttpStatus.BAD_REQUEST);
+      if (!deckId) {
+        throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
-      const user = await decksService.updateUserById(userId, newUserData);
+      const deck = await decksService.updateDeckById(deckId, newDeck);
 
-      if (!user) {
+      if (!deck) {
         throw new ErrorHandler(
-          HttpStatus.NOT_FOUND,
-          statusCodes[HttpStatus.NOT_FOUND],
+          StatusCodes.NOT_FOUND,
+          statusCodes[StatusCodes.NOT_FOUND],
         );
       } else {
-        res.statusMessage = statusCodes[HttpStatus.OK].update;
+        res.statusMessage = statusCodes[StatusCodes.OK].update;
         res
           .type('application/json')
-          .json(user)
-          .status(HttpStatus.OK)
+          .json(deck)
+          .status(StatusCodes.OK)
           .end();
       }
       next();
     }),
-  ) */
+  ) 
 
   .delete(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
