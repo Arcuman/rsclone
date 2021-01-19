@@ -26,14 +26,9 @@ const updateCardById =  async (id:number, data:Card):Promise<Card>=>{
 };
 
 const setUserCards = async (cards:Card[], userId:number):Promise<boolean> =>{
-  let error = false;
-  cards.forEach(async (card:Card):Promise<void> =>{
-    const cardCount = await cardModel.setUserCard(card.id, userId);
-    error = error || !cardCount;    
-  });
-
-  return !error;
-  
+  const notError = await cardModel.setUserCard(cards, userId);
+ 
+  return notError;  
 };
 
 export const cardService =   {

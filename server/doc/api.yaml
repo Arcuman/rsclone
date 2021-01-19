@@ -12,43 +12,47 @@ components:
     User:
       type: object
       properties:
-        id:
-          type: string
+        user_id:
+          type: integer
         name:
           type: string
         login:
           type: string
     deck:
       properties:
-        id:
+        user_deck_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
           type: string
-        title:
-          type: string
-        columns:
+        isinitial:
+          type: boolean
+        cards_count:
+          type: integer
+        cards:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-              title:
-                type: string
-              order:
-                type: integer
-    Task:
+            $ref: "#/components/schemas/Card"
+            
+    Card:
       required:
         - title
       properties:
         id:
+          type: integer
+        name:
           type: string
-        title:
-          type: string
-        order:
-          type: number
-        description:
-          type: string
-        userId: 
-          type: string
+        attack:
+          type: integer
+        manaCost:
+          type: integer
+        health: 
+          type: integer
+        isinitial:
+          type: boolean
+        isActive:
+          type: boolean
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -106,10 +110,11 @@ paths:
       responses:
         200:
           description: The user has been created.
-          content:
-            application/json:
+          content: 
+            text/plain:
               schema:
-                $ref: "#/components/schemas/User"
+                type: integer
+                title: user_id
         400:
           description: Bad request
         401:
@@ -120,7 +125,7 @@ paths:
         in: path
         required: true
         schema:
-          type: string
+          type: integer
     get:
       tags:
         - Users
@@ -177,9 +182,7 @@ paths:
       tags:
         - Users
       summary: Delete user
-      description: Deletes user by ID. When somebody
-        DELETE User, all Tasks where User is assignee
-        should be updated to put userId=null
+      description: Deletes user by ID. 
       responses:
         204:
           description: The user has been deleted
@@ -217,64 +220,63 @@ paths:
               type: object
               title: example
               properties:
-                title:
+                user_id:
+                  type: integer
+                name:
                   type: string
-                  description: The deck's name
-                columns:
+                isinitial:
+                  type: boolean
+                cards:
                   type: array
-                  description: The deck's column list
                   items:
                     type: object
+                    title: cardId
                     properties:
-                      title:
-                        type: string
-                      order:
+                      id:
                         type: integer
-                  required:
-                    - title
-                    - order
               required:
-                - title
-                - columns
+                - user_id
+                - name
       responses:
         200:
           description: The deck has been created.
           content:
-            application/json:
+             text/plain:
               schema:
-                $ref: "#/components/schemas/deck"
+                type: integer
+                title: user_id
         400:
           description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
   /decks/{deckId}:
     parameters:
-      - name: boardId
+      - name: deckId
         in: path
         required: true
         schema:
-          type: string
+          type: integer
     get:
       tags:
         - decks
-      summary: Get board by id
-      description: Gets the Board by ID (e.g. “/decks/123”)
+      summary: Get deck by id
+      description: Gets the Deck by ID (e.g. “/decks/123”)
       responses:
         200:
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Board"
+                $ref: "#/components/schemas/deck"
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
-          description: Board not found
+          description: Deck not found
     put:
       tags:
         - decks
-      summary: Update board
-      description: Updates a Board by ID
+      summary: Update deck
+      description: Updates a Deck by ID
       requestBody:
         required: true
         content:
@@ -283,38 +285,31 @@ paths:
               type: object
               title: example
               properties:
-                id:
+                user_id:
+                  type: integer
+                name:
                   type: string
-                title:
-                  type: string
-                  description: The board's name
-                columns:
+                isinitial:
+                  type: boolean
+                cards:
                   type: array
-                  description: The board's column list
                   items:
                     type: object
+                    title: cardId
                     properties:
                       id:
-                        type: string
-                        description: column's id
-                      title:
-                        type: string
-                        description: column's title
-                      order:
                         type: integer
-                  required:
-                    - title
-                    - order
               required:
-                - title
-                - columns
+                - user_id
+                - name
       responses:
         200:
           description: The board has been updated.
           content:
-            application/json:
+             text/plain:
               schema:
-                $ref: "#/components/schemas/Board"
+                type: integer
+                title: number of deck cards
         400:
           description: Bad request
         401:
@@ -322,18 +317,17 @@ paths:
     delete:
       tags:
         - decks
-      summary: Delete board
-      description: Deletes a Board by ID.
-        When somebody DELETE Board,
-        all its Tasks should be deleted as well
+      summary: Delete deck
+      description: Deletes a Deck by ID.
+        
       responses:
         204:
-          description: The board has been deleted
+          description: The deck has been deleted
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
-          description: Board not found
-  /decks/{boardId}/tasks:
+          description: Deck not found
+  /decks/{deckd}/tasks:
     parameters:
       - name: boardId
         in: path

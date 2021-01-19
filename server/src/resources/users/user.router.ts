@@ -16,7 +16,7 @@ router
       res
         .type('application/json')
         .json(users)
-        .status(200)
+        .status(HttpStatus.OK)
         .end();
       next();
     }),

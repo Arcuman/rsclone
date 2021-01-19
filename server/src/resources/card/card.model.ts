@@ -116,22 +116,17 @@ const setCard = async (data: Card): Promise<number> => {
   return card.id;
 };
 
-const setUserCard = async (card_id: number, user_id:number): Promise<number> => {
-  let userCardId: number;
-  
-  try {
-    const query = 'INSERT INTO "UserCards" (card_id, user_id) '+
-                  'VALUES ($1, $2) RETURNING user_card_id';
-  
-    ({ rows: [userCardId] } = await db.query(query, [card_id.toString(), user_id.toString()]));
+const setUserCard = async (cards:Card[], user_id:number): Promise<boolean> => {
+  const cardsUsersPairs =  cards.reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '').slice(1);
 
-    if (!userCardId){
-      return 0;
-    }
+  try {
+    const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
+    const { rowCount }= await db.query(query, []);
+    
+    return rowCount>0; 
   } catch (error) {
     throw new Error('500');
-  }
-  return userCardId;
+  } 
 };
 
 const updateCardById = async (id: number, data: Card): Promise<Card> => {
