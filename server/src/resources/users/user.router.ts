@@ -113,4 +113,58 @@ router
       next();
     }),
   );
+
+  router
+  .route('/profile')
+  .get(
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
+      const userId = Number(req.params.id);
+      if (!userId) {
+        throw new ErrorHandler(HttpStatus.BAD_REQUEST);
+      }
+      const profile = await usersService.getUserProfile(userId);
+
+      if (!profile) {
+        throw new ErrorHandler(
+          HttpStatus.NOT_FOUND,
+          statusCodes[HttpStatus.NOT_FOUND],
+        );
+      } else {
+        res.statusMessage = statusCodes[HttpStatus.OK].all;
+        res
+          .type('application/json')
+          .json(profile)
+          .status(HttpStatus.OK)
+          .end();
+      }
+      next();
+    }),
+  )
+  .put(
+    catchError(async (req:Request, res:Response, next:NextFunction) => {
+      const newUserProfile = req.body;
+      const userId = Number(req.params.id);
+
+      if (!userId) {
+        throw new ErrorHandler(HttpStatus.BAD_REQUEST);
+      }
+      const profile = await usersService.updateUserProfile(userId, newUserProfile);
+
+      if (!profile) {
+        throw new ErrorHandler(
+          HttpStatus.NOT_FOUND,
+          statusCodes[HttpStatus.NOT_FOUND],
+        );
+      } else {
+        res.statusMessage = statusCodes[HttpStatus.OK].update;
+        res
+          .type('application/json')
+          .json(profile)
+          .status(HttpStatus.OK)
+          .end();
+      }
+      next();
+    }),
+  )
+
 export {router};

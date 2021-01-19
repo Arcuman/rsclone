@@ -7,6 +7,15 @@ export interface User {
   password: string;
 }
 
+export interface UserProfile{
+  user_id: number;
+  nickName: string;
+  level: number;
+  exp: number;
+  curr_user_deck_id: number;
+}
+
+
 export interface Session {
   refreshToken: string;
   user_id: number;
@@ -41,6 +50,31 @@ const getUserById = async (id: number): Promise<User> => {
   return user;
 };
 
+const getDefaultDeckId = async (id: number): Promise<number> => {
+  let deckId: number;
+  try {
+    ({ rows: [deckId] } = await db.query('Select cur_user_deck_id as  from "UserProfiles" Where user_id=$1', [id]));
+
+  } catch (error) {
+    throw new Error('500');
+
+  }
+  return deckId;
+};
+
+const getUserProfile = async (id: number): Promise<UserProfile> => {
+  let profile: UserProfile;
+  try {
+    ({ rows: [profile] } = await db.query('Select *  from "UserProfiles" Where user_id=$1', [id]));
+
+  } catch (error) {
+    throw new Error('500');
+
+  }
+  return profile;
+};
+
+
 const setUser = async (userData: User): Promise<number> => {
   let user: User;
   try {
@@ -54,6 +88,21 @@ const setUser = async (userData: User): Promise<number> => {
   return user.user_id;
 };
 
+const setUserProfile = async (data: UserProfile): Promise<number> => {
+  try {
+    const query = 'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, curr_user_deck_id) '+
+                  'VALUES ($1, $2, $3, $4, $5) ';
+                
+    const { rowCount } = await db.query(query, 
+                                  [data.user_id.toString(), data.nickName, data.level.toString(), 
+                                    data.exp.toString(), data.curr_user_deck_id.toString()]);
+    return rowCount;
+  } catch (error) {
+    throw new Error('500');
+  }
+  
+};
+
 const updateUserById = async (id: number, userData: User): Promise<User> => {
   let user: User;
   try {
@@ -64,6 +113,33 @@ const updateUserById = async (id: number, userData: User): Promise<User> => {
     throw new Error('500');
   }
   return user;
+};
+
+const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> => {
+  let profile: UserProfile;
+  try {
+    const query = 'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, curr_user_deck_id=$5  '+
+                  'WHERE user_id=$1  RETURNING *';
+    ({ rows: [profile] } = await db.query(query, 
+                                  [id.toString(), data.nickName, data.level.toString(), 
+                                    data.exp.toString(), data.curr_user_deck_id.toString()]));
+
+  } catch (error) {
+    throw new Error('500');
+  }
+  return profile;
+};
+
+const updateDefaultDeck = async (user_id:number, deck_id:number): Promise<number> => {
+  try {
+    const query = 'UPDATE "UserProfiles" Set curr_user_deck_id=$2  '+
+                  'WHERE user_id=$1  RETURNING user_id';
+    const { rowCount } = await db.query(query, 
+                                  [user_id.toString(), deck_id.toString()]);
+    return rowCount;
+  } catch (error) {
+    throw new Error('500');
+  }
 };
 
 const deleteUserById = async (id: number): Promise<number> => {
@@ -135,8 +211,13 @@ const addRefreshSession = async ({ refreshToken, user_id, ip, expiresIn}: Sessio
 export const usersModel = {
   getAll,
   getUserById,
+  getDefaultDeckId,
+  getUserProfile,
   setUser,
+  setUserProfile,
   updateUserById,
+  updateUserProfile,
+  updateDefaultDeck,
   deleteUserById,
   getUserByLogin,
   getSessionByRefreshToken,
