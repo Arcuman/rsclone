@@ -27,14 +27,14 @@ const getAll = async (user_id:number): Promise<Deck[]> => {
 
 const getDeckById = async (id: number): Promise<Deck> => {
   let deck: Deck;
-  console.log('id=', id);
+
   try {
     ({ rows: [deck] } = await db.query('Select * from "UserDecks" Where user_deck_id=$1', [id]));
 
   } catch (error) {
     throw new Error('500');
   }
-  console.log('deck=', deck);
+ 
   return deck;
 };
 

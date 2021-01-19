@@ -4,7 +4,7 @@ const statusCodes = {
     create: 'The deck has been created',
     update: 'The deck has been updated',
   },
-  '204': 'The dec has been deleted',
+  '204': 'The deck has been deleted',
   '404': 'Deck not found',
 };
 export default statusCodes;

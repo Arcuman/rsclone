@@ -1,6 +1,6 @@
 
-import {Card} from '@/resources/card/card.model';
 import {decksModel, Deck} from './decks.model';
+import {usersService} from '@/resources/users/user.controller';
 
 const getAll = (user_id:number):Promise<Deck[]> =>  decksModel.getAll(user_id);
 const getDeckById = (id:number):Promise<Deck> => decksModel.getDeckById(id);
@@ -12,6 +12,18 @@ const getDeckByIdCards = async (id:number):Promise<Deck> => {
   }
   
   deck.cards = await decksModel.getDeckCards(id);
+  return deck;
+
+};
+
+const getUserDefaultDeck = async (userId:number):Promise<Deck> => {
+  const deckId = await usersService.getDefaultDeckId(userId);
+  const deck:Deck = await decksModel.getDeckById(deckId);
+  if (!deck){
+    throw new Error('no deck');
+  }
+  
+  deck.cards = await decksModel.getDeckCards(deckId);
   return deck;
 
 };
@@ -39,12 +51,19 @@ const updateDeckById =  async (id:number, data:Deck):Promise<number>=>{
   return cardsCount;
 };
 
+const updateDefaultDeck =  async (deckId:number, userId:number):Promise<number>=>{
+  const count = await usersService.updateDefaultDeck(userId, deckId);
+  return count;
+};
+
 export const decksService =   {
   getAll,
   getDeckById,
   getDeckByIdCards,
+  getUserDefaultDeck,
   createDeck,
   updateDeckById,
+  updateDefaultDeck,
   deleteDeckById, 
 };
 

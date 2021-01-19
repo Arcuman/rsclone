@@ -11,8 +11,7 @@ router
   .route('/')
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-      console.log('user_id=', req.user!.user_id);
-      const decks:Deck[] = await decksService.getAll(req.user!.user_id);
+       const decks:Deck[] = await decksService.getAll(req.user!.user_id);
 
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res
