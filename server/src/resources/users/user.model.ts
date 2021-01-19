@@ -15,7 +15,6 @@ export interface UserProfile{
   curr_user_deck_id: number;
 }
 
-
 export interface Session {
   refreshToken: string;
   user_id: number;
@@ -74,15 +73,14 @@ const getUserProfile = async (id: number): Promise<UserProfile> => {
   return profile;
 };
 
-
 const setUser = async (userData: User): Promise<number> => {
   let user: User;
+  
   try {
     const query = 'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
     ({ rows: [user] } = await db.query(query, [userData.login, userData.name, userData.password]));
 
   } catch (error) {
-    console.log(error);
     throw new Error('500');
   }
   return user.user_id;
@@ -90,12 +88,12 @@ const setUser = async (userData: User): Promise<number> => {
 
 const setUserProfile = async (data: UserProfile): Promise<number> => {
   try {
-    const query = 'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, curr_user_deck_id) '+
+    const query = 'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, cur_user_deck_id) '+
                   'VALUES ($1, $2, $3, $4, $5) ';
-                
+     
     const { rowCount } = await db.query(query, 
-                                  [data.user_id.toString(), data.nickName, data.level.toString(), 
-                                    data.exp.toString(), data.curr_user_deck_id.toString()]);
+      [data.user_id.toString(), data.nickName, data.level.toString(), 
+        data.exp.toString(), data.curr_user_deck_id.toString()]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -121,8 +119,8 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
     const query = 'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, curr_user_deck_id=$5  '+
                   'WHERE user_id=$1  RETURNING *';
     ({ rows: [profile] } = await db.query(query, 
-                                  [id.toString(), data.nickName, data.level.toString(), 
-                                    data.exp.toString(), data.curr_user_deck_id.toString()]));
+      [id.toString(), data.nickName, data.level.toString(), 
+        data.exp.toString(), data.curr_user_deck_id.toString()]));
 
   } catch (error) {
     throw new Error('500');
@@ -135,7 +133,7 @@ const updateDefaultDeck = async (user_id:number, deck_id:number): Promise<number
     const query = 'UPDATE "UserProfiles" Set curr_user_deck_id=$2  '+
                   'WHERE user_id=$1  RETURNING user_id';
     const { rowCount } = await db.query(query, 
-                                  [user_id.toString(), deck_id.toString()]);
+      [user_id.toString(), deck_id.toString()]);
     return rowCount;
   } catch (error) {
     throw new Error('500');

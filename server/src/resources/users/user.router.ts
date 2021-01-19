@@ -114,7 +114,7 @@ router
     }),
   );
 
-  router
+router
   .route('/profile')
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
@@ -165,6 +165,6 @@ router
       }
       next();
     }),
-  )
+  );
 
 export {router};

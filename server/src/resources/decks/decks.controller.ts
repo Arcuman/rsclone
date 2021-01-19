@@ -1,6 +1,13 @@
 
-import {decksModel, Deck} from './decks.model';
 import {usersService} from '@/resources/users/user.controller';
+import { StatusCodes } from 'http-status-codes';
+import {decksModel, Deck} from './decks.model';
+import statusCodes from './decks.constants';
+
+const isInitialDeck = async (id:number):Promise<boolean> =>{
+  const deck = await decksModel.getDeckById(id);
+  return deck.isinitial || false;  
+};
 
 const getAll = (user_id:number):Promise<Deck[]> =>  decksModel.getAll(user_id);
 const getDeckById = (id:number):Promise<Deck> => decksModel.getDeckById(id);
@@ -8,7 +15,7 @@ const getDeckById = (id:number):Promise<Deck> => decksModel.getDeckById(id);
 const getDeckByIdCards = async (id:number):Promise<Deck> => {
   const deck:Deck = await decksModel.getDeckById(id);
   if (!deck){
-    throw new Error('no deck');
+    throw new Error(statusCodes[StatusCodes.NOT_FOUND]);
   }
   
   deck.cards = await decksModel.getDeckCards(id);
@@ -20,7 +27,7 @@ const getUserDefaultDeck = async (userId:number):Promise<Deck> => {
   const deckId = await usersService.getDefaultDeckId(userId);
   const deck:Deck = await decksModel.getDeckById(deckId);
   if (!deck){
-    throw new Error('no deck');
+    throw new Error(statusCodes[StatusCodes.NOT_FOUND]);
   }
   
   deck.cards = await decksModel.getDeckCards(deckId);
@@ -29,6 +36,10 @@ const getUserDefaultDeck = async (userId:number):Promise<Deck> => {
 };
 
 const deleteDeckById =  async (id:number):Promise<number> => {
+  if (await isInitialDeck(id)){
+    throw new Error(statusCodes[StatusCodes.BAD_REQUEST].initialDelete);
+  }
+
   await  decksModel.deleteDeckCards(id);
   const count = await decksModel.deleteDeckById(id); 
   return count;
@@ -40,11 +51,17 @@ const createDeck =   async (data:Deck):Promise<number> =>  {
   if (!deckId) {
     return 0;
   }
-  const cardsCount = await decksModel.setDeckCards(deckId, data.cards!);
-  return cardsCount;
+  
+  await decksModel.setDeckCards(deckId, data.cards!);
+  
+  return deckId;
 };
 
 const updateDeckById =  async (id:number, data:Deck):Promise<number>=>{
+  if (await isInitialDeck(id)){
+    throw new Error(statusCodes[StatusCodes.BAD_REQUEST].initialUpdate);
+  }
+
   await decksModel.deleteDeckCards(id);
   await decksModel.updateDeckById(id, data);
   const cardsCount = await decksModel.setDeckCards(id, data.cards!);

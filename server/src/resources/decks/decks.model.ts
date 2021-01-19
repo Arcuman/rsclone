@@ -5,7 +5,8 @@ export interface Deck {
   user_deck_id?: number;
   user_id: number;
   name: string;
-  cards_count?:number;
+  isinitial?:boolean;
+  cards_count?:number;  
   cards?:Card[];
 }
 
@@ -89,9 +90,10 @@ const deleteDeckCards = async (id: number): Promise<number> => {
 
 const setDeckInfo = async (data: Deck): Promise<number> => {
   let deck: Deck;
+  const isinitial  = data.isinitial ? data.isinitial : false;
   try {
-    const query = 'INSERT INTO "UserDecks" (user_id, name) VALUES ($1, $2 ) RETURNING user_deck_id';
-    ({ rows: [deck] } = await db.query(query, [data.user_id.toString(), data.name]));
+    const query = 'INSERT INTO "UserDecks" (user_id, name, isinitial) VALUES ($1, $2, $3 ) RETURNING user_deck_id';
+    ({ rows: [deck] } = await db.query(query, [data.user_id.toString(), data.name, isinitial.toString()]));
     if (!deck){
       return 0;
     }

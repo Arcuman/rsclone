@@ -101,11 +101,11 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
       .status(StatusCodes.OK)
       .end();
   } catch (error) {
+    const message:string = getReasonPhrase(StatusCodes.BAD_REQUEST);
     res
       .status(StatusCodes.BAD_REQUEST)
-      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
+      .send(`${message} ${error}`);
   }
-  
 };
 
 const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -115,11 +115,10 @@ const refreshToken = async (req: Request, res: Response, next: NextFunction): Pr
     req.user = authUser.user;
     req.body =  JSON.stringify({token:authUser.token});
   } catch (error) {
-    res.statusMessage = statusCodes[StatusCodes.BAD_REQUEST];
-    
+     
     res
       .status(StatusCodes.BAD_REQUEST)
-      .end();
+      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
     return next(error);
   }
   return next();

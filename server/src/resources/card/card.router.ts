@@ -11,9 +11,8 @@ router
   .route('/')
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-      console.log('user_id=', req.user!.user_id);
       const cards:Card[] = await cardService.getAllByUserId(req.user!.user_id);
-
+     
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res
         .type('application/json')
@@ -28,7 +27,7 @@ router
     catchError(async (req:Request, res:Response, next:NextFunction) => {
       const newCard:Card = req.body;
       const card = await cardService.createCard(newCard);
-
+     
       res.statusMessage = statusCodes[StatusCodes.OK].update;
       res
         .type('application/json')
@@ -39,20 +38,20 @@ router
     }),
   );
 
-  router
+router
   .route('/all')
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-        const cards:Card[] = await cardService.getAll();
+      const cards:Card[] = await cardService.getAll();
        
-        res.statusMessage = statusCodes[StatusCodes.OK].all;
-        res
-          .type('application/json')
-          .json(cards)
-          .status(StatusCodes.OK)
-          .end();
-        next();
-      }),
+      res.statusMessage = statusCodes[StatusCodes.OK].all;
+      res
+        .type('application/json')
+        .json(cards)
+        .status(StatusCodes.OK)
+        .end();
+      next();
+    }),
   );
 
 router
@@ -63,7 +62,7 @@ router
       if (!id) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
-      const card = await cardService.getCardByIdCards(id);
+      const card = await cardService.getCardById(id);
 
       if (!card) {
         throw new ErrorHandler(
@@ -86,12 +85,13 @@ router
     catchError(async (req:Request, res:Response, next:NextFunction) => {
       const newCard:Card = req.body;
       const cardId = Number(req.params.id);
-
+     
       if (!cardId) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
+   
       const card = await cardService.updateCardById(cardId, newCard);
-
+     
       if (!card) {
         throw new ErrorHandler(
           StatusCodes.NOT_FOUND,

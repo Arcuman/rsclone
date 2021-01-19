@@ -11,7 +11,7 @@ router
   .route('/')
   .get(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
-       const decks:Deck[] = await decksService.getAll(req.user!.user_id);
+      const decks:Deck[] = await decksService.getAll(req.user!.user_id);
 
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res
@@ -26,12 +26,12 @@ router
   .post(
     catchError(async (req:Request, res:Response, next:NextFunction) => {
       const newDeck:Deck = req.body;
-      const deck = await decksService.createDeck(newDeck);
-
+      const deckId = await decksService.createDeck(newDeck);
+     
       res.statusMessage = statusCodes[StatusCodes.OK].update;
       res
         .type('application/json')
-        .json(deck)
+        .json(deckId)
         .status(StatusCodes.OK)
         .end();
       next();
