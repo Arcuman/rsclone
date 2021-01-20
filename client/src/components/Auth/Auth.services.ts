@@ -1,6 +1,6 @@
 import { store } from '@/redux/store/rootStore';
 import { AuthUser } from '@/types/types';
-import { StatusCodes} from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import {
   setAuthInformation,
   removeAuthInformation,
@@ -14,7 +14,8 @@ import {
   LOGOUT_ACTION,
   REGISTER_ACTION,
   HEADER_JSON,
-  REFRESH_TOKEN, AUTH_ERRORS,
+  REFRESH_TOKEN,
+  AUTH_ERRORS,
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
@@ -24,34 +25,37 @@ const requestInit: RequestInit = {
   mode: 'cors',
   cache: 'default',
   credentials: 'include',
-  body:'',
+  body: '',
 };
 
-const refreshTokenSession = async (): Promise<boolean> => fetch(REFRESH_TOKEN, requestInit)
-  .then((response): Promise<string> => {
-    if (response.status !== StatusCodes.OK) {
-      throw new Error();
-    }
-    return response.json();
-  })
-  .then((bodyValue: string) => {
-    const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
+const refreshTokenSession = async (): Promise<boolean> =>
+  fetch(REFRESH_TOKEN, requestInit)
+    .then(
+      (response): Promise<string> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
+    .then((bodyValue: string) => {
+      const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
 
-    if (!authObj.accessToken) {
-      return false;
-    }
+      if (!authObj.accessToken) {
+        return false;
+      }
 
-    const { exp } = parseTokenData(authObj.accessToken);
-    authObj.tokenExpDate = exp;
+      const { exp } = parseTokenData(authObj.accessToken);
+      authObj.tokenExpDate = exp;
 
-    store.dispatch(setAuthInformation(authObj));
-    localStorage.setItem('refreshToken', 'true');
+      store.dispatch(setAuthInformation(authObj));
+      localStorage.setItem('refreshToken', 'true');
 
-    return true;
-  })
-  .catch(error => {
-    throw new Error(error);
-  });
+      return true;
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
 
 export const isUserAuthenticate = async (): Promise<boolean> => {
   const { accessToken } = store.getState().authUser;
@@ -81,7 +85,7 @@ export const handleRegister = (): void => {
 
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
 
-  requestInit.body=body;
+  requestInit.body = body;
 
   fetch(REGISTER_ACTION, requestInit)
     .then((response): void => {
@@ -101,21 +105,22 @@ export const handleLogin = (): void => {
   const password = <HTMLInputElement>document.getElementById('password');
 
   const body = JSON.stringify({ login: login.value, password: password.value });
- 
+
   requestInit.body = body;
 
   fetch(LOGIN_ACTION, requestInit)
-    .then((response): Promise<string> => {
-     
-      if (response.status !== StatusCodes.OK){
-        throw new Error();
-      }
-      return response.json();
-    })
+    .then(
+      (response): Promise<string> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
     .then((bodyValue: string) => {
       const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
-     
-      if (!authObj.accessToken){
+
+      if (!authObj.accessToken) {
         throw new Error();
       }
       const { exp } = parseTokenData(authObj.accessToken);

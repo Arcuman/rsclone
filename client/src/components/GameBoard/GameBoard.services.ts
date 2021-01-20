@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
-import { IMAGES } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
-import { CardCreateInfo } from '@/components/Card/Card.model';
 import { cardBase } from '@/components/Card/Card.render';
+import { IMAGES } from '../Game/constant';
+import { createAvatar } from './UserAvatar/Avatar.render';
+import { avatarPosition } from './UserAvatar/constants';
+import { createTable } from './Table/Table.render';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -125,14 +127,51 @@ export function create(game: Phaser.Scene): void {
   const containerX: number = <number>gameWidth / 2;
   const containerY: number = <number>gameHeight - 80;
 
-  const cardInfo: CardCreateInfo = {
+  let cardImg: string = IMAGES.AGENT.NAME;
+  cardBase({
     scene: game,
     posX: containerX,
     posY: containerY,
-    card: 'agent',
+    card: cardImg,
     mana: '6',
     attack: '2',
-    health: '3',
-  };
-  cardBase(cardInfo);
+    health: '2',
+  });
+
+  cardImg = IMAGES.SHIV.NAME;
+  cardBase({
+    scene: game,
+    posX: containerX + 50,
+    posY: containerY,
+    card: cardImg,
+    mana: '1',
+  });
+
+  cardImg = IMAGES.GAME_BOARD.NAME;
+  const createGameTable = createTable({
+    scene: game,
+    posX: <number>gameWidth / 2,
+    posY: <number>gameHeight / 2,
+    img: cardImg,
+  });
+
+  const { USER_X, USER_Y, ENEMY_X, ENEMY_Y } = avatarPosition;
+  cardImg = IMAGES.AVATAR.NAME;
+  const userAvatarExample = createAvatar({
+    scene: game,
+    posX: USER_X,
+    posY: USER_Y,
+    card: cardImg,
+    userName: 'Korolevishna',
+    health: '30',
+  });
+
+  const enemyAvatarExample = createAvatar({
+    scene: game,
+    posX: ENEMY_X,
+    posY: ENEMY_Y,
+    card: cardImg,
+    userName: 'Spider',
+    health: '30',
+  });
 }
