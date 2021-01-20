@@ -33,3 +33,10 @@ export interface TextDecoration {
   TEXT_OUTLINE_SIZE: number;
   TEXT_DEPTH: number;
 }
+
+export interface ShadowOptions {
+  OFFSET_X: number;
+  OFFSET_Y: number;
+  TINT: number;
+  ALPHA: number;
+}

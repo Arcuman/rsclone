@@ -13,8 +13,8 @@ export interface CardCreateInfo {
   posY: number;
   card: string;
   mana: string;
-  attack: string;
-  health: string;
+  attack?: string;
+  health?: string;
 }
 
 export interface PositionInfo {
