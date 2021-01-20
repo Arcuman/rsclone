@@ -1,4 +1,5 @@
-import { PositionInfo, TextDecoration } from './Card.model';
+import { TextDecoration, ShadowOptions } from '@/types/types';
+import { PositionInfo } from './Card.model';
 
 export const positionInfo: PositionInfo = {
   IMG_X: 0,
@@ -20,6 +21,14 @@ export const textDecoration: TextDecoration = {
   TEXT_DEPTH: 2,
 };
 
+export const shadowOptions: ShadowOptions = {
+  OFFSET_X: 4,
+  OFFSET_Y: 4,
+  TINT: 0x000000,
+  ALPHA: 0.6,
+};
+
 export const CHANGE_POSITION_CARD_Y = 100;
-export const SIZE_NORMAL_CARD = 1;
-export const SIZE_LITTLE_CARD = 0.6;
+export const SIZE_NORMAL_CARD = 1.1;
+export const SIZE_LITTLE_CARD = 0.7;
+export const CARD_CONTAINER_DEPTH = 1;

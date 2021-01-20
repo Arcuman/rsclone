@@ -69,6 +69,14 @@ export const IMAGES = {
     NAME: 'vendetta',
     PATH: 'assets/images/vendetta.png',
   },
+  GAME_BOARD: {
+    NAME: 'game_board',
+    PATH: 'assets/images/game_board.png',
+  },
+  AVATAR: {
+    NAME: 'avatar',
+    PATH: 'assets/images/avatar.png',
+  },
 };
 
 export const ATLASES = {

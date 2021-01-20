@@ -6,6 +6,17 @@ const REFRESH_TOKEN = 'http://localhost:3000/refresh-tokens';
 
 const HEADER_JSON = { 'Content-Type': 'application/json' };
 
-const AUTH_ERRORS = {login:'Bad request for login data', register:'Error! Has already registered'};
+const AUTH_ERRORS = {
+  login: 'Bad request for login data',
+  register: 'Error! Has already registered',
+};
 
-export { authForm, LOGIN_ACTION, LOGOUT_ACTION, REGISTER_ACTION, HEADER_JSON, REFRESH_TOKEN, AUTH_ERRORS};
+export {
+  authForm,
+  LOGIN_ACTION,
+  LOGOUT_ACTION,
+  REGISTER_ACTION,
+  HEADER_JSON,
+  REFRESH_TOKEN,
+  AUTH_ERRORS,
+};
