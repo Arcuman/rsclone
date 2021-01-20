@@ -26,8 +26,6 @@ export class GameBoardScene extends Phaser.Scene {
     this.state = data.gameState;
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
-    // eslint-disable-next-line no-console
-    console.log(this.state);
     create(this);
   }
 }

@@ -26,9 +26,9 @@ async function onLocationChange(changes: Update): Promise<void> {
       } else if (scene) {
         const game = getGame();
         if (game) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          game.scene.stop(game.scene.getScenes(true)[0].sys.config.key);
+          const currentScene = game.scene.getScenes(true)[0];
+          const curSceneKey = (<Phaser.Types.Scenes.SettingsConfig>currentScene.sys.config).key;
+          game.scene.stop(curSceneKey!);
           game.scene.start(scene);
         } else {
           createGameObj(scene);
