@@ -9,6 +9,7 @@ import { createGameObj, getGame } from '@/components/Game/Game.services';
 import { SCENES } from '@/components/Game/constant';
 import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
+import SettingsConfig = Phaser.Types.Scenes.SettingsConfig;
 
 async function onLocationChange(changes: Update): Promise<void> {
   router
@@ -25,6 +26,9 @@ async function onLocationChange(changes: Update): Promise<void> {
       } else if (scene) {
         const game = getGame();
         if (game) {
+          const currentScene = game.scene.getScenes(true)[0];
+          const curSceneKey = (<Phaser.Types.Scenes.SettingsConfig>currentScene.sys.config).key;
+          game.scene.stop(curSceneKey!);
           game.scene.start(scene);
         } else {
           createGameObj(scene);

@@ -20,5 +20,5 @@ const config:ClientConfig = {
     rejectUnauthorized: false,
   },
 };
- 
+
 export default config;

@@ -11,17 +11,18 @@ import {
   TEXT_FONT,
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
+import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
 import File = Phaser.Loader.File;
 
-function setLoadingBar(game: Phaser.Scene) {
-  const progressBar = game.add.graphics();
-  const progressBox = game.add.graphics();
+function setLoadingBar(scene: Phaser.Scene) {
+  const progressBar = scene.add.graphics();
+  const progressBox = scene.add.graphics();
   progressBox.fillStyle(PROGRESS_BOX.color, PROGRESS_BOX.alpha);
   progressBox.fillRect(PROGRESS_BOX.x, PROGRESS_BOX.y, PROGRESS_BOX.width, PROGRESS_BOX.height);
 
-  const { width } = game.cameras.main;
-  const { height } = game.cameras.main;
-  const loadingText = game.make.text({
+  const { width } = scene.cameras.main;
+  const { height } = scene.cameras.main;
+  const loadingText = scene.make.text({
     x: width / 2,
     y: height / 2 - 50,
     text: LOADING_TEXT,
@@ -31,7 +32,7 @@ function setLoadingBar(game: Phaser.Scene) {
   });
   loadingText.setOrigin(0.5, 0.5);
 
-  const percentText = game.make.text({
+  const percentText = scene.make.text({
     x: width / 2,
     y: height / 2 - 5,
     text: TEXT_ZERO_PROCENT,
@@ -41,7 +42,7 @@ function setLoadingBar(game: Phaser.Scene) {
   });
   percentText.setOrigin(0.5, 0.5);
 
-  const assetText = game.make.text({
+  const assetText = scene.make.text({
     x: width / 2,
     y: height / 2 + 50,
     text: '',
@@ -50,7 +51,7 @@ function setLoadingBar(game: Phaser.Scene) {
     },
   });
   assetText.setOrigin(0.5, 0.5);
-  game.load.on('progress', (value: number) => {
+  scene.load.on('progress', (value: number) => {
     percentText.setText(`${value * 100}%`);
     progressBar.clear();
     progressBox.fillStyle(PROGRESS_BAR.color, PROGRESS_BAR.alpha);
@@ -61,39 +62,40 @@ function setLoadingBar(game: Phaser.Scene) {
       PROGRESS_BAR.height,
     );
   });
-  game.load.on('fileprogress', (file: File) => {
+  scene.load.on('fileprogress', (file: File) => {
     assetText.setText(LOADINT_ASSETS(file.key));
   });
 }
 
-function loadImages(game: Phaser.Scene) {
+function loadImages(scene: Phaser.Scene) {
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const prop in IMAGES) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    game.load.image(IMAGES[prop].NAME, IMAGES[prop].PATH);
+    scene.load.image(IMAGES[prop].NAME, IMAGES[prop].PATH);
   }
 }
 
-function loadAtlases(game: Phaser.Scene) {
+function loadAtlases(scene: Phaser.Scene) {
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const prop in ATLASES) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    game.load.multiatlas(ATLASES[prop].NAME, ATLASES[prop].PATH, ATLASES[prop].IMAGES_CONTAINER);
+    scene.load.multiatlas(ATLASES[prop].NAME, ATLASES[prop].PATH, ATLASES[prop].IMAGES_CONTAINER);
   }
 }
-function loadScenes(game: Phaser.Scene) {
-  game.scene.add(SCENES.MENU, MenuScene, false);
-  game.scene.add(SCENES.GAME, GameBoardScene, false);
-  game.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
+function loadScenes(scene: Phaser.Scene) {
+  scene.scene.add(SCENES.MENU, MenuScene, false);
+  scene.scene.add(SCENES.GAME_BOARD, GameBoardScene, false);
+  scene.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
+  scene.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
 }
 
-export function preload(game: Phaser.Scene, nextScene: string): void {
-  setLoadingBar(game);
-  game.load.reset();
-  loadImages(game);
-  loadAtlases(game);
-  loadScenes(game);
-  game.load.on('complete', () => {
-    game.scene.start(nextScene);
+export function preload(scene: Phaser.Scene, nextScene: string): void {
+  setLoadingBar(scene);
+  scene.load.reset();
+  loadImages(scene);
+  loadAtlases(scene);
+  loadScenes(scene);
+  scene.load.on('complete', () => {
+    scene.scene.start(nextScene);
   });
 }

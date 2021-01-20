@@ -1,3 +1,12 @@
+export interface Card {
+  id: number;
+  name: string;
+  isActive: boolean;
+  health: number;
+  attack: number;
+  manaCost: number;
+}
+
 export interface CardCreateInfo {
   scene: Phaser.Scene;
   posX: number;

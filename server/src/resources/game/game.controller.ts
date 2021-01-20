@@ -2,9 +2,10 @@ import {Server, Socket} from 'socket.io';
 import {closeSocket, sendInitState} from '@/resources/game/game.service';
 import {createPlayer } from '@/resources/game/player/player.service';
 import {Room} from '@/resources/game/room/room.model';
-import {  getOrCreateOpenRoom } from '@/resources/game/room/room.service';
+import {closeRoom, getOrCreateOpenRoom} from '@/resources/game/room/room.service';
 import {
-  CLOSE_SOCKET,
+  ALREADY_PLAY,
+  CLOSE_SOCKET, DISCONNECT,
   HAND_CARD_PLAY,
   NEXT_TURN,
   OPPONENT_FOUND,
@@ -17,9 +18,22 @@ import {countDownTimer} from '@/resources/game/servicies/timer.service';
 import {handCardPlay} from '@/resources/game/servicies/handCardPlay.service';
 import {tableCardPlayTargetPlayer} from '@/resources/game/servicies/tableCardPlayTargerPlayer.service';
 import {tableCardPlayTargetCard} from '@/resources/game/servicies/tableCardPlayTargerCard.service';
+import {webToken} from '@/helpers/webToken';
 
-export default async function gameLogic(io: Server, socket: Socket, rooms: Array<Room>, id:number): Promise<void> {
-  const player = await createPlayer(id, socket);
+function isPlayerPlayed(rooms: Array<Room>, userId:number):boolean{
+  return rooms.some( room => room.players.some((player)=> player.userId === userId));
+}
+
+export default async function gameLogic(io: Server, socket: Socket, rooms: Array<Room>): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore.
+  const userId = webToken.getDataFromToken(socket.handshake.query.token);
+  if (isPlayerPlayed(rooms, userId)) {
+    socket.emit(ALREADY_PLAY);
+    socket.disconnect();
+    return ;
+  }
+  const player = await createPlayer(userId, socket);
   const openRoom: Room = getOrCreateOpenRoom(rooms);
 
   openRoom.players.push(player);
@@ -49,4 +63,8 @@ export default async function gameLogic(io: Server, socket: Socket, rooms: Array
 
   player.socket.on(CLOSE_SOCKET
     , () => closeSocket(openRoom, rooms, player));
+  player.socket.on(DISCONNECT
+    , () => {
+      closeRoom(openRoom, rooms);
+    });
 }

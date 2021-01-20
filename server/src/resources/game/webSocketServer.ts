@@ -12,9 +12,7 @@ export default (server : http.Server ) : void => {
         origin: '*',
         methods: ['GET', 'POST'],
       }});
-  let id = 0;
   io.on('connection', (socket : Socket) : void =>{
-    id = id === 2 ? 1 : id += 1 ;
-    gameLogic(io, socket, rooms, id);
-  }); 
+    gameLogic(io, socket, rooms);
+  });
 };
