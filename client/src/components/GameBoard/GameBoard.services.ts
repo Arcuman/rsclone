@@ -127,7 +127,6 @@ export function create(scene: Phaser.Scene): void {
   const containerX: number = <number>gameWidth / 2;
   const containerY: number = <number>gameHeight - 80;
 
-
   let cardImg: string = IMAGES.AGENT.NAME;
   cardBase({
     scene,
@@ -141,7 +140,7 @@ export function create(scene: Phaser.Scene): void {
 
   cardImg = IMAGES.SHIV.NAME;
   cardBase({
-    scene: game,
+    scene,
     posX: containerX + 50,
     posY: containerY,
     card: cardImg,
@@ -150,7 +149,7 @@ export function create(scene: Phaser.Scene): void {
 
   cardImg = IMAGES.GAME_BOARD.NAME;
   const createGameTable = createTable({
-    scene: game,
+    scene,
     posX: <number>gameWidth / 2,
     posY: <number>gameHeight / 2,
     img: cardImg,
@@ -159,7 +158,7 @@ export function create(scene: Phaser.Scene): void {
   const { USER_X, USER_Y, ENEMY_X, ENEMY_Y } = avatarPosition;
   cardImg = IMAGES.AVATAR.NAME;
   const userAvatarExample = createAvatar({
-    scene: game,
+    scene,
     posX: USER_X,
     posY: USER_Y,
     card: cardImg,
@@ -168,7 +167,7 @@ export function create(scene: Phaser.Scene): void {
   });
 
   const enemyAvatarExample = createAvatar({
-    scene: game,
+    scene,
     posX: ENEMY_X,
     posY: ENEMY_Y,
     card: cardImg,
