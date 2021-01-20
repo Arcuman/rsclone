@@ -28,7 +28,7 @@ router
       const newDeck:Deck = req.body;
       const deckId = await decksService.createDeck(newDeck);
      
-      res.statusMessage = statusCodes[StatusCodes.OK].update;
+      res.statusMessage = statusCodes[StatusCodes.OK].create;
       res
         .type('application/json')
         .json(deckId)

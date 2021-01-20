@@ -4,7 +4,7 @@ export interface User {
   user_id: number;
   login: string;
   name: string;
-  password: string;
+  password?: string;
 }
 
 export interface UserProfile{
@@ -78,7 +78,7 @@ const setUser = async (userData: User): Promise<number> => {
   
   try {
     const query = 'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
-    ({ rows: [user] } = await db.query(query, [userData.login, userData.name, userData.password]));
+    ({ rows: [user] } = await db.query(query, [userData.login, userData.name, userData.password!]));
 
   } catch (error) {
     throw new Error('500');
@@ -97,15 +97,14 @@ const setUserProfile = async (data: UserProfile): Promise<number> => {
     return rowCount;
   } catch (error) {
     throw new Error('500');
-  }
-  
+  }  
 };
 
 const updateUserById = async (id: number, userData: User): Promise<User> => {
   let user: User;
   try {
     const query = 'UPDATE "Users" Set login=$2, name=$3, password= $4 WHERE user_id=$1  RETURNING *';
-    ({ rows: [user] } = await db.query(query, [id.toString(), userData.login, userData.name, userData.password]));
+    ({ rows: [user] } = await db.query(query, [id.toString(), userData.login, userData.name, userData.password!]));
 
   } catch (error) {
     throw new Error('500');

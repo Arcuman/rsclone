@@ -52,7 +52,7 @@ const getUserProfile = (id:number):Promise<UserProfile> => usersModel.getUserPro
 const setUser =  async (userData:User):Promise<number> =>  {
   const user = await usersModel.getUserByLogin(userData.login);
   
-  if (user) {
+  if (user || !userData.password) {
     return 0;
   }
 
@@ -67,6 +67,9 @@ const setUser =  async (userData:User):Promise<number> =>  {
 };
 
 const updateUserById = async (id:number, userData:User):Promise<User> => {
+  if (!userData.password) {
+    throw new Error();
+  }
   const hash = myCrypt.hashPassword(userData.password);
   const newUserData = {...userData, password:hash};
   return usersModel.updateUserById(id, newUserData);
@@ -81,7 +84,7 @@ const deleteUserById =  (id:number):Promise<number> => usersModel.deleteUserById
 const checkUserAuth = async (login:string, password:string):Promise<User|null> => {
   const user = await usersModel.getUserByLogin(login);
  
-  if (!user) {
+  if (!user || !user.password) {
     return null;
   }
   const isCheck =  myCrypt.checkPassword(password, user.password);

@@ -18,7 +18,7 @@ components:
           type: string
         login:
           type: string
-    deck:
+    Deck:
       properties:
         user_deck_id:
           type: integer
@@ -34,7 +34,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Card"
-            
     Card:
       required:
         - title
@@ -111,7 +110,7 @@ paths:
         200:
           description: The user has been created.
           content: 
-            text/plain:
+            text/json:
               schema:
                 type: integer
                 title: user_id
@@ -193,7 +192,7 @@ paths:
   /decks:
     get:
       tags:
-        - decks
+        - Decks
       summary: Get all decks
       description: Returns all decks
       responses:
@@ -204,12 +203,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/deck"
+                  $ref: "#/components/schemas/Deck"
         401:
           $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
-        - decks
+        - Decks
       summary: Create deck
       description: Creates a new deck
       requestBody:
@@ -241,7 +240,7 @@ paths:
         200:
           description: The deck has been created.
           content:
-             text/plain:
+             text/json:
               schema:
                 type: integer
                 title: user_id
@@ -258,7 +257,7 @@ paths:
           type: integer
     get:
       tags:
-        - decks
+        - Decks
       summary: Get deck by id
       description: Gets the Deck by ID (e.g. “/decks/123”)
       responses:
@@ -267,14 +266,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/deck"
+                $ref: "#/components/schemas/Deck"
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Deck not found
     put:
       tags:
-        - decks
+        - Decks
       summary: Update deck
       description: Updates a Deck by ID
       requestBody:
@@ -306,17 +305,16 @@ paths:
         200:
           description: The board has been updated.
           content:
-             text/plain:
+             text/json:
               schema:
-                type: integer
-                title: number of deck cards
+                $ref: "#/components/schemas/Deck"
         400:
           description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
     delete:
       tags:
-        - decks
+        - Decks
       summary: Delete deck
       description: Deletes a Deck by ID.
         
@@ -327,16 +325,16 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Deck not found
-  /decks/{deckd}/tasks:
+  /decks/{deckId}/tasks:
     parameters:
-      - name: boardId
+      - name: deckId
         in: path
         required: true
         schema:
           type: string
     get:
       tags:
-        - Tasks
+        - Card
       summary: Get Tasks by boardId
       description: Gets tasks by the Board ID
         (e.g. “/board/1/tasks”)
@@ -348,13 +346,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Task"
+                  $ref: "#/components/schemas/Card"
         401:
           $ref: '#/components/responses/UnauthorizedError'
-
     post:
       tags:
-        - Tasks
+        - Card
       summary: Create new task
       description: Creates a new task
       requestBody:
@@ -393,7 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Task"           
+                $ref: "#/components/schemas/Card"           
         400:
           description: Bad request
         401:
@@ -412,7 +409,7 @@ paths:
           type: string
     get:
       tags:
-        - Tasks
+        - Card
       summary: Get Task by deckId and taskId
       description: Gets the Task by the deck's and task ID
         (e.g. “/deck/1/tasks/123”)
@@ -422,12 +419,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: "#/components/schemas/Card"
         401:
           $ref: '#/components/responses/UnauthorizedError'
     put:
       tags:
-        - Tasks
+        - Card
       summary: Update Task
       description: Updates the Task by ID
       requestBody:
@@ -469,7 +466,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: "#/components/schemas/Card"
         400:
           description: Bad request
         401:
@@ -478,7 +475,7 @@ paths:
           description: Task not found
     delete:
       tags:
-        - Tasks
+        - Card
       summary: Delete Task
       description: Deletes Task by ID.
       responses:
@@ -495,7 +492,7 @@ paths:
       security:
         []
       summary: Login
-      description: Logins a user and returns a JWT-token
+      description: Logins a user and returns a JWT-token, create refresh token session, set refresh token in http-only cookie
       requestBody:
         required: true
         content:
@@ -519,7 +516,128 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                description: JWT Token          
+                type: object
+                title: example   
+                properties:
+                  user:
+                    type: object
+                    description: User data
+                    properties:
+                      user_id:
+                        type: integer
+                        description: User id
+                      login:
+                        type: string
+                        description: User login
+                      name:
+                        type: string
+                        description: User name
+                  accessToken:
+                    type: string
+                    description: JWT Access Token
+        403:
+          description: Forbidden. Bad login/password combination
+  /logout:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Logout
+      description: Logout user and delete refresh token session, send empty cookie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+              required:
+                - login
+      responses:
+        200:
+          description: Successful logout.
+        400:
+          description: Bad Request. Login doesn't exist
+  /register:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Register
+      description: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+                name:
+                  type: string
+                  description: User nickName
+                password:
+                  type: string
+                  description: Password
+              required:
+                - name
+                - login
+                - password
+      responses:
+        200:
+          description: The user has been created.
+        400:
+          description: Bad Request.
         403:
           description: Incorrect login or password
+  /refresh-tokens:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Refresh user tokens information
+      description: Refresh user tokens information. Get refresh token from Cookie. Delete old refresh token session. Create refresh token session. Send new access token, set in http-only cookie new refresh token.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+      responses:
+        200:
+          description: All new auth data create and send successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                title: example   
+                properties:
+                  user:
+                    type: object
+                    description: User data
+                    properties:
+                      user_id:
+                        type: integer
+                        description: User id
+                      login:
+                        type: string
+                        description: User login
+                      name:
+                        type: string
+                        description: User name
+                  accessToken:
+                    type: string
+                    description: JWT Access Token
+        400:
+          description: Bad Request.

@@ -57,7 +57,7 @@ const createDeck =   async (data:Deck):Promise<number> =>  {
   return deckId;
 };
 
-const updateDeckById =  async (id:number, data:Deck):Promise<number>=>{
+const updateDeckById =  async (id:number, data:Deck):Promise<Deck>=>{
   if (await isInitialDeck(id)){
     throw new Error(statusCodes[StatusCodes.BAD_REQUEST].initialUpdate);
   }
@@ -65,7 +65,8 @@ const updateDeckById =  async (id:number, data:Deck):Promise<number>=>{
   await decksModel.deleteDeckCards(id);
   await decksModel.updateDeckById(id, data);
   const cardsCount = await decksModel.setDeckCards(id, data.cards!);
-  return cardsCount;
+  
+  return getDeckByIdCards(id);
 };
 
 const updateDefaultDeck =  async (deckId:number, userId:number):Promise<number>=>{
