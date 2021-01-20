@@ -1,25 +1,28 @@
 import Phaser from 'phaser';
 import { SCENES } from '@/components/Game/constant';
-import io from 'socket.io-client';
-import { WEBSOCKET_HOST_PORT, WEBSOCKET_PATH } from '@/constants/constants';
 import {
   ALREADY_PLAY,
+  BACK_TO_MENU_TIME,
+  END_YOYR_MATCH,
+  ENEMY_FOUND,
   FIND_ENEMY_PLAYER,
   OPPONENT_FOUND,
+  INIT_STATE,
   TEXT_POSITION_Y,
   WAIT_SECOND_PLAYER,
 } from '@/components/FindEnemyScene/constants';
 import { textDecoration } from '@/components/Card/constants';
-import { store } from '@/redux/store/rootStore';
 import { browserHistory } from '@/router/history';
 import { MENU_URL } from '@/router/constants';
+import { connectToServer } from '@/components/FindEnemyScene/FindEnemyScene.service';
+import { GameState } from '@/types/types';
 
 export class FindEnemyScene extends Phaser.Scene {
   private socket: SocketIOClient.Socket;
 
   private text: Phaser.GameObjects.Text;
 
-  private isPlayerOne: boolean;
+  private isPlayerOne = false;
 
   constructor() {
     super({
@@ -30,12 +33,8 @@ export class FindEnemyScene extends Phaser.Scene {
   }
 
   create(): void {
-    const state = store.getState();
-    const token = state.authUser.accessToken;
-    this.socket = io.connect(WEBSOCKET_HOST_PORT, {
-      path: WEBSOCKET_PATH,
-      query: { token },
-    });
+    this.socket = connectToServer();
+
     this.text = this.add
       .text(
         this.cameras.main.width / 2,
@@ -48,18 +47,30 @@ export class FindEnemyScene extends Phaser.Scene {
         },
       )
       .setOrigin(0.5, 0.5);
+
     this.text.setStroke(textDecoration.TEXT_OUTLINE_COLOR, textDecoration.TEXT_OUTLINE_SIZE);
+
     this.socket.on(OPPONENT_FOUND, (): void => {
-      this.text.setText('OpponentFound');
+      this.text.setText(ENEMY_FOUND);
     });
+
     this.socket.on(WAIT_SECOND_PLAYER, (): void => {
       this.isPlayerOne = true;
     });
+
+    this.socket.on(INIT_STATE, (gameState: GameState): void => {
+      this.scene.start(SCENES.GAME_BOARD, {
+        gameState,
+        socket: this.socket,
+        isPlayerOne: this.isPlayerOne,
+      });
+    });
+
     this.socket.on(ALREADY_PLAY, (): void => {
-      this.text.setText('End your match');
+      this.text.setText(END_YOYR_MATCH);
       setTimeout(() => {
         browserHistory.push(MENU_URL);
-      }, 3000);
+      }, BACK_TO_MENU_TIME);
     });
   }
 }

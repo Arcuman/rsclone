@@ -12,14 +12,14 @@ interface MenuState {
 }
 
 function createButton(
-  game: Phaser.Scene,
+  scene: Phaser.Scene,
   positionY: number,
   atlasName: string,
   menu: MenuState,
 ): Phaser.GameObjects.Sprite {
-  const button = game.add.sprite(
-    game.game.renderer.width / 2,
-    game.game.renderer.height / 2 - positionY + HEIGHT_COEFFICIENT,
+  const button = scene.add.sprite(
+    scene.game.renderer.width / 2,
+    scene.game.renderer.height / 2 - positionY + HEIGHT_COEFFICIENT,
     atlasName,
     menu.IDLE,
   );
@@ -36,20 +36,19 @@ function createButton(
   return button;
 }
 
-export function create(game: Phaser.Scene): void {
-  setBackground(game, IMAGES.MENU_BACKGROUND.NAME);
+export function create(scene: Phaser.Scene): void {
+  setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
   const startButton = createButton(
-    game,
+    scene,
     MENU_ITEM_HEIGHT * 2,
     ATLASES.MENU_START_ATLAS.NAME,
     MENU_IMAGES.MENU_START_GAME,
   );
   startButton.on('pointerup', () => {
-    // game.scene.start(SCENES.FIND_ENEMY);
     browserHistory.push(GAME_URL);
   });
   const myCardsButton = createButton(
-    game,
+    scene,
     MENU_ITEM_HEIGHT,
     ATLASES.MY_CARDS_ATLAS.NAME,
     MENU_IMAGES.MENU_MY_CARDS,
@@ -59,14 +58,14 @@ export function create(game: Phaser.Scene): void {
   });
 
   const settingButton = createButton(
-    game,
+    scene,
     0,
     ATLASES.SETTINGS_ATLAS.NAME,
     MENU_IMAGES.MENU_SETTINGS,
   );
 
   const exitButton = createButton(
-    game,
+    scene,
     -MENU_ITEM_HEIGHT,
     ATLASES.EXIT_ATLAS.NAME,
     MENU_IMAGES.MENU_EXIT,

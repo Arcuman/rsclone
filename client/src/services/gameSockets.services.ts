@@ -1,5 +1,6 @@
 import { WEBSOCKET_PATH, WEBSOCKET_HOST_PORT } from '@/constants/constants';
 import * as io from 'socket.io-client';
+import { GameState } from '@/components/GameBoard/GameBoard.model';
 
 interface Card {
   id: number;
@@ -8,24 +9,6 @@ interface Card {
   health: number;
   attack: number;
   manaCost: number;
-}
-
-interface GameState {
-  health: number;
-  maxMana: number;
-  currentMana: number;
-  handCards: Array<Card>;
-  deckCountCards: number;
-  tableCards: Array<Card>;
-  isPlayerOneTurn: boolean;
-  enemy: {
-    health: number;
-    maxMana: number;
-    currentMana: number;
-    countCards: number;
-    deckCountCards: number;
-    tableCards: Array<Card>;
-  };
 }
 
 export default function test(): void {

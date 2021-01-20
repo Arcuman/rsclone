@@ -1,4 +1,5 @@
-import { PositionInfo, TextDecoration } from './Card.model';
+import { TextDecoration } from '@/types/types';
+import { PositionInfo } from './Card.model';
 
 export const positionInfo: PositionInfo = {
   IMG_X: 0,

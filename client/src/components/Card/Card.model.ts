@@ -1,3 +1,12 @@
+export interface Card {
+  id: number;
+  name: string;
+  isActive: boolean;
+  health: number;
+  attack: number;
+  manaCost: number;
+}
+
 export interface CardCreateInfo {
   scene: Phaser.Scene;
   posX: number;
@@ -17,13 +26,4 @@ export interface PositionInfo {
   ATTACK_Y: number;
   HEALTH_X: number;
   HEALTH_Y: number;
-}
-
-export interface TextDecoration {
-  FONT_SIZE: string;
-  FONT_FAMILY: string;
-  FONT_COLOR: string;
-  TEXT_OUTLINE_COLOR: string;
-  TEXT_OUTLINE_SIZE: number;
-  TEXT_DEPTH: number;
 }

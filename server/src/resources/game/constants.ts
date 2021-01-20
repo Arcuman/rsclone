@@ -5,6 +5,7 @@ export const COUNTDOWN_SEC = 30;
 
 const OPPONENT_FOUND = 'opponentFound';
 const ALREADY_PLAY = 'already_play';
+const INIT_STATE = 'initState';
 const START_GAME = 'startGame';
 const NEXT_TURN = 'nextTurn';
 const TIMER = 'timer';
@@ -37,4 +38,5 @@ export {
   NOT_ENOUGH_MANA,
   ALREADY_PLAY,
   DISCONNECT,
+  INIT_STATE,
 };

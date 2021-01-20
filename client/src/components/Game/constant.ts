@@ -120,7 +120,6 @@ export const MENU_IMAGES = {
 export const SCENES = {
   LOAD: 'LOAD',
   MENU: 'MENU',
-  GAME: 'GAME',
   MY_CARDS: 'MY_CARDS',
   FIND_ENEMY: 'FIND_ENEMY',
   GAME_BOARD: 'GAME_BOARD',
@@ -139,5 +138,5 @@ export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig 
     createContainer: false,
   },
   scene: [],
-  backgroundColor: 0x333333,
+  backgroundColor: 0x33ffff,
 });
