@@ -15,13 +15,13 @@ function createButton(
   game: Phaser.Scene,
   positionY: number,
   atlasName: string,
-  menu: MenuState
+  menu: MenuState,
 ): Phaser.GameObjects.Sprite {
   const button = game.add.sprite(
     game.game.renderer.width / 2,
     game.game.renderer.height / 2 - positionY + HEIGHT_COEFFICIENT,
     atlasName,
-    menu.IDLE
+    menu.IDLE,
   );
   button.setScale(0.9, 0.9).setInteractive();
   button.on('pointerover', () => {
@@ -42,7 +42,7 @@ export function create(game: Phaser.Scene): void {
     game,
     MENU_ITEM_HEIGHT * 2,
     ATLASES.MENU_START_ATLAS.NAME,
-    MENU_IMAGES.MENU_START_GAME
+    MENU_IMAGES.MENU_START_GAME,
   );
   startButton.on('pointerup', () => {
     browserHistory.push(GAME_URL);
@@ -51,7 +51,7 @@ export function create(game: Phaser.Scene): void {
     game,
     MENU_ITEM_HEIGHT,
     ATLASES.MY_CARDS_ATLAS.NAME,
-    MENU_IMAGES.MENU_MY_CARDS
+    MENU_IMAGES.MENU_MY_CARDS,
   );
   myCardsButton.on('pointerup', () => {
     browserHistory.push(MY_CARDS_URL);
@@ -61,14 +61,14 @@ export function create(game: Phaser.Scene): void {
     game,
     0,
     ATLASES.SETTINGS_ATLAS.NAME,
-    MENU_IMAGES.MENU_SETTINGS
+    MENU_IMAGES.MENU_SETTINGS,
   );
 
   const exitButton = createButton(
     game,
     -MENU_ITEM_HEIGHT,
     ATLASES.EXIT_ATLAS.NAME,
-    MENU_IMAGES.MENU_EXIT
+    MENU_IMAGES.MENU_EXIT,
   );
   exitButton.on('pointerup', () => {
     handleLogout();

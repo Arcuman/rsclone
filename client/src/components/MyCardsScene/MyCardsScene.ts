@@ -5,7 +5,7 @@ function setBackground(game: Phaser.Scene) {
   const image = game.add.image(
     game.cameras.main.width / 2,
     game.cameras.main.height / 2,
-    IMAGES.LOAD_BACKGROUND.NAME
+    IMAGES.LOAD_BACKGROUND.NAME,
   );
   const scaleX = game.cameras.main.width / image.width;
   const scaleY = game.cameras.main.height / image.height;

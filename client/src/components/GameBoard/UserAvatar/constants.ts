@@ -1,5 +1,5 @@
 import { TextDecoration, ShadowOptions } from '@/types/types';
-import { PositionInfo } from './Avatar.model';
+import { PositionInfo, AvatarPosition } from './Avatar.model';
 
 export const positionInfo: PositionInfo = {
   IMG_X: 0,
@@ -33,6 +33,13 @@ export const shadowOptions: ShadowOptions = {
   OFFSET_Y: 4,
   TINT: 0x000000,
   ALPHA: 0.6,
+};
+
+export const avatarPosition: AvatarPosition = {
+  USER_X: 1030,
+  USER_Y: 620,
+  ENEMY_X: 245,
+  ENEMY_Y: 110,
 };
 
 export const SIZE_AVATAR = 0.7;

@@ -15,3 +15,10 @@ export interface AvatarCreateInfo {
   userName: string;
   health: string;
 }
+
+export interface AvatarPosition {
+  USER_X: number;
+  USER_Y: number;
+  ENEMY_X: number;
+  ENEMY_Y: number;
+}

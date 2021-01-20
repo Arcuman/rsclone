@@ -36,7 +36,7 @@ const refreshTokenSession = async (): Promise<boolean> =>
           throw new Error();
         }
         return response.json();
-      }
+      },
     )
     .then((bodyValue: string) => {
       const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
@@ -115,7 +115,7 @@ export const handleLogin = (): void => {
           throw new Error();
         }
         return response.json();
-      }
+      },
     )
     .then((bodyValue: string) => {
       const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);

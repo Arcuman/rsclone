@@ -29,6 +29,6 @@ export const shadowOptions: ShadowOptions = {
 };
 
 export const CHANGE_POSITION_CARD_Y = 100;
-export const SIZE_NORMAL_CARD = 1;
-export const SIZE_LITTLE_CARD = 0.6;
+export const SIZE_NORMAL_CARD = 1.1;
+export const SIZE_LITTLE_CARD = 0.7;
 export const CARD_CONTAINER_DEPTH = 1;

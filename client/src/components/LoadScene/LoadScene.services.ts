@@ -58,7 +58,7 @@ function setLoadingBar(game: Phaser.Scene) {
       PROGRESS_BAR.x,
       PROGRESS_BAR.y,
       PROGRESS_BAR.width * value,
-      PROGRESS_BAR.height
+      PROGRESS_BAR.height,
     );
   });
   game.load.on('fileprogress', (file: File) => {

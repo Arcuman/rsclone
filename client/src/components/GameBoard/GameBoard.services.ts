@@ -3,6 +3,7 @@ import { setBackground } from '@/utils/utils';
 import { cardBase } from '@/components/Card/Card.render';
 import { IMAGES } from '../Game/constant';
 import { createAvatar } from './UserAvatar/Avatar.render';
+import { avatarPosition } from './UserAvatar/constants';
 import { createTable } from './Table/Table.render';
 
 export function preload(this: Phaser.Scene): void {}
@@ -154,11 +155,12 @@ export function create(game: Phaser.Scene): void {
     img: cardImg,
   });
 
+  const { USER_X, USER_Y, ENEMY_X, ENEMY_Y } = avatarPosition;
   cardImg = IMAGES.AVATAR.NAME;
   const userAvatarExample = createAvatar({
     scene: game,
-    posX: 1030,
-    posY: 620,
+    posX: USER_X,
+    posY: USER_Y,
     card: cardImg,
     userName: 'Korolevishna',
     health: '30',
@@ -166,8 +168,8 @@ export function create(game: Phaser.Scene): void {
 
   const enemyAvatarExample = createAvatar({
     scene: game,
-    posX: 250,
-    posY: 100,
+    posX: ENEMY_X,
+    posY: ENEMY_Y,
     card: cardImg,
     userName: 'Spider',
     health: '30',
