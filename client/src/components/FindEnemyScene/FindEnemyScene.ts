@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { SCENES } from '@/components/Game/constant';
+import { IMAGES, SCENES } from '@/components/Game/constant';
 import {
   ALREADY_PLAY,
   BACK_TO_MENU_TIME,
@@ -16,6 +16,7 @@ import { browserHistory } from '@/router/history';
 import { MENU_URL } from '@/router/constants';
 import { connectToServer } from '@/components/FindEnemyScene/FindEnemyScene.service';
 import { GameState } from '@/types/types';
+import { setBackground } from '@/utils/utils';
 
 export class FindEnemyScene extends Phaser.Scene {
   private socket: SocketIOClient.Socket;
@@ -33,6 +34,7 @@ export class FindEnemyScene extends Phaser.Scene {
   }
 
   create(): void {
+    setBackground(this, IMAGES.LOAD_BACKGROUND.NAME);
     this.socket = connectToServer();
 
     this.text = this.add

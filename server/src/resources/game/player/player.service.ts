@@ -3,6 +3,7 @@ import { Socket } from 'socket.io';
 import {Player} from '@/resources/game/player/player.model';
 import {MAX_HEALTH, NUMBER_OF_HAND_CARDS, START_MANA} from '@/resources/game/constants';
 import {playerDoesntHaveCard} from '@/resources/game/player/constants';
+import {getUserById} from '@/resources/users/user.controller';
 
 function shuffleCards(array:Card[]):Card[] {
   return array.map(a  => [Math.random(), a])
@@ -20,10 +21,12 @@ export function getCardById(player: Player, id:number): Card{
 
 export async function createPlayer(userId:number, socket: Socket) : Promise<Player>{
   const cards : Array<Card> = await getUserDeckCards(userId);
+  const user = await getUserById(userId);
   const deckCards : Array<Card> = shuffleCards(cards);
   const handCards : Array<Card> = deckCards.splice(0, NUMBER_OF_HAND_CARDS);
   return <Player>{
     userId,
+    name: user.name,
     health: MAX_HEALTH,
     maxMana: START_MANA,
     currentMana: START_MANA,

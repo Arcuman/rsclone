@@ -7,6 +7,7 @@ import {INIT_STATE} from '@/resources/game/constants';
 export function generateInitialGameState(room:Room, curPlayer : Player) : GameState{
   const enemyPlayer = getEnemyPlayer(room, curPlayer);
   return {
+    name: curPlayer.name,
     health: curPlayer.health,
     maxMana: curPlayer.maxMana,
     currentMana: curPlayer.currentMana,
@@ -14,6 +15,7 @@ export function generateInitialGameState(room:Room, curPlayer : Player) : GameSt
     handCards: curPlayer.handCards,
     tableCards: curPlayer.tableCards,
     enemy: {
+      name: enemyPlayer.name,
       health: enemyPlayer.health,
       maxMana: enemyPlayer.maxMana,
       currentMana:  enemyPlayer.currentMana,

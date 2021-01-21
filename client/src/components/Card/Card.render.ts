@@ -9,7 +9,7 @@ import {
   CARD_CONTAINER_DEPTH,
 } from './constants';
 
-export const cardBase = (data: CardCreateInfo): void => {
+export const cardBase = (data: CardCreateInfo): Phaser.GameObjects.Container => {
   const { scene, posX, posY, card, mana, attack, health } = data;
   const { IMG_X, IMG_Y, MANA_X, MANA_Y, ATTACK_X, ATTACK_Y, HEALTH_X, HEALTH_Y } = positionInfo;
   const { OFFSET_X, OFFSET_Y, TINT, ALPHA } = shadowOptions;
@@ -52,4 +52,6 @@ export const cardBase = (data: CardCreateInfo): void => {
   }
 
   setDraggableOnCard(scene, cardContainer, posY);
+
+  return cardContainer;
 };

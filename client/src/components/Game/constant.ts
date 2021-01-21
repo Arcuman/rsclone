@@ -146,5 +146,4 @@ export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig 
     createContainer: false,
   },
   scene: [],
-  backgroundColor: 0x33ffff,
 });

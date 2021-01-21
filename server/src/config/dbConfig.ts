@@ -16,9 +16,7 @@ const config:ClientConfig = {
   database: DB_NAME,
   password: DB_PASSWORD,
   port: Number(DB_PORT),
-  ssl: {
-    rejectUnauthorized: false,
-  },
+
 };
 
 export default config;
