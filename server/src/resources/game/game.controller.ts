@@ -9,10 +9,12 @@ import {
   HAND_CARD_PLAY,
   NEXT_TURN,
   OPPONENT_FOUND,
-  START_GAME, TABLE_CARD_PLAY_CARD_TARGET, TABLE_CARD_PLAY_PLAYER_TARGET,
+  START_GAME,
+  TABLE_CARD_PLAY_CARD_TARGET,
+  TABLE_CARD_PLAY_PLAYER_TARGET,
   WAIT_SECOND_PLAYER,
 } from '@/resources/game/constants';
-import {Card} from '@/resources/card/card.models';
+import {Card} from '@/resources/card/card.model';
 import {nextTurn} from '@/resources/game/servicies/nextTurn.service';
 import {countDownTimer} from '@/resources/game/servicies/timer.service';
 import {handCardPlay} from '@/resources/game/servicies/handCardPlay.service';
@@ -48,16 +50,16 @@ export default async function gameLogic(io: Server, socket: Socket, rooms: Array
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
 
-  player.socket.on(NEXT_TURN, ()=> nextTurn(openRoom, player, io));
+  player.socket.on(NEXT_TURN, () => nextTurn(openRoom, player, io));
 
-  player.socket.on(HAND_CARD_PLAY, (card: Card)=>{
+  player.socket.on(HAND_CARD_PLAY, (card: Card) => {
     handCardPlay(card, player, openRoom, io);
   });
 
-  player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId:number)=>{
+  player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId: number) => {
     tableCardPlayTargetPlayer(cardId, openRoom, player, io);
   });
-  player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId:number, targetId:number)=>{
+  player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId: number, targetId: number) => {
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
   });
 
