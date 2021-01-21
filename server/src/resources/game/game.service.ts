@@ -1,11 +1,8 @@
-import { GameState } from '@/resources/game/game.models';
-import { Player } from '@/resources/game/player/player.model';
-import { Room } from '@/resources/game/room/room.model';
-import {
-  deletePlayerFromRoom,
-  deleteRoom,
-  getEnemyPlayer,
-} from '@/resources/game/room/room.service';
+import {GameState} from '@/resources/game/game.models';
+import {Player} from '@/resources/game/player/player.model';
+import {Room} from '@/resources/game/room/room.model';
+import {deletePlayerFromRoom, deleteRoom, getEnemyPlayer} from '@/resources/game/room/room.service';
+import {INIT_STATE} from '@/resources/game/constants';
 
 export function generateInitialGameState(room: Room, curPlayer: Player): GameState {
   const enemyPlayer = getEnemyPlayer(room, curPlayer);
@@ -40,6 +37,6 @@ export function closeSocket(openRoom: Room, rooms: Array<Room>, player: Player):
 export function sendInitState(room: Room): void {
   room.players.forEach(player => {
     const initialState = generateInitialGameState(room, player);
-    player.socket.emit('initState', initialState);
+    player.socket.emit(INIT_STATE, initialState);
   });
 }

@@ -51,7 +51,7 @@
     "@typescript-eslint/no-var-requires":0,
     "comma-dangle": ["error", "always-multiline"],
     "max-classes-per-file": "off",
-    "no-console": "warning",
+    "no-console": 1,
     "no-multiple-empty-lines": ["error", { "max": 1 }],
     "no-redeclare": "error",
     "no-return-await": "error",

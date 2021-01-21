@@ -12,8 +12,15 @@ export function getEnemyPlayer(room: Room, curPlayer: Player): Player {
   return enemyPlayer;
 }
 
-export function isOpenedRoomExist(rooms: Array<Room>): boolean {
-  const openRoom = rooms.find(room => room.players.length < MAX_ROOM_PLAYERS_COUNT);
+export function closeRoom(openRoom:Room, rooms:Array<Room>) : void {
+  const roomId = rooms.findIndex((room:Room)=>room.id === openRoom.id);
+  if ( roomId >-1 ){
+    rooms.splice(roomId, 1);
+  }
+}
+
+export function isOpenedRoomExist(rooms : Array<Room>): boolean{
+  const openRoom = rooms.find((room ) => room.players.length < MAX_ROOM_PLAYERS_COUNT);
   return !!openRoom;
 }
 export function getOpenedRoom(rooms: Array<Room>): Room {

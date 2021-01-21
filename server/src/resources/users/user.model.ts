@@ -143,7 +143,7 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> => {
   try {
     const query =
-      'UPDATE "UserProfiles" Set curr_user_deck_id=$2  ' + 'WHERE user_id=$1  RETURNING user_id';
+      'UPDATE "UserProfiles" Set curr_user_deck_id=$2 WHERE user_id=$1  RETURNING user_id';
     const { rowCount } = await db.query(query, [user_id.toString(), deck_id.toString()]);
     return rowCount;
   } catch (error) {
@@ -226,7 +226,7 @@ const addRefreshSession = async ({
     } = await db.query(
       `INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
                                             VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`,
-      []
+      [],
     ));
   } catch (error) {
     throw new Error(error);

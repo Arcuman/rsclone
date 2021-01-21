@@ -21,7 +21,7 @@ app.use(passport.initialize());
 app.use((req, res, next) => {
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type, Accept,Authorization,Origin'
+    'X-Requested-With,content-type, Accept,Authorization,Origin',
   );
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -32,7 +32,7 @@ app.use(
   cors({
     credentials: true,
     origin: ['http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082'],
-  })
+  }),
 );
 app.options('*', cors());
 
