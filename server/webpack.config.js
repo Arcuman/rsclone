@@ -77,16 +77,7 @@ module.exports = (env = {}) => {
             './node_modules/swagger-ui-dist/favicon-32x32.png'
         ]
     }),
-   /* new CopyPlugin({
-      patterns: [
-          {
-              from: path.resolve(__dirname, 'src/assets/'),
-              to: path.resolve(__dirname, 'dist/assets'),
-          },
-      ],
-  }),*/
-
-    ],
+   ],
   };
   if (env.nodemon) {
     config.watch = true;

@@ -5,6 +5,6 @@ const statusCodes = {
     update: 'The card has been updated',
   },
   '204': 'The card has been deleted',
-  '404': 'card not found',
+  '404': 'Card not found',
 };
 export default statusCodes;

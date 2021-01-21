@@ -52,6 +52,8 @@ components:
           type: boolean
         isActive:
           type: boolean
+        image:
+          type: string
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -210,7 +212,7 @@ paths:
       tags:
         - Decks
       summary: Create deck
-      description: Creates a new deck
+      description: Creates a new deck, user_id get from Authorization
       requestBody:
         required: true
         content:
@@ -219,8 +221,6 @@ paths:
               type: object
               title: example
               properties:
-                user_id:
-                  type: integer
                 name:
                   type: string
                 isinitial:
@@ -275,7 +275,7 @@ paths:
       tags:
         - Decks
       summary: Update deck
-      description: Updates a Deck by ID
+      description: Updates a Deck by ID. user_id get from Authorization
       requestBody:
         required: true
         content:
@@ -284,8 +284,6 @@ paths:
               type: object
               title: example
               properties:
-                user_id:
-                  type: integer
                 name:
                   type: string
                 isinitial:
@@ -325,19 +323,12 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Deck not found
-  /decks/{deckId}/tasks:
-    parameters:
-      - name: deckId
-        in: path
-        required: true
-        schema:
-          type: string
+  /cards:
     get:
       tags:
         - Card
-      summary: Get Tasks by boardId
-      description: Gets tasks by the Board ID
-        (e.g. “/board/1/tasks”)
+      summary: Get all user's cards, data of user get from Authorization
+      description: Returns all user's cards
       responses:
         200:
           description: Successful operation
@@ -352,8 +343,8 @@ paths:
     post:
       tags:
         - Card
-      summary: Create new task
-      description: Creates a new task
+      summary: Create a new card
+      description: Create a new card
       requestBody:
         required: true
         content:
@@ -362,57 +353,75 @@ paths:
               type: object
               title: example
               properties:
-                title:
+                name:
                   type: string
-                  description: The task's title
-                order:
+                  description: The card's name
+                attack:
                   type: integer
-                  description: The task's order
-                description:
+                  description: The card's attack value
+                manaCost:
+                  type: integer
+                  description: The card's manaCost value
+                health:
+                  type: integer
+                  description: The card's health value
+                isinitial:
+                  type: boolean
+                  description: Is card is initial. Used for creating first(initial) deck for new User.
+                isActive:
+                  type: boolean
+                  description: Is card is active. Not active card has only manaCost and doesn't lay on table board in game.
+                image:
                   type: string
-                userId:
-                  type: string
-                  description: The task's Assignee
-                boardId:
-                  type: string
-                  description: Board ID
-                columnId:
-                  type: string
-                  description: Column ID
+                  description: The card's image
               required:
-                - title
-                - order
-                - boardId
-                - columnId
+                - name
+                - attack
+                - manaCost
+                - health
+                - isActive
+                
       responses:
         200:
-          description: The task has been created.
+          description: The card has been created.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Card"           
+                type: integer
+                title: card_id           
         400:
           description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
-  /decks/{deckId}/tasks/{taskId}:
-    parameters:
-      - name: deckId
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: taskId
-        in: path
-        required: true
-        schema:
-          type: string
+  /cards/all:
     get:
       tags:
         - Card
-      summary: Get Task by deckId and taskId
-      description: Gets the Task by the deck's and task ID
-        (e.g. “/deck/1/tasks/123”)
+      summary: Get all cards
+      description: Get all cards
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /cards/{cardId}:
+    parameters:
+      - name: cardId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Card
+      summary: Get card by id
+      description: Gets the Card by id (e.g. “/cards/123”)
       responses:
         200:
           description: Successful operation
@@ -422,11 +431,13 @@ paths:
                 $ref: "#/components/schemas/Card"
         401:
           $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Card not found  
     put:
       tags:
         - Card
-      summary: Update Task
-      description: Updates the Task by ID
+      summary: Update Card
+      description: Updates the Card by id
       requestBody:
         required: true
         content:
@@ -435,34 +446,36 @@ paths:
               type: object
               title: example
               properties:
-                id:
+                name:
                   type: string
-                  title: The task's ID
-                title:
-                  type: string
-                  description: The task's title
-                order:
+                  description: The card's name
+                attack:
                   type: integer
-                  description: The task's order
-                description:
+                  description: The card's attack value
+                manaCost:
+                  type: integer
+                  description: The card's manaCost value
+                health:
+                  type: integer
+                  description: The card's health value
+                isinitial:
+                  type: boolean
+                  description: Is card is initial. Used for creating first(initial) deck for new User.
+                isActive:
+                  type: boolean
+                  description: Is card is active. Not active card has only manaCost and doesn't lay on table board in game.
+                image:
                   type: string
-                userId:
-                  type: string
-                  description: The task's Assignee
-                deckId:
-                  type: string
-                  description: deck ID
-                columnId:
-                  type: string
-                  description: Column ID
+                  description: The card's image
               required:
-                - id
-                - order
-                - deckId
-                - columnId
+                - name
+                - attack
+                - manaCost
+                - health
+                - isActive
       responses:
         200:
-          description: The task has been updated.
+          description: The card has been updated.
           content:
             application/json:
               schema:
@@ -472,19 +485,19 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
-          description: Task not found
+          description: Card not found
     delete:
       tags:
         - Card
-      summary: Delete Task
-      description: Deletes Task by ID.
+      summary: Delete Card
+      description: Deletes Card by id.
       responses:
         204:
-          description: The task has been deleted
+          description: The card has been deleted
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
-          description: Task not found
+          description: Card not found
   /login:
     post:
       tags:

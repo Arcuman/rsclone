@@ -1,6 +1,6 @@
-import {User} from '@/resources/users/user.model';
+import { User } from '@/resources/users/user.model';
 
 export interface AuthUser {
-  user:User;
+  user: User;
   token: string;
 }

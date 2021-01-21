@@ -1,15 +1,15 @@
-import {Player} from '@/resources/game/player/player.model';
-import {Room} from '@/resources/game/room/room.model';
-import {Server} from 'socket.io';
-import {getEnemyPlayer} from '@/resources/game/room/room.service';
-import {COUNTDOWN_SEC, NEXT_ROUND, NEXT_TURN} from '@/resources/game/constants';
+import { Player } from '@/resources/game/player/player.model';
+import { Room } from '@/resources/game/room/room.model';
+import { Server } from 'socket.io';
+import { getEnemyPlayer } from '@/resources/game/room/room.service';
+import { COUNTDOWN_SEC, NEXT_ROUND, NEXT_TURN } from '@/resources/game/constants';
 
-function addAndResetManaToPlayer(player:Player):void{
-  player.setMaxMana( player.maxMana + 1);
+function addAndResetManaToPlayer(player: Player): void {
+  player.setMaxMana(player.maxMana + 1);
   player.setCurrentMana(player.maxMana);
 }
 
-export function nextTurn(openRoom:Room, player:Player, io:Server):void{
+export function nextTurn(openRoom: Room, player: Player, io: Server): void {
   if (openRoom.newRound) {
     const enemy = getEnemyPlayer(openRoom, player);
     addAndResetManaToPlayer(player);

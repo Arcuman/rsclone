@@ -15,11 +15,7 @@ import {
   AUTH_LOGOUT,
 } from './constants';
 import statusCodes from '../users/user.constants';
-import {
-  RefreshTokensAction,
-  getNewRefreshToken,
-  createCookieData,
-} from './refreshToken';
+import { RefreshTokensAction, getNewRefreshToken, createCookieData } from './refreshToken';
 import { AuthUser } from './auth.model';
 
 const LocalStrategy = require('passport-local').Strategy;
@@ -46,8 +42,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -65,36 +61,24 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  }),
+  })
 );
 
-const authenticate = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  passport.authenticate(
-    'bearer',
-    { session: false },
-    (err: string, user: User) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.status(401).send(statusCodes[401]);
-      }
-      req.user = user;
+const authenticate = (req: Request, res: Response, next: NextFunction): void => {
+  passport.authenticate('bearer', { session: false }, (err: string, user: User) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).send(statusCodes[401]);
+    }
+    req.user = user;
 
-      return next();
-    },
-  )(req, res, next);
+    return next();
+  })(req, res, next);
 };
 
-const authenticateLocal = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+const authenticateLocal = (req: Request, res: Response, next: NextFunction): void => {
   passport.authenticate(
     'local',
     {
@@ -111,7 +95,7 @@ const authenticateLocal = (
       }
       req.user = user;
       return next();
-    },
+    }
   )(req, res, next);
 };
 
@@ -129,20 +113,14 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const refreshToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const authUser: AuthUser = await RefreshTokensAction(req);
 
     req.user = authUser.user;
     req.body = JSON.stringify({ token: authUser.token });
   } catch (error) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
+    res.status(StatusCodes.BAD_REQUEST).send(getReasonPhrase(StatusCodes.BAD_REQUEST));
     return next(error);
   }
   return next();
@@ -150,30 +128,21 @@ const refreshToken = async (
 
 const logoutUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.body.login){
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
+    if (!req.body.login) {
+      res.status(StatusCodes.BAD_REQUEST).send(getReasonPhrase(StatusCodes.BAD_REQUEST));
       return;
     }
 
     const user = await usersService.getUserByLogin(req.body.login);
 
     if (!user) {
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .send(ERR_LOGOUT_MESSAGE);
+      res.status(StatusCodes.BAD_REQUEST).send(ERR_LOGOUT_MESSAGE);
     }
     await usersService.deleteSessionByUserId(user.user_id);
 
-    res
-      .cookie('refreshToken', '')
-      .status(StatusCodes.OK)
-      .send(getReasonPhrase(StatusCodes.OK));
+    res.cookie('refreshToken', '').status(StatusCodes.OK).send(getReasonPhrase(StatusCodes.OK));
   } catch (error) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(getReasonPhrase(StatusCodes.BAD_REQUEST));
+    res.status(StatusCodes.BAD_REQUEST).send(getReasonPhrase(StatusCodes.BAD_REQUEST));
   }
 };
 
@@ -189,41 +158,27 @@ const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
   }
 };
 
-export const sendAuthResponseToClient = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const sendAuthResponseToClient = async (req: Request, res: Response): Promise<void> => {
   const userData = req.user!;
-  console.log('userData', userData);
 
-  let newRefreshToken ='';
+  let newRefreshToken = '';
   let forbiddenMessage = `${getReasonPhrase(StatusCodes.FORBIDDEN)}. ${ERR_LOGIN_MESSAGE}`;
-  if ( req.baseUrl === AUTH_REFRESH_TOKEN ){
-    newRefreshToken= JSON.parse(req.body)?.token;
+  if (req.baseUrl === AUTH_REFRESH_TOKEN) {
+    newRefreshToken = JSON.parse(req.body)?.token;
     forbiddenMessage = 'Bad token';
   }
   if (!userData) {
-    res
-      .status(StatusCodes.FORBIDDEN)
-      .send(forbiddenMessage);
+    res.status(StatusCodes.FORBIDDEN).send(forbiddenMessage);
     return;
   }
   const user = {
     user_id: userData.user_id,
-    login:userData.login,
-    name:userData.name,
+    login: userData.login,
+    name: userData.name,
   };
   const userId = user.user_id;
-  /*  const user = await usersService.getUserById(userId);
-
- if (!user) {
-    res
-      .status(StatusCodes.FORBIDDEN)
-      .send(getReasonPhrase(StatusCodes.FORBIDDEN));
-    return;
-  } */
-
   const accessToken = webToken.createToken(user);
+ 
   if (!newRefreshToken || newRefreshToken === '') {
     newRefreshToken = await getNewRefreshToken(userId, req);
   }
@@ -232,7 +187,6 @@ export const sendAuthResponseToClient = async (
   const body = JSON.stringify({
     user,
     accessToken,
-    // refreshToken: newRefreshToken,
   });
 
   res

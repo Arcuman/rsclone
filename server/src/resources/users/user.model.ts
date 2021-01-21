@@ -7,7 +7,7 @@ export interface User {
   password?: string;
 }
 
-export interface UserProfile{
+export interface UserProfile {
   user_id: number;
   nickName: string;
   level: number;
@@ -23,7 +23,6 @@ export interface Session {
 }
 
 const getAll = async (): Promise<User[]> => {
-
   let users;
 
   try {
@@ -32,7 +31,6 @@ const getAll = async (): Promise<User[]> => {
     users = rows;
   } catch (error) {
     throw new Error('500');
-
   }
   return users;
 };
@@ -40,11 +38,11 @@ const getAll = async (): Promise<User[]> => {
 const getUserById = async (id: number): Promise<User> => {
   let user: User;
   try {
-    ({ rows: [user] } = await db.query('Select user_id, login,name from "Users" Where user_id=$1', [id]));
-
+    ({
+      rows: [user],
+    } = await db.query('Select user_id, login,name from "Users" Where user_id=$1', [id]));
   } catch (error) {
     throw new Error('500');
-
   }
   return user;
 };
@@ -52,11 +50,11 @@ const getUserById = async (id: number): Promise<User> => {
 const getDefaultDeckId = async (id: number): Promise<number> => {
   let deckId: number;
   try {
-    ({ rows: [deckId] } = await db.query('Select cur_user_deck_id as  from "UserProfiles" Where user_id=$1', [id]));
-
+    ({
+      rows: [deckId],
+    } = await db.query('Select cur_user_deck_id from "UserProfiles" Where user_id=$1', [id]));
   } catch (error) {
     throw new Error('500');
-
   }
   return deckId;
 };
@@ -64,22 +62,24 @@ const getDefaultDeckId = async (id: number): Promise<number> => {
 const getUserProfile = async (id: number): Promise<UserProfile> => {
   let profile: UserProfile;
   try {
-    ({ rows: [profile] } = await db.query('Select *  from "UserProfiles" Where user_id=$1', [id]));
-
+    ({
+      rows: [profile],
+    } = await db.query('Select *  from "UserProfiles" Where user_id=$1', [id]));
   } catch (error) {
     throw new Error('500');
-
   }
   return profile;
 };
 
 const setUser = async (userData: User): Promise<number> => {
   let user: User;
-  
-  try {
-    const query = 'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
-    ({ rows: [user] } = await db.query(query, [userData.login, userData.name, userData.password!]));
 
+  try {
+    const query =
+      'INSERT INTO "Users" (login, name, password) VALUES ($1, $2, $3 ) RETURNING user_id';
+    ({
+      rows: [user],
+    } = await db.query(query, [userData.login, userData.name, userData.password!]));
   } catch (error) {
     throw new Error('500');
   }
@@ -88,24 +88,31 @@ const setUser = async (userData: User): Promise<number> => {
 
 const setUserProfile = async (data: UserProfile): Promise<number> => {
   try {
-    const query = 'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, cur_user_deck_id) '+
-                  'VALUES ($1, $2, $3, $4, $5) ';
-     
-    const { rowCount } = await db.query(query, 
-      [data.user_id.toString(), data.nickName, data.level.toString(), 
-        data.exp.toString(), data.curr_user_deck_id.toString()]);
+    const query =
+      'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, cur_user_deck_id) ' +
+      'VALUES ($1, $2, $3, $4, $5) ';
+
+    const { rowCount } = await db.query(query, [
+      data.user_id.toString(),
+      data.nickName,
+      data.level.toString(),
+      data.exp.toString(),
+      data.curr_user_deck_id.toString(),
+    ]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
-  }  
+  }
 };
 
 const updateUserById = async (id: number, userData: User): Promise<User> => {
   let user: User;
   try {
-    const query = 'UPDATE "Users" Set login=$2, name=$3, password= $4 WHERE user_id=$1  RETURNING *';
-    ({ rows: [user] } = await db.query(query, [id.toString(), userData.login, userData.name, userData.password!]));
-
+    const query =
+      'UPDATE "Users" Set login=$2, name=$3, password= $4 WHERE user_id=$1  RETURNING *';
+    ({
+      rows: [user],
+    } = await db.query(query, [id.toString(), userData.login, userData.name, userData.password!]));
   } catch (error) {
     throw new Error('500');
   }
@@ -115,24 +122,29 @@ const updateUserById = async (id: number, userData: User): Promise<User> => {
 const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> => {
   let profile: UserProfile;
   try {
-    const query = 'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, curr_user_deck_id=$5  '+
-                  'WHERE user_id=$1  RETURNING *';
-    ({ rows: [profile] } = await db.query(query, 
-      [id.toString(), data.nickName, data.level.toString(), 
-        data.exp.toString(), data.curr_user_deck_id.toString()]));
-
+    const query =
+      'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, curr_user_deck_id=$5  ' +
+      'WHERE user_id=$1  RETURNING *';
+    ({
+      rows: [profile],
+    } = await db.query(query, [
+      id.toString(),
+      data.nickName,
+      data.level.toString(),
+      data.exp.toString(),
+      data.curr_user_deck_id.toString(),
+    ]));
   } catch (error) {
     throw new Error('500');
   }
   return profile;
 };
 
-const updateDefaultDeck = async (user_id:number, deck_id:number): Promise<number> => {
+const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> => {
   try {
-    const query = 'UPDATE "UserProfiles" Set curr_user_deck_id=$2  '+
-                  'WHERE user_id=$1  RETURNING user_id';
-    const { rowCount } = await db.query(query, 
-      [user_id.toString(), deck_id.toString()]);
+    const query =
+      'UPDATE "UserProfiles" Set curr_user_deck_id=$2  ' + 'WHERE user_id=$1  RETURNING user_id';
+    const { rowCount } = await db.query(query, [user_id.toString(), deck_id.toString()]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -153,8 +165,9 @@ const getUserByLogin = async (login: string): Promise<User> => {
   let user: User;
 
   try {
-    ({ rows: [user] } = await db.query('Select * from "Users" Where login=$1', [login]));
-
+    ({
+      rows: [user],
+    } = await db.query('Select * from "Users" Where login=$1', [login]));
   } catch (error) {
     throw new Error('500');
   }
@@ -165,7 +178,9 @@ const getSessionByRefreshToken = async (token: string): Promise<Session> => {
   let session: Session;
 
   try {
-    ({ rows: [session] } = await db.query('Select * From "UsersRefreshSession" Where "refreshToken"=$1', [token]));
+    ({
+      rows: [session],
+    } = await db.query('Select * From "UsersRefreshSession" Where "refreshToken"=$1', [token]));
   } catch (error) {
     throw new Error('500');
   }
@@ -175,7 +190,9 @@ const getSessionByRefreshToken = async (token: string): Promise<Session> => {
 
 const deleteSessionByRefreshToken = async (token: string): Promise<number> => {
   try {
-    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "refreshToken"=$1', [token]);
+    const {
+      rowCount,
+    } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "refreshToken"=$1', [token]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -183,9 +200,11 @@ const deleteSessionByRefreshToken = async (token: string): Promise<number> => {
   return 0;
 };
 
-const deleteSessionByUserId = async (user_id:number): Promise<number> => {
+const deleteSessionByUserId = async (user_id: number): Promise<number> => {
   try {
-    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "user_id"=$1', [user_id]);
+    const { rowCount } = await db.query('DELETE FROM "UsersRefreshSession"  WHERE "user_id"=$1', [
+      user_id,
+    ]);
     return rowCount;
   } catch (error) {
     throw new Error('500');
@@ -193,12 +212,22 @@ const deleteSessionByUserId = async (user_id:number): Promise<number> => {
   return 0;
 };
 
-const addRefreshSession = async ({ refreshToken, user_id, ip, expiresIn}: Session): Promise<string> => {
+const addRefreshSession = async ({
+  refreshToken,
+  user_id,
+  ip,
+  expiresIn,
+}: Session): Promise<string> => {
   let session: Session;
 
   try {
-    ({ rows: [session] } = await db.query(`INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
-                                            VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`, []));
+    ({
+      rows: [session],
+    } = await db.query(
+      `INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
+                                            VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`,
+      []
+    ));
   } catch (error) {
     throw new Error(error);
   }

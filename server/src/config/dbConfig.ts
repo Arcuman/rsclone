@@ -1,17 +1,16 @@
-
-import {ClientConfig} from 'pg';
+import { ClientConfig } from 'pg';
 
 import dotenv from 'dotenv';
-import {envPath} from './config';
+import { envPath } from './config';
 
 dotenv.config({
   path: envPath,
 });
 
-const { DB_USER, DB_NAME, DB_PASSWORD, DB_PORT, DB_HOST} =  process.env;
+const { DB_USER, DB_NAME, DB_PASSWORD, DB_PORT, DB_HOST } = process.env;
 
-const config:ClientConfig = {
-  host:DB_HOST,
+const config: ClientConfig = {
+  host: DB_HOST,
   user: DB_USER,
   database: DB_NAME,
   password: DB_PASSWORD,
@@ -20,5 +19,5 @@ const config:ClientConfig = {
     rejectUnauthorized: false,
   },
 };
- 
+
 export default config;

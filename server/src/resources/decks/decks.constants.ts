@@ -5,9 +5,9 @@ const statusCodes = {
     update: 'The deck has been updated',
   },
   '204': 'The deck has been deleted',
-  '400':{
+  '400': {
     initialDelete: 'Error! Forbidden to delete initial deck!',
-    initialUpdate:'Error! Forbidden to update initial deck!',
+    initialUpdate: 'Error! Forbidden to update initial deck!',
   },
   '404': 'Deck not found',
 };
