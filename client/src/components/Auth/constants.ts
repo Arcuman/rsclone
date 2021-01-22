@@ -1,3 +1,5 @@
+import {BASE_HTTP_URL} from '@/constants/constants';
+
 const authForm = {
   login: 'Логин',
   password: 'Пароль',
@@ -6,10 +8,11 @@ const authForm = {
   auth: 'Авторизация',
   register: 'Регистрация',
 };
-const LOGIN_ACTION = 'http://localhost:3000/login';
-const LOGOUT_ACTION = 'http://localhost:3000/logout';
-const REGISTER_ACTION = 'http://localhost:3000/register';
-const REFRESH_TOKEN = 'http://localhost:3000/refresh-tokens';
+
+const LOGIN_ACTION = `${BASE_HTTP_URL}/login`;
+const LOGOUT_ACTION = `${BASE_HTTP_URL}/logout`;
+const REGISTER_ACTION = `${BASE_HTTP_URL}/register`;
+const REFRESH_TOKEN = `${BASE_HTTP_URL}/refresh-tokens`;
 
 const HEADER_JSON = { 'Content-Type': 'application/json' };
 const AUTH_IMAGES = {
