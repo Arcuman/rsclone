@@ -39,9 +39,9 @@ export const shadowOptions: ShadowOptions = {
 
 export const avatarPosition: AvatarPosition = {
   USER_X: 1030,
-  USER_Y: 620,
+  USER_Y: 630,
   ENEMY_X: 245,
-  ENEMY_Y: 110,
+  ENEMY_Y: 100,
 };
 
 export const SIZE_AVATAR = 0.7;

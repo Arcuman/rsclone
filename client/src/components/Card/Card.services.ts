@@ -11,14 +11,21 @@ export const setDraggableOnCard = (
 
   cardContainer.on('pointerover', () => {
     cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
-    cardContainer.setY(posY - CHANGE_POSITION_CARD_Y);
+    cardContainer.setDepth(10);
   });
 
   cardContainer.on('pointerout', () => {
     cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
-    cardContainer.setY(posY);
+    cardContainer.setDepth(1);
   });
-
+  cardContainer.on('pointerdown', () => {
+    cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
+    cardContainer.setDepth(10);
+  });
+  cardContainer.on('pointerup', () => {
+    cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
+    cardContainer.setDepth(1);
+  });
   scene.input.on(
     'drag',
     (

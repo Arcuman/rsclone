@@ -9,6 +9,10 @@ export const IMAGES = {
     NAME: 'load-background',
     PATH: 'assets/images/loading-bgr.jpg',
   },
+  GAME_BACKGROUND: {
+    NAME: 'game-background',
+    PATH: 'assets/images/game-bgr.jpg',
+  },
   AGENT: {
     NAME: 'agent',
     PATH: 'assets/images/agent.png',
@@ -71,11 +75,15 @@ export const IMAGES = {
   },
   GAME_BOARD: {
     NAME: 'game_board',
-    PATH: 'assets/images/game_board.png',
+    PATH: 'assets/images/game_board.jpg',
   },
   AVATAR: {
     NAME: 'avatar',
     PATH: 'assets/images/avatar.png',
+  },
+  COVER: {
+    NAME: 'cover',
+    PATH: 'assets/images/cover.png',
   },
 };
 

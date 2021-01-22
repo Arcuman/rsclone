@@ -11,10 +11,7 @@ export interface CardCreateInfo {
   scene: Phaser.Scene;
   posX: number;
   posY: number;
-  card: string;
-  mana: string;
-  attack?: string;
-  health?: string;
+  card: Card;
 }
 
 export interface PositionInfo {
