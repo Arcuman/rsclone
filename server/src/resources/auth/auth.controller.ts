@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { ErrorHandler, catchError } from '@/helpers/errorHandler';
 import passport from 'passport';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import { webToken } from '@/helpers/webToken';
@@ -8,6 +9,7 @@ import { usersService } from '../users/user.controller';
 import {
   ERR_LOGIN_MESSAGE,
   ERR_LOGOUT_MESSAGE,
+  ERR_LOGIN_EXIST,
   AUTH_FORM_FIELDS,
   AUTH_FAILURE_REDIRECT_URL,
   AUTH_REFRESH_TOKEN,
@@ -101,14 +103,19 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
+    const userData = req.body;
     const userID = await usersService.setUser(req.body);
-    if (userID === 0) {
+    if (!userData.login || !userData.password){
       throw new Error();
+    }
+    if (userID === 0) {
+      res.status(ERR_LOGIN_EXIST.status).send(ERR_LOGIN_EXIST.message);
+      return;
     }
     res.statusMessage = statusCodes[StatusCodes.OK].create;
     res.status(StatusCodes.OK).end();
   } catch (error) {
-    const message: string = getReasonPhrase(StatusCodes.BAD_REQUEST);
+    const message: string =getReasonPhrase(StatusCodes.BAD_REQUEST);
     res.status(StatusCodes.BAD_REQUEST).send(`${message}`);
   }
 };
@@ -147,8 +154,9 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
+ 
   if (req.baseUrl === AUTH_REGISTER) {
-    registerUser(req, res);
+    registerUser(req, res);   
   } else if (req.baseUrl === AUTH_REFRESH_TOKEN) {
     refreshToken(req, res, next);
   } else if (req.baseUrl === AUTH_LOGOUT) {
@@ -156,6 +164,7 @@ const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
   } else {
     authenticateLocal(req, res, next);
   }
+  
 };
 
 export const sendAuthResponseToClient = async (req: Request, res: Response): Promise<void> => {
