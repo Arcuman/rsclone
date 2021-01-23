@@ -1,0 +1,1 @@
+export const PLAYER_CARDS_POSITION = 620;

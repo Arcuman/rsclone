@@ -1,9 +1,23 @@
+import Phaser from 'phaser';
 import {
   CHANGE_POSITION_CARD_Y,
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
-  DEPTH_NORMAL_CARD, DEPTH_CLICK_CARD,
+  DEPTH_NORMAL_CARD, DEPTH_CLICK_CARD, IMAGE_CARD_SIZE,
 } from './constants';
+
+export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
+  const gameWidth = scene.game.config.width;
+  const centerWidth: number = <number>gameWidth / 2;
+  let posX;
+  const offsetCard = Math.ceil(index / 2) * (IMAGE_CARD_SIZE*SIZE_LITTLE_CARD);
+  if (index % 2 === 0) {
+    posX = centerWidth - offsetCard;
+  } else {
+    posX = centerWidth + offsetCard;
+  }
+  return posX;
+}
 
 export const setDraggableOnCard = (
   scene: Phaser.Scene,

@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import Phaser from 'phaser';
 import { IMAGES, SCENES } from '@/components/Game/constant';
 import { GameState } from '@/components/GameBoard/GameBoard.model';
@@ -8,6 +8,10 @@ import { cardBase } from '@/components/Card/Card.render';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
 import { createTable } from '@/components/GameBoard/Table/Table.render';
+import {
+  createGameTableImg,
+  createPlayerTableZone,
+} from '@/components/GameBoard/Table/Table.services';
 import { create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene {
@@ -31,6 +35,8 @@ export class GameBoardScene extends Phaser.Scene {
 
   private enemyTableZone: Phaser.GameObjects.Zone;
 
+  private gameTableImg: Phaser.GameObjects.Container;
+
   constructor() {
     super({
       key: SCENES.GAME_BOARD,
@@ -50,54 +56,13 @@ export class GameBoardScene extends Phaser.Scene {
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
-    // eslint-disable-next-line no-console
-    console.log(this.state);
-
     this.enemyCards = createEnemyCards(this, this.state.enemy.countCards);
 
     this.playerCards = createPlayerCards(this, this.state.handCards);
 
-    const gameWidth = <number>this.game.config.width;
-    const gameHeight = <number>this.game.config.height;
+    this.gameTableImg = createGameTableImg(this);
 
-    const cardImg = IMAGES.GAME_BOARD.NAME;
-    const createGameTable = createTable({
-      scene: this,
-      posX: gameWidth / 2,
-      posY: gameHeight / 2,
-      img: cardImg,
-    });
-    this.playerTableZone = this.add
-      .zone(
-        gameWidth / 2,
-        gameHeight / 2 + ((createGameTable.height / 2) * 0.6) / 2,
-        createGameTable.width,
-        createGameTable.height / 2
-      )
-      .setRectangleDropZone(createGameTable.width * 0.6, (createGameTable.height / 2) * 0.6);
-    //
-    // const dropZoneOutline = this.add.graphics();
-    // dropZoneOutline.lineStyle(4, 0xff69b4);
-    // dropZoneOutline.strokeRect(this.playerTableZone.x - this.playerTableZone.input.hitArea.width / 2,
-    //   this.playerTableZone.y - this.playerTableZone.input.hitArea.height / 2,
-    //   this.playerTableZone.input.hitArea.width,
-    //   this.playerTableZone.input.hitArea.height);
-
-    this.enemyTableZone = this.add
-      .zone(
-        gameWidth / 2,
-        gameHeight / 2 - ((createGameTable.height / 2) * 0.6) / 2,
-        createGameTable.width,
-        createGameTable.height / 2
-      )
-      .setRectangleDropZone(createGameTable.width * 0.6, (createGameTable.height / 2) * 0.6);
-    // const enemydropZoneOutline = this.add.graphics();
-    // dropZoneOutline.lineStyle(4, 0xff69b4);
-    // dropZoneOutline.strokeRect(
-    //   this.enemyTableZone.x - this.enemyTableZone.input.hitArea.width / 2,
-    //   this.enemyTableZone.y - this.enemyTableZone.input.hitArea.height / 2,
-    //   this.enemyTableZone.input.hitArea.width,
-    //   this.enemyTableZone.input.hitArea.height);
+    this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
     this.enemyAvatar = createEnemyAvatar(this, this.state);
     this.playerAvatar = createPlayerAvatar(this, this.state);
