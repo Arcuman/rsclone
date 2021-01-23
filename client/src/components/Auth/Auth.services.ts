@@ -87,23 +87,22 @@ export const handleRegister = (): void => {
   const password = <HTMLInputElement>document.getElementById('password');
   const confirmPassword = <HTMLInputElement>document.getElementById('confirm-password');
   const message = <HTMLInputElement>document.querySelector('.auth-message');
-  
-  if (!name.value || !login.value || !password.value || !confirmPassword.value){
+
+  if (!name.value || !login.value || !password.value || !confirmPassword.value) {
     message.innerHTML = AUTH_MESSAGE.badData;
     return;
   }
- 
+
   if (!isConfirmedPassword(password.value, confirmPassword.value)) {
     message.innerHTML = AUTH_MESSAGE.notConfirmedPassword;
     return;
   }
- 
+
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
   requestInit.body = body;
-  
+
   fetch(REGISTER_ACTION, requestInit)
     .then((response): void => {
-   
       if (response.status === AUTH_LOGIN_EXISTS_ERROR_STATUS) {
         throw new Error(AUTH_MESSAGE.loginExists);
       } else if (response.status !== StatusCodes.OK) {
@@ -113,7 +112,7 @@ export const handleRegister = (): void => {
       message.innerHTML = AUTH_MESSAGE.successRegistration;
       store.dispatch(userRegistered());
     })
-    .catch((error:Error) => {
+    .catch((error: Error) => {
       message.innerHTML = error.message || AUTH_MESSAGE.badData;
     });
 };
