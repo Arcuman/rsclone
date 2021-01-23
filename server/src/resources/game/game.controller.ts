@@ -15,13 +15,14 @@ import {
   TABLE_CARD_PLAY_PLAYER_TARGET,
   WAIT_SECOND_PLAYER,
 } from '@/resources/game/constants';
-import { Card } from '@/resources/card/card.model';
+
 import { nextTurn } from '@/resources/game/servicies/nextTurn.service';
 import { countDownTimer } from '@/resources/game/servicies/timer.service';
 import { handCardPlay } from '@/resources/game/servicies/handCardPlay.service';
 import { tableCardPlayTargetPlayer } from '@/resources/game/servicies/tableCardPlayTargerPlayer.service';
 import { tableCardPlayTargetCard } from '@/resources/game/servicies/tableCardPlayTargerCard.service';
 import { webToken } from '@/helpers/webToken';
+import { Card } from '@/resources/card/card.model';
 
 function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
   return rooms.some(room => room.players.some(player => player.userId === userId));
@@ -30,7 +31,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>,
+  rooms: Array<Room>
 ): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore.

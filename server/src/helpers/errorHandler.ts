@@ -2,19 +2,18 @@ import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 
 class ErrorHandler extends Error {
-  statusCode:number;
+  statusCode: number;
 
-  message:string;
+  message: string;
 
-  constructor(statusCode:number, message = '') {
+  constructor(statusCode: number, message = '') {
     super();
     this.statusCode = statusCode;
-    this.message =
-      message === '' ? getReasonPhrase(statusCode) : message;
+    this.message = message === '' ? getReasonPhrase(statusCode) : message;
   }
 }
 
-const returnError = (err:ErrorHandler, res:Response):void => {
+const returnError = (err: ErrorHandler, res: Response): void => {
   let { statusCode, message } = err;
   if (!statusCode) {
     statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
@@ -28,18 +27,17 @@ const returnError = (err:ErrorHandler, res:Response):void => {
 };
 
 /* eslint consistent-return: 1 */
-const catchError =  (fn:any):any => 
-  async (req:Request, res:Response, next:NextFunction):Promise<void>=> {
-    try {
-      await fn(req, res, next);
-    } catch (error) {
-      return next(error);
-    }  
-    return next();
-  };
-
-export  {
-  ErrorHandler,
-  returnError,
-  catchError,
+const catchError = (fn: any): any => async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    await fn(req, res, next);
+  } catch (error) {
+    return next(error);
+  }
+  return next();
 };
+
+export { ErrorHandler, returnError, catchError };

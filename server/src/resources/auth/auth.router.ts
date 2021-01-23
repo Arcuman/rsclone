@@ -1,9 +1,9 @@
-import { authenticate, clientAuth, sendAuthResponseToClient} from './auth.controller';
-import {User} from '../users/user.model';
+import { authenticate, clientAuth, sendAuthResponseToClient } from './auth.controller';
+import { User } from '../users/user.model';
 
 declare module 'express' {
   export interface Request {
-    user?:User;
+    user?: User;
   }
 }
 

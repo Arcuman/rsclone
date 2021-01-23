@@ -1,7 +1,7 @@
-import {Socket} from 'socket.io';
-import {Card} from '@/resources/card/card.models';
+import { Socket } from 'socket.io';
+import { Card } from '@/resources/card/card.model';
 
-export interface Player{
+export interface Player {
   userId: number;
   socket: Socket;
   name: string;
@@ -11,6 +11,6 @@ export interface Player{
   handCards: Array<Card>;
   deckCards: Array<Card>;
   tableCards: Array<Card>;
-  setMaxMana(value:number):void;
-  setCurrentMana(value:number):void;
+  setMaxMana(value: number): void;
+  setCurrentMana(value: number): void;
 }
