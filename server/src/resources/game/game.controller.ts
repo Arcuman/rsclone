@@ -31,7 +31,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>
+  rooms: Array<Room>,
 ): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore.
