@@ -14,68 +14,68 @@ export const IMAGES = {
     PATH: 'assets/images/game-bgr.jpg',
   },
   AGENT: {
-    NAME: 'agent',
+    NAME: 'agent.png',
     PATH: 'assets/images/agent.png',
   },
   AKAMA: {
-    NAME: 'akama',
+    NAME: 'akama.png',
     PATH: 'assets/images/akama.png',
   },
   ASSASSINATE: {
-    NAME: 'assassinate',
+    NAME: 'assassinate.png',
     PATH: 'assets/images/assassinate.png',
   },
   MASTER_DISGUISE: {
-    NAME: 'master_disguise',
+    NAME: 'master_disguise.png',
     PATH: 'assets/images/master_disguise.png',
   },
   PHARAOH_CAT: {
-    NAME: 'pharaoh_cat',
+    NAME: 'pharaoh_cat.png',
     PATH: 'assets/images/pharaoh_cat.png',
   },
   PRIZE_PLUNDERER: {
-    NAME: 'prize_plunderer',
+    NAME: 'prize_plunderer.png',
     PATH: 'assets/images/prize_plunderer.png',
   },
   SAHKET_SAPPER: {
-    NAME: 'sahket_sapper',
+    NAME: 'sahket_sapper.png',
     PATH: 'assets/images/sahket_sapper.png',
   },
   SEAL_FATE: {
-    NAME: 'seal_fate',
+    NAME: 'seal_fate.png',
     PATH: 'assets/images/seal_fate.png',
   },
   SHADOW_SKULPTOR: {
-    NAME: 'shadow_sculptor',
+    NAME: 'shadow_sculptor.png',
     PATH: 'assets/images/shadow_sculptor.png',
   },
   SHIV: {
-    NAME: 'shiv',
+    NAME: 'shiv.png',
     PATH: 'assets/images/shiv.png',
   },
   SINISTER_STRIKE: {
-    NAME: 'sinister_strike',
+    NAME: 'sinister_strike.png',
     PATH: 'assets/images/sinister_strike.png',
   },
   SKYVATEER: {
-    NAME: 'skyvateer',
+    NAME: 'skyvateer.png',
     PATH: 'assets/images/skyvateer.png',
   },
   STOWAWAY: {
-    NAME: 'stowaway',
+    NAME: 'stowaway.png',
     PATH: 'assets/images/stowaway.png',
   },
   SWEET_TOOTH: {
-    NAME: 'sweet_tooth',
+    NAME: 'sweet_tooth.png',
     PATH: 'assets/images/sweet_tooth.png',
   },
   VENDETTA: {
-    NAME: 'vendetta',
+    NAME: 'vendetta.png',
     PATH: 'assets/images/vendetta.png',
   },
   GAME_BOARD: {
     NAME: 'game_board',
-    PATH: 'assets/images/game_board.jpg',
+    PATH: 'assets/images/game_board.png',
   },
   AVATAR: {
     NAME: 'avatar',

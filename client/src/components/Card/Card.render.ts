@@ -8,7 +8,7 @@ import {
   shadowOptions,
   CARD_CONTAINER_DEPTH,
   CARD_HEALTH_FIELD,
-  CARD_ID_FIELD,
+  CARD_ID_FIELD, CARD_ORIGIN_CENTER,
 } from './constants';
 
 export const cardBase = (data: CardCreateInfo): Phaser.GameObjects.Container => {
@@ -17,16 +17,16 @@ export const cardBase = (data: CardCreateInfo): Phaser.GameObjects.Container => 
   const { OFFSET_X, OFFSET_Y, TINT, ALPHA } = shadowOptions;
 
   const spriteCard: Phaser.GameObjects.Sprite = scene.add
-    .sprite(IMG_X, IMG_Y, card.name)
-    .setOrigin(0.5, 0.5);
-  const shadow = setShadow(scene, card.name, IMG_X + OFFSET_X, IMG_Y + OFFSET_Y, TINT, ALPHA);
+    .sprite(IMG_X, IMG_Y, card.image)
+    .setOrigin(CARD_ORIGIN_CENTER, CARD_ORIGIN_CENTER);
+  const shadow = setShadow(scene, card.image, IMG_X + OFFSET_X, IMG_Y + OFFSET_Y, TINT, ALPHA);
   const cardLayers: (Phaser.GameObjects.Text | Phaser.GameObjects.Sprite)[] = [shadow, spriteCard];
-  if (card.manaCost) {
+  if (card.manacost) {
     const textMana: Phaser.GameObjects.Text = createTextData(
       scene,
       MANA_X,
       MANA_Y,
-      card.manaCost.toString(),
+      card.manacost.toString(),
       textDecoration,
     );
     cardLayers.push(textMana);
@@ -63,7 +63,7 @@ export const cardBase = (data: CardCreateInfo): Phaser.GameObjects.Container => 
       },
     );
   }
-  if (card.manaCost) {
+  if (card.manacost) {
     setDraggableOnCard(scene, cardContainer, posY);
   }
   return cardContainer;

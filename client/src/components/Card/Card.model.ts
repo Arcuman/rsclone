@@ -4,7 +4,8 @@ export interface Card {
   isActive: boolean;
   health: number;
   attack: number;
-  manaCost: number;
+  manacost: number;
+  image: string;
 }
 
 export interface CardCreateInfo {

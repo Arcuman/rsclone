@@ -3,6 +3,8 @@ import { Player } from '@/resources/game/player/player.model';
 import { MAX_HEALTH, NUMBER_OF_HAND_CARDS, START_MANA } from '@/resources/game/constants';
 import { playerDoesntHaveCard } from '@/resources/game/player/constants';
 import { getUserById } from '@/resources/users/user.controller';
+import { Deck } from '@/resources/decks/decks.model';
+import { getUserDefaultDeck } from '@/resources/decks/decks.controller';
 import { Card, getUserDeckCards } from '../../card/card.model';
 
 function shuffleCards(array: Card[]): Card[] {
@@ -21,9 +23,10 @@ export function getCardById(player: Player, id: number): Card {
 }
 
 export async function createPlayer(userId: number, socket: Socket): Promise<Player> {
-  const cards: Array<Card> = await getUserDeckCards(userId);
+  const deck: Deck = await getUserDefaultDeck(userId);
+  const { cards } = deck;
   const user = await getUserById(userId);
-  const deckCards: Array<Card> = shuffleCards(cards);
+  const deckCards: Array<Card> = shuffleCards(cards!);
   const handCards: Array<Card> = deckCards.splice(0, NUMBER_OF_HAND_CARDS);
   return <Player>{
     userId,

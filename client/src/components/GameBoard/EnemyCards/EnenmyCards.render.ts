@@ -29,10 +29,11 @@ export function createEnemyCards(
         card: {
           id: -1,
           name: IMAGES.COVER.NAME,
-          manaCost: 0,
+          manacost: 0,
           attack: 0,
           health: 0,
           isActive: false,
+          image: IMAGES.COVER.NAME,
         },
       }),
     );

@@ -1,4 +1,9 @@
-import { CHANGE_POSITION_CARD_Y, SIZE_NORMAL_CARD, SIZE_LITTLE_CARD } from './constants';
+import {
+  CHANGE_POSITION_CARD_Y,
+  SIZE_NORMAL_CARD,
+  SIZE_LITTLE_CARD,
+  DEPTH_NORMAL_CARD, DEPTH_CLICK_CARD,
+} from './constants';
 
 export const setDraggableOnCard = (
   scene: Phaser.Scene,
@@ -11,20 +16,20 @@ export const setDraggableOnCard = (
 
   cardContainer.on('pointerover', () => {
     cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
-    cardContainer.setDepth(10);
+    cardContainer.setDepth(DEPTH_CLICK_CARD);
   });
 
   cardContainer.on('pointerout', () => {
     cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
-    cardContainer.setDepth(1);
+    cardContainer.setDepth(DEPTH_NORMAL_CARD);
   });
   cardContainer.on('pointerdown', () => {
     cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
-    cardContainer.setDepth(10);
+    cardContainer.setDepth(DEPTH_CLICK_CARD);
   });
   cardContainer.on('pointerup', () => {
     cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
-    cardContainer.setDepth(1);
+    cardContainer.setDepth(DEPTH_NORMAL_CARD);
   });
   scene.input.on(
     'drag',
