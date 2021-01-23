@@ -4,37 +4,7 @@ import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/con
 import { browserHistory } from '@/router/history';
 import { GAME_URL, MY_CARDS_URL, PROFILE_URL } from '@/router/constants';
 import { handleLogout } from '@/components/Auth/Auth.services';
-
-interface MenuState {
-  IDLE: string;
-  HOVER: string;
-  CLICK: string;
-}
-
-function createButton(
-  scene: Phaser.Scene,
-  positionY: number,
-  atlasName: string,
-  menu: MenuState,
-): Phaser.GameObjects.Sprite {
-  const button = scene.add.sprite(
-    scene.game.renderer.width / 2,
-    scene.game.renderer.height / 2 - positionY + HEIGHT_COEFFICIENT,
-    atlasName,
-    menu.IDLE,
-  );
-  button.setScale(0.9, 0.9).setInteractive();
-  button.on('pointerover', () => {
-    button.setFrame(menu.HOVER);
-  });
-  button.on('pointerout', () => {
-    button.setFrame(menu.IDLE);
-  });
-  button.on('pointerdown', () => {
-    button.setFrame(menu.CLICK);
-  });
-  return button;
-}
+import {createButton} from '@/components/Button/Button.services';
 
 export function create(scene: Phaser.Scene): void {
   setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
@@ -43,6 +13,7 @@ export function create(scene: Phaser.Scene): void {
     MENU_ITEM_HEIGHT * 2,
     ATLASES.MENU_START_ATLAS.NAME,
     MENU_IMAGES.MENU_START_GAME,
+    HEIGHT_COEFFICIENT,
   );
   startButton.on('pointerup', () => {
     browserHistory.push(GAME_URL);
@@ -52,6 +23,7 @@ export function create(scene: Phaser.Scene): void {
     MENU_ITEM_HEIGHT,
     ATLASES.MY_CARDS_ATLAS.NAME,
     MENU_IMAGES.MENU_MY_CARDS,
+    HEIGHT_COEFFICIENT,
   );
   myCardsButton.on('pointerup', () => {
     browserHistory.push(MY_CARDS_URL);
@@ -62,6 +34,7 @@ export function create(scene: Phaser.Scene): void {
     0,
     ATLASES.SETTINGS_ATLAS.NAME,
     MENU_IMAGES.MENU_SETTINGS,
+    HEIGHT_COEFFICIENT,
   );
   
   settingButton.on('pointerup', () => {
@@ -73,6 +46,7 @@ export function create(scene: Phaser.Scene): void {
     -MENU_ITEM_HEIGHT,
     ATLASES.EXIT_ATLAS.NAME,
     MENU_IMAGES.MENU_EXIT,
+    HEIGHT_COEFFICIENT,
   );
   exitButton.on('pointerup', () => {
     handleLogout();

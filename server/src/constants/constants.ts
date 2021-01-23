@@ -24,4 +24,4 @@ dotenv.config({
 export const CURR_CLIENT_DOMAIN = process.env.CURR_CLIENT_DOMAIN || 'card-game-hfe.herokuapp.com';
 export const REMOUTE_CLIENT_HOST = `https://${CURR_CLIENT_DOMAIN}`;
   
-export const ORIGINS_HOST =  [REMOUTE_CLIENT_HOST, 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082'];
+export const ORIGINS_HOST =  [REMOUTE_CLIENT_HOST, 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082', 'http://localhost:8083'];

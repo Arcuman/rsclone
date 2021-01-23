@@ -1,6 +1,7 @@
 import { setBackground, createTextData} from '@/utils/utils';
 import { ATLASES, IMAGES,  SCENES } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
+import {createButton} from '@/components/Button/Button.services';
 import {textDecoration, positionInfo} from './constants';
 
 const user={
