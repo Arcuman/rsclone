@@ -62,8 +62,8 @@ const setCurrAuthForm = (event: Event) => {
   const menuItemId = target.getAttribute('id');
   const menuItems = document.querySelector('.auth-menu')?.childNodes;
   menuItems?.forEach(item =>{
-    const el =  <HTMLElement>item;
-    el.classList.remove('active') ;
+    const menuElement =  <HTMLElement>item;
+    menuElement.classList.remove('active') ;
   });
  
   target.classList.add('active');
