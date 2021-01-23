@@ -12,6 +12,7 @@ import {
   createGameTableImg,
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
+import { TIMER } from './constants';
 import { create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene {
@@ -37,6 +38,8 @@ export class GameBoardScene extends Phaser.Scene {
 
   private gameTableImg: Phaser.GameObjects.Container;
 
+  timerLabel: Phaser.GameObjects.Text;
+
   constructor() {
     super({
       key: SCENES.GAME_BOARD,
@@ -50,6 +53,10 @@ export class GameBoardScene extends Phaser.Scene {
     socket: SocketIOClient.Socket;
     isPlayerOne: boolean;
   }): void {
+
+    // this.timer = new TimerScene(this, timerLabel);
+    // this.timer.start(this.handleTimerFinished.bind(this));
+
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
 
     this.state = data.gameState;
@@ -68,5 +75,16 @@ export class GameBoardScene extends Phaser.Scene {
     this.playerAvatar = createPlayerAvatar(this, this.state);
 
     create(this);
+
+    this.timerLabel = this.add.text(120, 350, 'HELLO WORLD', { fontSize: '48' }).setOrigin(0.5);
+    this.socket.on(TIMER, (countDown: string | string[])=>this.timerLabel.setText(countDown));
   }
+
+  // handleTimerFinished() {
+  //   this.add.text(150, 150, 'YOOOOOU', { fontSize: '25' });
+  // }
+
+  // update() {
+  //   // this.timer.update();
+  // }
 }
