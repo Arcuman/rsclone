@@ -9,7 +9,7 @@ export function handCardPlay(card: Card, player: Player, openRoom: Room, io: Ser
     player.setCurrentMana(player.currentMana - card.manaCost);
     player.handCards.splice(
       player.handCards.findIndex((handCard: Card) => handCard.id === card.id),
-      1,
+      1
     );
     player.tableCards.push(card);
     io.to(openRoom.id).emit(HAND_CARD_PLAY, card, openRoom.isPlayerOneTurn);

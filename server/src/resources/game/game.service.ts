@@ -1,12 +1,17 @@
-import {GameState} from '@/resources/game/game.models';
-import {Player} from '@/resources/game/player/player.model';
-import {Room} from '@/resources/game/room/room.model';
-import {deletePlayerFromRoom, deleteRoom, getEnemyPlayer} from '@/resources/game/room/room.service';
-import {INIT_STATE} from '@/resources/game/constants';
+import { GameState } from '@/resources/game/game.models';
+import { Player } from '@/resources/game/player/player.model';
+import { Room } from '@/resources/game/room/room.model';
+import {
+  deletePlayerFromRoom,
+  deleteRoom,
+  getEnemyPlayer,
+} from '@/resources/game/room/room.service';
+import { INIT_STATE } from '@/resources/game/constants';
 
 export function generateInitialGameState(room: Room, curPlayer: Player): GameState {
   const enemyPlayer = getEnemyPlayer(room, curPlayer);
   return {
+    name: curPlayer.name,
     health: curPlayer.health,
     maxMana: curPlayer.maxMana,
     currentMana: curPlayer.currentMana,
@@ -14,6 +19,7 @@ export function generateInitialGameState(room: Room, curPlayer: Player): GameSta
     handCards: curPlayer.handCards,
     tableCards: curPlayer.tableCards,
     enemy: {
+      name: enemyPlayer.name,
       health: enemyPlayer.health,
       maxMana: enemyPlayer.maxMana,
       currentMana: enemyPlayer.currentMana,

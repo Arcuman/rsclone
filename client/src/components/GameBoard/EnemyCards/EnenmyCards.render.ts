@@ -1,7 +1,6 @@
-import Phaser from 'phaser';
-import { cardBase } from '@/components/Card/Card.render';
 import { IMAGES } from '@/components/Game/constant';
-import { Card } from '@/components/Card/Card.model';
+import { cardBase } from '@/components/Card/Card.render';
+import * as Phaser from 'phaser';
 
 function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   const gameWidth = scene.game.config.width;
@@ -15,19 +14,27 @@ function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   return posX;
 }
 
-export function createPlayerCards(
+export function createEnemyCards(
   scene: Phaser.Scene,
-  cards: Card[],
+  enemyCardsCount: number,
 ): Phaser.GameObjects.Container[] {
   const enemyCards: Phaser.GameObjects.Container[] = [];
-  for (let i = 0; i < cards.length; i += 1) {
+  for (let i = 0; i < enemyCardsCount; i += 1) {
     const posX = getPositionOfCard(scene, i);
     enemyCards.push(
       cardBase({
         scene,
         posX,
-        posY: 620,
-        card: cards[i],
+        posY: 90,
+        card: {
+          id: -1,
+          name: IMAGES.COVER.NAME,
+          manacost: 0,
+          attack: 0,
+          health: 0,
+          isActive: false,
+          image: IMAGES.COVER.NAME,
+        },
       }),
     );
   }

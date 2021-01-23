@@ -9,7 +9,7 @@ export function tableCardPlayTargetPlayer(
   cardId: number,
   openRoom: Room,
   player: Player,
-  io: Server,
+  io: Server
 ): void {
   const enemy = getEnemyPlayer(openRoom, player);
   const playerCard = getCardById(player, cardId);

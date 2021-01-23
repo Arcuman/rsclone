@@ -4,17 +4,15 @@ export interface Card {
   isActive: boolean;
   health: number;
   attack: number;
-  manaCost: number;
+  manacost: number;
+  image: string;
 }
 
 export interface CardCreateInfo {
   scene: Phaser.Scene;
   posX: number;
   posY: number;
-  card: string;
-  mana: string;
-  attack?: string;
-  health?: string;
+  card: Card;
 }
 
 export interface PositionInfo {

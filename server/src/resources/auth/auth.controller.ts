@@ -44,8 +44,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -63,7 +63,7 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  }),
+  })
 );
 
 const authenticate = (req: Request, res: Response, next: NextFunction): void => {
@@ -97,7 +97,7 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
       }
       req.user = user;
       return next();
-    },
+    }
   )(req, res, next);
 };
 
@@ -187,7 +187,7 @@ export const sendAuthResponseToClient = async (req: Request, res: Response): Pro
   };
   const userId = user.user_id;
   const accessToken = webToken.createToken(user);
- 
+
   if (!newRefreshToken || newRefreshToken === '') {
     newRefreshToken = await getNewRefreshToken(userId, req);
   }

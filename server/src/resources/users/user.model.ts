@@ -48,7 +48,7 @@ const getUserById = async (id: number): Promise<User> => {
 };
 
 const getDefaultDeckId = async (id: number): Promise<number> => {
-  let deckId: number;
+  let deckId: { cur_user_deck_id: number };
   try {
     ({
       rows: [deckId],
@@ -56,7 +56,7 @@ const getDefaultDeckId = async (id: number): Promise<number> => {
   } catch (error) {
     throw new Error('500');
   }
-  return deckId;
+  return deckId.cur_user_deck_id;
 };
 
 const getUserProfile = async (id: number): Promise<UserProfile> => {
@@ -226,7 +226,7 @@ const addRefreshSession = async ({
     } = await db.query(
       `INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
                                             VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`,
-      [],
+      []
     ));
   } catch (error) {
     throw new Error(error);

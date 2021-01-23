@@ -24,7 +24,7 @@ const getDeckByIdCards = async (id: number): Promise<Deck> => {
   return deck;
 };
 
-const getUserDefaultDeck = async (userId: number): Promise<Deck> => {
+export const getUserDefaultDeck = async (userId: number): Promise<Deck> => {
   const deckId = await usersService.getDefaultDeckId(userId);
   const deck: Deck = await decksModel.getDeckById(deckId);
   if (!deck) {

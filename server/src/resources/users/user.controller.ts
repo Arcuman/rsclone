@@ -47,7 +47,7 @@ const createInitialUserData = async (userId: number, name: string): Promise<void
 };
 
 const getAll = (): Promise<User[]> => usersModel.getAll();
-const getUserById = (id: number): Promise<User> => usersModel.getUserById(id);
+export const getUserById = (id: number): Promise<User> => usersModel.getUserById(id);
 const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLogin(login);
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
