@@ -21,7 +21,7 @@ const getAll = async (user_id: number): Promise<Deck[]> => {
         'From "UserDecks" JOIN "UserDeckCards" ' +
         'ON "UserDecks".user_deck_id = "UserDeckCards".user_deck_id ' +
         'Where "UserDecks".user_id=$1 group BY  "UserDecks".user_deck_id',
-      [user_id.toString()],
+      [user_id.toString()]
     );
     decks = rows;
   } catch (error) {
@@ -51,11 +51,11 @@ const getDeckCards = async (deck_id: number): Promise<Card[]> => {
       rows: cards,
     } = await db.query(
       'Select "Cards".card_id as id, "Cards".name, "Cards"."isActive", ' +
-        '"Cards".health, "Cards".attack,"Cards".manacost as manaCost ' +
+        '"Cards".health, "Cards".attack,"Cards".manacost as manaCost, "Cards".image  ' +
         'From "UserDeckCards" JOIN "Cards" ' +
         'ON "UserDeckCards".card_id = "Cards".card_id ' +
         'Where "UserDeckCards".user_deck_id=$1',
-      [deck_id],
+      [deck_id]
     ));
   } catch (error) {
     throw new Error('500');

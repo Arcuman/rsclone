@@ -4,6 +4,7 @@ import { Card } from '@/resources/card/card.model';
 export interface Player {
   userId: number;
   socket: Socket;
+  name: string;
   health: number;
   currentMana: number;
   maxMana: number;

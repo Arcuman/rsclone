@@ -15,7 +15,8 @@ import {
   REGISTER_ACTION,
   HEADER_JSON,
   REFRESH_TOKEN,
-  AUTH_ERRORS,
+  AUTH_MESSAGE,
+  AUTH_LOGIN_EXISTS_ERROR_STATUS,
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
@@ -77,32 +78,50 @@ export const isUserJustRegistered = (): boolean => {
   return user.userRegistered;
 };
 
+const isConfirmedPassword = (password: string, confirmPassword: string): boolean =>
+  password === confirmPassword;
+
 export const handleRegister = (): void => {
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
+  const confirmPassword = <HTMLInputElement>document.getElementById('confirm-password');
   const message = <HTMLInputElement>document.querySelector('.auth-message');
-
+  
+  if (!name.value || !login.value || !password.value || !confirmPassword.value){
+    message.innerHTML = AUTH_MESSAGE.badData;
+    return;
+  }
+ 
+  if (!isConfirmedPassword(password.value, confirmPassword.value)) {
+    message.innerHTML = AUTH_MESSAGE.notConfirmedPassword;
+    return;
+  }
+ 
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
-
   requestInit.body = body;
-
+  
   fetch(REGISTER_ACTION, requestInit)
     .then((response): void => {
-      if (response.status !== StatusCodes.OK) {
+   
+      if (response.status === AUTH_LOGIN_EXISTS_ERROR_STATUS) {
+        throw new Error(AUTH_MESSAGE.loginExists);
+      } else if (response.status !== StatusCodes.OK) {
         throw new Error();
       }
 
+      message.innerHTML = AUTH_MESSAGE.successRegistration;
       store.dispatch(userRegistered());
     })
-    .catch(() => {
-      message.innerHTML = AUTH_ERRORS.register;
+    .catch((error:Error) => {
+      message.innerHTML = error.message || AUTH_MESSAGE.badData;
     });
 };
 
 export const handleLogin = (): void => {
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
+  const message = <HTMLInputElement>document.querySelector('.auth-message');
 
   const body = JSON.stringify({ login: login.value, password: password.value });
 
@@ -130,8 +149,7 @@ export const handleLogin = (): void => {
       browserHistory.push(MENU_URL);
     })
     .catch(() => {
-      // eslint-disable-next-line no-console
-      console.log(AUTH_ERRORS.login);
+      message.innerHTML = AUTH_MESSAGE.login;
     });
 };
 

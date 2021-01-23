@@ -7,49 +7,64 @@ import {
   SIZE_LITTLE_CARD,
   shadowOptions,
   CARD_CONTAINER_DEPTH,
+  CARD_HEALTH_FIELD,
+  CARD_ID_FIELD, CARD_ORIGIN_CENTER,
 } from './constants';
 
-export const cardBase = (data: CardCreateInfo): void => {
-  const { scene, posX, posY, card, mana, attack, health } = data;
+export const cardBase = (data: CardCreateInfo): Phaser.GameObjects.Container => {
+  const { scene, posX, posY, card } = data;
   const { IMG_X, IMG_Y, MANA_X, MANA_Y, ATTACK_X, ATTACK_Y, HEALTH_X, HEALTH_Y } = positionInfo;
   const { OFFSET_X, OFFSET_Y, TINT, ALPHA } = shadowOptions;
 
-  const spriteCard: Phaser.GameObjects.Sprite = scene.add.sprite(IMG_X, IMG_Y, card);
-  const shadow = setShadow(scene, card, IMG_X + OFFSET_X, IMG_Y + OFFSET_Y, TINT, ALPHA);
-
-  const textMana: Phaser.GameObjects.Text = createTextData(
-    scene,
-    MANA_X,
-    MANA_Y,
-    mana,
-    textDecoration,
-  );
-
-  const cardLayers = [shadow, spriteCard, textMana];
+  const spriteCard: Phaser.GameObjects.Sprite = scene.add
+    .sprite(IMG_X, IMG_Y, card.image)
+    .setOrigin(CARD_ORIGIN_CENTER, CARD_ORIGIN_CENTER);
+  const shadow = setShadow(scene, card.image, IMG_X + OFFSET_X, IMG_Y + OFFSET_Y, TINT, ALPHA);
+  const cardLayers: (Phaser.GameObjects.Text | Phaser.GameObjects.Sprite)[] = [shadow, spriteCard];
+  if (card.manacost) {
+    const textMana: Phaser.GameObjects.Text = createTextData(
+      scene,
+      MANA_X,
+      MANA_Y,
+      card.manacost.toString(),
+      textDecoration,
+    );
+    cardLayers.push(textMana);
+  }
   const cardContainer = scene.add.container(posX, posY, cardLayers);
-
   cardContainer.setSize(spriteCard.width, spriteCard.height);
   cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
   cardContainer.depth = CARD_CONTAINER_DEPTH;
 
-  if (attack && health) {
+  if (card.isActive) {
     const textAttack: Phaser.GameObjects.Text = createTextData(
       scene,
       ATTACK_X,
       ATTACK_Y,
-      attack,
+      card.attack.toString(),
       textDecoration,
     );
     const textHealth: Phaser.GameObjects.Text = createTextData(
       scene,
       HEALTH_X,
       HEALTH_Y,
-      health,
+      card.health.toString(),
       textDecoration,
     );
     cardContainer.add(textAttack);
     cardContainer.add(textHealth);
-  }
 
-  setDraggableOnCard(scene, cardContainer, posY);
+    cardContainer.setData(CARD_HEALTH_FIELD, card.health);
+    cardContainer.setData(CARD_ID_FIELD, card.id);
+    cardContainer.on(
+      'changedata',
+      (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
+        textHealth.setText(cardContainer.getData(CARD_HEALTH_FIELD));
+      },
+    );
+  }
+  if (card.manacost) {
+    setDraggableOnCard(scene, cardContainer, posY);
+  }
+  return cardContainer;
 };

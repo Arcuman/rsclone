@@ -8,6 +8,9 @@
   "bugs": {
     "url": "https://github.com/Alexey-Koren/webpack-boilerplate/issues"
   },
+  "browser": {
+    "fs": false
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Alexey-Koren/webpack-boilerplate.git"
@@ -94,7 +97,9 @@
     "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
+    "@types/dotenv-webpack": "^5.0.0",
     "@types/page": "^1.11.1",
+    "dotenv-webpack": "^6.0.0",
     "eslint-loader": "^4.0.2"
   }
 }

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { ErrorHandler, catchError } from '@/helpers/errorHandler';
 import passport from 'passport';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import { webToken } from '@/helpers/webToken';
@@ -8,6 +9,7 @@ import { usersService } from '../users/user.controller';
 import {
   ERR_LOGIN_MESSAGE,
   ERR_LOGOUT_MESSAGE,
+  ERR_LOGIN_EXIST,
   AUTH_FORM_FIELDS,
   AUTH_FAILURE_REDIRECT_URL,
   AUTH_REFRESH_TOKEN,
@@ -42,8 +44,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -61,7 +63,7 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  }),
+  })
 );
 
 const authenticate = (req: Request, res: Response, next: NextFunction): void => {
@@ -95,15 +97,20 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
       }
       req.user = user;
       return next();
-    },
+    }
   )(req, res, next);
 };
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
+    const userData = req.body;
     const userID = await usersService.setUser(req.body);
-    if (userID === 0) {
+    if (!userData.login || !userData.password) {
       throw new Error();
+    }
+    if (userID === 0) {
+      res.status(ERR_LOGIN_EXIST.status).send(ERR_LOGIN_EXIST.message);
+      return;
     }
     res.statusMessage = statusCodes[StatusCodes.OK].create;
     res.status(StatusCodes.OK).end();
@@ -178,7 +185,7 @@ export const sendAuthResponseToClient = async (req: Request, res: Response): Pro
   };
   const userId = user.user_id;
   const accessToken = webToken.createToken(user);
- 
+
   if (!newRefreshToken || newRefreshToken === '') {
     newRefreshToken = await getNewRefreshToken(userId, req);
   }

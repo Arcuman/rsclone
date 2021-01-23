@@ -2,7 +2,7 @@ import { setShadow } from '@/utils/utils';
 import { tablePositionInfo } from './constants';
 import { TableCreateInfo } from './Table.model';
 
-export const createTable = (data: TableCreateInfo): void => {
+export const createTable = (data: TableCreateInfo): Phaser.GameObjects.Container => {
   const { scene, posX, posY, img } = data;
   const {
     IMG_X,
@@ -30,4 +30,6 @@ export const createTable = (data: TableCreateInfo): void => {
 
   tableContainer.setSize(spriteTable.width, spriteTable.height);
   tableContainer.setScale(TABLE_CONTAINER_SCALE, TABLE_CONTAINER_SCALE);
+
+  return tableContainer;
 };
