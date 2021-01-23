@@ -187,7 +187,7 @@ export const sendAuthResponseToClient = async (req: Request, res: Response): Pro
   };
   const userId = user.user_id;
   const accessToken = webToken.createToken(user);
- 
+
   if (!newRefreshToken || newRefreshToken === '') {
     newRefreshToken = await getNewRefreshToken(userId, req);
   }
