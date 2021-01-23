@@ -7,9 +7,11 @@
     "start:dev": "node --inspect ./dist/server",
     "build:dev": "webpack --env.development",
     "start": " webpack --progress --env.development --env.nodemon",
+    "start:heroku": "webpack --mode production --config ./webpack.config.js",
     "start:prod": "webpack --progress --env.nodemon",
     "build:prod": "webpack --progress",
     "build:ci": "webpack",
+    "build": "webpack --mode production --config ./webpack.config.js",
     "lint": "eslint . --ext .ts",
     "prettier:format": "prettier --write \"**/*.+(ts|tsx|scss)\""
   },

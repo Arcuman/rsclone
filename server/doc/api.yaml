@@ -612,6 +612,8 @@ paths:
           description: Bad Request.
         403:
           description: Incorrect login or password
+        460:
+          description: Login already exists
   /refresh-tokens:
     post:
       tags:
