@@ -29,6 +29,11 @@ const requestInit: RequestInit = {
   body: '',
 };
 
+export const buttonStyleClick = (event:MouseEvent):void =>{
+  const element = <HTMLElement>event.target;
+  element.classList.add('active');
+};
+
 const refreshTokenSession = async (): Promise<boolean> =>
   fetch(REFRESH_TOKEN, requestInit)
     .then(
@@ -81,7 +86,10 @@ export const isUserJustRegistered = (): boolean => {
 const isConfirmedPassword = (password: string, confirmPassword: string): boolean =>
   password === confirmPassword;
 
-export const handleRegister = (): void => {
+export const handleRegister = (event:MouseEvent): void => {
+  const element = <HTMLElement>event.target;
+  element.classList.remove('active');
+
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
@@ -118,7 +126,10 @@ export const handleRegister = (): void => {
     });
 };
 
-export const handleLogin = (): void => {
+export const handleLogin = (event:MouseEvent): void => {
+  const element = <HTMLElement>event.target;
+  element.classList.remove('active');
+
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
   const message = <HTMLInputElement>document.querySelector('.auth-message');
