@@ -2,7 +2,7 @@ import { setBackground } from '@/utils/utils';
 import { ATLASES, IMAGES, MENU_IMAGES, SCENES } from '@/components/Game/constant';
 import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/constants';
 import { browserHistory } from '@/router/history';
-import { GAME_URL, MY_CARDS_URL } from '@/router/constants';
+import { GAME_URL, MY_CARDS_URL, PROFILE_URL } from '@/router/constants';
 import { handleLogout } from '@/components/Auth/Auth.services';
 
 interface MenuState {
@@ -63,6 +63,10 @@ export function create(scene: Phaser.Scene): void {
     ATLASES.SETTINGS_ATLAS.NAME,
     MENU_IMAGES.MENU_SETTINGS,
   );
+  
+  settingButton.on('pointerup', () => {
+    browserHistory.push(PROFILE_URL);
+  });
 
   const exitButton = createButton(
     scene,

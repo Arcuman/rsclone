@@ -54,18 +54,18 @@ const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultD
 const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
 
 const setUser = async (userData: User): Promise<number> => {
-  const user = await usersModel.getUserByLogin(userData.login);
-
+  const user =await usersModel.getUserByLogin(userData.login);
+  
   if (user || !userData.password) {
     return 0;
   }
-
+  
   const hash = myCrypt.hashPassword(userData.password);
   const newUserData = { ...userData, password: hash };
   const userId = await usersModel.setUser(newUserData);
-
+  
   createInitialUserData(userId, newUserData.name);
-
+  
   return userId;
 };
 

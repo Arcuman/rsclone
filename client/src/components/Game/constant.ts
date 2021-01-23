@@ -13,6 +13,10 @@ export const IMAGES = {
     NAME: 'game-background',
     PATH: 'assets/images/game-bgr.jpg',
   },
+  PROFILE_BACKGROUND: {
+    NAME: 'profile-background',
+    PATH: 'assets/images/settings_bgr.jpg',
+  },
   AGENT: {
     NAME: 'agent.png',
     PATH: 'assets/images/agent.png',
@@ -85,6 +89,10 @@ export const IMAGES = {
     NAME: 'cover',
     PATH: 'assets/images/cover.png',
   },
+  SETTINGS_BLOCK_IMAGE:{
+    NAME: 'settings_block',
+    PATH: 'assets/images/settings_block.png',
+  },
 };
 
 export const ATLASES = {
@@ -139,6 +147,7 @@ export const SCENES = {
   MY_CARDS: 'MY_CARDS',
   FIND_ENEMY: 'FIND_ENEMY',
   GAME_BOARD: 'GAME_BOARD',
+  PROFILE: 'PROFILE',
 };
 
 export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({
