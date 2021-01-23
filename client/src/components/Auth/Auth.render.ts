@@ -1,7 +1,7 @@
 import './auth.scss';
 import { createHtmlElement } from '@/utils/utils';
-import { authForm } from './constants';
-import { handleLogin, handleClearForm, handleRegister } from './Auth.services';
+import { authForm, AUTH_IMAGES } from './constants';
+import { handleLogin,  handleRegister } from './Auth.services';
 
 interface RenderFunction {
   (): HTMLElement;
@@ -19,19 +19,17 @@ const renderFormField = (name: string, type: string): HTMLElement => {
 
 const renderLoginForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
+  form.appendChild(createHtmlElement('div', 'auth-message'));
+  const inputWrapper = createHtmlElement('div', 'auth-input-wrapper');
+  
+  inputWrapper.appendChild(renderFormField('login', 'text'));
+  inputWrapper.appendChild(renderFormField('password', 'password'));
+  form.appendChild(inputWrapper);
 
-  form.appendChild(renderFormField('login', 'text'));
-  form.appendChild(renderFormField('password', 'password'));
-
-  const buttonOk = createHtmlElement('button', 'button-ok');
-  buttonOk.innerHTML = 'Login';
+  const buttonOk = <HTMLImageElement>createHtmlElement('img', 'button-ok');
+  buttonOk.src = AUTH_IMAGES.login;
   buttonOk.addEventListener('click', () => handleLogin());
   form.appendChild(buttonOk);
-
-  const buttonCancel = createHtmlElement('button', 'button-cancel');
-  buttonCancel.innerHTML = 'Cancel';
-  buttonCancel.addEventListener('click', () => handleClearForm());
-  form.appendChild(buttonCancel);
 
   return form;
 };
@@ -39,20 +37,19 @@ const renderLoginForm = (): HTMLElement => {
 const renderRegisterForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
   form.appendChild(createHtmlElement('div', 'auth-message'));
-  form.appendChild(renderFormField('name', 'text'));
-  form.appendChild(renderFormField('login', 'text'));
-  form.appendChild(renderFormField('password', 'password'));
-
-  const buttonOk = createHtmlElement('button', 'button-ok');
-  buttonOk.innerHTML = 'Register';
-  buttonOk.addEventListener('click', () => handleRegister());
-
-  form.appendChild(buttonOk);
-
-  const buttonCancel = createHtmlElement('button', 'button-cancel');
-  buttonCancel.innerHTML = 'Cancel';
-  buttonCancel.addEventListener('click', () => handleClearForm());
-  form.appendChild(buttonCancel);
+  const inputWrapper = createHtmlElement('div', 'auth-input-wrapper register');
+  
+  inputWrapper.appendChild(renderFormField('name', 'text'));
+  inputWrapper.appendChild(renderFormField('login', 'text'));
+  inputWrapper.appendChild(renderFormField('password', 'password'));
+  inputWrapper.appendChild(renderFormField('confirm-password', 'password'));
+  
+  form.appendChild(inputWrapper);
+ 
+  const buttonSend = <HTMLImageElement>createHtmlElement('img', 'button-ok');
+  buttonSend.src = AUTH_IMAGES.register;
+  buttonSend.addEventListener('click', () => handleRegister());
+  form.appendChild(buttonSend);
 
   return form;
 };
@@ -63,10 +60,14 @@ const setCurrAuthForm = (event: Event) => {
     return;
   }
   const menuItemId = target.getAttribute('id');
-  if (!target.classList.contains('active')) {
-    target.classList.add('active');
-    target.closest('li')?.classList.remove('active');
-  }
+  const menuItems = document.querySelector('.auth-menu')?.childNodes;
+  menuItems?.forEach(item =>{
+    const menuElement =  <HTMLElement>item;
+    menuElement.classList.remove('active') ;
+  });
+ 
+  target.classList.add('active');
+ 
   document.querySelector('.auth-form')?.remove();
   const authWrapper = document.querySelector('.auth-wrapper');
 
@@ -80,12 +81,16 @@ const renderMenuAuth = (): HTMLElement => {
 
   const loginItem = createHtmlElement('li', 'auth-menu-login active');
   loginItem.setAttribute('id', 'loginItem');
-  loginItem.innerHTML = 'Login';
+  loginItem.innerHTML = authForm.auth;
   menuAuth.append(loginItem);
+
+  const slashItem = createHtmlElement('div');
+  slashItem.innerHTML = '/';
+  menuAuth.append(slashItem);
 
   const registerItem = createHtmlElement('li', 'auth-menu-register');
   registerItem.setAttribute('id', 'registerItem');
-  registerItem.innerHTML = 'Register';
+  registerItem.innerHTML = authForm.register;
   menuAuth.append(registerItem);
 
   menuAuth.addEventListener('click', event => setCurrAuthForm(event));

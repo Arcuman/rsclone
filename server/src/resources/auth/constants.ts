@@ -1,5 +1,6 @@
 const ERR_LOGIN_MESSAGE = 'Bad login/password combination';
 const ERR_LOGOUT_MESSAGE = "Login doesn't exist";
+const ERR_LOGIN_EXIST = {status:460, message:'Login already exists'};
 const AUTH_FORM_FIELDS = { usernameField: 'login', passwordField: 'password' };
 const SESSION_EXPIRED = 'Session expired';
 
@@ -14,6 +15,7 @@ const BAD_REFRESH_TOKEN = 'Refresh token not exist';
 export {
   ERR_LOGIN_MESSAGE,
   ERR_LOGOUT_MESSAGE,
+  ERR_LOGIN_EXIST,
   AUTH_FORM_FIELDS,
   AUTH_FAILURE_REDIRECT_URL,
   AUTH_REFRESH_TOKEN,

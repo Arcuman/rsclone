@@ -9,12 +9,13 @@
   margin: 0;
   padding: 0;
 }
-
-.main {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
 }
+
 
 body,
 html {
