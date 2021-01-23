@@ -8,7 +8,6 @@ export const renderMain = (link: string): HTMLElement => {
   mainEl.id = 'main';
  
   switch (link) {
-    
     case AUTH_URL:
       mainEl.appendChild(renderAuthForms());
       break;
