@@ -1,4 +1,11 @@
+@font-face {
+	font-family: 'Capture Smallz'; 
+	src: url(../../assets/fonts/Capture_Smallz.woff); 
+}
+ 
+
 .auth-wrapper {
+  font-family: 'Capture Smallz';
   margin-left:10rem;
   font-size: 3rem;
   display: flex;
@@ -7,35 +14,73 @@
   align-items: center;
   row-gap: 2rem;
   //color:burlywood;
+  
+  .auth-menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    column-gap: 1rem;
+    color: #9a665f;
 
-  ul li {
-    cursor: pointer;
-    color: blue;
-    text-decoration: underline;
+    li {
+      list-style: none;    
+      cursor: pointer;
+
+      &.active{
+        text-decoration: underline;
+      }
+    }
   }
+
   .auth-form {
     max-width:40rem;
     min-width:32rem;
     width:100%;
-    padding:6rem 4rem;
+    //padding:6rem 4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    row-gap: 2rem;
-    background-image: url('../../assets/images/svitok.png');
-
+       
+    .auth-message{
+      font-size: 2.1rem;
+      height: 2rem;
+      color: #cfbf61;
+    }
+    
+    .auth-input-wrapper{
+      width:45rem;
+      height:45rem;
+      padding:7rem 20rem;
+      background: url('../../assets/images/auth_list.png') no-repeat;
+      background-size:contain;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      row-gap: 5rem;
+      color: #261c17;
+      &.register{
+        padding:5.5rem 20rem;
+        row-gap: 2rem;
+      }
+    }
+   
     input {
-      //padding: 1rem;
+      font-size: 2.5rem;
       background-color: transparent;
       border:0;
-      border-bottom:1px solid black;
+      border-bottom:3px solid #261c17;
       width:30rem;
       outline: none;
     }
+    input::selection{
+      background-color: transparent;
+    }
     input:focus{
       border:0;
-      border-bottom:1px solid black;
+      border-bottom:3px solid #261c17;
     }
    /* button {
       padding: 2rem;

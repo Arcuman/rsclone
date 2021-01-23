@@ -3,5 +3,7 @@
     height: 100vh;
     display: flex;
     justify-content: flex-start;
-    background-image:url('../../assets/images/auth_bgr.jpg')
+    background:url('../../assets/images/auth_bgr.jpg') no-repeat;
+    background-position-x:right ;
+
   }

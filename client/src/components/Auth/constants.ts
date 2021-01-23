@@ -1,4 +1,4 @@
-import {BASE_HTTP_URL} from '@/constants/constants';
+import { BASE_HTTP_URL } from '@/constants/constants';
 
 const authForm = {
   login: 'Логин',
@@ -9,23 +9,24 @@ const authForm = {
   register: 'Регистрация',
 };
 
-const LOGIN_ACTION = `${BASE_HTTP_URL}/login`;
-const LOGOUT_ACTION = `${BASE_HTTP_URL}/logout`;
-const REGISTER_ACTION = `${BASE_HTTP_URL}/register`;
-const REFRESH_TOKEN = `${BASE_HTTP_URL}/refresh-tokens`;
+const LOGIN_ACTION = `${<string>BASE_HTTP_URL}/login`;
+const LOGOUT_ACTION = `${<string>BASE_HTTP_URL}/logout`;
+const REGISTER_ACTION = `${<string>BASE_HTTP_URL}/register`;
+const REFRESH_TOKEN = `${<string>BASE_HTTP_URL}/refresh-tokens`;
 
 const HEADER_JSON = { 'Content-Type': 'application/json' };
 const AUTH_IMAGES = {
-  login: 'assets/images/menu/exit-button-ru.png',
-  register: 'assets/images/menu/my-cards-button-ru.png',
+  login: 'assets/images/enter_button.png',
+  register: 'assets/images/send_button.png',
 };
+
 const AUTH_LOGIN_EXISTS_ERROR_STATUS = 460;
 const AUTH_MESSAGE = {
   login: 'Неверный логин/пароль',
   loginExists: 'Введенный логин уже существует',
-  badData:'Обязательные поля не заполнены',
-  notConfirmedPassword:'Пароли не совпадают',
-  successRegistration:'Вы зарегистрированы',
+  badData: 'Обязательные поля не заполнены',
+  notConfirmedPassword: 'Пароли не совпадают',
+  successRegistration: 'Вы зарегистрированы',
 };
 
 export {
