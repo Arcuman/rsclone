@@ -77,6 +77,18 @@ export const IMAGES = {
     NAME: 'avatar',
     PATH: 'assets/images/avatar.png',
   },
+  MY_CARDS_CONTAINER: {
+    NAME: 'my_cards_container',
+    PATH: 'assets/images/my_cards/book_my_cards.png',
+  },
+  MY_DECKS_CONTAINER: {
+    NAME: 'my_decks_container',
+    PATH: 'assets/images/my_cards/my_deck_container.png',
+  },
+  MY_CARDS_DECOR: {
+    NAME: 'my_cards_decor',
+    PATH: 'assets/images/my_cards/decor_my_cards.png',
+  },
 };
 
 export const ATLASES = {
