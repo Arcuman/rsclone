@@ -1,10 +1,15 @@
+/* eslint-disable no-console */
 import Phaser from 'phaser';
+import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
+import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
+import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
   DEPTH_NORMAL_CARD,
   DEPTH_CLICK_CARD,
   IMAGE_CARD_SIZE,
+  CARD_ID_FIELD,
 } from './constants';
 
 export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
@@ -21,22 +26,44 @@ export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
 }
 
 export const setDraggableCard = (
-  scene: Phaser.Scene,
+  scene: IGameBoardScene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
-  cardContainer.setInteractive();
-  scene.input.setDraggable(cardContainer);
-  scene.input.on(
+  scene.input.setDraggable(cardContainer, false);
+  cardContainer.on(
     'drag',
-    (
-      pointer: Phaser.GameObjects.GameObject,
-      gameObject: Phaser.GameObjects.Container,
-      dragX: number,
-      dragY: number,
-    ) => {
-      const gameObjectParameters = gameObject;
+    (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number) => {
+      const gameObjectParameters = cardContainer;
       gameObjectParameters.x = dragX;
       gameObjectParameters.y = dragY;
+    },
+  );
+  cardContainer.on(
+    'dragend',
+    (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
+      const gameObjectParameters = cardContainer;
+      if (!dropped) {
+        gameObjectParameters.x = cardContainer.input.dragStartX;
+        gameObjectParameters.y = cardContainer.input.dragStartY;
+      }
+    },
+  );
+  cardContainer.on(
+    'drop',
+    (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
+      const gameObject = cardContainer;
+      gameObject.x = getPositionOfCard(scene, <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD));
+      gameObject.y = dropZone.y;
+      scene.input.setDraggable(cardContainer, false);
+      dropZone.setData(
+        ZONE_COUNT_CARDS_FIELD,
+        <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD) + 1,
+      );
+      const socket = scene.getSocket();
+      socket.emit(
+        HAND_CARD_PLAY,
+        scene.getState().handCards.find(card => card.id === cardContainer.getData(CARD_ID_FIELD)),
+      );
     },
   );
 };

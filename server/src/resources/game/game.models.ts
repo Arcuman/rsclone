@@ -1,10 +1,5 @@
 import { Card } from '@/resources/card/card.model';
 
-export enum TargetType {
-  enemyCard,
-  enemyPlayer,
-}
-
 export interface GameState {
   name: string;
   health: number;

@@ -39,3 +39,5 @@ export const IMAGE_CARD_SIZE = 147;
 
 export const CARD_HEALTH_FIELD = 'CARD_HEALTH_FIELD';
 export const CARD_ID_FIELD = 'CARD_ID_FIELD';
+export const CARD_MANA_FIELD = 'CARD_MANA_FIELD';
+export const CARD_IS_ACTIVE_FIELD = 'CARD_IS_ACTIVE_FIELD';

@@ -5,6 +5,8 @@ import {
   DROP_ZONE_HIEGHT_OFFSET,
   DROP_ZONE_WIDTH_OFFSET,
   tablePositionInfo,
+  ZONE_COUNT_CARDS_FIELD,
+  ZONE_COUNT_CARDS_FIELD_INIT,
 } from '@/components/GameBoard/Table/constants';
 
 export function createGameTableImg(scene: Phaser.Scene): Phaser.GameObjects.Container {
@@ -33,13 +35,14 @@ export function createPlayerTableZone(
       gameHeight / 2 +
         (tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE) / 2 -
         DROP_ZONE_HIEGHT_OFFSET,
-      tableWidth,
-      tableHalfHeight,
+      tableWidth * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_WIDTH_OFFSET,
+      tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET,
     )
     .setRectangleDropZone(
       tableWidth * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_WIDTH_OFFSET,
       tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET,
     );
+  zone.setData(ZONE_COUNT_CARDS_FIELD, ZONE_COUNT_CARDS_FIELD_INIT);
   const dropZoneOutline = scene.add.graphics();
   dropZoneOutline.lineStyle(4, 0xff69b4);
   dropZoneOutline.strokeRect(

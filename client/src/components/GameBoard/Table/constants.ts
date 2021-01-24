@@ -12,3 +12,5 @@ export const tablePositionInfo: TablePositionInfo = {
 
 export const DROP_ZONE_HIEGHT_OFFSET = 20;
 export const DROP_ZONE_WIDTH_OFFSET = 50;
+export const ZONE_COUNT_CARDS_FIELD = 'ZONE_COUNT_CARDS_FIELD';
+export const ZONE_COUNT_CARDS_FIELD_INIT = 0;

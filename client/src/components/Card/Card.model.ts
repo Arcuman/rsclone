@@ -1,15 +1,17 @@
+import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
+
 export interface Card {
   id: number;
   name: string;
   isActive: boolean;
   health: number;
   attack: number;
-  manacost: number;
+  manaCost: number;
   image: string;
 }
 
 export interface CardCreateInfo {
-  scene: Phaser.Scene;
+  scene: IGameBoardScene;
   posX: number;
   posY: number;
   card: Card;

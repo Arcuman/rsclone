@@ -1,4 +1,11 @@
 import { Card } from '@/components/Card/Card.model';
+import Phaser from 'phaser';
+
+export interface IGameBoardScene extends Phaser.Scene {
+  getState(): GameState;
+  getPlayerCards(): Phaser.GameObjects.Container[];
+  getSocket(): SocketIOClient.Socket;
+}
 
 export interface GameState {
   name: string;
