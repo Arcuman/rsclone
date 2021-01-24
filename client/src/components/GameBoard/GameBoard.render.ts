@@ -1,13 +1,9 @@
-
 import Phaser from 'phaser';
 import { IMAGES, SCENES } from '@/components/Game/constant';
 import { GameState } from '@/components/GameBoard/GameBoard.model';
 import { setBackground } from '@/utils/utils';
-import { TEXT_FIELD_NAME } from '@/components/GameBoard/UserAvatar/constants';
-import { cardBase } from '@/components/Card/Card.render';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
-import { createTable } from '@/components/GameBoard/Table/Table.render';
 import {
   createGameTableImg,
   createPlayerTableZone,

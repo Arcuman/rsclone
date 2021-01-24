@@ -5,7 +5,7 @@ import {
   positionInfo,
   shadowOptions,
   SIZE_AVATAR,
-  TEXT_FIELD_NAME,
+  PLAYER_HEALTH_FIELD,
 } from './constants';
 import { AvatarCreateInfo } from './Avatar.model';
 
@@ -32,18 +32,16 @@ export const createAvatar = (data: AvatarCreateInfo): Phaser.GameObjects.Contain
     USER_NAME_Y,
     userName,
     AvatarNameDecoration,
-  );
-
-  textUserName.x = -textUserName.width / 2;
+  ).setOrigin(0.5, 0.5);
 
   const avatarLayers = [shadow, spriteCard, textHealth, textUserName];
   const cardContainer: Phaser.GameObjects.Container = scene.add.container(posX, posY, avatarLayers);
 
-  cardContainer.setData(TEXT_FIELD_NAME, health);
+  cardContainer.setData(PLAYER_HEALTH_FIELD, health);
   cardContainer.on(
     'changedata',
     (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
-      textHealth.setText(cardContainer.getData(TEXT_FIELD_NAME));
+      textHealth.setText(cardContainer.getData(PLAYER_HEALTH_FIELD));
     },
   );
   cardContainer.setSize(spriteCard.width, spriteCard.height);

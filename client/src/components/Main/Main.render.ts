@@ -6,7 +6,7 @@ import { AUTH_URL, ERROR_404_URL } from '@/router/constants';
 export const renderMain = (link: string): HTMLElement => {
   const mainEl = createHtmlElement('main', 'main');
   mainEl.id = 'main';
- 
+
   switch (link) {
     case AUTH_URL:
       mainEl.appendChild(renderAuthForms());

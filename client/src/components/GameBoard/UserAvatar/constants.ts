@@ -1,13 +1,13 @@
 import { TextDecoration, ShadowOptions } from '@/types/types';
 import { PositionInfo, AvatarPosition } from './Avatar.model';
 
-export const TEXT_FIELD_NAME = 'TEXT_FIELD_NAME';
+export const PLAYER_HEALTH_FIELD = 'PLAYER_HEALTH_FIELD';
 
 export const positionInfo: PositionInfo = {
   IMG_X: 0,
   IMG_Y: 0,
-  USER_NAME_X: 0,
-  USER_NAME_Y: 72,
+  USER_NAME_X: 5,
+  USER_NAME_Y: 85,
   HEALTH_X: 77,
   HEALTH_Y: 53,
 };
