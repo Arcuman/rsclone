@@ -17,6 +17,7 @@ import {
   USER_PROFILE_INFO,
   API_INFO_URLS,
   INFO_BLOCK_X,
+  INFO_BLOCK_SCALE,
 } from './constants';
 import { UserProfile } from './Profile.model';
 
@@ -77,7 +78,7 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
   return user;
 };
 
-const getUserCounCards = async (): Promise<number> => {
+const countCards = async (): Promise<number> => {
   const requestInit = getRequestInit();
 
   const cardsCount = await fetch(`${API_INFO_URLS.cards}`, requestInit)
@@ -104,7 +105,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     IMAGES.SETTINGS_BLOCK_IMAGE.NAME,
   );
 
-  userInfoBgr.setScale(0.8).setScrollFactor(0);
+  userInfoBgr.setScale(INFO_BLOCK_SCALE).setScrollFactor(0);
 
   const user = await getUserProfileInfo();
 
@@ -132,7 +133,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textDecoration,
   );
 
-  const userCountCards = await getUserCounCards();
+  const userCountCards = await countCards();
   const textUserCards: Phaser.GameObjects.Text = createTextData(
     scene,
     positionInfo.TEXT_X,

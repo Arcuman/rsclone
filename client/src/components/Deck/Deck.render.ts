@@ -2,6 +2,7 @@ import { IMAGES } from '@/components/Game/constant';
 import { createBaseCard } from '@/components/Card/Card.render';
 import * as Phaser from 'phaser';
 import { createTextData } from '@/utils/utils';
+import { COVER_CARD } from '@/constants/constants';
 import { Deck } from './Deck.model';
 import { textDecoration, positionInfo, CHANGE_POSITION_DECK_Y, CARDS_COUNT_TEXT } from './constants';
 
@@ -11,12 +12,12 @@ export function createDeck(scene: Phaser.Scene, deckInfo: Deck): Phaser.GameObje
     posX: positionInfo.IMG_X,
     posY: positionInfo.IMG_Y,
     card: {
-      id: -1,
+      id: COVER_CARD.ID,
       name: IMAGES.COVER.NAME,
-      manacost: 0,
-      attack: 0,
-      health: 0,
-      isActive: false,
+      manacost: COVER_CARD.MANA_COST,
+      attack: COVER_CARD.ATTACK,
+      health: COVER_CARD.HEALTH,
+      isActive: COVER_CARD.ISACTIVE,
       image: IMAGES.COVER.NAME,
     },
   });

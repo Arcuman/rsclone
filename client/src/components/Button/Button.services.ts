@@ -14,7 +14,6 @@ interface ImageState {
   
 export function createButton(
   scene: Phaser.Scene,
-  /* positionY: number, */
   position:Position,
   YOffset:number,
   atlasName: string,
@@ -22,8 +21,6 @@ export function createButton(
   heightOffset=0,
 ): Phaser.GameObjects.Sprite {
   const button = scene.add.sprite(
-  /*  scene.game.renderer.width / 2,
-    scene.game.renderer.height / 2 - positionY + heightOffset, */
     position.X,
     position.Y- YOffset + heightOffset,
     atlasName,

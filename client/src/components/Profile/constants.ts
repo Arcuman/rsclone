@@ -23,6 +23,7 @@ export const positionMenu = {
 export const BUTTON_HEIGHT = 126;
 export const HEIGHT_OFFSET = 50;
 
+export const INFO_BLOCK_SCALE = 0.8;
 export const INFO_BLOCK_X = 270;
 export const USER_PROFILE_INFO = {
   nickName:'Ник:', level:'Уровень:', exp:'Опыт:', cards:'Мои карты:', currDeck:'Текущая колода:', counts:'шт.',
