@@ -105,7 +105,9 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   userInfoBgr.setScale(0.8).setScrollFactor(0);
+
   const user = await getUserProfileInfo();
+
   const textUserName: Phaser.GameObjects.Text = createTextData(
     scene,
     positionInfo.TEXT_X,
