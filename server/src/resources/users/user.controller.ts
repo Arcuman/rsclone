@@ -31,13 +31,13 @@ const createInitialUserData = async (userId: number, name: string): Promise<void
   if (!deckId) {
     throw new Error(statusCodes[400].initialDeck);
   }
-
+  
   const profile = {
     user_id: userId,
     nickName: name,
     level: INITIAL_LEVEL,
     exp: INITIAL_EXP,
-    curr_user_deck_id: deckId,
+    cur_user_deck_id: deckId,
   };
 
   const rowCount = await usersModel.setUserProfile(profile);

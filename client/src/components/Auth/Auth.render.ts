@@ -1,6 +1,6 @@
 import './auth.scss';
 import { createHtmlElement } from '@/utils/utils';
-import { authForm, AUTH_IMAGES } from './constants';
+import { authForm } from './constants';
 import { handleLogin,  handleRegister, buttonStyleClick } from './Auth.services';
 
 interface RenderFunction {
@@ -27,7 +27,6 @@ const renderLoginForm = (): HTMLElement => {
   form.appendChild(inputWrapper);
 
   const buttonOk = <HTMLImageElement>createHtmlElement('button', 'button-enter');
-  // buttonOk.src = AUTH_IMAGES.login;
   buttonOk.addEventListener('mousedown', (event) => buttonStyleClick(event));
   buttonOk.addEventListener('mouseup', (event) => handleLogin(event));
   form.appendChild(buttonOk);
