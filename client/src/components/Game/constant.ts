@@ -13,6 +13,10 @@ export const IMAGES = {
     NAME: 'game-background',
     PATH: 'assets/images/game-bgr.jpg',
   },
+  PROFILE_BACKGROUND: {
+    NAME: 'profile-background',
+    PATH: 'assets/images/settings_bgr.jpg',
+  },
   AGENT: {
     NAME: 'agent.png',
     PATH: 'assets/images/agent.png',
@@ -85,6 +89,10 @@ export const IMAGES = {
     NAME: 'cover',
     PATH: 'assets/images/cover.png',
   },
+  SETTINGS_BLOCK_IMAGE:{
+    NAME: 'settings_block',
+    PATH: 'assets/images/settings_block.png',
+  },
 };
 
 export const ATLASES = {
@@ -104,6 +112,11 @@ export const ATLASES = {
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
   EXIT_ATLAS: {
+    NAME: 'exit_atlas',
+    PATH: 'assets/images/menu/exit_atlas.json',
+    IMAGES_CONTAINER: 'assets/images/menu/',
+  },
+  MENU_ATLAS: {
     NAME: 'exit_atlas',
     PATH: 'assets/images/menu/exit_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
@@ -131,6 +144,11 @@ export const MENU_IMAGES = {
     HOVER: 'exit-button-hover-ru.png',
     CLICK: 'exit-button-click-ru.png',
   },
+  MENU_BUTTON: {
+    IDLE: 'exit-button-ru.png',
+    HOVER: 'exit-button-hover-ru.png',
+    CLICK: 'exit-button-click-ru.png',
+  },
 };
 
 export const SCENES = {
@@ -139,6 +157,7 @@ export const SCENES = {
   MY_CARDS: 'MY_CARDS',
   FIND_ENEMY: 'FIND_ENEMY',
   GAME_BOARD: 'GAME_BOARD',
+  PROFILE: 'PROFILE',
 };
 
 export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({

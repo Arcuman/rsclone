@@ -9,11 +9,11 @@ import {
 } from '@/redux/actions/actions';
 import { browserHistory } from '@/router/history';
 import { AUTH_URL, MENU_URL } from '@/router/constants';
+import { HEADER_JSON } from '@/constants/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
   REGISTER_ACTION,
-  HEADER_JSON,
   REFRESH_TOKEN,
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
@@ -27,6 +27,11 @@ const requestInit: RequestInit = {
   cache: 'default',
   credentials: 'include',
   body: '',
+};
+
+export const buttonStyleClick = (event: MouseEvent): void => {
+  const element = <HTMLElement>event.target;
+  element.classList.add('active');
 };
 
 const refreshTokenSession = async (): Promise<boolean> =>
@@ -81,7 +86,10 @@ export const isUserJustRegistered = (): boolean => {
 const isConfirmedPassword = (password: string, confirmPassword: string): boolean =>
   password === confirmPassword;
 
-export const handleRegister = (): void => {
+export const handleRegister = (event: MouseEvent): void => {
+  const element = <HTMLElement>event.target;
+  element.classList.remove('active');
+
   const name = <HTMLInputElement>document.getElementById('name');
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
@@ -117,7 +125,10 @@ export const handleRegister = (): void => {
     });
 };
 
-export const handleLogin = (): void => {
+export const handleLogin = (event: MouseEvent): void => {
+  const element = <HTMLElement>event.target;
+  element.classList.remove('active');
+
   const login = <HTMLInputElement>document.getElementById('login');
   const password = <HTMLInputElement>document.getElementById('password');
   const message = <HTMLInputElement>document.querySelector('.auth-message');

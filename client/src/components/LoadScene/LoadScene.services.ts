@@ -1,5 +1,6 @@
 import { ATLASES, IMAGES, SCENES } from '@/components/Game/constant';
 import { MenuScene } from '@/components/MenuScene/MenuScene';
+import { ProfileScene } from '@/components/Profile/Profile.render';
 import { GameBoardScene } from '@/components/GameBoard/GameBoard.render';
 import { MyCardsScene } from '@/components/MyCardsScene/MyCardsScene';
 import {
@@ -87,6 +88,7 @@ function loadScenes(scene: Phaser.Scene) {
   scene.scene.add(SCENES.GAME_BOARD, GameBoardScene, false);
   scene.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
   scene.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
+  scene.scene.add(SCENES.PROFILE, ProfileScene, false);
 }
 
 export function preload(scene: Phaser.Scene, nextScene: string): void {

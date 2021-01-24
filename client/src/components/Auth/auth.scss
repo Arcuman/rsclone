@@ -83,11 +83,35 @@
       border: 0;
       border-bottom: 3px solid #261c17;
     }
-
-    .button-ok {
+    
+    .button-enter {
       width: 30rem;
       height: 10rem;
       border: 0;
+      background: url('../../assets/images/enter_button.png') no-repeat;
+      background-size: contain;
+      outline: none;
+      &:hover{
+        background: url('../../assets/images/enter_button_light.png') no-repeat;
+      }
+      &.active{
+        background: url('../../assets/images/enter_button_click.png') no-repeat;
+      }
+    }
+
+    .button-send {
+      width: 30rem;
+      height: 10rem;
+      border: 0;
+      background: url('../../assets/images/send_button.png') no-repeat;
+      background-size: contain;
+      outline: none;
+      &:hover{
+        background: url('../../assets/images/send_button_light.png') no-repeat;
+      }
+      &.active{
+        background: url('../../assets/images/send_button_click.png') no-repeat;
+      }
     }
   }
 }
