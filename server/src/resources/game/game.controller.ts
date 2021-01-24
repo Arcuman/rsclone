@@ -31,7 +31,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>,
+  rooms: Array<Room>
 ): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore.
@@ -50,8 +50,10 @@ export default async function gameLogic(
   if (openRoom.players.length === 2) {
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
-    io.to(openRoom.id).emit(START_GAME);
-    openRoom.timer = setInterval(() => countDownTimer(openRoom, io), 1000);
+    setTimeout(() => {
+      io.to(openRoom.id).emit(START_GAME);
+      openRoom.timer = setInterval(() => countDownTimer(openRoom, io), 1000);
+    }, 3000);
   } else {
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }

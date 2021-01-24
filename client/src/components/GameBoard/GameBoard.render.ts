@@ -8,6 +8,7 @@ import {
   createGameTableImg,
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
+import {START_GAME, NEXT_TURN} from '@/components/GameBoard/constants';
 import { create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene {
@@ -33,6 +34,8 @@ export class GameBoardScene extends Phaser.Scene {
 
   private gameTableImg: Phaser.GameObjects.Container;
 
+  private playerTurn: Phaser.GameObjects.Text;
+
   constructor() {
     super({
       key: SCENES.GAME_BOARD,
@@ -52,6 +55,16 @@ export class GameBoardScene extends Phaser.Scene {
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
+    // eslint-disable-next-line no-console
+    console.log(this.isPlayerOne);
+    // eslint-disable-next-line no-console
+    console.log(this.state.isPlayerOneTurn);
+    if (this.isPlayerOne === this.state.isPlayerOneTurn){
+      this.playerTurn = this.add.text(1100, 120, 'YOUR TURN');
+    } else {
+      this.playerTurn = this.add.text(1100, 120, 'ENEMY TURN');
+    }
+
     this.enemyCards = createEnemyCards(this, this.state.enemy.countCards);
 
     this.playerCards = createPlayerCards(this, this.state.handCards);
@@ -61,8 +74,22 @@ export class GameBoardScene extends Phaser.Scene {
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
     this.enemyAvatar = createEnemyAvatar(this, this.state);
+
     this.playerAvatar = createPlayerAvatar(this, this.state);
 
     create(this);
+
+    this.socket.on(START_GAME, ()=>{
+      // eslint-disable-next-line no-console
+      console.log('startGame');
+    });
+    this.socket.on(NEXT_TURN, (isPlayerOneTurn:boolean)=>{
+      this.state.isPlayerOneTurn = isPlayerOneTurn;
+      if (this.isPlayerOne === this.state.isPlayerOneTurn){
+        this.playerTurn.setText('YOUR TURN');
+      } else {
+        this.playerTurn.setText('ENEMY TURN');
+      }
+    });
   }
 }
