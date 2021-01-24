@@ -9,11 +9,11 @@ import {
 } from '@/redux/actions/actions';
 import { browserHistory } from '@/router/history';
 import { AUTH_URL, MENU_URL } from '@/router/constants';
+import { HEADER_JSON } from '@/constants/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
   REGISTER_ACTION,
-  HEADER_JSON,
   REFRESH_TOKEN,
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
@@ -29,7 +29,7 @@ const requestInit: RequestInit = {
   body: '',
 };
 
-export const buttonStyleClick = (event:MouseEvent):void =>{
+export const buttonStyleClick = (event: MouseEvent): void => {
   const element = <HTMLElement>event.target;
   element.classList.add('active');
 };
@@ -86,7 +86,7 @@ export const isUserJustRegistered = (): boolean => {
 const isConfirmedPassword = (password: string, confirmPassword: string): boolean =>
   password === confirmPassword;
 
-export const handleRegister = (event:MouseEvent): void => {
+export const handleRegister = (event: MouseEvent): void => {
   const element = <HTMLElement>event.target;
   element.classList.remove('active');
 
@@ -95,23 +95,22 @@ export const handleRegister = (event:MouseEvent): void => {
   const password = <HTMLInputElement>document.getElementById('password');
   const confirmPassword = <HTMLInputElement>document.getElementById('confirm-password');
   const message = <HTMLInputElement>document.querySelector('.auth-message');
-  
-  if (!name.value || !login.value || !password.value || !confirmPassword.value){
+
+  if (!name.value || !login.value || !password.value || !confirmPassword.value) {
     message.innerHTML = AUTH_MESSAGE.badData;
     return;
   }
- 
+
   if (!isConfirmedPassword(password.value, confirmPassword.value)) {
     message.innerHTML = AUTH_MESSAGE.notConfirmedPassword;
     return;
   }
- 
+
   const body = JSON.stringify({ name: name.value, login: login.value, password: password.value });
   requestInit.body = body;
-  
+
   fetch(REGISTER_ACTION, requestInit)
     .then((response): void => {
-   
       if (response.status === AUTH_LOGIN_EXISTS_ERROR_STATUS) {
         throw new Error(AUTH_MESSAGE.loginExists);
       } else if (response.status !== StatusCodes.OK) {
@@ -121,12 +120,12 @@ export const handleRegister = (event:MouseEvent): void => {
       message.innerHTML = AUTH_MESSAGE.successRegistration;
       store.dispatch(userRegistered());
     })
-    .catch((error:Error) => {
+    .catch((error: Error) => {
       message.innerHTML = error.message || AUTH_MESSAGE.badData;
     });
 };
 
-export const handleLogin = (event:MouseEvent): void => {
+export const handleLogin = (event: MouseEvent): void => {
   const element = <HTMLElement>event.target;
   element.classList.remove('active');
 

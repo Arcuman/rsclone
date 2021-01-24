@@ -116,6 +116,11 @@ export const ATLASES = {
     PATH: 'assets/images/menu/exit_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
+  MENU_ATLAS: {
+    NAME: 'exit_atlas',
+    PATH: 'assets/images/menu/exit_atlas.json',
+    IMAGES_CONTAINER: 'assets/images/menu/',
+  },
 };
 
 export const MENU_IMAGES = {
@@ -135,6 +140,11 @@ export const MENU_IMAGES = {
     CLICK: 'settings-button-click-ru.png',
   },
   MENU_EXIT: {
+    IDLE: 'exit-button-ru.png',
+    HOVER: 'exit-button-hover-ru.png',
+    CLICK: 'exit-button-click-ru.png',
+  },
+  MENU_BUTTON: {
     IDLE: 'exit-button-ru.png',
     HOVER: 'exit-button-hover-ru.png',
     CLICK: 'exit-button-click-ru.png',

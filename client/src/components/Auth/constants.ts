@@ -14,7 +14,6 @@ const LOGOUT_ACTION = `${<string>BASE_HTTP_URL}/logout`;
 const REGISTER_ACTION = `${<string>BASE_HTTP_URL}/register`;
 const REFRESH_TOKEN = `${<string>BASE_HTTP_URL}/refresh-tokens`;
 
-const HEADER_JSON = { 'Content-Type': 'application/json' };
 const AUTH_IMAGES = {
   login: 'assets/images/enter_button.png',
   register: 'assets/images/send_button.png',
@@ -34,7 +33,6 @@ export {
   LOGIN_ACTION,
   LOGOUT_ACTION,
   REGISTER_ACTION,
-  HEADER_JSON,
   REFRESH_TOKEN,
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,

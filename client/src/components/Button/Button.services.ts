@@ -1,6 +1,11 @@
 
 import {BUTTON_SCALE} from './constants';
 
+interface Position{
+  X:number;
+  Y:number;
+}
+
 interface ImageState {
   IDLE: string;
   HOVER: string;
@@ -9,14 +14,18 @@ interface ImageState {
   
 export function createButton(
   scene: Phaser.Scene,
-  positionY: number,
+  /* positionY: number, */
+  position:Position,
+  YOffset:number,
   atlasName: string,
-  image: ImageState,
+  image: ImageState,  
   heightOffset=0,
 ): Phaser.GameObjects.Sprite {
   const button = scene.add.sprite(
-    scene.game.renderer.width / 2,
-    scene.game.renderer.height / 2 - positionY + heightOffset,
+  /*  scene.game.renderer.width / 2,
+    scene.game.renderer.height / 2 - positionY + heightOffset, */
+    position.X,
+    position.Y- YOffset + heightOffset,
     atlasName,
     image.IDLE,
   );
