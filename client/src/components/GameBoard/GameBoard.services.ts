@@ -1,11 +1,8 @@
 import Phaser from 'phaser';
-import { setBackground } from '@/utils/utils';
-import { cardBase } from '@/components/Card/Card.render';
 import { GameState } from '@/components/GameBoard/GameBoard.model';
 import { IMAGES } from '../Game/constant';
 import { createAvatar } from './UserAvatar/Avatar.render';
 import { avatarPosition } from './UserAvatar/constants';
-import { createTable } from './Table/Table.render';
 
 export function preload(this: Phaser.Scene): void {}
 

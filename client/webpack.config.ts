@@ -5,6 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { Configuration } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Dotenv from 'dotenv-webpack';
 
 const isProduction = process.env.NODE_ENV === 'production';

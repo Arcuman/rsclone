@@ -21,7 +21,7 @@ const renderLoginForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
   form.appendChild(createHtmlElement('div', 'auth-message'));
   const inputWrapper = createHtmlElement('div', 'auth-input-wrapper');
-  
+
   inputWrapper.appendChild(renderFormField('login', 'text'));
   inputWrapper.appendChild(renderFormField('password', 'password'));
   form.appendChild(inputWrapper);
@@ -38,12 +38,12 @@ const renderRegisterForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
   form.appendChild(createHtmlElement('div', 'auth-message'));
   const inputWrapper = createHtmlElement('div', 'auth-input-wrapper register');
-  
+
   inputWrapper.appendChild(renderFormField('name', 'text'));
   inputWrapper.appendChild(renderFormField('login', 'text'));
   inputWrapper.appendChild(renderFormField('password', 'password'));
   inputWrapper.appendChild(renderFormField('confirm-password', 'password'));
-  
+
   form.appendChild(inputWrapper);
  
   const buttonSend = <HTMLImageElement>createHtmlElement('button', 'button-send');
@@ -61,13 +61,13 @@ const setCurrAuthForm = (event: Event) => {
   }
   const menuItemId = target.getAttribute('id');
   const menuItems = document.querySelector('.auth-menu')?.childNodes;
-  menuItems?.forEach(item =>{
-    const menuElement =  <HTMLElement>item;
-    menuElement.classList.remove('active') ;
+  menuItems?.forEach(item => {
+    const menuElement = <HTMLElement>item;
+    menuElement.classList.remove('active');
   });
- 
+
   target.classList.add('active');
- 
+
   document.querySelector('.auth-form')?.remove();
   const authWrapper = document.querySelector('.auth-wrapper');
 

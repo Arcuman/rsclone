@@ -49,7 +49,9 @@ export const createTextData = (
     color: FONT_COLOR,
   };
 
-  const text: Phaser.GameObjects.Text = scene.add.text(posX, posY, value, fontOptions);
+  const text: Phaser.GameObjects.Text = scene.add
+    .text(posX, posY, value, fontOptions)
+    .setOrigin(0.5);
   text.setStroke(TEXT_OUTLINE_COLOR, TEXT_OUTLINE_SIZE);
   text.depth = TEXT_DEPTH;
 

@@ -118,7 +118,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     res.statusMessage = statusCodes[StatusCodes.OK].create;
     res.status(StatusCodes.OK).end();
   } catch (error) {
-    const message: string =getReasonPhrase(StatusCodes.BAD_REQUEST);
+    const message: string = getReasonPhrase(StatusCodes.BAD_REQUEST);
     res.status(StatusCodes.BAD_REQUEST).send(`${message}`);
   }
 };
@@ -157,9 +157,8 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
- 
   if (req.baseUrl === AUTH_REGISTER) {
-    registerUser(req, res);   
+    registerUser(req, res);
   } else if (req.baseUrl === AUTH_REFRESH_TOKEN) {
     refreshToken(req, res, next);
   } else if (req.baseUrl === AUTH_LOGOUT) {
@@ -167,7 +166,6 @@ const clientAuth = (req: Request, res: Response, next: NextFunction): void => {
   } else {
     authenticateLocal(req, res, next);
   }
-  
 };
 
 export const sendAuthResponseToClient = async (req: Request, res: Response): Promise<void> => {
