@@ -52,16 +52,16 @@ export default async function gameLogic(
     sendInitState(openRoom);
     setTimeout(() => {
       io.to(openRoom.id).emit(START_GAME);
-      openRoom.timer = setInterval(() => countDownTimer(openRoom, io), 1000);
-    }, 3000);
+      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), 1000);
+    }, 1000);
   } else {
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
 
   player.socket.on(NEXT_TURN, () => nextTurn(openRoom, player, io));
 
-  player.socket.on(HAND_CARD_PLAY, (card: Card) => {
-    handCardPlay(card, player, openRoom, io);
+  player.socket.on(HAND_CARD_PLAY, (cardId: number) => {
+    handCardPlay(cardId, player, openRoom, io);
   });
 
   player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId: number) => {

@@ -1,7 +1,12 @@
 import { createTextData, setShadow } from '@/utils/utils';
 import Phaser from 'phaser';
 import { CardCreateInfo } from './Card.model';
-import { setClickableCard, setDraggableCard, setScalableCard } from './Card.services';
+import {
+  setClickableCard,
+  setDraggableCard,
+  setDropOnHandCard,
+  setScalableCard,
+} from './Card.services';
 import {
   positionInfo,
   textDecoration,
@@ -77,15 +82,16 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
 
 export function createPlayerHandCard(data: CardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
-  setScalableCard(data.scene, cardContainer);
+  setScalableCard(data.scene, cardContainer, SIZE_LITTLE_CARD);
   setDraggableCard(data.scene, cardContainer);
   setClickableCard(data.scene, cardContainer);
+  setDropOnHandCard(data.scene, cardContainer);
   return cardContainer;
 }
 
 export function createScalableCard(data: CardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
-  setScalableCard(data.scene, cardContainer);
+  setScalableCard(data.scene, cardContainer, SIZE_TINY_CARD);
   cardContainer.setScale(SIZE_TINY_CARD);
   return cardContainer;
 }

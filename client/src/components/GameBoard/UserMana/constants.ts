@@ -1,0 +1,1 @@
+export const MANA_COUNT_FIELD = 'MANA_COUNT_FIELD';

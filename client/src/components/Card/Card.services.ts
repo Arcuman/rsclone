@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
 import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
+import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -10,6 +11,8 @@ import {
   DEPTH_CLICK_CARD,
   IMAGE_CARD_SIZE,
   CARD_ID_FIELD,
+  CARD_MANA_FIELD,
+  SIZE_TINY_CARD,
 } from './constants';
 
 export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
@@ -24,6 +27,70 @@ export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   }
   return posX;
 }
+export const setScalableCard = (
+  scene: Phaser.Scene,
+  cardContainer: Phaser.GameObjects.Container,
+  scale: number,
+): void => {
+  cardContainer.setInteractive();
+  cardContainer.removeListener('pointerover');
+  cardContainer.on('pointerover', () => {
+    cardContainer.setScale(SIZE_NORMAL_CARD);
+    cardContainer.setDepth(DEPTH_CLICK_CARD);
+  });
+  cardContainer.removeListener('pointerout');
+  cardContainer.on('pointerout', () => {
+    cardContainer.setScale(scale);
+    cardContainer.setDepth(DEPTH_NORMAL_CARD);
+  });
+};
+export const setDraggableCardsDependOnPlayerMana = (scene: IGameBoardScene): void => {
+  scene.getPlayerCards().forEach(card => {
+    if (
+      <number>scene.getPlayerMana().getData(MANA_COUNT_FIELD) >=
+      <number>card.getData(CARD_MANA_FIELD)
+    ) {
+      scene.input.setDraggable(card);
+    } else {
+      scene.input.setDraggable(card, false);
+    }
+  });
+};
+export const setDropOnHandCard = (
+  scene: IGameBoardScene,
+  cardContainer: Phaser.GameObjects.Container,
+): void => {
+  cardContainer.removeListener('drop');
+  cardContainer.on(
+    'drop',
+    (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
+      const gameObject = cardContainer;
+      gameObject.x = getPositionOfCard(scene, <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD));
+      gameObject.y = dropZone.y;
+      scene.input.setDraggable(cardContainer, false);
+      dropZone.setData(
+        ZONE_COUNT_CARDS_FIELD,
+        <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD) + 1,
+      );
+      setScalableCard(scene, cardContainer, SIZE_TINY_CARD);
+      const socket = scene.getSocket();
+      socket.emit(HAND_CARD_PLAY, cardContainer.getData(CARD_ID_FIELD));
+
+      scene.setPlayerMana(
+        <number>scene.getPlayerMana().getData(MANA_COUNT_FIELD) -
+          <number>cardContainer.getData(CARD_MANA_FIELD),
+      );
+
+      const indexDeleteCard = scene
+        .getPlayerCards()
+        .findIndex(card => card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD));
+      scene.getPlayerCards().splice(indexDeleteCard, 1);
+      scene.getPlayerTableCards().push(cardContainer);
+
+      setDraggableCardsDependOnPlayerMana(scene);
+    },
+  );
+};
 
 export const setDraggableCard = (
   scene: IGameBoardScene,
@@ -48,39 +115,6 @@ export const setDraggableCard = (
       }
     },
   );
-  cardContainer.on(
-    'drop',
-    (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      const gameObject = cardContainer;
-      gameObject.x = getPositionOfCard(scene, <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD));
-      gameObject.y = dropZone.y;
-      scene.input.setDraggable(cardContainer, false);
-      dropZone.setData(
-        ZONE_COUNT_CARDS_FIELD,
-        <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD) + 1,
-      );
-      const socket = scene.getSocket();
-      socket.emit(
-        HAND_CARD_PLAY,
-        scene.getState().handCards.find(card => card.id === cardContainer.getData(CARD_ID_FIELD)),
-      );
-    },
-  );
-};
-
-export const setScalableCard = (
-  scene: Phaser.Scene,
-  cardContainer: Phaser.GameObjects.Container,
-): void => {
-  cardContainer.setInteractive();
-  cardContainer.on('pointerover', () => {
-    cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
-    cardContainer.setDepth(DEPTH_CLICK_CARD);
-  });
-  cardContainer.on('pointerout', () => {
-    cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
-    cardContainer.setDepth(DEPTH_NORMAL_CARD);
-  });
 };
 
 export const setClickableCard = (

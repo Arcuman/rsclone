@@ -62,7 +62,7 @@ export class FindEnemyScene extends Phaser.Scene {
 
     this.socket.on(INIT_STATE, (gameState: GameState): void => {
       this.scene.start(SCENES.GAME_BOARD, {
-        gameState,
+        initState: gameState,
         socket: this.socket,
         isPlayerOne: this.isPlayerOne,
       });

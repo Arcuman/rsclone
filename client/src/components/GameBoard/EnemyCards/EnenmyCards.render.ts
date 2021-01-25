@@ -5,9 +5,12 @@ import { getPositionOfCard } from '@/components/Card/Card.services';
 import { ENEMY_COVER_CARD } from '@/components/GameBoard/EnemyCards/constant';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 
-export function createEnemyCards(scene: IGameBoardScene): Phaser.GameObjects.Container[] {
+export function createEnemyCards(
+  scene: IGameBoardScene,
+  enemyCount: number,
+): Phaser.GameObjects.Container[] {
   const enemyCards: Phaser.GameObjects.Container[] = [];
-  for (let i = 0; i < scene.getState().enemy.countCards; i += 1) {
+  for (let i = 0; i < enemyCount; i += 1) {
     const posX = getPositionOfCard(scene, i);
     enemyCards.push(
       createBaseCard({

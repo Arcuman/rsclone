@@ -11,12 +11,15 @@ function addAndResetManaToPlayer(player: Player): void {
 
 export function nextTurn(openRoom: Room, player: Player, io: Server): void {
   if (openRoom.newRound) {
+    console.log('1');
     const enemy = getEnemyPlayer(openRoom, player);
     addAndResetManaToPlayer(player);
     addAndResetManaToPlayer(enemy);
     io.to(openRoom.id).emit(NEXT_ROUND, player.maxMana, player.currentMana);
+    console.log('2');
   }
   openRoom.setNewRound(!openRoom.newRound);
+  console.log(3);
   openRoom.setIsPlayerOneTurn(!openRoom.isPlayerOneTurn);
   openRoom.setCountDown(COUNTDOWN_SEC);
   io.to(openRoom.id).emit(NEXT_TURN, openRoom.isPlayerOneTurn);

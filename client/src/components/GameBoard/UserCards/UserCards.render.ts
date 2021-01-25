@@ -3,10 +3,14 @@ import { createPlayerHandCard } from '@/components/Card/Card.render';
 import { PLAYER_CARDS_POSITION } from '@/components/GameBoard/UserCards/constants';
 import { getPositionOfCard } from '@/components/Card/Card.services';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
+import { Card } from '@/components/Card/Card.model';
 
-export function createPlayerCards(scene: IGameBoardScene): Phaser.GameObjects.Container[] {
+export function createPlayerCards(
+  scene: IGameBoardScene,
+  playerCards: Card[],
+): Phaser.GameObjects.Container[] {
   const enemyCards: Phaser.GameObjects.Container[] = [];
-  scene.getState().handCards.forEach((card, i) => {
+  playerCards.forEach((card, i) => {
     const posX = getPositionOfCard(scene, i);
     enemyCards.push(
       createPlayerHandCard({

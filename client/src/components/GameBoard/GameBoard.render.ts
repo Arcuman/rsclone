@@ -9,14 +9,25 @@ import {
   createGameTableImg,
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
-import { START_GAME, NEXT_TURN, HAND_CARD_PLAY } from '@/components/GameBoard/constants';
-import { setClickableCard, setDraggableCard } from '@/components/Card/Card.services';
+import {
+  START_GAME,
+  NEXT_TURN,
+  HAND_CARD_PLAY,
+  NEXT_ROUND,
+} from '@/components/GameBoard/constants';
+import {
+  getPositionOfCard,
+  setDraggableCardsDependOnPlayerMana,
+} from '@/components/Card/Card.services';
 import {
   createEnemyAvatar,
   createPlayerAvatar,
 } from '@/components/GameBoard/UserAvatar/Avatar.service';
-import { CARD_MANA_FIELD } from '@/components/Card/constants';
 import { Card } from '@/components/Card/Card.model';
+import { createScalableCard } from '@/components/Card/Card.render';
+import { createPlayerMana } from '@/components/GameBoard/UserMana/UserMana.render';
+import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
+import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { create } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
@@ -36,6 +47,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
   private playerTableCards: Phaser.GameObjects.Container[] = [];
 
+  private enemyTableCards: Phaser.GameObjects.Container[] = [];
+
   private playerTableZone: Phaser.GameObjects.Zone;
 
   private enemyTableZone: Phaser.GameObjects.Zone;
@@ -43,6 +56,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private gameTableImg: Phaser.GameObjects.Container;
 
   private playerTurn: Phaser.GameObjects.Text;
+
+  private playerMana: Phaser.GameObjects.Container;
 
   constructor() {
     super({
@@ -52,77 +67,101 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
   }
 
-  public getState(): GameState {
-    return this.state;
-  }
-
   public getPlayerCards(): Phaser.GameObjects.Container[] {
     return this.playerCards;
+  }
+
+  public getEnemyCards(): Phaser.GameObjects.Container[] {
+    return this.enemyCards;
+  }
+
+  public getPlayerTableCards(): Phaser.GameObjects.Container[] {
+    return this.playerTableCards;
+  }
+
+  public getEnemyTableCards(): Phaser.GameObjects.Container[] {
+    return this.enemyTableCards;
   }
 
   public getSocket(): SocketIOClient.Socket {
     return this.socket;
   }
 
+  public getPlayerMana(): Phaser.GameObjects.Container {
+    return this.playerMana;
+  }
+
+  public getPlayerTableZone(): Phaser.GameObjects.Zone {
+    return this.playerTableZone;
+  }
+
+  public getIsPlayerOne(): boolean {
+    return this.isPlayerOne;
+  }
+
+  public setPlayerMana(value: number): void {
+    this.playerMana.data.values[MANA_COUNT_FIELD] = value;
+  }
+
   create(data: {
-    gameState: GameState;
+    initState: GameState;
     socket: SocketIOClient.Socket;
     isPlayerOne: boolean;
   }): void {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
 
-    this.state = data.gameState;
+    this.state = data.initState;
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
-    this.enemyCards = createEnemyCards(this);
-    this.playerCards = createPlayerCards(this);
+    this.enemyCards = createEnemyCards(this, data.initState.enemy.countCards);
+    this.playerCards = createPlayerCards(this, data.initState.handCards);
 
-    if (this.isPlayerOne === this.state.isPlayerOneTurn) {
-      this.playerTurn = this.add.text(1100, 120, 'YOUR TURN');
-      this.playerCards.forEach(card => {
-        if (this.state.currentMana >= card.getData(CARD_MANA_FIELD)) {
-          this.input.setDraggable(card);
-        }
-      });
-    } else {
-      this.playerTurn = this.add.text(1100, 120, 'ENEMY TURN');
-      this.input.setDraggable(this.playerCards, false);
-    }
     this.gameTableImg = createGameTableImg(this);
 
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
-    this.enemyAvatar = createEnemyAvatar(this);
+    this.enemyAvatar = createEnemyAvatar(
+      this,
+      data.initState.enemy.name,
+      data.initState.enemy.health,
+    );
 
-    this.playerAvatar = createPlayerAvatar(this);
+    this.playerAvatar = createPlayerAvatar(this, data.initState.name, data.initState.health);
+
+    this.playerMana = createPlayerMana(this, data.initState.currentMana);
 
     create(this);
 
-    this.socket.on(START_GAME, () => {
-      // eslint-disable-next-line no-console
-      console.log('startGame');
-    });
+    // this.state.isPlayerOneTurn will be a endTurnButton Data
+    if (this.isPlayerOne === this.state.isPlayerOneTurn) {
+      // PlayerTyrn will be a endTurnButton
+      this.playerTurn = this.add.text(1100, 120, 'YOUR TURN');
+      setDraggableCardsDependOnPlayerMana(this);
+    } else {
+      // PlayerTyrn will be a endTurnButton
+      this.playerTurn = this.add.text(1100, 120, 'ENEMY TURN');
+      this.input.setDraggable(this.playerCards, false);
+    }
+
+    this.socket.on(START_GAME, () => {});
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
-      this.state.isPlayerOneTurn = isPlayerOneTurn;
-      if (this.isPlayerOne === this.state.isPlayerOneTurn) {
+      if (this.isPlayerOne === isPlayerOneTurn) {
         this.playerTurn.setText('YOUR TURN');
-        this.playerCards.forEach(card => {
-          if (this.state.currentMana >= card.getData(CARD_MANA_FIELD)) {
-            this.input.setDraggable(card);
-          }
-        });
+        setDraggableCardsDependOnPlayerMana(this);
       } else {
         this.playerTurn.setText('ENEMY TURN');
         this.input.setDraggable(this.playerCards, false);
       }
     });
 
+    this.socket.on(NEXT_ROUND, (maxMana: number) => {
+      this.setPlayerMana(maxMana);
+    });
+
     this.socket.on(HAND_CARD_PLAY, (card: Card, isPlayerOne: boolean) => {
-      if (this.isPlayerOne !== isPlayerOne) {
-        this.state.enemy.tableCards.push(card);
-      }
+      onHandCardPlay(this, card, isPlayerOne);
     });
   }
 }

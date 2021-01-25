@@ -2,9 +2,15 @@ import { Card } from '@/components/Card/Card.model';
 import Phaser from 'phaser';
 
 export interface IGameBoardScene extends Phaser.Scene {
-  getState(): GameState;
   getPlayerCards(): Phaser.GameObjects.Container[];
+  getEnemyCards(): Phaser.GameObjects.Container[];
+  getPlayerTableCards(): Phaser.GameObjects.Container[];
+  getEnemyTableCards(): Phaser.GameObjects.Container[];
   getSocket(): SocketIOClient.Socket;
+  getPlayerMana(): Phaser.GameObjects.Container;
+  getIsPlayerOne(): boolean;
+  getPlayerTableZone(): Phaser.GameObjects.Zone;
+  setPlayerMana(value: number): void;
 }
 
 export interface GameState {

@@ -4,9 +4,11 @@ import { Room } from '@/resources/game/room/room.model';
 import { Server } from 'socket.io';
 import { HAND_CARD_PLAY, NOT_ENOUGH_MANA } from '@/resources/game/constants';
 
-export function handCardPlay(card: Card, player: Player, openRoom: Room, io: Server): void {
-  if (!card)
-    return;
+export function handCardPlay(cardId: number, player: Player, openRoom: Room, io: Server): void {
+  const card = player.handCards.find((handCard)=>handCard.id === cardId);
+  if (!card){
+    throw new TypeError('NO SUCH CARD');
+  }
   if (player.currentMana >= card.manaCost) {
 
     player.setCurrentMana(player.currentMana - card.manaCost);
