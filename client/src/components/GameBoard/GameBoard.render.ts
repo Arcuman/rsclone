@@ -13,7 +13,7 @@ import {
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
 import { TIMER } from './constants';
-import { create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
+import { addTimerEndSprite, create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene {
   private state: GameState;
@@ -48,6 +48,11 @@ export class GameBoardScene extends Phaser.Scene {
     });
   }
 
+  preload() {
+    this.load.spritesheet('boom', '../../assets/images/Timer/explosion.png', { frameWidth: 64, frameHeight: 64, endFrame: 23 });
+    this.load.spritesheet('wick', '../../assets/images/Timer/wick.png', { frameWidth: 1585, frameHeight: 100, endFrame: 150 });
+  }
+
   create(data: {
     gameState: GameState;
     socket: SocketIOClient.Socket;
@@ -76,8 +81,16 @@ export class GameBoardScene extends Phaser.Scene {
 
     create(this);
 
-    this.timerLabel = this.add.text(120, 350, 'HELLO WORLD', { fontSize: '48' }).setOrigin(0.5);
-    this.socket.on(TIMER, (countDown: string | string[])=>this.timerLabel.setText(countDown));
+    this.timerLabel = this.add.text(120, 350, '', { fontSize: '48px', color: 'red' }).setOrigin(0.5);
+    this.socket.on(TIMER, (countDown: string | string[])=>{
+      if (+countDown === 5) {
+        addTimerEndSprite(this, 'wick');
+      } else if (+countDown === 0) {
+        addTimerEndSprite(this, 'boom');
+      }
+      this.timerLabel.setText(countDown);
+    });
+
   }
 
   // handleTimerFinished() {
@@ -86,5 +99,6 @@ export class GameBoardScene extends Phaser.Scene {
 
   // update() {
   //   // this.timer.update();
+
   // }
 }

@@ -121,3 +121,25 @@ export function createPlayerAvatar(
     health: state.health.toString(),
   });
 }
+
+export function addTimerEndSprite(scene: Phaser.Scene, typeOfSprite: string) {
+  if (typeOfSprite === 'boom') {
+    const configExplosion = {
+      key: 'explosion',
+      frames: typeOfSprite,
+      frameRate: 42,
+      repeat: 0,
+    };
+    scene.anims.create(configExplosion);
+    scene.add.sprite(120, 350, typeOfSprite).play('explosion');
+  } else if (typeOfSprite === 'wick') {
+    const configExplosion = {
+      key: 'wick',
+      frames: typeOfSprite,
+      frameRate: 30,
+      repeat: 0,
+    };
+    scene.anims.create(configExplosion);
+    scene.add.sprite(200, 350, typeOfSprite).play('wick');
+  }
+}
