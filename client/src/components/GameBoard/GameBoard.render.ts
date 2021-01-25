@@ -10,7 +10,7 @@ import {
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
 import { BOMB_IMAGE, BOOM_SPRITESHEET, FRAME_SIZE, TIMER, TIMER_LABEL, WICK_SPRITESHEET } from './constants';
-import { addTimerAlmostExpired, addTimerEndSprite, create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
+import { addTimerAlmostExpired, addTimerEndSprite, create } from './GameBoard.services';
 import {
   START_GAME,
   NEXT_TURN,
@@ -32,10 +32,8 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
-import { create } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
-
   private socket: SocketIOClient.Socket;
 
   private isPlayerOne = false;
@@ -156,25 +154,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       data.initState.enemy.name,
       data.initState.enemy.health,
     );
-
-    this.timerLabel = this.add.text(
-      TIMER_LABEL.POSITION.POS_X,
-      TIMER_LABEL.POSITION.POS_Y,
-      TIMER_LABEL.DEFAULT_EMPTY_STRING,
-      {
-        fontSize: TIMER_LABEL.STYLE.FONT_SIZE,
-        fontFamily: TIMER_LABEL.STYLE.FONT_FAMILY,
-        color: TIMER_LABEL.STYLE.COLOR,
-      }).setOrigin(0.5);
-
-    this.socket.on(TIMER, (countDown: string | string[])=>{
-      if (+countDown === 5) {
-        addTimerAlmostExpired(this);
-      } else if (+countDown === 0) {
-        addTimerEndSprite(this);
-      }
-      this.timerLabel.setText(countDown);
-    });
     
     this.playerAvatar = createPlayerAvatar(this, data.initState.name, data.initState.health);
 
@@ -187,8 +166,27 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     } else {
       this.input.setDraggable(this.playerCards, false);
     }
+    
+    this.timerLabel = this.add.text(
+      TIMER_LABEL.POSITION.POS_X,
+      TIMER_LABEL.POSITION.POS_Y,
+      TIMER_LABEL.DEFAULT_EMPTY_STRING,
+      {
+        fontSize: TIMER_LABEL.STYLE.FONT_SIZE,
+        fontFamily: TIMER_LABEL.STYLE.FONT_FAMILY,
+        color: TIMER_LABEL.STYLE.COLOR,
+      }).setOrigin(0.5);
 
     this.socket.on(START_GAME, () => {});
+    
+    this.socket.on(TIMER, (countDown: string | string[])=>{
+      if (+countDown === 5) {
+        addTimerAlmostExpired(this);
+      } else if (+countDown === 0) {
+        addTimerEndSprite(this);
+      }
+      this.timerLabel.setText(countDown);
+    });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
