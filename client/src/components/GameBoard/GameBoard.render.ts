@@ -28,11 +28,11 @@ import { createScalableCard } from '@/components/Card/Card.render';
 import { createPlayerMana } from '@/components/GameBoard/UserMana/UserMana.render';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
+import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
+import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
 import { create } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
-  private state: GameState;
-
   private socket: SocketIOClient.Socket;
 
   private isPlayerOne = false;
@@ -55,9 +55,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
   private gameTableImg: Phaser.GameObjects.Container;
 
-  private playerTurn: Phaser.GameObjects.Text;
-
   private playerMana: Phaser.GameObjects.Container;
+
+  private endTurnButton: Phaser.GameObjects.Container;
 
   constructor() {
     super({
@@ -91,6 +91,10 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     return this.playerMana;
   }
 
+  public getEndTurnButton(): Phaser.GameObjects.Container {
+    return this.endTurnButton;
+  }
+
   public getPlayerTableZone(): Phaser.GameObjects.Zone {
     return this.playerTableZone;
   }
@@ -110,11 +114,12 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   }): void {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
 
-    this.state = data.initState;
+    create(this);
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
     this.enemyCards = createEnemyCards(this, data.initState.enemy.countCards);
+
     this.playerCards = createPlayerCards(this, data.initState.handCards);
 
     this.gameTableImg = createGameTableImg(this);
@@ -131,27 +136,21 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.playerMana = createPlayerMana(this, data.initState.currentMana);
 
-    create(this);
+    this.endTurnButton = createEndTurnButton(this, data.initState.isPlayerOneTurn);
 
-    // this.state.isPlayerOneTurn will be a endTurnButton Data
-    if (this.isPlayerOne === this.state.isPlayerOneTurn) {
-      // PlayerTyrn will be a endTurnButton
-      this.playerTurn = this.add.text(1100, 120, 'YOUR TURN');
+    if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
       setDraggableCardsDependOnPlayerMana(this);
     } else {
-      // PlayerTyrn will be a endTurnButton
-      this.playerTurn = this.add.text(1100, 120, 'ENEMY TURN');
       this.input.setDraggable(this.playerCards, false);
     }
 
     this.socket.on(START_GAME, () => {});
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
-        this.playerTurn.setText('YOUR TURN');
         setDraggableCardsDependOnPlayerMana(this);
       } else {
-        this.playerTurn.setText('ENEMY TURN');
         this.input.setDraggable(this.playerCards, false);
       }
     });
