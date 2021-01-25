@@ -1,7 +1,12 @@
 import { createTextData, setShadow } from '@/utils/utils';
 import Phaser from 'phaser';
-import { CardCreateInfo } from './Card.model';
-import { setClickableCard, setDraggableCard, setScalableCard } from './Card.services';
+import { CardCreateInfo, HandCardCreateInfo } from './Card.model';
+import {
+  setClickableCard,
+  setDraggableCard,
+  setDropOnHandCard,
+  setScalableCard,
+} from './Card.services';
 import {
   positionInfo,
   textDecoration,
@@ -12,6 +17,8 @@ import {
   CARD_ID_FIELD,
   CARD_ORIGIN_CENTER,
   SIZE_TINY_CARD,
+  CARD_MANA_FIELD,
+  CARD_IS_ACTIVE_FIELD,
 } from './constants';
 
 export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Container {
@@ -27,20 +34,18 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
 
   const cardLayers: (Phaser.GameObjects.Text | Phaser.GameObjects.Sprite)[] = [shadow, spriteCard];
 
-  if (card.manacost) {
+  if (card.manaCost) {
     const textMana: Phaser.GameObjects.Text = createTextData(
       scene,
       MANA_X,
       MANA_Y,
-      card.manacost.toString(),
+      card.manaCost.toString(),
       textDecoration,
     );
     cardLayers.push(textMana);
   }
   const cardContainer = scene.add.container(posX, posY, cardLayers);
-  cardContainer.setSize(spriteCard.width, spriteCard.height);
-  cardContainer.setScale(SIZE_LITTLE_CARD);
-  cardContainer.depth = CARD_CONTAINER_DEPTH;
+
   if (card.isActive) {
     const textAttack: Phaser.GameObjects.Text = createTextData(
       scene,
@@ -59,7 +64,7 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
     cardContainer.add([textAttack, textHealth]);
 
     cardContainer.setData(CARD_HEALTH_FIELD, card.health);
-    cardContainer.setData(CARD_ID_FIELD, card.id);
+    cardContainer.setData(CARD_IS_ACTIVE_FIELD, card.isActive);
     cardContainer.on(
       'changedata',
       (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
@@ -67,20 +72,26 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
       },
     );
   }
+  cardContainer.setData(CARD_ID_FIELD, card.id);
+  cardContainer.setData(CARD_MANA_FIELD, card.manaCost);
+  cardContainer.setSize(spriteCard.width, spriteCard.height);
+  cardContainer.setScale(SIZE_LITTLE_CARD);
+  cardContainer.depth = CARD_CONTAINER_DEPTH;
   return cardContainer;
 }
 
-export function createPlayerHandCard(data: CardCreateInfo): Phaser.GameObjects.Container {
+export function createPlayerHandCard(data: HandCardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
+  setScalableCard(data.scene, cardContainer, SIZE_LITTLE_CARD);
   setDraggableCard(data.scene, cardContainer);
-  setScalableCard(data.scene, cardContainer);
   setClickableCard(data.scene, cardContainer);
+  setDropOnHandCard(data.scene, cardContainer);
   return cardContainer;
 }
 
 export function createScalableCard(data: CardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
-  setScalableCard(data.scene, cardContainer);
+  setScalableCard(data.scene, cardContainer, SIZE_TINY_CARD);
   cardContainer.setScale(SIZE_TINY_CARD);
   return cardContainer;
 }

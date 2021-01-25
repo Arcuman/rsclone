@@ -4,6 +4,5 @@ export interface UserProfile {
   level: number;
   exp: number;
   cur_user_deck_id: number;
-  countCards:number;
+  countCards: number;
 }
-  

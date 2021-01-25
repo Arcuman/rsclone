@@ -7,7 +7,7 @@ export const END_YOYR_MATCH = 'END YOYR MATCH BEFORE START NEW';
 export const TEXT_POSITION_Y = 100;
 
 export const OPPONENT_FOUND = 'opponentFound';
-export const WAIT_SECOND_PLAYER = 'waitSecondPlay';
+export const WAIT_SECOND_PLAYER = 'waitSecondPlayer';
 export const ALREADY_PLAY = 'already_play';
 export const INIT_STATE = 'initState';
 

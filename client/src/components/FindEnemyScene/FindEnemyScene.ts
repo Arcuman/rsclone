@@ -15,8 +15,8 @@ import { textDecoration } from '@/components/Card/constants';
 import { browserHistory } from '@/router/history';
 import { MENU_URL } from '@/router/constants';
 import { connectToServer } from '@/components/FindEnemyScene/FindEnemyScene.service';
-import { GameState } from '@/types/types';
 import { setBackground } from '@/utils/utils';
+import { GameState } from '@/components/GameBoard/GameBoard.model';
 
 export class FindEnemyScene extends Phaser.Scene {
   private socket: SocketIOClient.Socket;
@@ -62,7 +62,7 @@ export class FindEnemyScene extends Phaser.Scene {
 
     this.socket.on(INIT_STATE, (gameState: GameState): void => {
       this.scene.start(SCENES.GAME_BOARD, {
-        gameState,
+        initState: gameState,
         socket: this.socket,
         isPlayerOne: this.isPlayerOne,
       });
