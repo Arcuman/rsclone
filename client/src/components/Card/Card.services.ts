@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import { StatusCodes } from 'http-status-codes';
+import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -6,6 +8,7 @@ import {
   DEPTH_CLICK_CARD,
   IMAGE_CARD_SIZE,
 } from './constants';
+import { Card } from './Card.model';
 
 export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   const gameWidth = scene.game.config.width;
@@ -69,4 +72,30 @@ export const setClickableCard = (
     cardContainer.setScale(SIZE_LITTLE_CARD, SIZE_LITTLE_CARD);
     cardContainer.setDepth(DEPTH_NORMAL_CARD);
   });
+};
+
+export const getUserCards = async (): Promise<Card[]> => {
+  const requestInit = getRequestInit();
+
+  const cards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
+    .then(
+      (response): Promise<Card[]> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
+    .then((cards: Card[]): Card[] => cards)
+    .catch(error => {
+      throw new Error(error);
+    });
+
+  return cards;
+};
+
+export const countCards = async (): Promise<number> => {
+  const userCards = await getUserCards();
+  
+  return userCards.length;
 };

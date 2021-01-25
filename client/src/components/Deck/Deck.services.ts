@@ -2,10 +2,10 @@ import { Deck } from '@/components/Deck/Deck.model';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 
-export const getUserCurrDeck = async (deckId: number) => {
+export const getUserDeckById = async (deckId: number):Promise<Deck> => {
   const requestInit = getRequestInit();
 
-  const userCurrDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)
+  const userDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)
     .then(
       (response): Promise<Deck> => {
         if (response.status !== StatusCodes.OK) {
@@ -14,12 +14,12 @@ export const getUserCurrDeck = async (deckId: number) => {
         return response.json();
       },
     )
-    .then((currDeck: Deck) => currDeck)
+    .then((deck: Deck) => deck)
     .catch(error => {
       throw new Error(error);
     });
 
-  return userCurrDeck;
+  return userDeck;
 };
 
 export const getUserDecks = async (): Promise<Deck[]> => {

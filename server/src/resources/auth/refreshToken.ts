@@ -9,7 +9,6 @@ import { AuthUser } from './auth.model';
 
 const getRefTokenExpiresInMilliseconds = (): number => {
   const refTokenExpiresInMilliseconds: number = new Date().getTime() + EXPIRE_IN_TOKEN;
-  console.log()
   return Math.round(refTokenExpiresInMilliseconds / 1000);
 };
 

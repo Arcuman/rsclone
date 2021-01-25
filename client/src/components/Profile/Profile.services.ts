@@ -3,13 +3,12 @@ import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
-import { getUserCurrDeck, getUserDecks } from '@/components/Deck/Deck.services';
+import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { createDeck } from '@/components/Deck/Deck.render';
 import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
-import { Card } from '@/components/Card/Card.model';
-
+import {countCards, getUserCards} from '@/components/Card/Card.services';
 import {
   textDecoration,
   positionInfo,
@@ -23,7 +22,6 @@ import { UserProfile } from './Profile.model';
 
 const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
-
   const requestInit = getRequestInit();
 
   const user = await fetch(`${API_INFO_URLS.userProfile}/${userId}`, requestInit)
@@ -41,26 +39,6 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
     });
 
   return user;
-};
-
-const countCards = async (): Promise<number> => {
-  const requestInit = getRequestInit();
-
-  const cardsCount = await fetch(`${API_INFO_URLS.cards}`, requestInit)
-    .then(
-      (response): Promise<Card[]> => {
-        if (response.status !== StatusCodes.OK) {
-          throw new Error();
-        }
-        return response.json();
-      },
-    )
-    .then((cards: Card[]): number => cards.length)
-    .catch(error => {
-      throw new Error(error);
-    });
-
-  return cardsCount;
 };
 
 const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
@@ -116,7 +94,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textDecoration,
   );
 
-  const userCurrDeckInfo = await getUserCurrDeck(user.cur_user_deck_id);
+  const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
   const userCurrDeck = createDeck(scene, userCurrDeckInfo);
 
   const userInfoBLock = [
