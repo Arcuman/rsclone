@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 
 import cors from 'cors';
 import passport from 'passport';
-import {HTTP_HEADERS, ORIGINS_HOST} from '@/constants/constants';
+import { HTTP_HEADERS, ORIGINS_HOST } from '@/constants/constants';
 import { decksRouter } from '@/resources/decks/decks.router';
 import { cardRouter } from '@/resources/card/card.router';
 import swaggerUI from 'swagger-ui-express';
@@ -20,13 +20,13 @@ app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(passport.initialize());
 app.use((req, res, next) => {
-  HTTP_HEADERS.forEach(resHeader =>{
+  HTTP_HEADERS.forEach(resHeader => {
     res.setHeader(resHeader[0], resHeader[1]);
   });
   next();
 });
 
-app.use(cors({credentials: true, origin: ORIGINS_HOST}));
+app.use(cors({ credentials: true, origin: ORIGINS_HOST }));
 app.options('*', cors());
 
 app.use('/', (req, res, next) => {

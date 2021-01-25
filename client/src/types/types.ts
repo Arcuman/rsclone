@@ -32,6 +32,7 @@ export interface TextDecoration {
   TEXT_OUTLINE_COLOR: string;
   TEXT_OUTLINE_SIZE: number;
   TEXT_DEPTH: number;
+  IS_SET_ORIGIN?: boolean;
 }
 
 export interface ShadowOptions {

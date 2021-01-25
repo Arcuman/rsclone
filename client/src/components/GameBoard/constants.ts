@@ -9,6 +9,7 @@ const TABLE_CARD_DESTROY = 'tableCardDestroy';
 const CLOSE_SOCKET = 'closeSocket';
 const DISCONNECT = 'disconnect';
 const NOT_ENOUGH_MANA = 'notEnoughMana';
+const START_GAME = 'startGame';
 
 // TIMER
 const TIMER = 'timer';
@@ -65,6 +66,7 @@ const SPRITE_POSITION = {
 };
 
 export {
+  START_GAME,
   NEXT_TURN,
   TIMER,
   NEXT_ROUND,

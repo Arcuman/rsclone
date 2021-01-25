@@ -1,17 +1,19 @@
-import {IMAGES} from '@/components/Game/constant';
-import {createTable} from '@/components/GameBoard/Table/Table.render';
+import { IMAGES } from '@/components/Game/constant';
+import { createTable } from '@/components/GameBoard/Table/Table.render';
 import Phaser from 'phaser';
 import {
   DROP_ZONE_HIEGHT_OFFSET,
   DROP_ZONE_WIDTH_OFFSET,
   tablePositionInfo,
+  ZONE_COUNT_CARDS_FIELD,
+  ZONE_COUNT_CARDS_FIELD_INIT,
 } from '@/components/GameBoard/Table/constants';
 
-export function createGameTableImg(scene: Phaser.Scene) : Phaser.GameObjects.Container{
+export function createGameTableImg(scene: Phaser.Scene): Phaser.GameObjects.Container {
   const gameWidth = <number>scene.game.config.width;
   const gameHeight = <number>scene.game.config.height;
   const cardImg = IMAGES.GAME_BOARD.NAME;
-  return  createTable({
+  return createTable({
     scene,
     posX: gameWidth / 2,
     posY: gameHeight / 2,
@@ -19,7 +21,10 @@ export function createGameTableImg(scene: Phaser.Scene) : Phaser.GameObjects.Con
   });
 }
 
-export function createPlayerTableZone(scene: Phaser.Scene, table : Phaser.GameObjects.Container) : Phaser.GameObjects.Zone{
+export function createPlayerTableZone(
+  scene: Phaser.Scene,
+  table: Phaser.GameObjects.Container,
+): Phaser.GameObjects.Zone {
   const gameWidth = <number>scene.game.config.width;
   const gameHeight = <number>scene.game.config.height;
   const tableHalfHeight = table.height / 2;
@@ -27,20 +32,28 @@ export function createPlayerTableZone(scene: Phaser.Scene, table : Phaser.GameOb
   const zone = scene.add
     .zone(
       gameWidth / 2,
-      gameHeight / 2 + (tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE) / 2 - DROP_ZONE_HIEGHT_OFFSET,
-      tableWidth,
-      tableHalfHeight,
+      gameHeight / 2 +
+        (tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE) / 2 -
+        DROP_ZONE_HIEGHT_OFFSET,
+      tableWidth * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_WIDTH_OFFSET,
+      tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET,
     )
-    .setRectangleDropZone(tableWidth * tablePositionInfo.TABLE_CONTAINER_SCALE -DROP_ZONE_WIDTH_OFFSET, (tableHalfHeight) * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET);
+    .setRectangleDropZone(
+      tableWidth * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_WIDTH_OFFSET,
+      tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET,
+    );
+  zone.setData(ZONE_COUNT_CARDS_FIELD, ZONE_COUNT_CARDS_FIELD_INIT);
   const dropZoneOutline = scene.add.graphics();
   dropZoneOutline.lineStyle(4, 0xff69b4);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  dropZoneOutline.strokeRect(zone.x - zone.input.hitArea.width / 2,
+  dropZoneOutline.strokeRect(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    zone.x - zone.input.hitArea.width / 2,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     zone.y - zone.input.hitArea.height / 2,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     zone.input.hitArea.width,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    zone.input.hitArea.height);
+    zone.input.hitArea.height,
+  );
   return zone;
 }

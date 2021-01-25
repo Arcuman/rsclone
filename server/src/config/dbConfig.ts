@@ -17,7 +17,7 @@ const config: ClientConfig = {
   port: Number(DB_PORT),
   ssl: {
     rejectUnauthorized: false,
-  },
+  }, 
 };
 
 export default config;

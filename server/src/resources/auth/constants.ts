@@ -1,6 +1,6 @@
 const ERR_LOGIN_MESSAGE = 'Bad login/password combination';
 const ERR_LOGOUT_MESSAGE = "Login doesn't exist";
-const ERR_LOGIN_EXIST = {status:460, message:'Login already exists'};
+const ERR_LOGIN_EXIST = { status: 460, message: 'Login already exists' };
 const AUTH_FORM_FIELDS = { usernameField: 'login', passwordField: 'password' };
 const SESSION_EXPIRED = 'Session expired';
 
