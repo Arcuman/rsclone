@@ -13,6 +13,10 @@ export const IMAGES = {
     NAME: 'game-background',
     PATH: 'assets/images/game-bgr.jpg',
   },
+  MY_CARDS_BACKGROUND: {
+    NAME: 'my-cards-background',
+    PATH: 'assets/images/my_cards_bgr.jpg',
+  },
   AGENT: {
     NAME: 'agent.png',
     PATH: 'assets/images/agent.png',
@@ -80,18 +84,6 @@ export const IMAGES = {
   AVATAR: {
     NAME: 'avatar',
     PATH: 'assets/images/avatar.png',
-  },
-  MY_CARDS_CONTAINER: {
-    NAME: 'my_cards_container',
-    PATH: 'assets/images/my_cards/book_my_cards.png',
-  },
-  MY_DECKS_CONTAINER: {
-    NAME: 'my_decks_container',
-    PATH: 'assets/images/my_cards/my_deck_container.png',
-  },
-  MY_CARDS_DECOR: {
-    NAME: 'my_cards_decor',
-    PATH: 'assets/images/my_cards/decor_my_cards.png',
   },
   COVER: {
     NAME: 'cover',

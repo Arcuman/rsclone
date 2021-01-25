@@ -1,38 +1,66 @@
-// import {cardBase} from '../Card/Card.render';
-// import {AllCards} from './CardsInfo';
+import {cardBase} from '../Card/Card.render';
+import {AllCards} from './CardsInfo';
+import {cardsPosition, decksPosition, cardsContainerPosition, decksContainerPosition, CARDS_POS_UP_Y, CARDS_POS_DOWN_Y, DECKS_OFFSET_Y, CARDS_SCALE, NUMBER_CARDS_IN_ROW } from './constants';
+import {CardsPosition, CardsContainerPosition} from './MyCards.model';
+import {Card} from '../Card/Card.model';
 
-export const create = (scene: Phaser.Scene): void => {
+function getPositionY(index: number, name: string): number {
+  const weightId = Math.floor(index/NUMBER_CARDS_IN_ROW);  
+  let posY = 0;
+  if (name === 'cards') {
+    if (weightId === 0 || weightId === 2) {
+      posY = CARDS_POS_UP_Y;
+    } else {
+      posY = CARDS_POS_DOWN_Y;
+    }
+  } else if (name === 'decks') {
+    posY = weightId*DECKS_OFFSET_Y;
+  }
+  
+  return posY;
+}
 
-  const gameHeight = scene.game.config.height;
-  const containerY: number = <number>gameHeight / 2;
- 
-  // const myDecksBgr: Phaser.GameObjects.Image = 
-  scene.add.image(1050, containerY, 'my_decks_container');
-  // const myCardsBgr: Phaser.GameObjects.Image = 
-  scene.add.image(430, 250, 'my_cards_container');
-  // const myCardsDecor: Phaser.GameObjects.Image = 
-  scene.add.image(230, 580, 'my_cards_decor');
-  // const cardContainer = 
-  scene.add.container(430, 250);
+function getPositionX(index: number, cardsPositionInfo: CardsPosition): number {
+  const {OFFSET_X, EXTRA_OFFSET_X, REDUCE_ID_1, REDUCE_ID_2, REDUCE_ID_3 } = cardsPositionInfo;
+  let posX;
+  if (index <= 2) {    
+    posX = index*OFFSET_X;
+  } else if (index >= 3 && index <= 5) {   
+    posX = (index-REDUCE_ID_1)*OFFSET_X;
+  } else if (index >= 6 && index <= 8) {   
+    posX = (index-REDUCE_ID_2)*OFFSET_X + EXTRA_OFFSET_X;
+  } else {   
+    posX = (index-REDUCE_ID_3)* OFFSET_X + EXTRA_OFFSET_X;
+  }
+  return posX;
+}
 
-  // AllCards.forEach((item, id) => {
-  //  const {name, attack, manacost, health, effect, image_url} = item;
-  //  const posX = id*30 + 10;
-  //  const posY = id*40;
-  //  const card = cardBase({
-  //    scene,
-  //    posX,
-  //    posY,
-  //    card: name,
-  //    mana: manacost.toString(),
-  //    attack: attack.toString(),
-  //    health: health.toString(),
-  //  });
-  //  console.log('card', card);
-  //  cardContainer.add(card);
-  // });
+const renderMyCards = (
+  scene: Phaser.Scene,
+  name: string,
+  allCards: Card[],
+  containerPosition: CardsContainerPosition,
+  cardsPositionInfo: CardsPosition, 
+):void => { 
+  const {CONTAINER_X, CONTAINER_Y} = containerPosition;
+  const cardContainer = scene.add.container(CONTAINER_X, CONTAINER_Y);
+
+  allCards.forEach((item: Card, id:number) => {
+    const posX = getPositionX(id, cardsPositionInfo);    
+    const posY = getPositionY(id, name);
+    const card = cardBase({
+      scene,
+      posX,
+      posY,
+      card: item,      
+    });  
+    card.setScale(CARDS_SCALE, CARDS_SCALE);
+    cardContainer.add(card);
+  });
 };
 
-// export const renderMyCards = (scene: Phaser.Scene, allCards):void => {
-//  // console.log('allCards', allCards);
-// };
+export const create = (scene: Phaser.Scene): void => {
+  renderMyCards(scene, 'cards', AllCards, cardsContainerPosition, cardsPosition);
+  renderMyCards(scene, 'decks', AllCards, decksContainerPosition, decksPosition); 
+};
+

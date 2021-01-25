@@ -1,0 +1,36 @@
+import {CardsPosition, CardsContainerPosition} from './MyCards.model';
+
+export const cardsContainerPosition: CardsContainerPosition = {
+  CONTAINER_X: 135,
+  CONTAINER_Y: 180,
+};
+
+export const decksContainerPosition: CardsContainerPosition = {
+  CONTAINER_X: 935,
+  CONTAINER_Y: 162,
+};
+
+export const cardsPosition: CardsPosition = {  
+  OFFSET_X: 110,
+  EXTRA_OFFSET_X: 40,  
+  REDUCE_ID_1: 3,
+  REDUCE_ID_2: 3,
+  REDUCE_ID_3: 6,  
+};
+
+export const decksPosition: CardsPosition = { 
+  OFFSET_X: 110,
+  EXTRA_OFFSET_X: 0,  
+  REDUCE_ID_1: 3,
+  REDUCE_ID_2: 6,
+  REDUCE_ID_3: 9,  
+};
+
+export const CARDS_POS_UP_Y = 0;
+export const CARDS_POS_DOWN_Y = 160;
+
+export const DECKS_OFFSET_Y = 140;
+
+export const CARDS_SCALE = 0.7;
+
+export const NUMBER_CARDS_IN_ROW = 3;
