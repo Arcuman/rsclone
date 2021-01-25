@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
-import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
+import { ZONE_COUNT_CARDS_FIELD, ZONE_TABLE_NAME } from '@/components/GameBoard/Table/constants';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
 import {
@@ -16,6 +16,7 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
+  CARD_IS_PLAYED_FIELD,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -48,6 +49,7 @@ export const setScalableCard = (
     cardContainer.setDepth(DEPTH_NORMAL_CARD);
   });
 };
+
 export const setDraggableCardsDependOnPlayerMana = (scene: IGameBoardScene): void => {
   scene.getPlayerCards().forEach(card => {
     if (
@@ -60,6 +62,12 @@ export const setDraggableCardsDependOnPlayerMana = (scene: IGameBoardScene): voi
     }
   });
 };
+export const activateTableCards = (scene: IGameBoardScene): void => {
+  scene.getPlayerTableCards().forEach(card => {
+    scene.input.setDraggable(card);
+    card.setData(CARD_IS_PLAYED_FIELD, false);
+  });
+};
 
 const setStartDragCoordinates = (cardContainer: Phaser.GameObjects.Container): void => {
   const gameObjectParameters = cardContainer;
@@ -67,7 +75,31 @@ const setStartDragCoordinates = (cardContainer: Phaser.GameObjects.Container): v
   gameObjectParameters.y = cardContainer.input.dragStartY;
 };
 
-export const setDropOnHandCard = (
+export const setDropEventOnTableCard = (
+  scene: IGameBoardScene,
+  cardContainer: Phaser.GameObjects.Container,
+): void => {
+  cardContainer.removeListener('drop');
+  cardContainer.on(
+    'drop',
+    (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
+      if (<boolean>cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
+        return;
+      }
+      console.log(dropZone.name);
+      cardContainer.setData(CARD_IS_PLAYED_FIELD, true);
+    },
+  );
+  cardContainer.removeListener('dragend');
+  cardContainer.on(
+    'dragend',
+    (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
+      setStartDragCoordinates(cardContainer);
+    },
+  );
+};
+
+export const setDropEventOnHandCard = (
   scene: IGameBoardScene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
@@ -76,6 +108,10 @@ export const setDropOnHandCard = (
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
       if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+        setStartDragCoordinates(cardContainer);
+        return;
+      }
+      if (dropZone.name !== ZONE_TABLE_NAME) {
         setStartDragCoordinates(cardContainer);
         return;
       }
@@ -123,8 +159,11 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
+      console.log('first dragend');
       if (!dropped) {
         setStartDragCoordinates(cardContainer);
+      } else {
+        setDropEventOnTableCard(scene, cardContainer);
       }
     },
   );
@@ -148,7 +187,7 @@ export const setClickableCard = (
 export const getUserCards = async (): Promise<Card[]> => {
   const requestInit = getRequestInit();
 
-  const cards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
+  const userCards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
     .then(
       (response): Promise<Card[]> => {
         if (response.status !== StatusCodes.OK) {
@@ -162,11 +201,11 @@ export const getUserCards = async (): Promise<Card[]> => {
       throw new Error(error);
     });
 
-  return cards;
+  return userCards;
 };
 
 export const countCards = async (): Promise<number> => {
   const userCards = await getUserCards();
-  
+
   return userCards.length;
 };

@@ -16,7 +16,7 @@ import {
   NEXT_ROUND,
 } from '@/components/GameBoard/constants';
 import {
-  getPositionOfCard,
+  activateTableCards,
   setDraggableCardsDependOnPlayerMana,
 } from '@/components/Card/Card.services';
 import {
@@ -24,7 +24,6 @@ import {
   createPlayerAvatar,
 } from '@/components/GameBoard/UserAvatar/Avatar.service';
 import { Card } from '@/components/Card/Card.model';
-import { createScalableCard } from '@/components/Card/Card.render';
 import { createPlayerMana } from '@/components/GameBoard/UserMana/UserMana.render';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
@@ -150,8 +149,10 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);
+        activateTableCards(this);
       } else {
         this.input.setDraggable(this.playerCards, false);
+        this.input.setDraggable(this.playerTableCards, false);
       }
     });
 

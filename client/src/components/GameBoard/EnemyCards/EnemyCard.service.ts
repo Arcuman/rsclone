@@ -7,13 +7,14 @@ import { IMAGE_CARD_SIZE } from '@/components/Card/constants';
 export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: boolean) {
   if (scene.getIsPlayerOne() !== isPlayerOne) {
     scene.getEnemyCards().pop()!.destroy();
-    scene.getEnemyTableCards().push(
-      createScalableCard({
-        scene,
-        posX: getPositionOfCard(scene, scene.getEnemyTableCards().length),
-        posY: scene.getPlayerTableZone().y - IMAGE_CARD_SIZE,
-        card,
-      }),
-    );
+    const enemyCard = createScalableCard({
+      scene,
+      posX: getPositionOfCard(scene, scene.getEnemyTableCards().length),
+      posY: scene.getPlayerTableZone().y - IMAGE_CARD_SIZE,
+      card,
+    });
+    enemyCard.input.dropZone = true;
+    enemyCard.setName(card.id.toString());
+    scene.getEnemyTableCards().push(enemyCard);
   }
 }
