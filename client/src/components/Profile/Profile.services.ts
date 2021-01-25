@@ -21,7 +21,7 @@ import {
 } from './constants';
 import { UserProfile } from './Profile.model';
 
-const getRequestInit = ():RequestInit =>{
+const getRequestInit = (): RequestInit => {
   const { accessToken } = store.getState().authUser;
   const headers = {
     Authorization: `Bearer ${accessToken}`,
@@ -38,7 +38,7 @@ const getRequestInit = ():RequestInit =>{
 
 const getUserCurrDeck = async (deckId: number) => {
   const requestInit = getRequestInit();
-  
+
   const userCurrDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)
     .then(
       (response): Promise<Deck> => {
@@ -58,7 +58,7 @@ const getUserCurrDeck = async (deckId: number) => {
 
 const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
-  
+
   const requestInit = getRequestInit();
 
   const user = await fetch(`${API_INFO_URLS.userProfile}/${userId}`, requestInit)

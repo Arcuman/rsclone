@@ -11,7 +11,7 @@ export class ProfileScene extends Phaser.Scene {
       visible: false,
     });
   }
-  
+
   create(): void {
     create(this);
   }

@@ -18,7 +18,7 @@ const options = {
     }
     return undefined;
   },
-  errorHandler(error: RouteError, context: ResolveContext): RouteResult<RouteResultResponse> {
+  errorHandler(error: RouteError): RouteResult<RouteResultResponse> {
     return {
       page: renderMain(ERROR_404_URL),
       redirect: null,

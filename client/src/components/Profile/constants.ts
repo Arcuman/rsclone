@@ -26,10 +26,15 @@ export const HEIGHT_OFFSET = 50;
 export const INFO_BLOCK_SCALE = 0.8;
 export const INFO_BLOCK_X = 270;
 export const USER_PROFILE_INFO = {
-  nickName:'Ник:', level:'Уровень:', exp:'Опыт:', cards:'Мои карты:', currDeck:'Текущая колода:', counts:'шт.',
+  nickName: 'Ник:',
+  level: 'Уровень:',
+  exp: 'Опыт:',
+  cards: 'Мои карты:',
+  currDeck: 'Текущая колода:',
+  counts: 'шт.',
 };
-export const API_INFO_URLS={
+export const API_INFO_URLS = {
   userProfile: `${<string>BASE_HTTP_URL}/users/profile`,
   cards: `${<string>BASE_HTTP_URL}/cards`,
-  userDeck:  `${<string>BASE_HTTP_URL}/decks`,
+  userDeck: `${<string>BASE_HTTP_URL}/decks`,
 };

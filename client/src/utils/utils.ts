@@ -34,7 +34,6 @@ export const createTextData = (
   posY: number,
   value: string,
   textDecoration: TextDecoration,
-  
 ): Phaser.GameObjects.Text => {
   const {
     FONT_SIZE,
@@ -43,8 +42,7 @@ export const createTextData = (
     TEXT_OUTLINE_COLOR,
     TEXT_OUTLINE_SIZE,
     TEXT_DEPTH,
-    IS_SET_ORIGIN=false,
-
+    IS_SET_ORIGIN = false,
   } = textDecoration;
   const fontOptions = {
     fontFamily: FONT_FAMILY,
@@ -52,12 +50,11 @@ export const createTextData = (
     color: FONT_COLOR,
   };
 
-  const text: Phaser.GameObjects.Text = scene.add
-    .text(posX, posY, value, fontOptions);
-  if (IS_SET_ORIGIN){
+  const text: Phaser.GameObjects.Text = scene.add.text(posX, posY, value, fontOptions);
+  if (IS_SET_ORIGIN) {
     text.setOrigin(0.5);
   }
-  
+
   text.setStroke(TEXT_OUTLINE_COLOR, TEXT_OUTLINE_SIZE);
   text.depth = TEXT_DEPTH;
 

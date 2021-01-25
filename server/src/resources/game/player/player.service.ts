@@ -28,6 +28,7 @@ export async function createPlayer(userId: number, socket: Socket): Promise<Play
   const user = await getUserById(userId);
   const deckCards: Array<Card> = shuffleCards(cards!);
   const handCards: Array<Card> = deckCards.splice(0, NUMBER_OF_HAND_CARDS);
+
   return <Player>{
     userId,
     name: user.name,

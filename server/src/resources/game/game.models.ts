@@ -1,8 +1,7 @@
 import { Card } from '@/resources/card/card.model';
 
-export enum TargetType {
-  enemyCard,
-  enemyPlayer,
+export interface SocketQuery{
+  token : string;
 }
 
 export interface GameState {

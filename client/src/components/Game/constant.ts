@@ -89,7 +89,7 @@ export const IMAGES = {
     NAME: 'cover',
     PATH: 'assets/images/cover.png',
   },
-  SETTINGS_BLOCK_IMAGE:{
+  SETTINGS_BLOCK_IMAGE: {
     NAME: 'settings_block',
     PATH: 'assets/images/settings_block.png',
   },
