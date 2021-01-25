@@ -12,8 +12,8 @@ import {
   createGameTableImg,
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
-import { TIMER } from './constants';
-import { addTimerEndSprite, create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
+import { BOMB_IMAGE, BOOM_SPRITESHEET, FRAME_SIZE, TIMER, TIMER_LABEL, WICK_SPRITESHEET } from './constants';
+import { addTimerAlmostExpired, addTimerEndSprite, create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene {
   private state: GameState;
@@ -49,8 +49,23 @@ export class GameBoardScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet('boom', '../../assets/images/Timer/explosion.png', { frameWidth: 64, frameHeight: 64, endFrame: 23 });
-    this.load.spritesheet('wick', '../../assets/images/Timer/wick.png', { frameWidth: 1585, frameHeight: 100, endFrame: 150 });
+    this.load.spritesheet(
+      'boom',
+      BOOM_SPRITESHEET,
+      {
+        frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
+        frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
+        endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
+      });
+    this.load.spritesheet(
+      'wick',
+      WICK_SPRITESHEET,
+      {
+        frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
+        frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
+        endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
+      });
+    this.load.image('bomb', BOMB_IMAGE);
   }
 
   create(data: {
@@ -58,10 +73,6 @@ export class GameBoardScene extends Phaser.Scene {
     socket: SocketIOClient.Socket;
     isPlayerOne: boolean;
   }): void {
-
-    // this.timer = new TimerScene(this, timerLabel);
-    // this.timer.start(this.handleTimerFinished.bind(this));
-
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
 
     this.state = data.gameState;
@@ -81,24 +92,23 @@ export class GameBoardScene extends Phaser.Scene {
 
     create(this);
 
-    this.timerLabel = this.add.text(120, 350, '', { fontSize: '48px', color: 'red' }).setOrigin(0.5);
+    this.timerLabel = this.add.text(
+      TIMER_LABEL.POSITION.POS_X,
+      TIMER_LABEL.POSITION.POS_Y,
+      TIMER_LABEL.DEFAULT_EMPTY_STRING,
+      {
+        fontSize: TIMER_LABEL.STYLE.FONT_SIZE,
+        fontFamily: TIMER_LABEL.STYLE.FONT_FAMILY,
+        color: TIMER_LABEL.STYLE.COLOR,
+      }).setOrigin(0.5);
+
     this.socket.on(TIMER, (countDown: string | string[])=>{
       if (+countDown === 5) {
-        addTimerEndSprite(this, 'wick');
+        addTimerAlmostExpired(this);
       } else if (+countDown === 0) {
-        addTimerEndSprite(this, 'boom');
+        addTimerEndSprite(this);
       }
       this.timerLabel.setText(countDown);
     });
-
   }
-
-  // handleTimerFinished() {
-  //   this.add.text(150, 150, 'YOOOOOU', { fontSize: '25' });
-  // }
-
-  // update() {
-  //   // this.timer.update();
-
-  // }
 }
