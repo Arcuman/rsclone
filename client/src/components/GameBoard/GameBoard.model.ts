@@ -8,6 +8,7 @@ export interface IGameBoardScene extends Phaser.Scene {
   getEnemyTableCards(): Phaser.GameObjects.Container[];
   getSocket(): SocketIOClient.Socket;
   getPlayerMana(): Phaser.GameObjects.Container;
+  getEndTurnButton(): Phaser.GameObjects.Container;
   getIsPlayerOne(): boolean;
   getPlayerTableZone(): Phaser.GameObjects.Zone;
   setPlayerMana(value: number): void;

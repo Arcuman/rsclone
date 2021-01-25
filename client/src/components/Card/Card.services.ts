@@ -4,6 +4,7 @@ import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
 import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
+import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -56,6 +57,13 @@ export const setDraggableCardsDependOnPlayerMana = (scene: IGameBoardScene): voi
     }
   });
 };
+
+const setStartDragCoordinates = (cardContainer: Phaser.GameObjects.Container): void => {
+  const gameObjectParameters = cardContainer;
+  gameObjectParameters.x = cardContainer.input.dragStartX;
+  gameObjectParameters.y = cardContainer.input.dragStartY;
+};
+
 export const setDropOnHandCard = (
   scene: IGameBoardScene,
   cardContainer: Phaser.GameObjects.Container,
@@ -64,6 +72,10 @@ export const setDropOnHandCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
+      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+        setStartDragCoordinates(cardContainer);
+        return;
+      }
       const gameObject = cardContainer;
       gameObject.x = getPositionOfCard(scene, <number>dropZone.getData(ZONE_COUNT_CARDS_FIELD));
       gameObject.y = dropZone.y;
@@ -108,10 +120,8 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
-      const gameObjectParameters = cardContainer;
       if (!dropped) {
-        gameObjectParameters.x = cardContainer.input.dragStartX;
-        gameObjectParameters.y = cardContainer.input.dragStartY;
+        setStartDragCoordinates(cardContainer);
       }
     },
   );
