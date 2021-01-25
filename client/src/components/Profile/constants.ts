@@ -1,7 +1,5 @@
 import { TextDecoration } from '@/types/types';
 
-import { BASE_HTTP_URL } from '@/constants/constants';
-
 export const textDecoration: TextDecoration = {
   FONT_SIZE: '32px',
   FONT_FAMILY: 'number_font',
@@ -32,9 +30,4 @@ export const USER_PROFILE_INFO = {
   cards: 'Мои карты:',
   currDeck: 'Текущая колода:',
   counts: 'шт.',
-};
-export const API_INFO_URLS = {
-  userProfile: `${<string>BASE_HTTP_URL}/users/profile`,
-  cards: `${<string>BASE_HTTP_URL}/cards`,
-  userDeck: `${<string>BASE_HTTP_URL}/decks`,
 };

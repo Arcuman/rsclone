@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-export const EXPIRE_IN_TOKEN = 3600;
+export const EXPIRE_IN_TOKEN = 36;
 export const ENV_NAME = '../remoute.env';
 // export const ENV_NAME = '../.env.local';
 export const MAX_CARDS_IN_DECK = 10;

@@ -1,64 +1,27 @@
 import { setBackground, createTextData } from '@/utils/utils';
+import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
+import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
+import { createDeck } from '@/components/Deck/Deck.render';
 import { MENU_URL } from '@/router/constants';
-import { HEADER_JSON } from '@/constants/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
-import { Card } from '@/components/Card/Card.model';
-import { Deck } from '@/components/Deck/Deck.model';
-import { createDeck } from '@/components/Deck/Deck.render';
+import {countCards, getUserCards} from '@/components/Card/Card.services';
 import {
   textDecoration,
   positionInfo,
   positionMenu,
   HEIGHT_OFFSET,
   USER_PROFILE_INFO,
-  API_INFO_URLS,
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
 } from './constants';
 import { UserProfile } from './Profile.model';
 
-const getRequestInit = (): RequestInit => {
-  const { accessToken } = store.getState().authUser;
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    ...HEADER_JSON,
-  };
-  return {
-    method: 'GET',
-    headers,
-    mode: 'cors',
-    cache: 'default',
-    credentials: 'include',
-  };
-};
-
-const getUserCurrDeck = async (deckId: number) => {
-  const requestInit = getRequestInit();
-
-  const userCurrDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)
-    .then(
-      (response): Promise<Deck> => {
-        if (response.status !== StatusCodes.OK) {
-          throw new Error();
-        }
-        return response.json();
-      },
-    )
-    .then((currDeck: Deck) => currDeck)
-    .catch(error => {
-      throw new Error(error);
-    });
-
-  return userCurrDeck;
-};
-
 const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
-
   const requestInit = getRequestInit();
 
   const user = await fetch(`${API_INFO_URLS.userProfile}/${userId}`, requestInit)
@@ -78,26 +41,6 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
   return user;
 };
 
-const countCards = async (): Promise<number> => {
-  const requestInit = getRequestInit();
-
-  const cardsCount = await fetch(`${API_INFO_URLS.cards}`, requestInit)
-    .then(
-      (response): Promise<Card[]> => {
-        if (response.status !== StatusCodes.OK) {
-          throw new Error();
-        }
-        return response.json();
-      },
-    )
-    .then((cards: Card[]): number => cards.length)
-    .catch(error => {
-      throw new Error(error);
-    });
-
-  return cardsCount;
-};
-
 const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   const userInfoBgr = scene.add.image(
     INFO_BLOCK_X,
@@ -108,7 +51,9 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   userInfoBgr.setScale(INFO_BLOCK_SCALE).setScrollFactor(0);
 
   const user = await getUserProfileInfo();
-
+  if (!user) {
+    throw new Error();
+  }
   const textUserName: Phaser.GameObjects.Text = createTextData(
     scene,
     positionInfo.TEXT_X,
@@ -149,7 +94,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textDecoration,
   );
 
-  const userCurrDeckInfo = await getUserCurrDeck(user.cur_user_deck_id);
+  const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
   const userCurrDeck = createDeck(scene, userCurrDeckInfo);
 
   const userInfoBLock = [
