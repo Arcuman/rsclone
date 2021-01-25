@@ -1,5 +1,6 @@
 export const GAME_URL = '/game';
 export const MY_CARDS_URL = '/mycards';
+export const PROFILE_URL = '/profile';
 export const ROOT_URL = '/';
 export const AUTH_URL = '/auth';
 export const MENU_URL = '/menu';

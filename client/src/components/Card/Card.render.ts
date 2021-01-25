@@ -1,6 +1,6 @@
 import { createTextData, setShadow } from '@/utils/utils';
 import Phaser from 'phaser';
-import { CardCreateInfo } from './Card.model';
+import { CardCreateInfo, HandCardCreateInfo } from './Card.model';
 import {
   setClickableCard,
   setDraggableCard,
@@ -80,7 +80,7 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
   return cardContainer;
 }
 
-export function createPlayerHandCard(data: CardCreateInfo): Phaser.GameObjects.Container {
+export function createPlayerHandCard(data: HandCardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
   setScalableCard(data.scene, cardContainer, SIZE_LITTLE_CARD);
   setDraggableCard(data.scene, cardContainer);

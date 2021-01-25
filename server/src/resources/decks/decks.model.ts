@@ -51,7 +51,7 @@ const getDeckCards = async (deck_id: number): Promise<Card[]> => {
       rows: cards,
     } = await db.query(
       'Select "Cards".card_id as id,  "Cards".name, "Cards"."isActive", ' +
-        '"Cards".health, "Cards".attack, "Cards".manaCost as "manaCost", "Cards".image  ' +
+        '"Cards".health, "Cards".attack, "Cards".manacost as "manaCost", "Cards".image  ' +
         'From "UserDeckCards" JOIN "Cards" ' +
         'ON "UserDeckCards".card_id = "Cards".card_id ' +
         'Where "UserDeckCards".user_deck_id=$1',

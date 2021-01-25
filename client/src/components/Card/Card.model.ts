@@ -11,6 +11,12 @@ export interface Card {
 }
 
 export interface CardCreateInfo {
+  scene: Phaser.Scene;
+  posX: number;
+  posY: number;
+  card: Card;
+}
+export interface HandCardCreateInfo {
   scene: IGameBoardScene;
   posX: number;
   posY: number;

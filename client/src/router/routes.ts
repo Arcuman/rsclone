@@ -1,5 +1,12 @@
 import { renderMain } from '@/components/Main/Main.render';
-import { AUTH_URL, MENU_URL, ROOT_URL, GAME_URL, MY_CARDS_URL } from '@/router/constants';
+import {
+  AUTH_URL,
+  MENU_URL,
+  ROOT_URL,
+  GAME_URL,
+  MY_CARDS_URL,
+  PROFILE_URL,
+} from '@/router/constants';
 import { SCENES } from '@/components/Game/constant';
 import { ResolveContext } from 'universal-router';
 import { RouteResultResponse, Route, ResolveContextWithNext } from './routes.model';
@@ -54,6 +61,12 @@ export const routes: Route[] = [
         path: ROOT_URL,
         action: (context: ResolveContext): RouteResultResponse =>
           createRouteResult(MENU_URL, null, null),
+        children: null,
+      },
+      {
+        path: PROFILE_URL,
+        action: (context: ResolveContext): RouteResultResponse =>
+          createRouteResult(null, null, SCENES.PROFILE),
         children: null,
       },
     ],

@@ -19,6 +19,7 @@ export const textDecoration: TextDecoration = {
   TEXT_OUTLINE_COLOR: '#000000',
   TEXT_OUTLINE_SIZE: 4,
   TEXT_DEPTH: 2,
+  IS_SET_ORIGIN: true,
 };
 
 export const shadowOptions: ShadowOptions = {

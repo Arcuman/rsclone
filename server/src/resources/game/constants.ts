@@ -2,6 +2,8 @@ export const NUMBER_OF_HAND_CARDS = 3;
 export const MAX_HEALTH = 10;
 export const START_MANA = 3;
 export const COUNTDOWN_SEC = 15;
+export const ONE_SEC = 1000;
+export const NO_SUCH_CARD_ERROR = 'NO SUCH CARD';
 
 const OPPONENT_FOUND = 'opponentFound';
 const ALREADY_PLAY = 'already_play';

@@ -1,7 +1,7 @@
 import './auth.scss';
 import { createHtmlElement } from '@/utils/utils';
-import { authForm, AUTH_IMAGES } from './constants';
-import { handleLogin, handleRegister } from './Auth.services';
+import { authForm } from './constants';
+import { handleLogin, handleRegister, buttonStyleClick } from './Auth.services';
 
 interface RenderFunction {
   (): HTMLElement;
@@ -26,9 +26,9 @@ const renderLoginForm = (): HTMLElement => {
   inputWrapper.appendChild(renderFormField('password', 'password'));
   form.appendChild(inputWrapper);
 
-  const buttonOk = <HTMLImageElement>createHtmlElement('img', 'button-ok');
-  buttonOk.src = AUTH_IMAGES.login;
-  buttonOk.addEventListener('click', () => handleLogin());
+  const buttonOk = <HTMLImageElement>createHtmlElement('button', 'button-enter');
+  buttonOk.addEventListener('mousedown', event => buttonStyleClick(event));
+  buttonOk.addEventListener('mouseup', event => handleLogin(event));
   form.appendChild(buttonOk);
 
   return form;
@@ -46,9 +46,9 @@ const renderRegisterForm = (): HTMLElement => {
 
   form.appendChild(inputWrapper);
 
-  const buttonSend = <HTMLImageElement>createHtmlElement('img', 'button-ok');
-  buttonSend.src = AUTH_IMAGES.register;
-  buttonSend.addEventListener('click', () => handleRegister());
+  const buttonSend = <HTMLImageElement>createHtmlElement('button', 'button-send');
+  buttonSend.addEventListener('mousedown', event => buttonStyleClick(event));
+  buttonSend.addEventListener('mouseup', event => handleRegister(event));
   form.appendChild(buttonSend);
 
   return form;
