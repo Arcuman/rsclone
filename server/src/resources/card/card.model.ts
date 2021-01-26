@@ -22,7 +22,7 @@ export async function getUserDeckCards(userId: number): Promise<Array<Card>> {
       '"UserProfiles".cur_user_deck_id = "UserDeckCards".user_deck_id\n' +
       ')on "Cards".card_id = "UserDeckCards".card_id\n' +
       'where "UserProfiles".user_id = $1',
-    [userId],
+    [userId]
   );
   rows.forEach(({ card_id, isActive, name, attack, manaCost, health, image }) => {
     cards.push({
@@ -59,7 +59,7 @@ const getAllByUserId = async (user_id: number): Promise<Card[]> => {
         'From "UserCards" JOIN "Cards" ' +
         'ON "UserCards".card_id = "Cards".card_id ' +
         'Where "UserCards".user_id=$1',
-      [user_id.toString()],
+      [user_id.toString()]
     );
     cards = rows;
   } catch (error) {
@@ -142,7 +142,7 @@ const setUserCard = async (cards: Card[], user_id: number): Promise<boolean> => 
   const cardsUsersPairs = cards
     .reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '')
     .slice(1);
-  console.log(cardsUsersPairs);
+
   try {
     const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
     const { rowCount } = await db.query(query, []);
