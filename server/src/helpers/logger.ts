@@ -26,10 +26,9 @@ const logger: Logger = createLogger({
     }),
   ],
 });
-
+/* eslint class-methods-use-this: 0 */
 class LoggerStream {
-  write(message: string) {
-    // logger.info(message.substring(0, message.lastIndexOf('\n')));
+  write(message: string):void {
     const mes = message.toString();
     const mesChunk = mes.split(' ');
     const status = mesChunk[1];

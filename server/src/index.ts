@@ -11,8 +11,8 @@ process
     logger.error(`Unhandled Rejection at Promise: ${message}`);
     process.exitCode = 1;
   })
-  .on('uncaughtException', error => {
-    logger.error(`Uncaught Exception: ${error}`);
+  .on('uncaughtException', (error:Error) => {
+    logger.error(`Uncaught Exception: ${error.message}`);
     process.exitCode = 1;
   });
   
