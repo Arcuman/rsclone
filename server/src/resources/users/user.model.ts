@@ -10,7 +10,7 @@ export interface User {
 export interface UserProfile {
   user_id: number;
   nickName: string;
-  level: number;
+  level_id: number;
   exp: number;
   cur_user_deck_id: number;
 }
@@ -89,13 +89,13 @@ const setUser = async (userData: User): Promise<number> => {
 const setUserProfile = async (data: UserProfile): Promise<number> => {
   try {
     const query =
-      'INSERT INTO "UserProfiles" (user_id, "nickName", level, exp, cur_user_deck_id) ' +
+      'INSERT INTO "UserProfiles" (user_id, "nickName", level_id, exp, cur_user_deck_id) ' +
       'VALUES ($1, $2, $3, $4, $5) ';
 
     const { rowCount } = await db.query(query, [
       data.user_id.toString(),
       data.nickName,
-      data.level.toString(),
+      data.level_id.toString(),
       data.exp.toString(),
       data.cur_user_deck_id.toString(),
     ]);
@@ -123,14 +123,14 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
   let profile: UserProfile;
   try {
     const query =
-      'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, cur_user_deck_id=$5  ' +
+      'UPDATE "UserProfiles" Set "nickName"=$2, level_id=$3, exp=$4, cur_user_deck_id=$5  ' +
       'WHERE user_id=$1  RETURNING *';
     ({
       rows: [profile],
     } = await db.query(query, [
       id.toString(),
       data.nickName,
-      data.level.toString(),
+      data.level_id.toString(),
       data.exp.toString(),
       data.cur_user_deck_id.toString(),
     ]));

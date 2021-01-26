@@ -24,6 +24,8 @@ const TABLE_CARD_DESTROY = 'tableCardDestroy';
 const CLOSE_SOCKET = 'closeSocket';
 const DISCONNECT = 'disconnect';
 const NOT_ENOUGH_MANA = 'notEnoughMana';
+const PLAYER_WIN = 'PLAYER_WIN';
+const PLAYER_LOSE = 'PLAYER_LOSE';
 
 export {
   OPPONENT_FOUND,
@@ -44,4 +46,5 @@ export {
   DISCONNECT,
   INIT_STATE,
   ENEMY_TABLE_CARD_DAMAGE,
+  PLAYER_WIN,
 };

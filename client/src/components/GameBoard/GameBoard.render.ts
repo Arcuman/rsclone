@@ -17,6 +17,8 @@ import {
   TABLE_CARD_DAMAGE,
   TABLE_CARD_DESTROY,
   ENEMY_TABLE_CARD_DAMAGE,
+  PLAYER_DAMAGE,
+  PLAYER_WIN,
 } from '@/components/GameBoard/constants';
 import {
   activateTableCards,
@@ -190,11 +192,19 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       }
     });
 
-    this.socket.on('playerDamage', (health: number, isPlayerOnePlay: boolean) => {
+    this.socket.on(PLAYER_DAMAGE, (health: number, isPlayerOnePlay: boolean) => {
       if (isPlayerOnePlay === this.isPlayerOne) {
         this.enemyAvatar.setData(PLAYER_HEALTH_FIELD, health);
       } else {
         this.playerAvatar.setData(PLAYER_HEALTH_FIELD, health);
+      }
+    });
+
+    this.socket.on(PLAYER_WIN, (isPlayerOnePlay: boolean) => {
+      if (isPlayerOnePlay === this.isPlayerOne) {
+        console.log('win');
+      } else {
+        console.log('lose');
       }
     });
   }

@@ -134,7 +134,6 @@ const setDeckCards = async (deck_id: number, cards: Card[]): Promise<number> => 
 
     const query = `INSERT INTO "UserDeckCards" (card_id, user_deck_id) VALUES ${cardsDecksPairs}`;
     const { rowCount } = await db.query(query, []);
-
     return rowCount;
   } catch (error) {
     throw new Error('500');

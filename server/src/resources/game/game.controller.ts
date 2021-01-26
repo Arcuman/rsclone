@@ -73,6 +73,7 @@ export default async function gameLogic(
       openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
     }
   });
+
   player.socket.on(CLOSE_SOCKET, () => closeSocket(openRoom, rooms, player));
   player.socket.on(DISCONNECT, () => {
     closeRoom(openRoom, rooms);
