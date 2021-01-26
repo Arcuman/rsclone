@@ -48,10 +48,7 @@ export default async function gameLogic(
   if (openRoom.players.length === 2) {
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
-    setTimeout(() => {
-      io.to(openRoom.id).emit(START_GAME);
-      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
-    }, 1000);
+
   } else {
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
@@ -69,6 +66,13 @@ export default async function gameLogic(
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
   });
 
+  player.socket.on(START_GAME, ()=>{
+    openRoom.playersReady += 1;
+    if (openRoom.playersReady === 2) {
+      io.to(openRoom.id).emit(START_GAME);
+      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
+    }
+  });
   player.socket.on(CLOSE_SOCKET, () => closeSocket(openRoom, rooms, player));
   player.socket.on(DISCONNECT, () => {
     closeRoom(openRoom, rooms);

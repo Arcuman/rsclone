@@ -2,7 +2,7 @@ import { Deck } from '@/components/Deck/Deck.model';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 
-export const getUserDeckById = async (deckId: number):Promise<Deck> => {
+export const getUserDeckById = async (deckId: number): Promise<Deck> => {
   const requestInit = getRequestInit();
 
   const userDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)

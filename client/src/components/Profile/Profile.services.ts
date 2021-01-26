@@ -8,7 +8,7 @@ import { createDeck } from '@/components/Deck/Deck.render';
 import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
-import {countCards} from '@/components/Card/Card.services';
+import { countCards } from '@/components/Card/Card.services';
 import {
   textDecoration,
   positionInfo,

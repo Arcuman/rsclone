@@ -4,7 +4,7 @@ import { CardCreateInfo, HandCardCreateInfo } from './Card.model';
 import {
   setClickableCard,
   setDraggableCard,
-  setDropOnHandCard,
+  setDropEventOnHandCard,
   setScalableCard,
 } from './Card.services';
 import {
@@ -19,6 +19,8 @@ import {
   SIZE_TINY_CARD,
   CARD_MANA_FIELD,
   CARD_IS_ACTIVE_FIELD,
+  CARD_IS_PLAYED_FIELD,
+  CARD_IS_PLAYED_FIELD_INIT,
 } from './constants';
 
 export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Container {
@@ -66,7 +68,7 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
     cardContainer.setData(CARD_HEALTH_FIELD, card.health);
     cardContainer.setData(CARD_IS_ACTIVE_FIELD, card.isActive);
     cardContainer.on(
-      'changedata',
+      `changedata-${CARD_HEALTH_FIELD}`,
       (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
         textHealth.setText(cardContainer.getData(CARD_HEALTH_FIELD));
       },
@@ -74,8 +76,22 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
   }
   cardContainer.setData(CARD_ID_FIELD, card.id);
   cardContainer.setData(CARD_MANA_FIELD, card.manaCost);
+  cardContainer.setData(CARD_IS_PLAYED_FIELD, CARD_IS_PLAYED_FIELD_INIT);
+
+  cardContainer.on(
+    `changedata-${CARD_IS_PLAYED_FIELD}`,
+    (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
+      if (cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
+        scene.input.setDraggable(cardContainer, false);
+      } else {
+        scene.input.setDraggable(cardContainer);
+      }
+    },
+  );
+
   cardContainer.setSize(spriteCard.width, spriteCard.height);
   cardContainer.setScale(SIZE_LITTLE_CARD);
+
   cardContainer.depth = CARD_CONTAINER_DEPTH;
   return cardContainer;
 }
@@ -85,7 +101,7 @@ export function createPlayerHandCard(data: HandCardCreateInfo): Phaser.GameObjec
   setScalableCard(data.scene, cardContainer, SIZE_LITTLE_CARD);
   setDraggableCard(data.scene, cardContainer);
   setClickableCard(data.scene, cardContainer);
-  setDropOnHandCard(data.scene, cardContainer);
+  setDropEventOnHandCard(data.scene, cardContainer);
   return cardContainer;
 }
 
