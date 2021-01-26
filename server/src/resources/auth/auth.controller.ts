@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { ErrorHandler, catchError } from '@/helpers/errorHandler';
 import passport from 'passport';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import { webToken } from '@/helpers/webToken';
