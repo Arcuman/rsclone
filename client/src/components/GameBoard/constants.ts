@@ -12,6 +12,7 @@ const CLOSE_SOCKET = 'closeSocket';
 const DISCONNECT = 'disconnect';
 const NOT_ENOUGH_MANA = 'notEnoughMana';
 const START_GAME = 'startGame';
+const PLAYER_WIN = 'PLAYER_WIN';
 
 export {
   START_GAME,
@@ -28,4 +29,5 @@ export {
   NOT_ENOUGH_MANA,
   DISCONNECT,
   ENEMY_TABLE_CARD_DAMAGE,
+  PLAYER_WIN,
 };

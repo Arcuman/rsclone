@@ -88,7 +88,7 @@ const getInitialCards = async (count: number): Promise<Card[]> => {
   try {
     const {
       rows,
-    } = await db.query('Select *, card_id as id From "Cards" Where isinitial=true LIMIT $1 ', [
+    } = await db.query('Select *, card_id as id from "Cards" Where isinitial=true LIMIT $1 ', [
       count,
     ]);
     cards = rows;
@@ -105,7 +105,6 @@ const deleteCardById = async (id: number): Promise<number> => {
   } catch (error) {
     throw new Error('500');
   }
-  return 0;
 };
 
 const setCard = async (data: Card): Promise<number> => {
@@ -143,7 +142,7 @@ const setUserCard = async (cards: Card[], user_id: number): Promise<boolean> => 
   const cardsUsersPairs = cards
     .reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '')
     .slice(1);
-
+  console.log(cardsUsersPairs);
   try {
     const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
     const { rowCount } = await db.query(query, []);

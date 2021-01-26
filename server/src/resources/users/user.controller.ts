@@ -3,6 +3,7 @@ import { webToken } from '@/helpers/webToken';
 import { MAX_CARDS_IN_DECK, INITIAL, INITIAL_LEVEL, INITIAL_EXP } from '@/constants/constants';
 import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
+import {levelService} from '@/resources/level/level.controller';
 import statusCodes from './user.constants';
 import { usersModel, User, Session, UserProfile } from './user.model';
 
@@ -31,11 +32,13 @@ const createInitialUserData = async (userId: number, name: string): Promise<void
   if (!deckId) {
     throw new Error(statusCodes[400].initialDeck);
   }
-  
+
+  const level = await levelService.getLevelByLevelValue(INITIAL_LEVEL);
+
   const profile = {
     user_id: userId,
     nickName: name,
-    level: INITIAL_LEVEL,
+    level_id: level.level_id,
     exp: INITIAL_EXP,
     cur_user_deck_id: deckId,
   };
@@ -55,17 +58,17 @@ const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserP
 
 const setUser = async (userData: User): Promise<number> => {
   const user =await usersModel.getUserByLogin(userData.login);
-  
+
   if (user || !userData.password) {
     return 0;
   }
-  
+
   const hash = myCrypt.hashPassword(userData.password);
   const newUserData = { ...userData, password: hash };
   const userId = await usersModel.setUser(newUserData);
-  
+
   createInitialUserData(userId, newUserData.name);
-  
+
   return userId;
 };
 

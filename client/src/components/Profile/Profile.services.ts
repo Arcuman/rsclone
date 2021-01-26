@@ -66,7 +66,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     scene,
     positionInfo.TEXT_X,
     positionInfo.TEXT_Y + HEIGHT_OFFSET,
-    `${USER_PROFILE_INFO.level} ${user.level.toString()}`,
+    `${USER_PROFILE_INFO.level} ${user.level_id.toString()}`,
     textDecoration,
   );
 
