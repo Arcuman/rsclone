@@ -1,6 +1,6 @@
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import Phaser from 'phaser';
-import { avatarPosition } from '@/components/GameBoard/UserAvatar/constants';
+import { avatarPosition, ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import { IMAGES } from '@/components/Game/constant';
 import { createAvatar } from '@/components/GameBoard/UserAvatar/Avatar.render';
 
@@ -11,7 +11,7 @@ export function createEnemyAvatar(
 ): Phaser.GameObjects.Container {
   const { ENEMY_X, ENEMY_Y } = avatarPosition;
   const cardImg = IMAGES.AVATAR.NAME;
-  return createAvatar({
+  const enemyAvatar = createAvatar({
     scene,
     posX: ENEMY_X,
     posY: ENEMY_Y,
@@ -19,6 +19,10 @@ export function createEnemyAvatar(
     userName,
     health: health.toString(),
   });
+  enemyAvatar.setName(ENEMY_PLAYER);
+  enemyAvatar.setInteractive();
+  enemyAvatar.input.dropZone = true;
+  return enemyAvatar;
 }
 
 export function createPlayerAvatar(

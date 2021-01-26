@@ -3,10 +3,16 @@ import Phaser from 'phaser';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
-import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
+import {
+  HAND_CARD_PLAY,
+  TABLE_CARD_PLAY_CARD_TARGET,
+  TABLE_CARD_PLAY_PLAYER_TARGET,
+} from '@/components/GameBoard/constants';
 import { ZONE_COUNT_CARDS_FIELD, ZONE_TABLE_NAME } from '@/components/GameBoard/Table/constants';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
+import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
+import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -83,13 +89,28 @@ export const setDropEventOnTableCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      if (<boolean>cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
+      if (
+        scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne() ||
+        dropZone.name === ZONE_TABLE_NAME
+      ) {
         return;
       }
-      console.log(dropZone.name);
+      if (dropZone.name === ENEMY_CARD) {
+        scene
+          .getSocket()
+          .emit(
+            TABLE_CARD_PLAY_CARD_TARGET,
+            cardContainer.getData(CARD_ID_FIELD),
+            dropZone.getData(CARD_ID_FIELD),
+          );
+      }
+      if (dropZone.name === ENEMY_PLAYER) {
+        scene.getSocket().emit(TABLE_CARD_PLAY_PLAYER_TARGET, cardContainer.getData(CARD_ID_FIELD));
+      }
       cardContainer.setData(CARD_IS_PLAYED_FIELD, true);
     },
   );
+
   cardContainer.removeListener('dragend');
   cardContainer.on(
     'dragend',
@@ -159,7 +180,6 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
-      console.log('first dragend');
       if (!dropped) {
         setStartDragCoordinates(cardContainer);
       } else {

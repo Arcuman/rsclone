@@ -2,6 +2,7 @@ export const NUMBER_OF_HAND_CARDS = 3;
 export const MAX_HEALTH = 10;
 export const START_MANA = 3;
 export const COUNTDOWN_SEC = 15;
+export const PLAYER_READY = 0;
 export const ONE_SEC = 1000;
 export const NO_SUCH_CARD_ERROR = 'NO SUCH CARD';
 
@@ -18,6 +19,7 @@ const TABLE_CARD_PLAY_PLAYER_TARGET = 'tableCardPlayTargerPlayer';
 const TABLE_CARD_PLAY_CARD_TARGET = 'tableCardPlayCardTarget';
 const PLAYER_DAMAGE = 'playerDamage';
 const TABLE_CARD_DAMAGE = 'tableCardDamage';
+const ENEMY_TABLE_CARD_DAMAGE = 'enemyTableCardDamage';
 const TABLE_CARD_DESTROY = 'tableCardDestroy';
 const CLOSE_SOCKET = 'closeSocket';
 const DISCONNECT = 'disconnect';
@@ -41,4 +43,5 @@ export {
   ALREADY_PLAY,
   DISCONNECT,
   INIT_STATE,
+  ENEMY_TABLE_CARD_DAMAGE,
 };

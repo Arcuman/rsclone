@@ -3,6 +3,7 @@ import { getPositionOfCard } from '@/components/Card/Card.services';
 import { Card } from '@/components/Card/Card.model';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { IMAGE_CARD_SIZE } from '@/components/Card/constants';
+import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 
 export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: boolean) {
   if (scene.getIsPlayerOne() !== isPlayerOne) {
@@ -14,7 +15,7 @@ export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: 
       card,
     });
     enemyCard.input.dropZone = true;
-    enemyCard.setName(card.id.toString());
+    enemyCard.setName(ENEMY_CARD);
     scene.getEnemyTableCards().push(enemyCard);
   }
 }

@@ -3,6 +3,8 @@ import { PositionInfo, AvatarPosition } from './Avatar.model';
 
 export const PLAYER_HEALTH_FIELD = 'PLAYER_HEALTH_FIELD';
 
+export const ENEMY_PLAYER = 'ENEMY_PLAYER';
+
 export const positionInfo: PositionInfo = {
   IMG_X: 0,
   IMG_Y: 0,

@@ -81,8 +81,6 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
   cardContainer.on(
     `changedata-${CARD_IS_PLAYED_FIELD}`,
     (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
-      // eslint-disable-next-line no-console
-      console.log('here');
       if (cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
         scene.input.setDraggable(cardContainer, false);
       } else {
