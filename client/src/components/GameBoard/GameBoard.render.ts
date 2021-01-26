@@ -9,8 +9,6 @@ import {
   createGameTableImg,
   createPlayerTableZone,
 } from '@/components/GameBoard/Table/Table.services';
-import { BOMB_IMAGE, BOOM_SPRITESHEET, FRAME_SIZE, TIMER, TIMER_LABEL, WICK_SPRITESHEET } from './constants';
-import { addTimerAlmostExpired, addTimerEndSprite, create } from './GameBoard.services';
 import {
   START_GAME,
   NEXT_TURN,
@@ -32,6 +30,10 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
+import { create } from './GameBoard.services';
+import { createTimer } from './Timer/Timer.render';
+import { addTimerAlmostExpiredSprite, addTimerEndSprite, setTimerBackground } from './Timer/Timer.services';
+import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -68,26 +70,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       active: false,
       visible: false,
     });
-  }
-
-  preload() {
-    this.load.spritesheet(
-      'boom',
-      BOOM_SPRITESHEET,
-      {
-        frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
-        frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
-        endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
-      });
-    this.load.spritesheet(
-      'wick',
-      WICK_SPRITESHEET,
-      {
-        frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
-        frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
-        endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
-      });
-    this.load.image('bomb', BOMB_IMAGE);
   }
 
   public getPlayerCards(): Phaser.GameObjects.Container[] {
@@ -154,7 +136,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       data.initState.enemy.name,
       data.initState.enemy.health,
     );
-    
+
     this.playerAvatar = createPlayerAvatar(this, data.initState.name, data.initState.health);
 
     this.playerMana = createPlayerMana(this, data.initState.currentMana);
@@ -166,23 +148,16 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     } else {
       this.input.setDraggable(this.playerCards, false);
     }
-    
-    this.timerLabel = this.add.text(
-      TIMER_LABEL.POSITION.POS_X,
-      TIMER_LABEL.POSITION.POS_Y,
-      TIMER_LABEL.DEFAULT_EMPTY_STRING,
-      {
-        fontSize: TIMER_LABEL.STYLE.FONT_SIZE,
-        fontFamily: TIMER_LABEL.STYLE.FONT_FAMILY,
-        color: TIMER_LABEL.STYLE.COLOR,
-      }).setOrigin(0.5);
+
+    setTimerBackground(this);
+    this.timerLabel = createTimer(this);
 
     this.socket.on(START_GAME, () => {});
-    
+
     this.socket.on(TIMER, (countDown: string | string[])=>{
-      if (+countDown === 5) {
-        addTimerAlmostExpired(this);
-      } else if (+countDown === 0) {
+      if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
+        addTimerAlmostExpiredSprite(this);
+      } else if (Number(countDown) === TIMER_COUNTDOWN.EXPIRED) {
         addTimerEndSprite(this);
       }
       this.timerLabel.setText(countDown);

@@ -1,55 +1,14 @@
-// export class TimerScene {
-//   scene: Phaser.Scene;
+import { SET_ORIGIN, TIMER_LABEL } from './constants';
 
-//   label: Phaser.GameObjects.Text;
-
-//   timerEvent: Phaser.Time.TimerEvent;
-
-//   duration = 0;
-
-//   /* finishedCallback: () => void; */
-
-//   constructor(scene: Phaser.Scene, label: Phaser.GameObjects.Text) {
-//     this.scene = scene;
-//     this.label = label;
-//   }
-
-//   start(callback?: () => void, duration = 45000) {
-//     this.stop();
-
-//     /* this.finishedCallback = callback; */
-//     this.duration = duration;
-
-//     this.timerEvent = this.scene.time.addEvent({
-//       delay: duration,
-//       callback: () => {
-//         this.label.text = '0';
-
-//         this.stop();
-
-//         if (callback) {
-//           callback();
-//         }
-//       },
-//     });
-//   }
-
-//   stop() {
-//     if (this.timerEvent) {
-//       this.timerEvent.destroy();
-//       /* this.timerEvent = undefined; */
-//     }
-//   }
-
-//   update() {
-//     if (!this.timerEvent || this.duration <= 0) {
-//       return;
-//     }
-
-//     const elapsed = this.timerEvent.getElapsed();
-//     const remaining = this.duration - elapsed;
-//     const seconds = remaining / 1000;
-
-//     this.label.text = seconds.toFixed(2);
-//   }
-// }
+export function createTimer(scene: Phaser.Scene): Phaser.GameObjects.Text {
+  const timerLabel = scene.add.text(
+    TIMER_LABEL.POSITION.POS_X,
+    TIMER_LABEL.POSITION.POS_Y,
+    TIMER_LABEL.DEFAULT_EMPTY_STRING,
+    {
+      fontSize: TIMER_LABEL.STYLE.FONT_SIZE,
+      fontFamily: TIMER_LABEL.STYLE.FONT_FAMILY,
+      color: TIMER_LABEL.STYLE.COLOR,
+    }).setOrigin(SET_ORIGIN.TIMER_LABEL_TEXT);
+  return timerLabel;
+}

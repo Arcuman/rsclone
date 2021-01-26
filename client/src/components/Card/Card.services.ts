@@ -157,6 +157,7 @@ export const getUserCards = async (): Promise<Card[]> => {
         return response.json();
       },
     )
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     .then((cards: Card[]): Card[] => cards)
     .catch(error => {
       throw new Error(error);
@@ -167,6 +168,6 @@ export const getUserCards = async (): Promise<Card[]> => {
 
 export const countCards = async (): Promise<number> => {
   const userCards = await getUserCards();
-  
+
   return userCards.length;
 };
