@@ -42,19 +42,15 @@ router
   .route('/:id')
   .get(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
-      console.log('herre', req.params.id);
       const userId = Number(req.params.id);
       if (!userId) {
-        console.log('3');
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
       const user = await usersService.getUserById(userId);
 
       if (!user) {
-        console.log('4');
         throw new ErrorHandler(HttpStatus.NOT_FOUND, statusCodes[HttpStatus.NOT_FOUND]);
       } else {
-        console.log('5');
         res.statusMessage = statusCodes[HttpStatus.OK].all;
         res.type('application/json').json(user).status(HttpStatus.OK).end();
       }
@@ -106,10 +102,8 @@ router
   .route('/:id/profile')
   .get(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
-      
       const userId =  Number(req.params.id);
-      console.log('us', userId);
-    
+   
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
@@ -118,8 +112,7 @@ router
       if (!profile) {
         throw new ErrorHandler(HttpStatus.NOT_FOUND, statusCodes[HttpStatus.NOT_FOUND]);
       } else {
-        console.log('2');
-        // res.statusMessage = statusCodes[HttpStatus.OK].all;
+        res.statusMessage = statusCodes[HttpStatus.OK].all;
         res.type('application/json').json(profile).status(HttpStatus.OK).end();
       }
       next();
