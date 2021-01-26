@@ -148,7 +148,7 @@ export const setClickableCard = (
 export const getUserCards = async (): Promise<Card[]> => {
   const requestInit = getRequestInit();
 
-  const cards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
+  const userCards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
     .then(
       (response): Promise<Card[]> => {
         if (response.status !== StatusCodes.OK) {
@@ -162,7 +162,7 @@ export const getUserCards = async (): Promise<Card[]> => {
       throw new Error(error);
     });
 
-  return cards;
+  return userCards;
 };
 
 export const countCards = async (): Promise<number> => {
