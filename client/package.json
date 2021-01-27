@@ -1,19 +1,12 @@
 {
-  "name": "webpack-boilerplate",
-  "version": "0.1.0",
-  "description": "Webpack react+typescript boilerplate",
+  "name": "client",
+  "version": "1.0.0",
+  "author": "Card Team",
+  "description": "Webpack+typescript and others",
   "main": "src/index.ts",
-  "author": "Alexey-Koren",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Alexey-Koren/webpack-boilerplate/issues"
-  },
   "browser": {
     "fs": false
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Alexey-Koren/webpack-boilerplate.git"
   },
   "scripts": {
     "start": "webpack-dev-server --open --hot -d",
