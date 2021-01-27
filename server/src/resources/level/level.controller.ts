@@ -1,8 +1,9 @@
-import {Level, levelModel} from '@/resources/level/level.model';
+import { Level, levelModel } from '@/resources/level/level.model';
 
 const getLevelById = (id: number): Promise<Level> => levelModel.getLevelById(id);
 
-const getLevelByLevelValue = (levelValue: number): Promise<Level> => levelModel.getLevelByLevelValue(levelValue);
+const getLevelByLevelValue = (levelValue: number): Promise<Level> =>
+  levelModel.getLevelByLevelValue(levelValue);
 
 const createLevel = async (data: Level): Promise<number> => {
   const levelId = await levelModel.setLevel(data);
@@ -14,7 +15,7 @@ const createLevel = async (data: Level): Promise<number> => {
 };
 
 const updateLevelById = async (id: number, data: Level): Promise<Level> => {
-  const level = await levelModel.updateCardById(id, data);
+  const level = await levelModel.updateLevelById(id, data);
   return level;
 };
 
