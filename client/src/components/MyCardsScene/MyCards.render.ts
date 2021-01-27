@@ -1,8 +1,10 @@
-import { createBaseCard } from '../Card/Card.render';
-import { setScalableCardInContainer, getUserCards } from '../Card/Card.services';
-import { AllCards } from './CardsInfo';
+import { createBaseCard } from '@/components/Card/Card.render';
+import { setScalableCardInContainer, getUserCards } from '@/components/Card/Card.services';
+import { Card } from '@/components/Card/Card.model';
+import { getUserDecks, setColoredDeck } from '@/components/Deck/Deck.services';
+import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
+import { Deck } from '@/components/Deck/Deck.model';
 import { cardsPosition,
-  decksPosition,
   cardsContainerPosition,
   decksContainerPosition,
   CARDS_POS_UP_Y,
@@ -12,24 +14,24 @@ import { cardsPosition,
   NUMBER_CARDS_IN_ROW,
   positionDeckName,
   positionDeckContainer,
+  NUMBER_CARDS_IN_DECK,
+  NAME_CARDS,
+  NAME_DECKS,
+  ZERO_POSITION_Y,
 } from './constants';
-import { CardsPosition, CardsContainerPosition } from './MyCards.model';
-import { Card } from '../Card/Card.model';
-import { getUserDecks, setColoredDeck } from '../Deck/Deck.services';
-import { createDeck, createDeckName } from '../Deck/Deck.render';
-import { Deck } from '../Deck/Deck.model';
+import { CardsPosition, CardsContainerPosition, IMyCardsScene} from './MyCards.model';
 import { setClickableDeck } from './MyCards.services';
 
 function getPositionY(index: number, name: string): number {
   const weightId = Math.floor(index/NUMBER_CARDS_IN_ROW);  
-  let posY = 0;
-  if (name === 'cards') {
+  let posY = ZERO_POSITION_Y;
+  if (name === NAME_CARDS) {
     if (weightId === 0 || weightId === 2) {
       posY = CARDS_POS_UP_Y;
     } else {
       posY = CARDS_POS_DOWN_Y;
     }
-  } else if (name === 'decks') {
+  } else if (name === NAME_DECKS) {
     posY = weightId*DECKS_OFFSET_Y;
   }
   
@@ -52,7 +54,7 @@ function getPositionX(index: number, cardsPositionInfo: CardsPosition): number {
 }
 
 const renderContainer = (
-  scene: Phaser.Scene,
+  scene: IMyCardsScene,
   name: string,  
   containerPosition: CardsContainerPosition,  
 ):Phaser.GameObjects.Container => { 
@@ -63,7 +65,7 @@ const renderContainer = (
 };
 
 const renderMyCards = (
-  scene: Phaser.Scene,
+  scene: IMyCardsScene,
   name: string,
   allCards: Card[],  
   cardsPositionInfo: CardsPosition,
@@ -85,12 +87,12 @@ const renderMyCards = (
 };
 
 const renderDeck = (
-  scene: Phaser.Scene, 
+  scene: IMyCardsScene, 
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ):void => { 
   userDecks.forEach(item => {
-    const userDeck = createDeck(scene, positionDeckContainer, 5);
+    const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
     setColoredDeck(lastCardInDeck);
 
@@ -99,30 +101,31 @@ const renderDeck = (
   
     decksContainer.add(userDeck);
     userDeck.add(userDeckName);
-  });
-  
+  });  
 };
 
-const getCardsInfo = async (scene: Phaser.Scene): Promise<void> => {
+const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
   if (!userCards) {
     throw new Error();
   }  
- 
+  scene.setUserCards(userCards);
+
+  const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition );
+  renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);  
+};
+
+const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userDecks = await getUserDecks();
   if (!userDecks) {
     throw new Error();
-  }
+  } 
   
-  const cardsContainer = renderContainer(scene, 'cards', cardsContainerPosition );
-  renderMyCards(scene, 'cards', userCards, cardsPosition, cardsContainer);
-
-  const decksContainer = renderContainer(scene, 'decks', decksContainerPosition );
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition );
   renderDeck(scene, userDecks, decksContainer);  
 };
 
-export const create = (scene: Phaser.Scene): void => {
-  getCardsInfo(scene);
-   
-  // renderMyCards(scene, 'decks', AllCards, decksContainerPosition, decksPosition); 
+export const create = (scene: IMyCardsScene): void => {
+  controlCardsInfo(scene);
+  controlDeckInfo(scene);  
 };

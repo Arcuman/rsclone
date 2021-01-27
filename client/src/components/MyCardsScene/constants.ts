@@ -1,6 +1,6 @@
 import { PositionText } from '@/types/types';
+import { PositionDeckContainer } from '@/components/Deck/Deck.model';
 import {CardsPosition, CardsContainerPosition} from './MyCards.model';
-import { PositionDeckContainer } from '../Deck/Deck.model';
 
 export const cardsContainerPosition: CardsContainerPosition = {
   CONTAINER_X: 135,
@@ -40,9 +40,11 @@ export const positionDeckName: PositionText = {
 
 export const CARDS_POS_UP_Y = 0;
 export const CARDS_POS_DOWN_Y = 155;
-
 export const DECKS_OFFSET_Y = 140;
-
 export const CARDS_SCALE = 0.7;
-
 export const NUMBER_CARDS_IN_ROW = 3;
+export const NUMBER_CARDS_IN_DECK = 5;
+export const NAME_CARDS = 'cards';
+export const NAME_DECKS = 'decks';
+export const ZERO_POSITION_Y = 0;
+export const TINT_VALUE_CLICK = 0x59503d;

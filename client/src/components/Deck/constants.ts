@@ -20,5 +20,6 @@ export const RATIO_OFFSET_Y = 0.9;
 export const SCALE_CARD_IN_DECK = 0.7;
 export const STANDART_NUMBER_CARD = 10;
 export const CHANGE_POSITION_DECK_Y = 50;
+export const TINT_VALUE = 0x9a8b6a;
 
 export const CARDS_COUNT_TEXT = 'Карт \nв колоде:';

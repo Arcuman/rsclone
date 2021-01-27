@@ -1,5 +1,6 @@
-import {Deck} from '../Deck/Deck.model';
-import {getUserDeckById} from '../Deck/Deck.services';
+import {Deck} from '@/components/Deck/Deck.model';
+import {getUserDeckById} from '@/components/Deck/Deck.services';
+import { TINT_VALUE_CLICK } from './constants';
 
 const openDeck = async (userDeck: Deck): Promise<void> => { 
   const userDeckData = await getUserDeckById(userDeck.user_deck_id);  
@@ -12,7 +13,7 @@ export const setClickableDeck = (
 ): void => {
   topCard.setInteractive();
   topCard.on('pointerdown', () => {
-    topCard.setTint(0x59503d);
+    topCard.setTint(TINT_VALUE_CLICK);
   });
   topCard.on('pointerup', () => {
     topCard.clearTint();
