@@ -12,7 +12,7 @@ export interface UserProfile {
   nickName: string;
   level: number;
   exp: number;
-  curr_user_deck_id: number;
+  cur_user_deck_id: number;
 }
 
 export interface Session {
@@ -97,7 +97,7 @@ const setUserProfile = async (data: UserProfile): Promise<number> => {
       data.nickName,
       data.level.toString(),
       data.exp.toString(),
-      data.curr_user_deck_id.toString(),
+      data.cur_user_deck_id.toString(),
     ]);
     return rowCount;
   } catch (error) {
@@ -123,7 +123,7 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
   let profile: UserProfile;
   try {
     const query =
-      'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, curr_user_deck_id=$5  ' +
+      'UPDATE "UserProfiles" Set "nickName"=$2, level=$3, exp=$4, cur_user_deck_id=$5  ' +
       'WHERE user_id=$1  RETURNING *';
     ({
       rows: [profile],
@@ -132,7 +132,7 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
       data.nickName,
       data.level.toString(),
       data.exp.toString(),
-      data.curr_user_deck_id.toString(),
+      data.cur_user_deck_id.toString(),
     ]));
   } catch (error) {
     throw new Error('500');
@@ -143,7 +143,7 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> => {
   try {
     const query =
-      'UPDATE "UserProfiles" Set curr_user_deck_id=$2 WHERE user_id=$1  RETURNING user_id';
+      'UPDATE "UserProfiles" Set cur_user_deck_id=$2 WHERE user_id=$1  RETURNING user_id';
     const { rowCount } = await db.query(query, [user_id.toString(), deck_id.toString()]);
     return rowCount;
   } catch (error) {

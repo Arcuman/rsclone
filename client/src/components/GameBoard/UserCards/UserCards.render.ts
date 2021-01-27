@@ -1,35 +1,25 @@
 import Phaser from 'phaser';
-import { cardBase } from '@/components/Card/Card.render';
-import { IMAGES } from '@/components/Game/constant';
+import { createPlayerHandCard } from '@/components/Card/Card.render';
+import { PLAYER_CARDS_POSITION } from '@/components/GameBoard/UserCards/constants';
+import { getPositionOfCard } from '@/components/Card/Card.services';
+import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { Card } from '@/components/Card/Card.model';
 
-function getPositionOfCard(scene: Phaser.Scene, index: number): number {
-  const gameWidth = scene.game.config.width;
-  const centerWidth: number = <number>gameWidth / 2;
-  let posX;
-  if (index % 2 === 0) {
-    posX = centerWidth - Math.ceil(index / 2) * (147 - 37);
-  } else {
-    posX = centerWidth + Math.ceil(index / 2) * (147 - 37);
-  }
-  return posX;
-}
-
 export function createPlayerCards(
-  scene: Phaser.Scene,
-  cards: Card[],
+  scene: IGameBoardScene,
+  playerCards: Card[],
 ): Phaser.GameObjects.Container[] {
   const enemyCards: Phaser.GameObjects.Container[] = [];
-  for (let i = 0; i < cards.length; i += 1) {
+  playerCards.forEach((card, i) => {
     const posX = getPositionOfCard(scene, i);
     enemyCards.push(
-      cardBase({
+      createPlayerHandCard({
         scene,
         posX,
-        posY: 620,
-        card: cards[i],
+        posY: PLAYER_CARDS_POSITION,
+        card,
       }),
     );
-  }
+  });
   return enemyCards;
 }

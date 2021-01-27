@@ -1,18 +1,38 @@
-/* eslint-disable */
+/* eslint-disable no-console */
 import Phaser from 'phaser';
 import { IMAGES, SCENES } from '@/components/Game/constant';
-import { GameState } from '@/components/GameBoard/GameBoard.model';
+import { GameState, IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { setBackground } from '@/utils/utils';
-import { TEXT_FIELD_NAME } from '@/components/GameBoard/UserAvatar/constants';
-import { cardBase } from '@/components/Card/Card.render';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
-import { createTable } from '@/components/GameBoard/Table/Table.render';
-import { create, createEnemyAvatar, createPlayerAvatar } from './GameBoard.services';
+import {
+  createGameTableImg,
+  createPlayerTableZone,
+} from '@/components/GameBoard/Table/Table.services';
+import {
+  START_GAME,
+  NEXT_TURN,
+  HAND_CARD_PLAY,
+  NEXT_ROUND,
+} from '@/components/GameBoard/constants';
+import {
+  getPositionOfCard,
+  setDraggableCardsDependOnPlayerMana,
+} from '@/components/Card/Card.services';
+import {
+  createEnemyAvatar,
+  createPlayerAvatar,
+} from '@/components/GameBoard/UserAvatar/Avatar.service';
+import { Card } from '@/components/Card/Card.model';
+import { createScalableCard } from '@/components/Card/Card.render';
+import { createPlayerMana } from '@/components/GameBoard/UserMana/UserMana.render';
+import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
+import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
+import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
+import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
+import { create } from './GameBoard.services';
 
-export class GameBoardScene extends Phaser.Scene {
-  private state: GameState;
-
+export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
 
   private isPlayerOne = false;
@@ -21,15 +41,23 @@ export class GameBoardScene extends Phaser.Scene {
 
   private playerAvatar: Phaser.GameObjects.Container;
 
-  private enemyHandCards: Phaser.GameObjects.Group;
-
   private enemyCards: Phaser.GameObjects.Container[] = [];
 
   private playerCards: Phaser.GameObjects.Container[] = [];
 
+  private playerTableCards: Phaser.GameObjects.Container[] = [];
+
+  private enemyTableCards: Phaser.GameObjects.Container[] = [];
+
   private playerTableZone: Phaser.GameObjects.Zone;
 
   private enemyTableZone: Phaser.GameObjects.Zone;
+
+  private gameTableImg: Phaser.GameObjects.Container;
+
+  private playerMana: Phaser.GameObjects.Container;
+
+  private endTurnButton: Phaser.GameObjects.Container;
 
   constructor() {
     super({
@@ -39,69 +67,100 @@ export class GameBoardScene extends Phaser.Scene {
     });
   }
 
+  public getPlayerCards(): Phaser.GameObjects.Container[] {
+    return this.playerCards;
+  }
+
+  public getEnemyCards(): Phaser.GameObjects.Container[] {
+    return this.enemyCards;
+  }
+
+  public getPlayerTableCards(): Phaser.GameObjects.Container[] {
+    return this.playerTableCards;
+  }
+
+  public getEnemyTableCards(): Phaser.GameObjects.Container[] {
+    return this.enemyTableCards;
+  }
+
+  public getSocket(): SocketIOClient.Socket {
+    return this.socket;
+  }
+
+  public getPlayerMana(): Phaser.GameObjects.Container {
+    return this.playerMana;
+  }
+
+  public getEndTurnButton(): Phaser.GameObjects.Container {
+    return this.endTurnButton;
+  }
+
+  public getPlayerTableZone(): Phaser.GameObjects.Zone {
+    return this.playerTableZone;
+  }
+
+  public getIsPlayerOne(): boolean {
+    return this.isPlayerOne;
+  }
+
+  public setPlayerMana(value: number): void {
+    this.playerMana.data.values[MANA_COUNT_FIELD] = value;
+  }
+
   create(data: {
-    gameState: GameState;
+    initState: GameState;
     socket: SocketIOClient.Socket;
     isPlayerOne: boolean;
   }): void {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
 
-    this.state = data.gameState;
+    create(this);
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
-    // eslint-disable-next-line no-console
-    console.log(this.state);
+    this.enemyCards = createEnemyCards(this, data.initState.enemy.countCards);
 
-    this.enemyCards = createEnemyCards(this, this.state.enemy.countCards);
+    this.playerCards = createPlayerCards(this, data.initState.handCards);
 
-    this.playerCards = createPlayerCards(this, this.state.handCards);
+    this.gameTableImg = createGameTableImg(this);
 
-    const gameWidth = <number>this.game.config.width;
-    const gameHeight = <number>this.game.config.height;
+    this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
-    const cardImg = IMAGES.GAME_BOARD.NAME;
-    const createGameTable = createTable({
-      scene: this,
-      posX: gameWidth / 2,
-      posY: gameHeight / 2,
-      img: cardImg,
+    this.enemyAvatar = createEnemyAvatar(
+      this,
+      data.initState.enemy.name,
+      data.initState.enemy.health,
+    );
+
+    this.playerAvatar = createPlayerAvatar(this, data.initState.name, data.initState.health);
+
+    this.playerMana = createPlayerMana(this, data.initState.currentMana);
+
+    this.endTurnButton = createEndTurnButton(this, data.initState.isPlayerOneTurn);
+
+    if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+      setDraggableCardsDependOnPlayerMana(this);
+    } else {
+      this.input.setDraggable(this.playerCards, false);
+    }
+
+    this.socket.on(START_GAME, () => {});
+
+    this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
+      if (this.isPlayerOne === isPlayerOneTurn) {
+        setDraggableCardsDependOnPlayerMana(this);
+      } else {
+        this.input.setDraggable(this.playerCards, false);
+      }
     });
-    this.playerTableZone = this.add
-      .zone(
-        gameWidth / 2,
-        gameHeight / 2 + ((createGameTable.height / 2) * 0.6) / 2,
-        createGameTable.width,
-        createGameTable.height / 2
-      )
-      .setRectangleDropZone(createGameTable.width * 0.6, (createGameTable.height / 2) * 0.6);
-    //
-    // const dropZoneOutline = this.add.graphics();
-    // dropZoneOutline.lineStyle(4, 0xff69b4);
-    // dropZoneOutline.strokeRect(this.playerTableZone.x - this.playerTableZone.input.hitArea.width / 2,
-    //   this.playerTableZone.y - this.playerTableZone.input.hitArea.height / 2,
-    //   this.playerTableZone.input.hitArea.width,
-    //   this.playerTableZone.input.hitArea.height);
 
-    this.enemyTableZone = this.add
-      .zone(
-        gameWidth / 2,
-        gameHeight / 2 - ((createGameTable.height / 2) * 0.6) / 2,
-        createGameTable.width,
-        createGameTable.height / 2
-      )
-      .setRectangleDropZone(createGameTable.width * 0.6, (createGameTable.height / 2) * 0.6);
-    // const enemydropZoneOutline = this.add.graphics();
-    // dropZoneOutline.lineStyle(4, 0xff69b4);
-    // dropZoneOutline.strokeRect(
-    //   this.enemyTableZone.x - this.enemyTableZone.input.hitArea.width / 2,
-    //   this.enemyTableZone.y - this.enemyTableZone.input.hitArea.height / 2,
-    //   this.enemyTableZone.input.hitArea.width,
-    //   this.enemyTableZone.input.hitArea.height);
+    this.socket.on(NEXT_ROUND, (maxMana: number) => {
+      this.setPlayerMana(maxMana);
+    });
 
-    this.enemyAvatar = createEnemyAvatar(this, this.state);
-    this.playerAvatar = createPlayerAvatar(this, this.state);
-
-    create(this);
+    this.socket.on(HAND_CARD_PLAY, (card: Card, isPlayerOne: boolean) => {
+      onHandCardPlay(this, card, isPlayerOne);
+    });
   }
 }

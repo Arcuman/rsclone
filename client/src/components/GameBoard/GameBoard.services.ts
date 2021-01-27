@@ -1,11 +1,4 @@
 import Phaser from 'phaser';
-import { setBackground } from '@/utils/utils';
-import { cardBase } from '@/components/Card/Card.render';
-import { GameState } from '@/components/GameBoard/GameBoard.model';
-import { IMAGES } from '../Game/constant';
-import { createAvatar } from './UserAvatar/Avatar.render';
-import { avatarPosition } from './UserAvatar/constants';
-import { createTable } from './Table/Table.render';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -33,8 +26,6 @@ function createConfig(
 }
 
 export function create(scene: Phaser.Scene): void {
-  const enemyCardsConfig = createConfig(640, 80, 600, 140, 0xff0022);
-  const playerCardsConfig = createConfig(640, 640, 600, 140, 0xff0011);
   const timer = createConfig(120, 360, 150, 150, 0xbb8c08);
   const endTurnButton = createConfig(1160, 360, 75, 75, 0xbbaa98);
   const playerMana = createConfig(220, 650, 200, 50, 0x005588);
@@ -83,41 +74,4 @@ export function create(scene: Phaser.Scene): void {
     enemyDeck.height,
     enemyDeck.color,
   );
-
-  const gameWidth = scene.game.config.width;
-  const gameHeight = scene.game.config.height;
-
-  const containerX: number = <number>gameWidth / 2;
-  const containerY: number = <number>gameHeight - 80;
-}
-
-export function createEnemyAvatar(
-  scene: Phaser.Scene,
-  state: GameState,
-): Phaser.GameObjects.Container {
-  const { ENEMY_X, ENEMY_Y } = avatarPosition;
-  const cardImg = IMAGES.AVATAR.NAME;
-  return createAvatar({
-    scene,
-    posX: ENEMY_X,
-    posY: ENEMY_Y,
-    card: cardImg,
-    userName: state.enemy.name.toString(),
-    health: state.enemy.health.toString(),
-  });
-}
-export function createPlayerAvatar(
-  scene: Phaser.Scene,
-  state: GameState,
-): Phaser.GameObjects.Container {
-  const { USER_X, USER_Y } = avatarPosition;
-  const cardImg = IMAGES.AVATAR.NAME;
-  return createAvatar({
-    scene,
-    posX: USER_X,
-    posY: USER_Y,
-    card: cardImg,
-    userName: state.name.toString(),
-    health: state.health.toString(),
-  });
 }

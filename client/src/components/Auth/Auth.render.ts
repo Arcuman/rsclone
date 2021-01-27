@@ -1,7 +1,7 @@
 import './auth.scss';
 import { createHtmlElement } from '@/utils/utils';
-import { authForm, AUTH_IMAGES } from './constants';
-import { handleLogin,  handleRegister } from './Auth.services';
+import { authForm } from './constants';
+import { handleLogin, handleRegister, buttonStyleClick } from './Auth.services';
 
 interface RenderFunction {
   (): HTMLElement;
@@ -21,14 +21,14 @@ const renderLoginForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
   form.appendChild(createHtmlElement('div', 'auth-message'));
   const inputWrapper = createHtmlElement('div', 'auth-input-wrapper');
-  
+
   inputWrapper.appendChild(renderFormField('login', 'text'));
   inputWrapper.appendChild(renderFormField('password', 'password'));
   form.appendChild(inputWrapper);
 
-  const buttonOk = <HTMLImageElement>createHtmlElement('img', 'button-ok');
-  buttonOk.src = AUTH_IMAGES.login;
-  buttonOk.addEventListener('click', () => handleLogin());
+  const buttonOk = <HTMLImageElement>createHtmlElement('button', 'button-enter');
+  buttonOk.addEventListener('mousedown', event => buttonStyleClick(event));
+  buttonOk.addEventListener('mouseup', event => handleLogin(event));
   form.appendChild(buttonOk);
 
   return form;
@@ -38,17 +38,17 @@ const renderRegisterForm = (): HTMLElement => {
   const form = createHtmlElement('div', 'auth-form');
   form.appendChild(createHtmlElement('div', 'auth-message'));
   const inputWrapper = createHtmlElement('div', 'auth-input-wrapper register');
-  
+
   inputWrapper.appendChild(renderFormField('name', 'text'));
   inputWrapper.appendChild(renderFormField('login', 'text'));
   inputWrapper.appendChild(renderFormField('password', 'password'));
   inputWrapper.appendChild(renderFormField('confirm-password', 'password'));
-  
+
   form.appendChild(inputWrapper);
- 
-  const buttonSend = <HTMLImageElement>createHtmlElement('img', 'button-ok');
-  buttonSend.src = AUTH_IMAGES.register;
-  buttonSend.addEventListener('click', () => handleRegister());
+
+  const buttonSend = <HTMLImageElement>createHtmlElement('button', 'button-send');
+  buttonSend.addEventListener('mousedown', event => buttonStyleClick(event));
+  buttonSend.addEventListener('mouseup', event => handleRegister(event));
   form.appendChild(buttonSend);
 
   return form;
@@ -61,13 +61,13 @@ const setCurrAuthForm = (event: Event) => {
   }
   const menuItemId = target.getAttribute('id');
   const menuItems = document.querySelector('.auth-menu')?.childNodes;
-  menuItems?.forEach(item =>{
-    const menuElement =  <HTMLElement>item;
-    menuElement.classList.remove('active') ;
+  menuItems?.forEach(item => {
+    const menuElement = <HTMLElement>item;
+    menuElement.classList.remove('active');
   });
- 
+
   target.classList.add('active');
- 
+
   document.querySelector('.auth-form')?.remove();
   const authWrapper = document.querySelector('.auth-wrapper');
 

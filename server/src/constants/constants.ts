@@ -1,10 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-export const EXPIRE_IN_TOKEN = 3600;
-// export const  ENV_NAME = '../remoute.env';
-export const ENV_NAME = '../.env.local';
-// export const  ENV_NAME = '../.env.local';
+export const EXPIRE_IN_TOKEN = 36;
+export const ENV_NAME = '../remoute.env';
+// export const ENV_NAME = '../.env.local';
 export const MAX_CARDS_IN_DECK = 10;
 export const INITIAL = 'Initial';
 export const INITIAL_LEVEL = 1;
@@ -29,4 +28,5 @@ export const ORIGINS_HOST = [
   'http://localhost:8080',
   'http://localhost:8081',
   'http://localhost:8082',
+  'http://localhost:8083',
 ];

@@ -104,10 +104,13 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const userData = req.body;
-    const userID = await usersService.setUser(req.body);
+
     if (!userData.login || !userData.password) {
       throw new Error();
     }
+
+    const userID = await usersService.setUser(userData);
+
     if (userID === 0) {
       res.status(ERR_LOGIN_EXIST.status).send(ERR_LOGIN_EXIST.message);
       return;

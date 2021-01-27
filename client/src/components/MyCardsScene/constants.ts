@@ -1,4 +1,6 @@
+import { PositionText } from '@/types/types';
 import {CardsPosition, CardsContainerPosition} from './MyCards.model';
+import { PositionDeckContainer } from '../Deck/Deck.model';
 
 export const cardsContainerPosition: CardsContainerPosition = {
   CONTAINER_X: 135,
@@ -26,8 +28,18 @@ export const decksPosition: CardsPosition = {
   REDUCE_ID_3: 9,  
 };
 
+export const positionDeckContainer: PositionDeckContainer = {
+  IMG_X: 10,
+  IMG_Y:10,
+};
+
+export const positionDeckName: PositionText = {  
+  TEXT_X:-30,
+  TEXT_Y: 70,
+};
+
 export const CARDS_POS_UP_Y = 0;
-export const CARDS_POS_DOWN_Y = 160;
+export const CARDS_POS_DOWN_Y = 155;
 
 export const DECKS_OFFSET_Y = 140;
 

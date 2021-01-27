@@ -9,3 +9,8 @@ export const tablePositionInfo: TablePositionInfo = {
   SHADOW_ALPHA: 0.6,
   TABLE_CONTAINER_SCALE: 0.7,
 };
+
+export const DROP_ZONE_HIEGHT_OFFSET = 20;
+export const DROP_ZONE_WIDTH_OFFSET = 50;
+export const ZONE_COUNT_CARDS_FIELD = 'ZONE_COUNT_CARDS_FIELD';
+export const ZONE_COUNT_CARDS_FIELD_INIT = 0;

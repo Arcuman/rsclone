@@ -37,7 +37,7 @@ const createInitialUserData = async (userId: number, name: string): Promise<void
     nickName: name,
     level: INITIAL_LEVEL,
     exp: INITIAL_EXP,
-    curr_user_deck_id: deckId,
+    cur_user_deck_id: deckId,
   };
 
   const rowCount = await usersModel.setUserProfile(profile);

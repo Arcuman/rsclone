@@ -99,10 +99,11 @@ router
   );
 
 router
-  .route('/profile')
+  .route('/profile/:id')
   .get(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
       const userId = Number(req.params.id);
+
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
