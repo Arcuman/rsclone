@@ -57,7 +57,7 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
     )
     .then(async (userProfileData: UserProfile) => {
       const levelInfo: Level = await getLevelInfo(userProfileData.level_id);
-      return {...userProfileData, level:levelInfo.level};
+      return { ...userProfileData, level: levelInfo.level };
     })
     .catch(error => {
       throw new Error(error);
@@ -121,9 +121,9 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  const userCurrDeck = createDeck(scene, positionDeckContainer); 
+  const userCurrDeck = createDeck(scene, positionDeckContainer);
   const userCurrDeckName = createDeckName(scene, userCurrDeckInfo, positionDeckText);
-  const userCurrDeckNumber =createDeckInfo(scene, userCurrDeckInfo);
+  const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
   userCurrDeck.add(userCurrDeckName);
   userCurrDeck.add(userCurrDeckNumber);
 
@@ -134,7 +134,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textUserExp,
     textUserCards,
     textCurrDeck,
-    userCurrDeck,    
+    userCurrDeck,
   ];
 
   scene.add.container(0, 0, userInfoBLock);
