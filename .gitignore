@@ -8,3 +8,5 @@ build/
 .env
 .env.local
 remoute.env
+logs
+debug.log

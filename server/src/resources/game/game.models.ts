@@ -1,7 +1,7 @@
 import { Card } from '@/resources/card/card.model';
 
-export interface SocketQuery{
-  token : string;
+export interface SocketQuery {
+  token: string;
 }
 
 export interface GameState {

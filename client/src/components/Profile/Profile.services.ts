@@ -3,12 +3,13 @@ import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
-import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
-import { createDeck } from '@/components/Deck/Deck.render';
+import { getUserDeckById } from '@/components/Deck/Deck.services';
+import { createDeck, createDeckInfo, createDeckName } from '@/components/Deck/Deck.render';
+import { positionDeckContainer } from '@/components/Deck/constants';
 import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
-import {countCards, getUserCards} from '@/components/Card/Card.services';
+import { countCards } from '@/components/Card/Card.services';
 import {
   textDecoration,
   positionInfo,
@@ -17,14 +18,35 @@ import {
   USER_PROFILE_INFO,
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
+  positionDeckText,
 } from './constants';
-import { UserProfile } from './Profile.model';
+import { UserProfile, Level } from './Profile.model';
+
+const getLevelInfo = async (levelId: number): Promise<Level> => {
+  const requestInit = getRequestInit();
+
+  const level = await fetch(`${API_INFO_URLS.level}/${levelId}`, requestInit)
+    .then(
+      (response): Promise<Level> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
+    .then((levelData: Level) => levelData)
+    .catch(error => {
+      throw new Error(error);
+    });
+
+  return level;
+};
 
 const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
   const requestInit = getRequestInit();
 
-  const user = await fetch(`${API_INFO_URLS.userProfile}/${userId}`, requestInit)
+  const user = await fetch(`${API_INFO_URLS.users}/${userId}/profile`, requestInit)
     .then(
       (response): Promise<UserProfile> => {
         if (response.status !== StatusCodes.OK) {
@@ -33,7 +55,10 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
         return response.json();
       },
     )
-    .then((userProfileData: UserProfile) => userProfileData)
+    .then(async (userProfileData: UserProfile) => {
+      const levelInfo: Level = await getLevelInfo(userProfileData.level_id);
+      return {...userProfileData, level:levelInfo.level};
+    })
     .catch(error => {
       throw new Error(error);
     });
@@ -62,11 +87,12 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textDecoration,
   );
 
+  const level = user.level ? user.level.toString() : '';
   const textUserLevel: Phaser.GameObjects.Text = createTextData(
     scene,
     positionInfo.TEXT_X,
     positionInfo.TEXT_Y + HEIGHT_OFFSET,
-    `${USER_PROFILE_INFO.level} ${user.level.toString()}`,
+    `${USER_PROFILE_INFO.level} ${level}`,
     textDecoration,
   );
 
@@ -95,7 +121,11 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  const userCurrDeck = createDeck(scene, userCurrDeckInfo);
+  const userCurrDeck = createDeck(scene, positionDeckContainer); 
+  const userCurrDeckName = createDeckName(scene, userCurrDeckInfo, positionDeckText);
+  const userCurrDeckNumber =createDeckInfo(scene, userCurrDeckInfo);
+  userCurrDeck.add(userCurrDeckName);
+  userCurrDeck.add(userCurrDeckNumber);
 
   const userInfoBLock = [
     userInfoBgr,
@@ -104,7 +134,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textUserExp,
     textUserCards,
     textCurrDeck,
-    userCurrDeck,
+    userCurrDeck,    
   ];
 
   scene.add.container(0, 0, userInfoBLock);

@@ -41,3 +41,8 @@ export interface ShadowOptions {
   TINT: number;
   ALPHA: number;
 }
+
+export interface PositionText {
+  TEXT_X: number;
+  TEXT_Y: number;
+}

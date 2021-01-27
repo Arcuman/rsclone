@@ -10,9 +10,7 @@ export interface Deck {
   cards?: Card[];
 }
 
-export interface PositionInfo {
+export interface PositionDeckContainer {
   IMG_X: number;
-  IMG_Y: number;
-  TEXT_X: number;
-  TEXT_Y: number;
+  IMG_Y: number;  
 }

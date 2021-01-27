@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title:  Card Game
-  description: card game with heroes and magic
+  description: Card game with heroes and magic
   version: 1.0.0
 
 servers:
@@ -18,7 +18,23 @@ components:
           type: string
         login:
           type: string
+    UserProfile:
+      type: object
+      properties:
+        profile_id:
+          type: integer
+        user_id:
+          type: integer
+        nickName:
+          type: string
+        level_id:
+          type: integer
+        exp:
+          type: integer
+        cur_user_deck_id:
+          type: integer
     Deck:
+      type: object
       properties:
         user_deck_id:
           type: integer
@@ -34,9 +50,23 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Card"
+    DeckInfo:
+      type: object
+      properties:
+        user_deck_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+        isinitial:
+          type: boolean
+        cards_count:
+          type: integer
     Card:
       required:
         - title
+      type: object
       properties:
         id:
           type: integer
@@ -54,6 +84,18 @@ components:
           type: boolean
         image:
           type: string
+    Level:
+      type: object
+      properties:
+        level_id:
+          type: integer
+        level:
+          type: integer
+        exp_to_lvl:
+          type: integer
+        exp_total:
+          type: integer
+          
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -140,6 +182,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+        400:
+          description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -191,20 +235,28 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User not found
-  /users/profile:
+  /users/{userId}/profile:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       tags:
         - Users
       summary: Get user profile
-      description: Gets a user by ID
-        e.g. “/users/123” (remove password from response)
+      description: Gets a user profile by user ID
+        e.g. “/users/123/profile”
       responses:
         200:
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserProfile"
+        400:
+          description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -212,8 +264,8 @@ paths:
     put:
       tags:
         - Users
-      summary: Update a user
-      description: Updates a user by ID
+      summary: Update  user's profile
+      description: Updates user's profile
       requestBody:
         required: true
         content:
@@ -222,24 +274,21 @@ paths:
               type: object
               title: example
               properties:
-                name:
+                nickName:
                   type: string
-                  description: The user's name
-                login:
-                  type: string
-                  description: The user's login
-                password:
-                  type: string
-                  description: The user's password
-              required:
-                - name
+                level_id:
+                  type: integer
+                exp:
+                  type: integer
+                cur_user_deck_id:
+                  type: integer
       responses:
         200:
-          description: The user has been updated.
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserProfile"
         400:
           description: Bad request
         401:
@@ -258,7 +307,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Deck"
+                  $ref: "#/components/schemas/DeckInfo"
         401:
           $ref: '#/components/responses/UnauthorizedError'
     post:
@@ -320,6 +369,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Deck"
+        400:
+          description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -482,6 +533,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Card"
+        400:
+          description: Bad request
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -551,6 +604,32 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Card not found
+  /level/{levelId}:
+    parameters:
+      - name: levelId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Level
+      summary: Get level by ID
+      description: Gets a level by ID
+        e.g. “/level/123”
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Level"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Level not found
   /login:
     post:
       tags:

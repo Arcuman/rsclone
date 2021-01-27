@@ -1,8 +1,9 @@
 import { Deck } from '@/components/Deck/Deck.model';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
+import { TINT_VALUE } from './constants';
 
-export const getUserDeckById = async (deckId: number):Promise<Deck> => {
+export const getUserDeckById = async (deckId: number): Promise<Deck> => {
   const requestInit = getRequestInit();
 
   const userDeck = await fetch(`${API_INFO_URLS.userDeck}/${deckId}`, requestInit)
@@ -41,3 +42,19 @@ export const getUserDecks = async (): Promise<Deck[]> => {
 
   return userDecks;
 };
+
+export const setColoredDeck = (  
+  topCard: Phaser.GameObjects.Sprite,  
+): void => {
+  topCard.setInteractive();
+  topCard.removeListener('pointerover');
+  topCard.on('pointerover', () => {    
+    topCard.setTint(TINT_VALUE);
+  });
+
+  topCard.removeListener('pointerout');
+  topCard.on('pointerout', () => {
+    topCard.clearTint();     
+  });
+};
+

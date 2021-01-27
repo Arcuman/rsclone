@@ -64,7 +64,7 @@ const updateDeckById = async (id: number, data: Deck): Promise<Deck> => {
 
   await decksModel.deleteDeckCards(id);
   await decksModel.updateDeckById(id, data);
-  const cardsCount = await decksModel.setDeckCards(id, data.cards!);
+  await decksModel.setDeckCards(id, data.cards!);
 
   return getDeckByIdCards(id);
 };

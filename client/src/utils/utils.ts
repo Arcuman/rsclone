@@ -8,7 +8,7 @@ export function deleteOldMain(): void {
   }
 }
 
-export function setBackground(game: Phaser.Scene, backgroundPath: string) {
+export function setBackground(game: Phaser.Scene, backgroundPath: string): void {
   const image = game.add.image(
     game.cameras.main.width / 2,
     game.cameras.main.height / 2,

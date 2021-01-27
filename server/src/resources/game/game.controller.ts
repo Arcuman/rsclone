@@ -8,7 +8,8 @@ import {
   CLOSE_SOCKET,
   DISCONNECT,
   HAND_CARD_PLAY,
-  NEXT_TURN, ONE_SEC,
+  NEXT_TURN,
+  ONE_SEC,
   OPPONENT_FOUND,
   START_GAME,
   TABLE_CARD_PLAY_CARD_TARGET,
@@ -22,7 +23,7 @@ import { handCardPlay } from '@/resources/game/servicies/handCardPlay.service';
 import { tableCardPlayTargetPlayer } from '@/resources/game/servicies/tableCardPlayTargerPlayer.service';
 import { tableCardPlayTargetCard } from '@/resources/game/servicies/tableCardPlayTargerCard.service';
 import { webToken } from '@/helpers/webToken';
-import {SocketQuery} from '@/resources/game/game.models';
+import { SocketQuery } from '@/resources/game/game.models';
 
 function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
   return rooms.some(room => room.players.some(player => player.userId === userId));
@@ -31,7 +32,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>,
+  rooms: Array<Room>
 ): Promise<void> {
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {
@@ -48,10 +49,6 @@ export default async function gameLogic(
   if (openRoom.players.length === 2) {
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
-    setTimeout(() => {
-      io.to(openRoom.id).emit(START_GAME);
-      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
-    }, 1000);
   } else {
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
@@ -67,6 +64,14 @@ export default async function gameLogic(
   });
   player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId: number, targetId: number) => {
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
+  });
+
+  player.socket.on(START_GAME, () => {
+    openRoom.playersReady += 1;
+    if (openRoom.playersReady === 2) {
+      io.to(openRoom.id).emit(START_GAME);
+      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
+    }
   });
 
   player.socket.on(CLOSE_SOCKET, () => closeSocket(openRoom, rooms, player));

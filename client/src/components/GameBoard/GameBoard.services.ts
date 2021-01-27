@@ -1,11 +1,6 @@
 import Phaser from 'phaser';
-import { setBackground } from '@/utils/utils';
-import { cardBase } from '@/components/Card/Card.render';
-import { GameState } from '@/components/GameBoard/GameBoard.model';
-import { IMAGES } from '../Game/constant';
-import { createAvatar } from './UserAvatar/Avatar.render';
-import { avatarPosition } from './UserAvatar/constants';
-import { createTable } from './Table/Table.render';
+import { Card } from '@/components/Card/Card.model';
+import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -78,4 +73,18 @@ export function create(scene: Phaser.Scene): void {
     enemyDeck.height,
     enemyDeck.color,
   );
+}
+
+export function damageCard(cards: Phaser.GameObjects.Container[], damagedCard: Card): void {
+  cards
+    .find(card => <number>card.getData(CARD_ID_FIELD) === damagedCard.id)!
+    .setData(CARD_HEALTH_FIELD, damagedCard.health);
+}
+export function destroyCard(cards: Phaser.GameObjects.Container[], destroyedCard: Card) {
+  cards
+    .splice(
+      cards.findIndex(card => <number>card.getData(CARD_ID_FIELD) === destroyedCard.id),
+      1,
+    )[0]
+    .destroy();
 }
