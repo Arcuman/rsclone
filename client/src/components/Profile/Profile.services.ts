@@ -9,7 +9,7 @@ import { positionDeckContainer } from '@/components/Deck/constants';
 import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
-import {countCards } from '@/components/Card/Card.services';
+import { countCards } from '@/components/Card/Card.services';
 import {
   textDecoration,
   positionInfo,
@@ -26,7 +26,7 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
   const requestInit = getRequestInit();
 
-  const user = await fetch(`${API_INFO_URLS.userProfile}/${userId}`, requestInit)
+  const user = await fetch(`${API_INFO_URLS.users}/${userId}/profile`, requestInit)
     .then(
       (response): Promise<UserProfile> => {
         if (response.status !== StatusCodes.OK) {
@@ -68,7 +68,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     scene,
     positionInfo.TEXT_X,
     positionInfo.TEXT_Y + HEIGHT_OFFSET,
-    `${USER_PROFILE_INFO.level} ${user.level.toString()}`,
+    `${USER_PROFILE_INFO.level} ${user.level_id.toString()}`,
     textDecoration,
   );
 

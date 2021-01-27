@@ -3,7 +3,7 @@ import { Player } from '@/resources/game/player/player.model';
 import { Server } from 'socket.io';
 import { getEnemyPlayer } from '@/resources/game/room/room.service';
 import { getCardById } from '@/resources/game/player/player.service';
-import { PLAYER_DAMAGE } from '@/resources/game/constants';
+import { PLAYER_DAMAGE, PLAYER_WIN } from '@/resources/game/constants';
 
 export function tableCardPlayTargetPlayer(
   cardId: number,
@@ -16,4 +16,7 @@ export function tableCardPlayTargetPlayer(
   const attack = playerCard.attack || 0;
   enemy.health -= attack;
   io.to(openRoom.id).emit(PLAYER_DAMAGE, enemy.health, openRoom.isPlayerOneTurn);
+  if (enemy.health <= 0) {
+    io.to(openRoom.id).emit(PLAYER_WIN, openRoom.isPlayerOneTurn);
+  }
 }

@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import { Card } from '@/components/Card/Card.model';
+import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 
 export function preload(this: Phaser.Scene): void {}
 
@@ -74,4 +76,18 @@ export function create(scene: Phaser.Scene): void {
     enemyDeck.height,
     enemyDeck.color,
   );
+}
+
+export function damageCard(cards: Phaser.GameObjects.Container[], damagedCard: Card): void {
+  cards
+    .find(card => <number>card.getData(CARD_ID_FIELD) === damagedCard.id)!
+    .setData(CARD_HEALTH_FIELD, damagedCard.health);
+}
+export function destroyCard(cards: Phaser.GameObjects.Container[], destroyedCard: Card) {
+  cards
+    .splice(
+      cards.findIndex(card => <number>card.getData(CARD_ID_FIELD) === destroyedCard.id),
+      1,
+    )[0]
+    .destroy();
 }

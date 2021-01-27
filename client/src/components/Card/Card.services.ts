@@ -3,10 +3,16 @@ import Phaser from 'phaser';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
-import { HAND_CARD_PLAY } from '@/components/GameBoard/constants';
-import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
+import {
+  HAND_CARD_PLAY,
+  TABLE_CARD_PLAY_CARD_TARGET,
+  TABLE_CARD_PLAY_PLAYER_TARGET,
+} from '@/components/GameBoard/constants';
+import { ZONE_COUNT_CARDS_FIELD, ZONE_TABLE_NAME } from '@/components/GameBoard/Table/constants';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
+import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
+import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -16,6 +22,7 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
+  CARD_IS_PLAYED_FIELD,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -80,6 +87,12 @@ export const setDraggableCardsDependOnPlayerMana = (scene: IGameBoardScene): voi
     }
   });
 };
+export const activateTableCards = (scene: IGameBoardScene): void => {
+  scene.getPlayerTableCards().forEach(card => {
+    scene.input.setDraggable(card);
+    card.setData(CARD_IS_PLAYED_FIELD, false);
+  });
+};
 
 const setStartDragCoordinates = (cardContainer: Phaser.GameObjects.Container): void => {
   const gameObjectParameters = cardContainer;
@@ -87,7 +100,46 @@ const setStartDragCoordinates = (cardContainer: Phaser.GameObjects.Container): v
   gameObjectParameters.y = cardContainer.input.dragStartY;
 };
 
-export const setDropOnHandCard = (
+export const setDropEventOnTableCard = (
+  scene: IGameBoardScene,
+  cardContainer: Phaser.GameObjects.Container,
+): void => {
+  cardContainer.removeListener('drop');
+  cardContainer.on(
+    'drop',
+    (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
+      if (
+        scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne() ||
+        dropZone.name === ZONE_TABLE_NAME
+      ) {
+        return;
+      }
+      if (dropZone.name === ENEMY_CARD) {
+        scene
+          .getSocket()
+          .emit(
+            TABLE_CARD_PLAY_CARD_TARGET,
+            cardContainer.getData(CARD_ID_FIELD),
+            dropZone.getData(CARD_ID_FIELD),
+          );
+      }
+      if (dropZone.name === ENEMY_PLAYER) {
+        scene.getSocket().emit(TABLE_CARD_PLAY_PLAYER_TARGET, cardContainer.getData(CARD_ID_FIELD));
+      }
+      cardContainer.setData(CARD_IS_PLAYED_FIELD, true);
+    },
+  );
+
+  cardContainer.removeListener('dragend');
+  cardContainer.on(
+    'dragend',
+    (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
+      setStartDragCoordinates(cardContainer);
+    },
+  );
+};
+
+export const setDropEventOnHandCard = (
   scene: IGameBoardScene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
@@ -96,6 +148,10 @@ export const setDropOnHandCard = (
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
       if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+        setStartDragCoordinates(cardContainer);
+        return;
+      }
+      if (dropZone.name !== ZONE_TABLE_NAME) {
         setStartDragCoordinates(cardContainer);
         return;
       }
@@ -145,6 +201,8 @@ export const setDraggableCard = (
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
       if (!dropped) {
         setStartDragCoordinates(cardContainer);
+      } else {
+        setDropEventOnTableCard(scene, cardContainer);
       }
     },
   );
@@ -168,7 +226,7 @@ export const setClickableCard = (
 export const getUserCards = async (): Promise<Card[]> => {
   const requestInit = getRequestInit();
 
-  const cards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
+  const userCards = await fetch(`${API_INFO_URLS.cards}`, requestInit)
     .then(
       (response): Promise<Card[]> => {
         if (response.status !== StatusCodes.OK) {
@@ -182,11 +240,11 @@ export const getUserCards = async (): Promise<Card[]> => {
       throw new Error(error);
     });
 
-  return cards;
+  return userCards;
 };
 
 export const countCards = async (): Promise<number> => {
   const userCards = await getUserCards();
-  
+
   return userCards.length;
 };

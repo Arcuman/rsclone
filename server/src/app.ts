@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from 'express';
-
 import cors from 'cors';
 import passport from 'passport';
 import { HTTP_HEADERS, ORIGINS_HOST } from '@/constants/constants';
@@ -9,6 +8,7 @@ import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
 import { returnError, ErrorHandler } from '@/helpers/errorHandler';
+import { morgan, morganFormat, LoggerStream } from '@/helpers/logger';
 import { authRouter, authenticate } from './resources/auth/auth.router';
 import { router } from './resources/users/user.router';
 
@@ -19,6 +19,12 @@ app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(passport.initialize());
+app.use(
+  morgan(morganFormat, {
+    stream: new LoggerStream(),
+  })
+);
+
 app.use((req, res, next) => {
   HTTP_HEADERS.forEach(resHeader => {
     res.setHeader(resHeader[0], resHeader[1]);

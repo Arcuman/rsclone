@@ -3,6 +3,7 @@ import { webToken } from '@/helpers/webToken';
 import { MAX_CARDS_IN_DECK, INITIAL, INITIAL_LEVEL, INITIAL_EXP } from '@/constants/constants';
 import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
+import { levelService } from '@/resources/level/level.controller';
 import statusCodes from './user.constants';
 import { usersModel, User, Session, UserProfile } from './user.model';
 
@@ -32,10 +33,12 @@ const createInitialUserData = async (userId: number, name: string): Promise<void
     throw new Error(statusCodes[400].initialDeck);
   }
 
+  const level = await levelService.getLevelByLevelValue(INITIAL_LEVEL);
+
   const profile = {
     user_id: userId,
     nickName: name,
-    level: INITIAL_LEVEL,
+    level_id: level.level_id,
     exp: INITIAL_EXP,
     cur_user_deck_id: deckId,
   };

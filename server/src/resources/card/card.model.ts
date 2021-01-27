@@ -16,7 +16,7 @@ export async function getUserDeckCards(userId: number): Promise<Array<Card>> {
   const {
     rows,
   } = await db.query(
-    'select "Cards".card_id, "isActive", name, attack, manacost, health, image \n' +
+    'select "Cards".card_id, "isActive", name, attack, "manaCost", health, image \n' +
       'from "Cards" join (\n' +
       '"UserDeckCards" join "UserProfiles" on \n' +
       '"UserProfiles".cur_user_deck_id = "UserDeckCards".user_deck_id\n' +
@@ -24,13 +24,13 @@ export async function getUserDeckCards(userId: number): Promise<Array<Card>> {
       'where "UserProfiles".user_id = $1',
     [userId]
   );
-  rows.forEach(({ card_id, isActive, name, attack, manacost, health, image }) => {
+  rows.forEach(({ card_id, isActive, name, attack, manaCost, health, image }) => {
     cards.push({
       id: <number>card_id,
       isActive: <boolean>isActive,
       name: <string>name,
       health: <number>health,
-      manaCost: <number>manacost,
+      manaCost: <number>manaCost,
       attack: <number>attack,
       image: <string>image,
     });
@@ -74,7 +74,7 @@ const getCardById = async (id: number): Promise<Card> => {
   try {
     ({
       rows: [card],
-    } = await db.query('Select * from "Cards" Where card_id=$1', [id]));
+    } = await db.query('Select * from "Cards"  Where card_id=$1', [id]));
   } catch (error) {
     throw new Error('500');
   }
@@ -88,7 +88,7 @@ const getInitialCards = async (count: number): Promise<Card[]> => {
   try {
     const {
       rows,
-    } = await db.query('Select *, card_id as id From "Cards" Where isinitial=true LIMIT $1 ', [
+    } = await db.query('Select *, card_id as id from "Cards" Where isinitial=true LIMIT $1 ', [
       count,
     ]);
     cards = rows;
@@ -105,7 +105,6 @@ const deleteCardById = async (id: number): Promise<number> => {
   } catch (error) {
     throw new Error('500');
   }
-  return 0;
 };
 
 const setCard = async (data: Card): Promise<number> => {
@@ -115,7 +114,7 @@ const setCard = async (data: Card): Promise<number> => {
 
   try {
     const query =
-      'INSERT INTO "Cards" ("isActive", name, attack, manacost, health, isinitial, image) ' +
+      'INSERT INTO "Cards" ("isActive", name, attack, "manaCost", health, isinitial, image) ' +
       'VALUES ($1, $2,$3,$4,$5,$6,$7 ) RETURNING card_id as id';
 
     ({
@@ -143,7 +142,7 @@ const setUserCard = async (cards: Card[], user_id: number): Promise<boolean> => 
   const cardsUsersPairs = cards
     .reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '')
     .slice(1);
-
+  console.log(cardsUsersPairs);
   try {
     const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
     const { rowCount } = await db.query(query, []);
@@ -161,7 +160,7 @@ const updateCardById = async (id: number, data: Card): Promise<Card> => {
 
   try {
     const query =
-      'UPDATE "Cards" Set "isActive"=$2, name=$3, attack=$4, manacost=$5, health=$6, isinitial=$7, image=$8 ' +
+      'UPDATE "Cards" Set "isActive"=$2, name=$3, attack=$4, "manaCost"=$5, health=$6, isinitial=$7, image=$8 ' +
       'WHERE card_id=$1  RETURNING *';
 
     ({

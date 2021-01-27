@@ -18,6 +18,21 @@ components:
           type: string
         login:
           type: string
+    UserProfile:
+      type: object
+      properties:
+        profile_id:
+          type: integer
+        user_id:
+          type: integer
+        nickName:
+          type: string
+        level:
+          type: integer
+        exp:
+          type: integer
+        cur_user_deck_id:
+          type: integer
     Deck:
       properties:
         user_deck_id:
@@ -34,6 +49,18 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Card"
+    DeckInfo:
+      properties:
+        user_deck_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+        isinitial:
+          type: boolean
+        cards_count:
+          type: integer
     Card:
       required:
         - title
@@ -54,6 +81,7 @@ components:
           type: boolean
         image:
           type: string
+          
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -191,7 +219,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User not found
-  /users/profile:
+  /users/{userId}/profile:
     get:
       tags:
         - Users
@@ -204,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserProfile"
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -212,8 +240,8 @@ paths:
     put:
       tags:
         - Users
-      summary: Update a user
-      description: Updates a user by ID
+      summary: Update  user's profile
+      description: Updates user's profile
       requestBody:
         required: true
         content:
@@ -222,24 +250,21 @@ paths:
               type: object
               title: example
               properties:
-                name:
+                nickName:
                   type: string
-                  description: The user's name
-                login:
-                  type: string
-                  description: The user's login
-                password:
-                  type: string
-                  description: The user's password
-              required:
-                - name
+                level:
+                  type: integer
+                exp:
+                  type: integer
+                cur_user_deck_id:
+                  type: integer
       responses:
         200:
-          description: The user has been updated.
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserProfile"
         400:
           description: Bad request
         401:
@@ -258,7 +283,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Deck"
+                  $ref: "#/components/schemas/DeckInfo"
         401:
           $ref: '#/components/responses/UnauthorizedError'
     post:

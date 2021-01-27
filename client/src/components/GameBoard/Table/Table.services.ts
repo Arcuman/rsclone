@@ -7,6 +7,7 @@ import {
   tablePositionInfo,
   ZONE_COUNT_CARDS_FIELD,
   ZONE_COUNT_CARDS_FIELD_INIT,
+  ZONE_TABLE_NAME,
 } from '@/components/GameBoard/Table/constants';
 
 export function createGameTableImg(scene: Phaser.Scene): Phaser.GameObjects.Container {
@@ -43,6 +44,7 @@ export function createPlayerTableZone(
       tableHalfHeight * tablePositionInfo.TABLE_CONTAINER_SCALE - DROP_ZONE_HIEGHT_OFFSET,
     );
   zone.setData(ZONE_COUNT_CARDS_FIELD, ZONE_COUNT_CARDS_FIELD_INIT);
+  zone.setName(ZONE_TABLE_NAME);
   const dropZoneOutline = scene.add.graphics();
   dropZoneOutline.lineStyle(4, 0xff69b4);
   dropZoneOutline.strokeRect(

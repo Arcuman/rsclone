@@ -51,7 +51,7 @@ const getDeckCards = async (deck_id: number): Promise<Card[]> => {
       rows: cards,
     } = await db.query(
       'Select "Cards".card_id as id,  "Cards".name, "Cards"."isActive", ' +
-        '"Cards".health, "Cards".attack, "Cards".manacost as "manaCost", "Cards".image  ' +
+        '"Cards".health, "Cards".attack, "Cards"."manaCost", "Cards".image  ' +
         'From "UserDeckCards" JOIN "Cards" ' +
         'ON "UserDeckCards".card_id = "Cards".card_id ' +
         'Where "UserDeckCards".user_deck_id=$1',
@@ -134,7 +134,6 @@ const setDeckCards = async (deck_id: number, cards: Card[]): Promise<number> => 
 
     const query = `INSERT INTO "UserDeckCards" (card_id, user_deck_id) VALUES ${cardsDecksPairs}`;
     const { rowCount } = await db.query(query, []);
-
     return rowCount;
   } catch (error) {
     throw new Error('500');

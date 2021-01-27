@@ -4,6 +4,7 @@ import { usersService } from '@/resources/users/user.controller';
 import { v4 as uuidv4 } from 'uuid';
 import { Session } from '@/resources/users/user.model';
 import { Cookie } from '@/types/types';
+import { logger } from '@/helpers/logger';
 import { SESSION_EXPIRED, BAD_REFRESH_TOKEN, REFRESH_TOKEN } from './constants';
 import { AuthUser } from './auth.model';
 
@@ -41,9 +42,8 @@ export const createCookieData = (value: string): Cookie => ({
 
 const setInLogExpireToken = (expiresIn: number): void => {
   const nowTime = new Date().getTime();
-  let logMessage;
   if (nowTime > expiresIn) {
-    logMessage = SESSION_EXPIRED;
+    logger.error(`Unhandled Rejection at Promise: ${SESSION_EXPIRED}`);
   }
 };
 

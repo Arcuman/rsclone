@@ -14,9 +14,14 @@ import {
   NEXT_TURN,
   HAND_CARD_PLAY,
   NEXT_ROUND,
+  TABLE_CARD_DAMAGE,
+  TABLE_CARD_DESTROY,
+  ENEMY_TABLE_CARD_DAMAGE,
+  PLAYER_DAMAGE,
+  PLAYER_WIN,
 } from '@/components/GameBoard/constants';
 import {
-  getPositionOfCard,
+  activateTableCards,
   setDraggableCardsDependOnPlayerMana,
 } from '@/components/Card/Card.services';
 import {
@@ -24,13 +29,15 @@ import {
   createPlayerAvatar,
 } from '@/components/GameBoard/UserAvatar/Avatar.service';
 import { Card } from '@/components/Card/Card.model';
-import { createScalableCard } from '@/components/Card/Card.render';
 import { createPlayerMana } from '@/components/GameBoard/UserMana/UserMana.render';
 import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
-import { create } from './GameBoard.services';
+import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
+import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
+import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
+import { create, damageCard, destroyCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -58,6 +65,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private playerMana: Phaser.GameObjects.Container;
 
   private endTurnButton: Phaser.GameObjects.Container;
+
+  private readyButton: Phaser.GameObjects.Container;
 
   constructor() {
     super({
@@ -138,20 +147,24 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.endTurnButton = createEndTurnButton(this, data.initState.isPlayerOneTurn);
 
-    if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
-      setDraggableCardsDependOnPlayerMana(this);
-    } else {
-      this.input.setDraggable(this.playerCards, false);
-    }
+    this.readyButton = createReadyButton(this);
 
-    this.socket.on(START_GAME, () => {});
+    this.socket.on(START_GAME, () => {
+      if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+        setDraggableCardsDependOnPlayerMana(this);
+      } else {
+        this.input.setDraggable(this.playerCards, false);
+      }
+    });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);
+        activateTableCards(this);
       } else {
         this.input.setDraggable(this.playerCards, false);
+        this.input.setDraggable(this.playerTableCards, false);
       }
     });
 
@@ -161,6 +174,38 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.socket.on(HAND_CARD_PLAY, (card: Card, isPlayerOne: boolean) => {
       onHandCardPlay(this, card, isPlayerOne);
+    });
+    this.socket.on(TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
+      damageCard(this.playerTableCards, attackingCard);
+      damageCard(this.enemyTableCards, damagedCard);
+    });
+    this.socket.on(ENEMY_TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
+      damageCard(this.enemyTableCards, attackingCard);
+      damageCard(this.playerTableCards, damagedCard);
+    });
+
+    this.socket.on(TABLE_CARD_DESTROY, (destroyedCard: Card, isPlayerOnePlay: boolean) => {
+      if (isPlayerOnePlay === this.isPlayerOne) {
+        destroyCard(this.playerTableCards, destroyedCard);
+      } else {
+        destroyCard(this.enemyTableCards, destroyedCard);
+      }
+    });
+
+    this.socket.on(PLAYER_DAMAGE, (health: number, isPlayerOnePlay: boolean) => {
+      if (isPlayerOnePlay === this.isPlayerOne) {
+        this.enemyAvatar.setData(PLAYER_HEALTH_FIELD, health);
+      } else {
+        this.playerAvatar.setData(PLAYER_HEALTH_FIELD, health);
+      }
+    });
+
+    this.socket.on(PLAYER_WIN, (isPlayerOnePlay: boolean) => {
+      if (isPlayerOnePlay === this.isPlayerOne) {
+        console.log('win');
+      } else {
+        console.log('lose');
+      }
     });
   }
 }
