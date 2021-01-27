@@ -21,6 +21,20 @@ const getLevelById = async (id: number): Promise<Level> => {
   return level;
 };
 
+const getLevelByExp = async (exp:number): Promise<number> =>{
+  let res: {level: number};
+
+  try {
+    ({
+      rows: [res],
+    } = await db.query('SELECT MAX(t.level) FROM (SELECT level FROM "Levels" WHERE exp_total - $1 <= 0) t', [exp]));
+  } catch (error) {
+    throw new Error('500');
+  }
+
+  return res.level;
+};
+
 const getLevelByLevelValue = async (levelValue: number): Promise<Level> => {
   let level: Level;
 
@@ -92,6 +106,7 @@ const updateLevelById = async (id: number, data: Level): Promise<Level> => {
 export const levelModel = {
   getLevelById,
   getLevelByLevelValue,
+  getLevelByExp,
   setLevel,
   deleteLevelById,
   updateLevelById,

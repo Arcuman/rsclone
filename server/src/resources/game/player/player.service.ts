@@ -5,7 +5,7 @@ import { playerDoesntHaveCard } from '@/resources/game/player/constants';
 import { getUserById } from '@/resources/users/user.controller';
 import { Deck } from '@/resources/decks/decks.model';
 import { getUserDefaultDeck } from '@/resources/decks/decks.controller';
-import { Card, getUserDeckCards } from '../../card/card.model';
+import { Card } from '../../card/card.model';
 
 function shuffleCards(array: Card[]): Card[] {
   return array

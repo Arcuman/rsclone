@@ -5,6 +5,8 @@ export const COUNTDOWN_SEC = 15;
 export const PLAYER_READY = 0;
 export const ONE_SEC = 1000;
 export const NO_SUCH_CARD_ERROR = 'NO SUCH CARD';
+export const EXP_WIN = 15;
+export const EXP_LOSE = 5;
 
 const OPPONENT_FOUND = 'opponentFound';
 const ALREADY_PLAY = 'already_play';
