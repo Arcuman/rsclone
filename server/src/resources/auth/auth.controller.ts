@@ -43,8 +43,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -62,7 +62,7 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  }),
+  })
 );
 
 const authenticate = (req: Request, res: Response, next: NextFunction): void => {
@@ -96,20 +96,20 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
       }
       req.user = user;
       return next();
-    },
+    }
   )(req, res, next);
 };
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const userData = req.body;
-     
-    if (!userData.login || !userData.password){
+
+    if (!userData.login || !userData.password) {
       throw new Error();
     }
- 
+
     const userID = await usersService.setUser(userData);
- 
+
     if (userID === 0) {
       res.status(ERR_LOGIN_EXIST.status).send(ERR_LOGIN_EXIST.message);
       return;

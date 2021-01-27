@@ -38,6 +38,7 @@ export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   }
   return posX;
 }
+
 export const setScalableCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
@@ -52,7 +53,25 @@ export const setScalableCard = (
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
     cardContainer.setScale(scale);
-    cardContainer.setDepth(DEPTH_NORMAL_CARD);
+    cardContainer.setDepth(DEPTH_NORMAL_CARD);    
+  });
+};
+
+export const setScalableCardInContainer = (
+  scene: Phaser.Scene,
+  cardContainer: Phaser.GameObjects.Container,
+  scale: number,  
+  generalСontainer: Phaser.GameObjects.Container,
+): void => {
+  cardContainer.setInteractive();
+  cardContainer.removeListener('pointerover');
+  cardContainer.on('pointerover', () => {
+    cardContainer.setScale(SIZE_NORMAL_CARD);
+    generalСontainer.bringToTop(cardContainer);
+  });
+  cardContainer.removeListener('pointerout');
+  cardContainer.on('pointerout', () => {
+    cardContainer.setScale(scale);
   });
 };
 

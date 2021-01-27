@@ -13,6 +13,10 @@ export const IMAGES = {
     NAME: 'game-background',
     PATH: 'assets/images/game-bgr.jpg',
   },
+  MY_CARDS_BACKGROUND: {
+    NAME: 'my-cards-background',
+    PATH: 'assets/images/my_cards_bgr.jpg',
+  },
   PROFILE_BACKGROUND: {
     NAME: 'profile-background',
     PATH: 'assets/images/settings_bgr.jpg',

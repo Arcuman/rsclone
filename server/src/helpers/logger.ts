@@ -2,7 +2,8 @@ import morgan from 'morgan';
 import { Request } from 'express';
 import { createLogger, format, transports, Logger } from 'winston';
 
-const morganFormatString = ':method :status :url query=:query body=:body size :res[content-length] - :response-time ms';
+const morganFormatString =
+  ':method :status :url query=:query body=:body size :res[content-length] - :response-time ms';
 const morganFormat = morgan.compile(morganFormatString);
 
 morgan.token('query', (req: Request) => JSON.stringify(req.query));
@@ -28,7 +29,7 @@ const logger: Logger = createLogger({
 });
 /* eslint class-methods-use-this: 0 */
 class LoggerStream {
-  write(message: string):void {
+  write(message: string): void {
     const mes = message.toString();
     const mesChunk = mes.split(' ');
     const status = mesChunk[1];
@@ -40,4 +41,4 @@ class LoggerStream {
   }
 }
 
-export { morgan, morganFormat, logger, LoggerStream};
+export { morgan, morganFormat, logger, LoggerStream };

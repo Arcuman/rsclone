@@ -3,7 +3,7 @@ import { webToken } from '@/helpers/webToken';
 import { MAX_CARDS_IN_DECK, INITIAL, INITIAL_LEVEL, INITIAL_EXP } from '@/constants/constants';
 import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
-import {levelService} from '@/resources/level/level.controller';
+import { levelService } from '@/resources/level/level.controller';
 import statusCodes from './user.constants';
 import { usersModel, User, Session, UserProfile } from './user.model';
 
@@ -57,7 +57,7 @@ const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultD
 const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
 
 const setUser = async (userData: User): Promise<number> => {
-  const user =await usersModel.getUserByLogin(userData.login);
+  const user = await usersModel.getUserByLogin(userData.login);
 
   if (user || !userData.password) {
     return 0;
