@@ -97,6 +97,10 @@ export const IMAGES = {
     NAME: 'settings_block',
     PATH: 'assets/images/settings_block.png',
   },
+  BOMB: {
+    NAME: 'bomb',
+    PATH: '../../assets/images/Timer/bomb-explosion.png',
+  },
 };
 
 export const ATLASES = {

@@ -34,6 +34,9 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
+import { createTimer } from './Timer/Timer.render';
+import { addTimerAlmostExpiredSprite, addTimerEndSprite, setTimerBackground } from './Timer/Timer.services';
+import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
 import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
 import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
@@ -61,6 +64,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private enemyTableZone: Phaser.GameObjects.Zone;
 
   private gameTableImg: Phaser.GameObjects.Container;
+
+  private timerLabel: Phaser.GameObjects.Text;
 
   private playerMana: Phaser.GameObjects.Container;
 
@@ -149,12 +154,24 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.readyButton = createReadyButton(this);
 
+    setTimerBackground(this);
+    this.timerLabel = createTimer(this);
+
     this.socket.on(START_GAME, () => {
       if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);
       } else {
         this.input.setDraggable(this.playerCards, false);
       }
+    });
+
+    this.socket.on(TIMER, (countDown: string | string[])=>{
+      if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
+        addTimerAlmostExpiredSprite(this);
+      } else if (Number(countDown) === TIMER_COUNTDOWN.EXPIRED) {
+        addTimerEndSprite(this);
+      }
+      this.timerLabel.setText(countDown);
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {

@@ -1,5 +1,4 @@
 const NEXT_TURN = 'nextTurn';
-const TIMER = 'timer';
 const NEXT_ROUND = 'nextRound';
 const HAND_CARD_PLAY = 'handCardPlay';
 const TABLE_CARD_PLAY_PLAYER_TARGET = 'tableCardPlayTargerPlayer';
@@ -17,7 +16,6 @@ const PLAYER_WIN = 'PLAYER_WIN';
 export {
   START_GAME,
   NEXT_TURN,
-  TIMER,
   NEXT_ROUND,
   HAND_CARD_PLAY,
   TABLE_CARD_PLAY_PLAYER_TARGET,
