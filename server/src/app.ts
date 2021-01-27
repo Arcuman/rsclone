@@ -4,6 +4,7 @@ import passport from 'passport';
 import { HTTP_HEADERS, ORIGINS_HOST } from '@/constants/constants';
 import { decksRouter } from '@/resources/decks/decks.router';
 import { cardRouter } from '@/resources/card/card.router';
+import { levelRouter } from '@/resources/level/level.router';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
@@ -46,6 +47,7 @@ app.use('/', (req, res, next) => {
 app.use('/users', authenticate, router);
 app.use('/decks', authenticate, decksRouter);
 app.use('/cards', authenticate, cardRouter);
+app.use('/level', authenticate, levelRouter);
 app.use('/login', authRouter);
 app.use('/logout', authRouter);
 app.use('/register', authRouter);

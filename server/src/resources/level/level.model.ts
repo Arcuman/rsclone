@@ -40,7 +40,7 @@ const setLevel = async (data: Level): Promise<number> => {
 
   try {
     const query =
-      'INSERT INTO "Cards" (level, exp_to_lvl, exp_total) ' +
+      'INSERT INTO "Levels" (level, exp_to_lvl, exp_total) ' +
       'VALUES ($1, $2, $3 ) RETURNING level_id';
 
     ({
@@ -69,7 +69,7 @@ const deleteLevelById = async (id: number): Promise<number> => {
   }
 };
 
-const updateCardById = async (id: number, data: Level): Promise<Level> => {
+const updateLevelById = async (id: number, data: Level): Promise<Level> => {
   let level: Level;
   try {
     const query =
@@ -94,5 +94,5 @@ export const levelModel = {
   getLevelByLevelValue,
   setLevel,
   deleteLevelById,
-  updateCardById,
+  updateLevelById,
 };

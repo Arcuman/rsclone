@@ -142,7 +142,7 @@ const setUserCard = async (cards: Card[], user_id: number): Promise<boolean> => 
   const cardsUsersPairs = cards
     .reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '')
     .slice(1);
-  console.log(cardsUsersPairs);
+
   try {
     const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
     const { rowCount } = await db.query(query, []);

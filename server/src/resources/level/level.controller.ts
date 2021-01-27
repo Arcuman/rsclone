@@ -15,7 +15,7 @@ const createLevel = async (data: Level): Promise<number> => {
 };
 
 const updateLevelById = async (id: number, data: Level): Promise<Level> => {
-  const level = await levelModel.updateCardById(id, data);
+  const level = await levelModel.updateLevelById(id, data);
   return level;
 };
 

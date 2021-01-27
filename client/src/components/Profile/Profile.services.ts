@@ -20,7 +20,27 @@ import {
   INFO_BLOCK_SCALE,
   positionDeckText,
 } from './constants';
-import { UserProfile } from './Profile.model';
+import { UserProfile, Level } from './Profile.model';
+
+const getLevelInfo = async (levelId: number): Promise<Level> => {
+  const requestInit = getRequestInit();
+
+  const level = await fetch(`${API_INFO_URLS.level}/${levelId}`, requestInit)
+    .then(
+      (response): Promise<Level> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
+    .then((levelData: Level) => levelData)
+    .catch(error => {
+      throw new Error(error);
+    });
+
+  return level;
+};
 
 const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
@@ -35,7 +55,10 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
         return response.json();
       },
     )
-    .then((userProfileData: UserProfile) => userProfileData)
+    .then(async (userProfileData: UserProfile) => {
+      const levelInfo: Level = await getLevelInfo(userProfileData.level_id);
+      return {...userProfileData, level:levelInfo.level};
+    })
     .catch(error => {
       throw new Error(error);
     });
@@ -64,11 +87,12 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textDecoration,
   );
 
+  const level = user.level ? user.level.toString() : '';
   const textUserLevel: Phaser.GameObjects.Text = createTextData(
     scene,
     positionInfo.TEXT_X,
     positionInfo.TEXT_Y + HEIGHT_OFFSET,
-    `${USER_PROFILE_INFO.level} ${user.level_id.toString()}`,
+    `${USER_PROFILE_INFO.level} ${level}`,
     textDecoration,
   );
 
