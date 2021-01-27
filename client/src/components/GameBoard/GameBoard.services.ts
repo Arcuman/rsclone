@@ -28,14 +28,11 @@ function createConfig(
 }
 
 export function create(scene: Phaser.Scene): void {
-  const timer = createConfig(120, 360, 150, 150, 0xbb8c08);
   const endTurnButton = createConfig(1160, 360, 75, 75, 0xbbaa98);
   const playerMana = createConfig(220, 650, 200, 50, 0x005588);
   const enemyMana = createConfig(1060, 70, 200, 50, 0x005588);
   const playerDeck = createConfig(1200, 600, 130, 150, 0x00ff88);
   const enemyDeck = createConfig(80, 120, 130, 150, 0x00ff88);
-
-  scene.add.rectangle(timer.positionX, timer.positionY, timer.width, timer.height, timer.color);
 
   scene.add.rectangle(
     endTurnButton.positionX,
