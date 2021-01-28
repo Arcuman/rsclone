@@ -88,6 +88,15 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);
 
+const addNewCard = async (unavailableCards : Card[], user_id : number) : Promise<Card> =>{
+  const newCard = cardService.getRandomCard(unavailableCards);
+  const isSetUserCards = await cardService.setUserCards([newCard], user_id);
+  if (!isSetUserCards) {
+    throw new Error(statusCodes[400].addCard);
+  }
+  return cardService.getCardById(newCard.id);
+};
+
 const updateUserExp = async (user_id: number, receivedExp: number): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);
@@ -98,20 +107,15 @@ const updateUserExp = async (user_id: number, receivedExp: number): Promise<Upda
     prevExp: user.exp,
     curExp: user.exp,
   };
+  
   if (user.exp + receivedExp > userLevel.exp_total + userLevel.exp_to_lvl) {
     let newLevel = await levelService.getLevelByLevelValue(userLevel.level + 1);
     if (!newLevel) {
       newLevel = userLevel;
     }
     const unavailableCards = await cardService.getUnavailableCards(user_id);
-
     if (unavailableCards) {
-      const newCard = cardService.getRandomCard(unavailableCards);
-      const isSetUserCards = await cardService.setUserCards([newCard], user_id);
-      if (!isSetUserCards) {
-        throw new Error(statusCodes[400].addCard);
-      }
-      res.newCard = await cardService.getCardById(newCard.id);
+      res.newCard = await addNewCard(unavailableCards, user_id);
     }
     newUserProfileData.level_id = newLevel.level_id;
     res.newLevel = newLevel.level;

@@ -1,3 +1,4 @@
+import statusCodes from '@/resources/users/user.constants';
 import { Card, cardModel } from './card.model';
 
 const getAll = (): Promise<Card[]> => cardModel.getAll();
@@ -32,7 +33,6 @@ const setUserCards = async (cards: Card[], userId: number): Promise<boolean> => 
 };
 
 function randomCard(min:number, max:number) {
-  // случайное число от min до (max+1)
   const rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
