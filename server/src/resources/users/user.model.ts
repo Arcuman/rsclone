@@ -28,6 +28,8 @@ export interface UpdatedUserLevelInfo{
   newLevel: number;
   prevExp: number;
   curExp: number;
+  nextLevelExp: number;
+  totalLevelExp: number;
   newCard?: Card;
 }
 

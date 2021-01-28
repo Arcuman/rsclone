@@ -1,5 +1,5 @@
 export const NUMBER_OF_HAND_CARDS = 3;
-export const MAX_HEALTH = 10;
+export const MAX_HEALTH = 1;
 export const START_MANA = 3;
 export const COUNTDOWN_SEC = 15;
 export const PLAYER_READY = 0;
@@ -49,4 +49,5 @@ export {
   INIT_STATE,
   ENEMY_TABLE_CARD_DAMAGE,
   PLAYER_WIN,
+  PLAYER_LOSE,
 };

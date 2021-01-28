@@ -1,6 +1,16 @@
 import { Card } from '@/components/Card/Card.model';
 import Phaser from 'phaser';
 
+export interface UpdatedUserLevelInfo {
+  prevLevel: number;
+  newLevel: number;
+  prevExp: number;
+  curExp: number;
+  nextLevelExp: number;
+  totalLevelExp: number;
+  newCard?: Card;
+}
+
 export interface IGameBoardScene extends Phaser.Scene {
   getPlayerCards(): Phaser.GameObjects.Container[];
   getEnemyCards(): Phaser.GameObjects.Container[];

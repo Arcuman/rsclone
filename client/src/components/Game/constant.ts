@@ -166,6 +166,7 @@ export const SCENES = {
   FIND_ENEMY: 'FIND_ENEMY',
   GAME_BOARD: 'GAME_BOARD',
   PROFILE: 'PROFILE',
+  GAME_OVER: 'GAME_OVER',
 };
 
 export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({

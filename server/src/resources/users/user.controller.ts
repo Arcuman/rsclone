@@ -106,9 +106,11 @@ const updateUserExp = async (user_id: number, receivedExp: number): Promise<Upda
     newLevel: userLevel.level,
     prevExp: user.exp,
     curExp: user.exp,
+    nextLevelExp: userLevel.exp_to_lvl,
+    totalLevelExp: userLevel.exp_total,
   };
 
-  if (user.exp + receivedExp > userLevel.exp_total + userLevel.exp_to_lvl) {
+  if (user.exp + receivedExp >= userLevel.exp_total + userLevel.exp_to_lvl) {
     let newLevel = await levelService.getLevelByLevelValue(userLevel.level + 1);
     if (!newLevel) {
       newLevel = userLevel;
@@ -119,6 +121,8 @@ const updateUserExp = async (user_id: number, receivedExp: number): Promise<Upda
     }
     newUserProfileData.level_id = newLevel.level_id;
     res.newLevel = newLevel.level;
+    res.nextLevelExp = newLevel.exp_to_lvl;
+    res.totalLevelExp = newLevel.exp_total;
   }
   newUserProfileData.exp += receivedExp;
   res.curExp = newUserProfileData.exp;
