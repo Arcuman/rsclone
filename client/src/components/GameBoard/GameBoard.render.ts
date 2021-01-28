@@ -51,7 +51,7 @@ import {
   setTimerBackground,
 } from './Timer/Timer.services';
 import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
-import { create, damageCard, destroyCard } from './GameBoard.services';
+import { create, damageCard, destroyEnemyCard, destroyPlayerCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -220,9 +220,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.socket.on(TABLE_CARD_DESTROY, (destroyedCard: Card, isPlayerOnePlay: boolean) => {
       if (isPlayerOnePlay === this.isPlayerOne) {
-        destroyCard(this.playerTableCards, destroyedCard);
+        destroyPlayerCard(this, this.playerTableCards, destroyedCard);
       } else {
-        destroyCard(this.enemyTableCards, destroyedCard);
+        destroyEnemyCard(this, this.enemyTableCards, destroyedCard);
       }
     });
 

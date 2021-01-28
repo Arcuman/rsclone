@@ -40,6 +40,53 @@ export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   return posX;
 }
 
+export function calcNewPosition(
+  cards: Phaser.GameObjects.Container[],
+  deletedIndex: number,
+): number {
+  const newCards = cards;
+  let newDeletedIndex = deletedIndex;
+  if (newDeletedIndex % 2 === 1) {
+    [newCards[0], newCards[1]] = [newCards[1], newCards[0]];
+    for (let i = 1; i < newDeletedIndex; i += 2) {
+      if (!newCards[i + 2]) break;
+      [newCards[i], newCards[i + 2]] = [newCards[i + 2], newCards[i]];
+    }
+    newDeletedIndex = 0;
+  }
+  for (let i = newDeletedIndex; i < newCards.length; i += 2) {
+    if (!newCards[i + 2]) {
+      break;
+    }
+    newDeletedIndex += 2;
+    [newCards[i], newCards[i + 2]] = [newCards[i + 2], newCards[i]];
+  }
+  if (newDeletedIndex === 0 && newCards.length === 2) {
+    console.log('here');
+    [newCards[0], newCards[1]] = [newCards[1], newCards[0]];
+    newDeletedIndex = 1;
+  }
+  return newDeletedIndex;
+}
+
+export function animateNewPosition(
+  scene: Phaser.Scene,
+  cards: Phaser.GameObjects.Container[],
+): void {
+  cards.forEach((card, index) => {
+    console.log(card);
+    const newCard = card;
+    const newPosX = getPositionOfCard(scene, index);
+    if (newPosX > newCard.x) {
+      while (newPosX - newCard.x > 0) {
+        newCard.x += 0.000001;
+      }
+    } else {
+      newCard.x = newPosX;
+    }
+  });
+}
+
 export const setScalableCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
@@ -181,10 +228,12 @@ export const setDropEventOnHandCard = (
           <number>cardContainer.getData(CARD_MANA_FIELD),
       );
 
-      const indexDeleteCard = scene
+      const deletedIndexCard = scene
         .getPlayerCards()
         .findIndex(card => card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD));
-      scene.getPlayerCards().splice(indexDeleteCard, 1);
+      const newDeletedIndexCard = calcNewPosition(scene.getPlayerCards(), deletedIndexCard);
+      scene.getPlayerCards().splice(newDeletedIndexCard, 1);
+      animateNewPosition(scene, scene.getPlayerCards());
       scene.getPlayerTableCards().push(cardContainer);
 
       setDraggableCardsDependOnPlayerMana(scene);
