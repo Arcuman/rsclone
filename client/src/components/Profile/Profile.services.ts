@@ -1,6 +1,6 @@
 import { setBackground, createTextData } from '@/utils/utils';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
-import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
 import { getUserDeckById } from '@/components/Deck/Deck.services';
@@ -141,6 +141,8 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
 };
 
 export const create = (scene: Phaser.Scene): void => {
+  const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, { loop: true });
+  profileBgAudio.play();
   setBackground(scene, IMAGES.PROFILE_BACKGROUND.NAME);
 
   const positionMenuCoords = {
@@ -158,6 +160,7 @@ export const create = (scene: Phaser.Scene): void => {
   );
 
   menuButton.on('pointerup', () => {
+    profileBgAudio.stop();
     browserHistory.push(MENU_URL);
   });
 

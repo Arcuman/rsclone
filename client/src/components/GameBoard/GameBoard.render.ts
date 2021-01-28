@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import Phaser from 'phaser';
-import { IMAGES, SCENES } from '@/components/Game/constant';
 import {
   GameState,
   IGameBoardScene,
   UpdatedUserLevelInfo,
 } from '@/components/GameBoard/GameBoard.model';
+import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
@@ -167,11 +167,16 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     setTimerBackground(this);
     this.timerLabel = createTimer(this);
+    let bgAudio: Phaser.Sound.BaseSound;
 
     this.socket.on(START_GAME, () => {
       if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+        bgAudio = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         setDraggableCardsDependOnPlayerMana(this);
       } else {
+        bgAudio = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         this.input.setDraggable(this.playerCards, false);
       }
     });
@@ -186,6 +191,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      bgAudio.stop();
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);

@@ -1,4 +1,4 @@
-import { ATLASES, IMAGES, SCENES } from '@/components/Game/constant';
+import { ATLASES, IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { MenuScene } from '@/components/MenuScene/MenuScene';
 import { ProfileScene } from '@/components/Profile/Profile.render';
 import { GameBoardScene } from '@/components/GameBoard/GameBoard.render';
@@ -70,6 +70,14 @@ function setLoadingBar(scene: Phaser.Scene) {
   });
 }
 
+function loadAudios(scene: Phaser.Scene) {
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const prop in AUDIO) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    scene.load.audio(AUDIO[prop].NAME, AUDIO[prop].PATH);
+  }
+}
+
 function loadImages(scene: Phaser.Scene) {
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const prop in IMAGES) {
@@ -110,6 +118,7 @@ function loadSpritesheets(scene: Phaser.Scene) {
 export function preload(scene: Phaser.Scene, nextScene: string): void {
   setLoadingBar(scene);
   scene.load.reset();
+  loadAudios(scene);
   loadImages(scene);
   loadAtlases(scene);
   loadScenes(scene);
