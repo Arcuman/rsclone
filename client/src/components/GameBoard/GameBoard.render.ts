@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import Phaser from 'phaser';
-import { IMAGES, SCENES } from '@/components/Game/constant';
+import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { GameState, IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
@@ -34,12 +34,16 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
-import { createTimer } from './Timer/Timer.render';
-import { addTimerAlmostExpiredSprite, addTimerEndSprite, setTimerBackground } from './Timer/Timer.services';
-import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
 import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
 import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
+import { createTimer } from './Timer/Timer.render';
+import {
+  addTimerAlmostExpiredSprite,
+  addTimerEndSprite,
+  setTimerBackground,
+} from './Timer/Timer.services';
+import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
 import { create, damageCard, destroyCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
@@ -156,16 +160,21 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     setTimerBackground(this);
     this.timerLabel = createTimer(this);
+    let bgAudio: Phaser.Sound.BaseSound;
 
     this.socket.on(START_GAME, () => {
       if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+        bgAudio = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         setDraggableCardsDependOnPlayerMana(this);
       } else {
+        bgAudio = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         this.input.setDraggable(this.playerCards, false);
       }
     });
 
-    this.socket.on(TIMER, (countDown: string | string[])=>{
+    this.socket.on(TIMER, (countDown: string | string[]) => {
       if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
         addTimerAlmostExpiredSprite(this);
       } else if (Number(countDown) === TIMER_COUNTDOWN.EXPIRED) {
@@ -175,6 +184,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      bgAudio.stop();
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);
