@@ -1,5 +1,5 @@
 import { setBackground } from '@/utils/utils';
-import { ATLASES, IMAGES, MENU_IMAGES, SCENES } from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/constants';
 import { browserHistory } from '@/router/history';
 import { GAME_URL, MY_CARDS_URL, PROFILE_URL } from '@/router/constants';
@@ -7,6 +7,9 @@ import { handleLogout } from '@/components/Auth/Auth.services';
 import { createButton } from '@/components/Button/Button.services';
 
 export function create(scene: Phaser.Scene): void {
+  const menuBgAudio = scene.sound.add(AUDIO.MENU_BG_AUDIO.NAME, { loop: true });
+  menuBgAudio.play();
+
   setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
   const position = { X: scene.game.renderer.width / 2, Y: scene.game.renderer.height / 2 };
 
@@ -19,6 +22,7 @@ export function create(scene: Phaser.Scene): void {
     HEIGHT_COEFFICIENT,
   );
   startButton.on('pointerup', () => {
+    menuBgAudio.stop();
     browserHistory.push(GAME_URL);
   });
 
@@ -31,6 +35,7 @@ export function create(scene: Phaser.Scene): void {
     HEIGHT_COEFFICIENT,
   );
   myCardsButton.on('pointerup', () => {
+    menuBgAudio.stop();
     browserHistory.push(MY_CARDS_URL);
   });
 
@@ -44,6 +49,7 @@ export function create(scene: Phaser.Scene): void {
   );
 
   settingButton.on('pointerup', () => {
+    menuBgAudio.stop();
     browserHistory.push(PROFILE_URL);
   });
 
@@ -55,7 +61,9 @@ export function create(scene: Phaser.Scene): void {
     MENU_IMAGES.MENU_EXIT,
     HEIGHT_COEFFICIENT,
   );
+
   exitButton.on('pointerup', () => {
+    menuBgAudio.stop();
     handleLogout();
   });
 }

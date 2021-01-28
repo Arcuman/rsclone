@@ -1,8 +1,8 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "author": "Dream Team",
-  "license": "MIT",
+  "author": "Card Team",
+  "license": "ISC",
   "scripts": {
     "start:dev": "node --inspect ./dist/server",
     "build:dev": "webpack --env.development",

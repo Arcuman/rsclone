@@ -60,7 +60,7 @@ router
       const newDeck: Deck = req.body;
       const deckId = Number(req.params.id);
 
-      if (!deckId || newDeck.name) {
+      if (!deckId || !newDeck.name) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
 
