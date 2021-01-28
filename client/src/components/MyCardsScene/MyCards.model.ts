@@ -16,4 +16,10 @@ export interface CardsPosition {
 export interface IMyCardsScene extends Phaser.Scene{
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
+
+  getMyCardsContainer(): Phaser.GameObjects.Container;
+  setMyCardsContainer(value: Phaser.GameObjects.Container): void;
+
+  getDeksContainer(): Phaser.GameObjects.Container;
+  setDeksContainer(value: Phaser.GameObjects.Container): void;
 }

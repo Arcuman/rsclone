@@ -1,15 +1,28 @@
 import {Deck} from '@/components/Deck/Deck.model';
 import {getUserDeckById} from '@/components/Deck/Deck.services';
-import { TINT_VALUE_CLICK } from './constants';
+import { Card } from '@/components/Card/Card.model';
+import { TINT_VALUE_CLICK, decksPosition, NAME_DECKS } from './constants';
+import { IMyCardsScene} from './MyCards.model';
+import { renderMyCards, controlCardsInfo, controlDeckInfo } from './MyCards.render';
+import { AllCards } from './CardsInfo';
 
-const openDeck = async (userDeck: Deck): Promise<void> => { 
-  const userDeckData = await getUserDeckById(userDeck.user_deck_id);  
+const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<void> => { 
+  const userDeckData = await getUserDeckById(userDeck.user_deck_id);
+  // console.log('userDeckData', userDeckData);
+  const cardsInSelectDeck: Card[] = userDeckData.cards;
+  // console.log('userDeckData', cardsInSelectDeck);
+  // console.log('getDeksContainer', scene.getDeksContainer());
+  const decksContainer = scene.getDeksContainer();
+  decksContainer.removeAll();
+  renderMyCards(scene, NAME_DECKS, AllCards, decksPosition, decksContainer);
+  // renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
+
 };
 
 export const setClickableDeck = (
-  scene: Phaser.Scene,
+  scene: IMyCardsScene,
   userDeck: Deck,
-  topCard: Phaser.GameObjects.GameObject,
+  topCard: Phaser.GameObjects.Sprite,
 ): void => {
   topCard.setInteractive();
   topCard.on('pointerdown', () => {
@@ -17,6 +30,11 @@ export const setClickableDeck = (
   });
   topCard.on('pointerup', () => {
     topCard.clearTint();
-    openDeck(userDeck);
+    openDeck(scene, userDeck);
   });
+};
+
+export const create = (scene: IMyCardsScene): void => {
+  controlCardsInfo(scene);
+  controlDeckInfo(scene);  
 };

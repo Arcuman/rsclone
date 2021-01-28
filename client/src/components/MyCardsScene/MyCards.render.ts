@@ -64,14 +64,14 @@ const renderContainer = (
   return cardContainer;
 };
 
-const renderMyCards = (
+export const renderMyCards = (
   scene: IMyCardsScene,
   name: string,
   allCards: Card[],  
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
 ):void => { 
-  allCards.forEach((item: Card, id:number) => {
+  allCards.forEach((item: Card, id:number) => {   
     const posX = getPositionX(id, cardsPositionInfo);    
     const posY = getPositionY(id, name);
     const card = createBaseCard({
@@ -86,7 +86,7 @@ const renderMyCards = (
   });
 };
 
-const renderDeck = (
+export const renderDeck = (
   scene: IMyCardsScene, 
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
@@ -94,9 +94,9 @@ const renderDeck = (
   userDecks.forEach(item => {
     const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
-    setColoredDeck(lastCardInDeck);
+    setColoredDeck(<Phaser.GameObjects.Sprite>lastCardInDeck);
 
-    setClickableDeck(scene, item, lastCardInDeck);
+    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck);
     const userDeckName = createDeckName(scene, item, positionDeckName);
   
     decksContainer.add(userDeck);
@@ -104,28 +104,28 @@ const renderDeck = (
   });  
 };
 
-const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
+export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
   if (!userCards) {
     throw new Error();
   }  
   scene.setUserCards(userCards);
-
+  // console.log('userCards', userCards);
   const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition );
+  scene.setMyCardsContainer(cardsContainer);
   renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);  
 };
 
-const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
+export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userDecks = await getUserDecks();
   if (!userDecks) {
     throw new Error();
   } 
   
   const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition );
+  decksContainer.setScrollFactor(0.25, 0.25, true); // check scroll!!!!!!!!!!!
+  decksContainer.setSize(400, 400);
+  scene.setDeksContainer(decksContainer);
   renderDeck(scene, userDecks, decksContainer);  
 };
 
-export const create = (scene: IMyCardsScene): void => {
-  controlCardsInfo(scene);
-  controlDeckInfo(scene);  
-};
