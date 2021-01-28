@@ -18,7 +18,7 @@ export async function tableCardPlayTargetPlayer(
   const attack = playerCard.attack || 0;
   enemy.health -= attack;
   io.to(openRoom.id).emit(PLAYER_DAMAGE, enemy.health, openRoom.isPlayerOneTurn);
-  if (enemy.health <= 0){
+  if (enemy.health <= 0) {
     io.to(openRoom.id).emit(PLAYER_WIN, openRoom.isPlayerOneTurn);
     const playerInfo : UpdatedUserLevelInfo = await usersService.updateUserExp(player.userId, EXP_WIN);
     const enemyInfo : UpdatedUserLevelInfo = await usersService.updateUserExp(enemy.userId, EXP_LOSE);

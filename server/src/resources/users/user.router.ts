@@ -102,13 +102,13 @@ router
   .route('/:id/profile')
   .get(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
-      const userId =  Number(req.params.id);
-   
+      const userId = Number(req.params.id);
+
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);
       }
       const profile = await usersService.getUserProfile(userId);
-    
+
       if (!profile) {
         throw new ErrorHandler(HttpStatus.NOT_FOUND, statusCodes[HttpStatus.NOT_FOUND]);
       } else {
@@ -121,7 +121,7 @@ router
   .put(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
       const newUserProfile = req.body;
-      const userId =  Number(req.params.id);
+      const userId = Number(req.params.id);
 
       if (!userId) {
         throw new ErrorHandler(HttpStatus.BAD_REQUEST);

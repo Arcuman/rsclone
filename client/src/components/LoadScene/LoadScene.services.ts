@@ -13,6 +13,7 @@ import {
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
+import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 
 function setLoadingBar(scene: Phaser.Scene) {
@@ -91,12 +92,26 @@ function loadScenes(scene: Phaser.Scene) {
   scene.scene.add(SCENES.PROFILE, ProfileScene, false);
 }
 
+function loadSpritesheets(scene: Phaser.Scene) {
+  scene.load.spritesheet('boom', BOOM_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
+  });
+  scene.load.spritesheet('wick', WICK_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
+  });
+}
+
 export function preload(scene: Phaser.Scene, nextScene: string): void {
   setLoadingBar(scene);
   scene.load.reset();
   loadImages(scene);
   loadAtlases(scene);
   loadScenes(scene);
+  loadSpritesheets(scene);
   scene.load.on('complete', () => {
     scene.scene.start(nextScene);
   });

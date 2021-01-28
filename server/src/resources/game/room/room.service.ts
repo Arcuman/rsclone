@@ -1,7 +1,7 @@
 import { Room } from '@/resources/game/room/room.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Player } from '@/resources/game/player/player.model';
-import {COUNTDOWN_SEC, PLAYER_READY} from '@/resources/game/constants';
+import { COUNTDOWN_SEC, PLAYER_READY } from '@/resources/game/constants';
 import { MAX_ROOM_PLAYERS_COUNT, NO_SECOND_PLAYER } from '@/resources/game/room/constants';
 
 export function getEnemyPlayer(room: Room, curPlayer: Player): Player {

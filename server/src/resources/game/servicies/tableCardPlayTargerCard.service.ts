@@ -3,7 +3,11 @@ import { Player } from '@/resources/game/player/player.model';
 import { Server } from 'socket.io';
 import { getEnemyPlayer } from '@/resources/game/room/room.service';
 import { getCardById } from '@/resources/game/player/player.service';
-import {ENEMY_TABLE_CARD_DAMAGE, TABLE_CARD_DAMAGE, TABLE_CARD_DESTROY} from '@/resources/game/constants';
+import {
+  ENEMY_TABLE_CARD_DAMAGE,
+  TABLE_CARD_DAMAGE,
+  TABLE_CARD_DESTROY,
+} from '@/resources/game/constants';
 
 export function tableCardPlayTargetCard(
   cardId: number,

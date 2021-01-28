@@ -8,7 +8,8 @@ import {
   CLOSE_SOCKET,
   DISCONNECT,
   HAND_CARD_PLAY,
-  NEXT_TURN, ONE_SEC,
+  NEXT_TURN,
+  ONE_SEC,
   OPPONENT_FOUND,
   START_GAME,
   TABLE_CARD_PLAY_CARD_TARGET,
@@ -22,7 +23,7 @@ import { handCardPlay } from '@/resources/game/servicies/handCardPlay.service';
 import { tableCardPlayTargetPlayer } from '@/resources/game/servicies/tableCardPlayTargerPlayer.service';
 import { tableCardPlayTargetCard } from '@/resources/game/servicies/tableCardPlayTargerCard.service';
 import { webToken } from '@/helpers/webToken';
-import {SocketQuery} from '@/resources/game/game.models';
+import { SocketQuery } from '@/resources/game/game.models';
 
 function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
   return rooms.some(room => room.players.some(player => player.userId === userId));
@@ -48,7 +49,6 @@ export default async function gameLogic(
   if (openRoom.players.length === 2) {
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
-
   } else {
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
@@ -66,7 +66,7 @@ export default async function gameLogic(
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
   });
 
-  player.socket.on(START_GAME, ()=>{
+  player.socket.on(START_GAME, () => {
     openRoom.playersReady += 1;
     if (openRoom.playersReady === 2) {
       io.to(openRoom.id).emit(START_GAME);

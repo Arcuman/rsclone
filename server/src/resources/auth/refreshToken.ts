@@ -4,7 +4,7 @@ import { usersService } from '@/resources/users/user.controller';
 import { v4 as uuidv4 } from 'uuid';
 import { Session } from '@/resources/users/user.model';
 import { Cookie } from '@/types/types';
-import {logger} from '@/helpers/logger';
+import { logger } from '@/helpers/logger';
 import { SESSION_EXPIRED, BAD_REFRESH_TOKEN, REFRESH_TOKEN } from './constants';
 import { AuthUser } from './auth.model';
 

@@ -58,7 +58,7 @@ const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultD
 const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
 
 const setUser = async (userData: User): Promise<number> => {
-  const user =await usersModel.getUserByLogin(userData.login);
+  const user = await usersModel.getUserByLogin(userData.login);
 
   if (user || !userData.password) {
     return 0;
@@ -107,7 +107,7 @@ const updateUserExp = async (user_id: number, receivedExp: number): Promise<Upda
     prevExp: user.exp,
     curExp: user.exp,
   };
-  
+
   if (user.exp + receivedExp > userLevel.exp_total + userLevel.exp_to_lvl) {
     let newLevel = await levelService.getLevelByLevelValue(userLevel.level + 1);
     if (!newLevel) {

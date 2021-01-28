@@ -4,7 +4,8 @@ import { ATLASES, IMAGES, MENU_IMAGES } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
 import { getUserDeckById } from '@/components/Deck/Deck.services';
-import { createDeck } from '@/components/Deck/Deck.render';
+import { createDeck, createDeckInfo, createDeckName } from '@/components/Deck/Deck.render';
+import { positionDeckContainer } from '@/components/Deck/constants';
 import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
@@ -17,6 +18,7 @@ import {
   USER_PROFILE_INFO,
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
+  positionDeckText,
 } from './constants';
 import { UserProfile, Level } from './Profile.model';
 
@@ -55,7 +57,7 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
     )
     .then(async (userProfileData: UserProfile) => {
       const levelInfo: Level = await getLevelInfo(userProfileData.level_id);
-      return {...userProfileData, level:levelInfo.level};
+      return { ...userProfileData, level: levelInfo.level };
     })
     .catch(error => {
       throw new Error(error);
@@ -119,7 +121,11 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  const userCurrDeck = createDeck(scene, userCurrDeckInfo);
+  const userCurrDeck = createDeck(scene, positionDeckContainer);
+  const userCurrDeckName = createDeckName(scene, userCurrDeckInfo, positionDeckText);
+  const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
+  userCurrDeck.add(userCurrDeckName);
+  userCurrDeck.add(userCurrDeckNumber);
 
   const userInfoBLock = [
     userInfoBgr,

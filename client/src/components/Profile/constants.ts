@@ -1,18 +1,24 @@
-import { TextDecoration } from '@/types/types';
+import { TextDecoration, PositionText } from '@/types/types';
 
 export const textDecoration: TextDecoration = {
   FONT_SIZE: '32px',
   FONT_FAMILY: 'number_font',
-  FONT_COLOR: '#ffffff',
-  TEXT_OUTLINE_COLOR: '#000000',
+  FONT_COLOR: '#d1c49a',
+  TEXT_OUTLINE_COLOR: '#292321',
   TEXT_OUTLINE_SIZE: 5,
   TEXT_DEPTH: 2,
 };
 
-export const positionInfo = {
+export const positionInfo: PositionText = {
   TEXT_X: 150,
   TEXT_Y: 160,
 };
+
+export const positionDeckText: PositionText = {
+  TEXT_X: 70,
+  TEXT_Y: -60,
+};
+
 export const positionMenu = {
   OFFSET_X: 180,
   Y: 20,
