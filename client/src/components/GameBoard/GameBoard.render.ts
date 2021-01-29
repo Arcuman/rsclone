@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 import Phaser from 'phaser';
-import { IMAGES, SCENES } from '@/components/Game/constant';
-import { GameState, IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
+import {
+  GameState,
+  IGameBoardScene,
+  UpdatedUserLevelInfo,
+} from '@/components/GameBoard/GameBoard.model';
+import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
@@ -19,6 +23,9 @@ import {
   ENEMY_TABLE_CARD_DAMAGE,
   PLAYER_DAMAGE,
   PLAYER_WIN,
+  PLAYER_LOSE,
+  WIN,
+  LOSE,
 } from '@/components/GameBoard/constants';
 import {
   activateTableCards,
@@ -34,13 +41,17 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { onHandCardPlay } from '@/components/GameBoard/EnemyCards/EnemyCard.service';
 import { createEndTurnButton } from '@/components/GameBoard/EndTurnButton/EndTurnButton.render';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
-import { createTimer } from './Timer/Timer.render';
-import { addTimerAlmostExpiredSprite, addTimerEndSprite, setTimerBackground } from './Timer/Timer.services';
-import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
 import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
 import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
-import { create, damageCard, destroyCard } from './GameBoard.services';
+import { createTimer } from './Timer/Timer.render';
+import {
+  addTimerAlmostExpiredSprite,
+  addTimerEndSprite,
+  setTimerBackground,
+} from './Timer/Timer.services';
+import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
+import { create, damageCard, destroyEnemyCard, destroyPlayerCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -156,16 +167,21 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     setTimerBackground(this);
     this.timerLabel = createTimer(this);
+    let bgAudio: Phaser.Sound.BaseSound;
 
     this.socket.on(START_GAME, () => {
       if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+        bgAudio = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         setDraggableCardsDependOnPlayerMana(this);
       } else {
+        bgAudio = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, { loop: true });
+        bgAudio.play();
         this.input.setDraggable(this.playerCards, false);
       }
     });
 
-    this.socket.on(TIMER, (countDown: string | string[])=>{
+    this.socket.on(TIMER, (countDown: string | string[]) => {
       if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
         addTimerAlmostExpiredSprite(this);
       } else if (Number(countDown) === TIMER_COUNTDOWN.EXPIRED) {
@@ -175,6 +191,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      bgAudio.stop();
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
         setDraggableCardsDependOnPlayerMana(this);
@@ -203,9 +220,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.socket.on(TABLE_CARD_DESTROY, (destroyedCard: Card, isPlayerOnePlay: boolean) => {
       if (isPlayerOnePlay === this.isPlayerOne) {
-        destroyCard(this.playerTableCards, destroyedCard);
+        destroyPlayerCard(this, this.playerTableCards, destroyedCard);
       } else {
-        destroyCard(this.enemyTableCards, destroyedCard);
+        destroyEnemyCard(this, this.enemyTableCards, destroyedCard);
       }
     });
 
@@ -217,12 +234,12 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       }
     });
 
-    this.socket.on(PLAYER_WIN, (isPlayerOnePlay: boolean) => {
-      if (isPlayerOnePlay === this.isPlayerOne) {
-        console.log('win');
-      } else {
-        console.log('lose');
-      }
+    this.socket.on(PLAYER_WIN, (info: UpdatedUserLevelInfo) => {
+      this.scene.start(SCENES.GAME_OVER, { message: WIN, playerInfo: info });
+    });
+
+    this.socket.on(PLAYER_LOSE, (info: UpdatedUserLevelInfo) => {
+      this.scene.start(SCENES.GAME_OVER, { message: LOSE, playerInfo: info });
     });
   }
 }

@@ -13,6 +13,7 @@ import { MANA_COUNT_FIELD } from '@/components/GameBoard/UserMana/constants';
 import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/constants';
 import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
+import { AUDIO } from '@/components/Game/constant';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -39,6 +40,47 @@ export function getPositionOfCard(scene: Phaser.Scene, index: number): number {
   return posX;
 }
 
+export function calcNewPosition(
+  cards: Phaser.GameObjects.Container[],
+  deletedIndex: number,
+): number {
+  const sortedCards = cards;
+  let newDeletedIndex = deletedIndex;
+  if (newDeletedIndex % 2 === 1) {
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
+    for (let i = 1; i < newDeletedIndex; i += 2) {
+      if (!sortedCards[i + 2]) break;
+      [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
+    }
+    newDeletedIndex = 0;
+  }
+  for (let i = newDeletedIndex; i < sortedCards.length; i += 2) {
+    if (!sortedCards[i + 2]) {
+      break;
+    }
+    newDeletedIndex += 2;
+    [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
+  }
+  if (newDeletedIndex === 0 && sortedCards.length === 2) {
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
+    newDeletedIndex = 1;
+  }
+  return newDeletedIndex;
+}
+
+export function animateNewPosition(
+  scene: Phaser.Scene,
+  cards: Phaser.GameObjects.Container[],
+): void {
+  cards.forEach((card, index) => {
+    const newPosX = getPositionOfCard(scene, index);
+    scene.tweens.add({
+      targets: card,
+      x: { value: newPosX, duration: 1500, ease: 'Power2' },
+    });
+  });
+}
+
 export const setScalableCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
@@ -47,30 +89,38 @@ export const setScalableCard = (
   cardContainer.setInteractive();
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME);
+    cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     cardContainer.setDepth(DEPTH_CLICK_CARD);
   });
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME);
+    cardAudio.play();
     cardContainer.setScale(scale);
-    cardContainer.setDepth(DEPTH_NORMAL_CARD);    
+    cardContainer.setDepth(DEPTH_NORMAL_CARD);
   });
 };
 
 export const setScalableCardInContainer = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
-  scale: number,  
+  scale: number,
   generalСontainer: Phaser.GameObjects.Container,
 ): void => {
   cardContainer.setInteractive();
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME);
+    cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     generalСontainer.bringToTop(cardContainer);
   });
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME);
+    cardAudio.play();
     cardContainer.setScale(scale);
   });
 };
@@ -172,10 +222,12 @@ export const setDropEventOnHandCard = (
           <number>cardContainer.getData(CARD_MANA_FIELD),
       );
 
-      const indexDeleteCard = scene
+      const deletedIndexCard = scene
         .getPlayerCards()
         .findIndex(card => card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD));
-      scene.getPlayerCards().splice(indexDeleteCard, 1);
+      const newDeletedIndexCard = calcNewPosition(scene.getPlayerCards(), deletedIndexCard);
+      scene.getPlayerCards().splice(newDeletedIndexCard, 1);
+      animateNewPosition(scene, scene.getPlayerCards());
       scene.getPlayerTableCards().push(cardContainer);
 
       setDraggableCardsDependOnPlayerMana(scene);

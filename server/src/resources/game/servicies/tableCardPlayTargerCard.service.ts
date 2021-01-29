@@ -14,7 +14,7 @@ export function tableCardPlayTargetCard(
   targetId: number,
   openRoom: Room,
   player: Player,
-  io: Server
+  io: Server,
 ): void {
   const enemy = getEnemyPlayer(openRoom, player);
   const playerCard = getCardById(player, cardId);
@@ -26,14 +26,14 @@ export function tableCardPlayTargetCard(
   if (enemyCard.health <= 0) {
     enemy.tableCards.splice(
       enemy.tableCards.findIndex(tableCard => enemyCard.id === tableCard.id),
-      1
+      1,
     );
     io.to(openRoom.id).emit(TABLE_CARD_DESTROY, enemyCard, !openRoom.isPlayerOneTurn);
   }
   if (playerCard.health <= 0) {
     player.tableCards.splice(
       player.tableCards.findIndex(tableCard => playerCard.id === tableCard.id),
-      1
+      1,
     );
     io.to(openRoom.id).emit(TABLE_CARD_DESTROY, playerCard, openRoom.isPlayerOneTurn);
   }

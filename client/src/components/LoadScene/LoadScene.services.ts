@@ -1,4 +1,4 @@
-import { ATLASES, IMAGES, SCENES } from '@/components/Game/constant';
+import { ATLASES, IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { MenuScene } from '@/components/MenuScene/MenuScene';
 import { ProfileScene } from '@/components/Profile/Profile.render';
 import { GameBoardScene } from '@/components/GameBoard/GameBoard.render';
@@ -13,6 +13,7 @@ import {
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
+import { GameOverScene } from '@/components/GameOverScene/GameOverScene.render';
 import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 
@@ -69,6 +70,14 @@ function setLoadingBar(scene: Phaser.Scene) {
   });
 }
 
+function loadAudios(scene: Phaser.Scene) {
+  // eslint-disable-next-line guard-for-in,no-restricted-syntax
+  for (const prop in AUDIO) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    scene.load.audio(AUDIO[prop].NAME, AUDIO[prop].PATH);
+  }
+}
+
 function loadImages(scene: Phaser.Scene) {
   // eslint-disable-next-line guard-for-in,no-restricted-syntax
   for (const prop in IMAGES) {
@@ -90,30 +99,26 @@ function loadScenes(scene: Phaser.Scene) {
   scene.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
   scene.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
   scene.scene.add(SCENES.PROFILE, ProfileScene, false);
+  scene.scene.add(SCENES.GAME_OVER, GameOverScene, false);
 }
 
 function loadSpritesheets(scene: Phaser.Scene) {
-  scene.load.spritesheet(
-    'boom',
-    BOOM_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
-    });
-  scene.load.spritesheet(
-    'wick',
-    WICK_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
-    });
+  scene.load.spritesheet('boom', BOOM_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
+  });
+  scene.load.spritesheet('wick', WICK_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
+  });
 }
 
 export function preload(scene: Phaser.Scene, nextScene: string): void {
   setLoadingBar(scene);
   scene.load.reset();
+  loadAudios(scene);
   loadImages(scene);
   loadAtlases(scene);
   loadScenes(scene);

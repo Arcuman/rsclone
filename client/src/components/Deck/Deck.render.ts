@@ -1,7 +1,7 @@
 import { IMAGES } from '@/components/Game/constant';
 import * as Phaser from 'phaser';
 import { createTextData } from '@/utils/utils';
-import {PositionText} from '@/types/types';
+import { PositionText } from '@/types/types';
 import { positionDeckText } from '@/components/Profile/constants';
 import { Deck, PositionDeckContainer } from './Deck.model';
 import {
@@ -14,22 +14,34 @@ import {
   STANDART_NUMBER_CARD,
 } from './constants';
 
-export function createDeck(scene: Phaser.Scene, position: PositionDeckContainer, numberCard?:number): Phaser.GameObjects.Container {
-  const numberCardsInDeck = numberCard || STANDART_NUMBER_CARD;  
-  const deck = scene.add.container( position.IMG_X, position.IMG_Y);
+export function createDeck(
+  scene: Phaser.Scene,
+  position: PositionDeckContainer,
+  numberCard?: number,
+): Phaser.GameObjects.Container {
+  const numberCardsInDeck = numberCard || STANDART_NUMBER_CARD;
+  const deck = scene.add.container(position.IMG_X, position.IMG_Y);
 
   for (let x = 0; x < numberCardsInDeck; x += 1) {
-    const offsetCardX = x*RATIO_OFFSET_X;
-    const offsetCardY = x*RATIO_OFFSET_Y;
-    const cardInDeck : Phaser.GameObjects.Sprite = scene.add.sprite(offsetCardX, offsetCardY, IMAGES.COVER.NAME);
+    const offsetCardX = x * RATIO_OFFSET_X;
+    const offsetCardY = x * RATIO_OFFSET_Y;
+    const cardInDeck: Phaser.GameObjects.Sprite = scene.add.sprite(
+      offsetCardX,
+      offsetCardY,
+      IMAGES.COVER.NAME,
+    );
     cardInDeck.setScale(SCALE_CARD_IN_DECK);
-    deck.add(cardInDeck);    
+    deck.add(cardInDeck);
   }
-  
+
   return deck;
 }
 
-export function createDeckName(scene: Phaser.Scene, deckInfo: Deck, positionDeckName: PositionText ): Phaser.GameObjects.Text {
+export function createDeckName(
+  scene: Phaser.Scene,
+  deckInfo: Deck,
+  positionDeckName: PositionText,
+): Phaser.GameObjects.Text {
   const textName: Phaser.GameObjects.Text = createTextData(
     scene,
     positionDeckName.TEXT_X,
@@ -37,7 +49,7 @@ export function createDeckName(scene: Phaser.Scene, deckInfo: Deck, positionDeck
     deckInfo.name,
     textDecoration,
   );
- 
+
   return textName;
 }
 
@@ -50,6 +62,6 @@ export function createDeckInfo(scene: Phaser.Scene, deckInfo: Deck): Phaser.Game
     `${CARDS_COUNT_TEXT} ${cardsCount}`,
     textDecoration,
   );
- 
+
   return textCardCount;
 }

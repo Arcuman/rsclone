@@ -10,34 +10,6 @@ export interface Card {
   isinitial?: boolean;
   image?: string;
 }
-
-export async function getUserDeckCards(userId: number): Promise<Array<Card>> {
-  const cards: Array<Card> = [];
-  const {
-    rows,
-  } = await db.query(
-    'select "Cards".card_id, "isActive", name, attack, "manaCost", health, image \n' +
-      'from "Cards" join (\n' +
-      '"UserDeckCards" join "UserProfiles" on \n' +
-      '"UserProfiles".cur_user_deck_id = "UserDeckCards".user_deck_id\n' +
-      ')on "Cards".card_id = "UserDeckCards".card_id\n' +
-      'where "UserProfiles".user_id = $1',
-    [userId]
-  );
-  rows.forEach(({ card_id, isActive, name, attack, manaCost, health, image }) => {
-    cards.push({
-      id: <number>card_id,
-      isActive: <boolean>isActive,
-      name: <string>name,
-      health: <number>health,
-      manaCost: <number>manaCost,
-      attack: <number>attack,
-      image: <string>image,
-    });
-  });
-  return cards;
-}
-
 const getAll = async (): Promise<Card[]> => {
   let cards;
 
@@ -59,7 +31,7 @@ const getAllByUserId = async (user_id: number): Promise<Card[]> => {
         'From "UserCards" JOIN "Cards" ' +
         'ON "UserCards".card_id = "Cards".card_id ' +
         'Where "UserCards".user_id=$1',
-      [user_id.toString()]
+      [user_id.toString()],
     );
     cards = rows;
   } catch (error) {
@@ -90,6 +62,22 @@ const getInitialCards = async (count: number): Promise<Card[]> => {
       rows,
     } = await db.query('Select *, card_id as id from "Cards" Where isinitial=true LIMIT $1 ', [
       count,
+    ]);
+    cards = rows;
+  } catch (error) {
+    throw new Error('500');
+  }
+  return cards;
+};
+
+const getUnavailableCards = async (user_id: number): Promise<Card[]> => {
+  let cards;
+
+  try {
+    const {
+      rows,
+    } = await db.query('select card_id as id from "Cards" EXCEPT  select card_id as id from "UserCards" where user_id = $1 ', [
+      user_id,
     ]);
     cards = rows;
   } catch (error) {
@@ -142,7 +130,6 @@ const setUserCard = async (cards: Card[], user_id: number): Promise<boolean> => 
   const cardsUsersPairs = cards
     .reduce((prev, curr) => `${prev}, (${curr.id}, ${user_id})`, '')
     .slice(1);
-
   try {
     const query = `INSERT INTO "UserCards" (card_id, user_id)  VALUES ${cardsUsersPairs}`;
     const { rowCount } = await db.query(query, []);
@@ -190,5 +177,5 @@ export const cardModel = {
   setUserCard,
   updateCardById,
   deleteCardById,
-  getUserDeckCards,
+  getUnavailableCards,
 };

@@ -8,14 +8,14 @@ export const API_INFO_URLS = {
   level: `${<string>BASE_HTTP_URL}/level`,
 };
 
-export const getRequestInit = (): RequestInit => {
+export const getRequestInit = (method = 'GET'): RequestInit => {
   const { accessToken } = store.getState().authUser;
   const headers = {
     Authorization: `Bearer ${accessToken}`,
     ...HEADER_JSON,
   };
   return {
-    method: 'GET',
+    method,
     headers,
     mode: 'cors',
     cache: 'default',

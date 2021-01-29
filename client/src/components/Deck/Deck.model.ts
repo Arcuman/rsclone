@@ -12,5 +12,5 @@ export interface Deck {
 
 export interface PositionDeckContainer {
   IMG_X: number;
-  IMG_Y: number;  
+  IMG_Y: number;
 }

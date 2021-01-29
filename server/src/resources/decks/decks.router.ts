@@ -16,7 +16,7 @@ router
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res.type('application/json').json(decks).status(StatusCodes.OK).end();
       next();
-    })
+    }),
   )
 
   .post(
@@ -32,7 +32,7 @@ router
       res.statusMessage = statusCodes[StatusCodes.OK].create;
       res.type('application/json').json(deckId).status(StatusCodes.OK).end();
       next();
-    })
+    }),
   );
 
 router
@@ -52,7 +52,7 @@ router
         res.type('application/json').json(deck).status(StatusCodes.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .put(
@@ -60,7 +60,7 @@ router
       const newDeck: Deck = req.body;
       const deckId = Number(req.params.id);
 
-      if (!deckId || newDeck.name) {
+      if (!deckId || !newDeck.name) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
 
@@ -73,7 +73,7 @@ router
         res.type('application/json').json(deck).status(StatusCodes.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .delete(
@@ -93,6 +93,6 @@ router
         res.status(StatusCodes.NO_CONTENT).end();
       }
       next();
-    })
+    }),
   );
 export { router as decksRouter };
