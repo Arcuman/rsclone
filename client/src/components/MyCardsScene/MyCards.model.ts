@@ -1,4 +1,5 @@
 import { Card } from '@/components/Card/Card.model';
+import { Deck } from '@/components/Deck/Deck.model';
 
 export interface CardsContainerPosition {
   CONTAINER_X: number;
@@ -13,7 +14,29 @@ export interface CardsPosition {
   REDUCE_ID_3: number;
 }
 
-export interface IMyCardsScene extends Phaser.Scene {
+export interface StateCardsOfDecks {
+  DECKS_DATA: Deck[];
+  CARDS_DATA: Card[];
+  CURRENT_PAGE: number;
+  TOTAL_PAGE: number;
+}
+
+export interface IMyCardsScene extends Phaser.Scene{
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
+
+  getMyCardsContainer(): Phaser.GameObjects.Container;
+  setMyCardsContainer(value: Phaser.GameObjects.Container): void;
+
+  getDecksContainer(): Phaser.GameObjects.Container;
+  setDecksContainer(value: Phaser.GameObjects.Container): void;
+
+  getMyCardsCurrentPage(): number;
+  setMyCardsCurrentPage(value: number): void;
+
+  getMyCardsTotalPage(): number;
+  setMyCardsTotalPage(value: number): void;  
+
+  getStateCardsOfDecks(): StateCardsOfDecks;
+  setStateCardsOfDecks(value: StateCardsOfDecks): void;
 }

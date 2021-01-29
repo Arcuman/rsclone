@@ -3,10 +3,10 @@ import { webToken } from '@/helpers/webToken';
 import { MAX_CARDS_IN_DECK, INITIAL, INITIAL_LEVEL, INITIAL_EXP } from '@/constants/constants';
 import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
-import {levelService} from '@/resources/level/level.controller';
-import {Card} from '@/resources/card/card.model';
+import { levelService } from '@/resources/level/level.controller';
+import { Card } from '@/resources/card/card.model';
 import statusCodes from './user.constants';
-import {usersModel, User, Session, UserProfile, UpdatedUserLevelInfo} from './user.model';
+import { usersModel, User, Session, UserProfile, UpdatedUserLevelInfo } from './user.model';
 
 const createInitialUserData = async (userId: number, name: string): Promise<void> => {
   const initialCards = await cardService.getInitialCards(MAX_CARDS_IN_DECK);
@@ -88,7 +88,7 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);
 
-const addNewCard = async (unavailableCards : Card[], user_id : number) : Promise<Card> =>{
+const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Card> => {
   const newCard = cardService.getRandomCard(unavailableCards);
   const isSetUserCards = await cardService.setUserCards([newCard], user_id);
   if (!isSetUserCards) {
@@ -97,12 +97,15 @@ const addNewCard = async (unavailableCards : Card[], user_id : number) : Promise
   return cardService.getCardById(newCard.id);
 };
 
-const updateUserExp = async (user_id: number, receivedExp: number): Promise<UpdatedUserLevelInfo> => {
+const updateUserExp = async (
+  user_id: number,
+  receivedExp: number
+): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);
-  const newUserProfileData = {...user};
+  const newUserProfileData = { ...user };
   const res: UpdatedUserLevelInfo = {
-    prevLevel : userLevel.level,
+    prevLevel: userLevel.level,
     newLevel: userLevel.level,
     prevExp: user.exp,
     curExp: user.exp,

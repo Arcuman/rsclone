@@ -1,19 +1,27 @@
 import Phaser from 'phaser';
-import { IMAGES, SCENES, AUDIO, ATLASES, MENU_IMAGES } from '@/components/Game/constant';
+import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { Card } from '@/components/Card/Card.model';
-import { browserHistory } from '@/router/history';
-import { createButton } from '@/components/Button/Button.services';
-import { MENU_URL } from '@/router/constants';
-import { create } from './MyCards.render';
-import { IMyCardsScene } from './MyCards.model';
+import { create } from './MyCards.services';
+import { IMyCardsScene, StateCardsOfDecks } from './MyCards.model';
 
 export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
   private userCards: Card[] = [];
 
   private currentPageMyCards: number;
 
-  private menuButton: Phaser.GameObjects.Sprite;
+  private totalPageMyCards: number;
+
+  private myCardsContainer: Phaser.GameObjects.Container;
+
+  private deksContainer: Phaser.GameObjects.Container;
+
+  private stateCardsOfDecks: StateCardsOfDecks = {
+    DECKS_DATA: [],
+    CARDS_DATA: [],
+    CURRENT_PAGE: 1,
+    TOTAL_PAGE: 1,  
+  };
 
   constructor() {
     super({
@@ -31,36 +39,50 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     this.userCards = value;
   }
 
-  public createMenyButton(scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void {
-    const positionMenu = {
-      OFFSET_X: 180,
-      Y: 20,
-    };
-    const positionMenuCoords = {
-      X: scene.cameras.main.width - positionMenu.OFFSET_X,
-      Y: positionMenu.Y,
-    };
-
-    this.menuButton = createButton(
-      scene,
-      positionMenuCoords,
-      0,
-      ATLASES.MENU_ATLAS.NAME,
-      MENU_IMAGES.MENU_BUTTON,
-      500,
-    );
-
-    this.menuButton.on('pointerup', () => {
-      cardsBgAudio.stop();
-      browserHistory.push(MENU_URL);
-    });
+  public getMyCardsContainer(): Phaser.GameObjects.Container {
+    return this.myCardsContainer;
   }
 
-  create(): void {
+  public setMyCardsContainer( value: Phaser.GameObjects.Container ): void {
+    this.myCardsContainer= value;
+  }
+
+  public getDecksContainer(): Phaser.GameObjects.Container {
+    return this.deksContainer;
+  }
+
+  public setDecksContainer( value: Phaser.GameObjects.Container ): void {
+    this.deksContainer= value;
+  }
+
+  public getMyCardsCurrentPage(): number {
+    return this.currentPageMyCards;
+  }
+
+  public setMyCardsCurrentPage(value: number): void {
+    this.currentPageMyCards = value;
+  }
+
+  public getMyCardsTotalPage(): number {
+    return this.totalPageMyCards;
+  }
+
+  public setMyCardsTotalPage(value: number): void {
+    this.totalPageMyCards = value;
+  }  
+
+  public getStateCardsOfDecks(): StateCardsOfDecks {
+    return this.stateCardsOfDecks;
+  }
+
+  public setStateCardsOfDecks(value: StateCardsOfDecks): void {
+    this.stateCardsOfDecks = value;
+  }
+  
+  create(): void {    
+    setBackground(this, IMAGES.MY_CARDS_BACKGROUND.NAME);
     const cardsBgAudio = this.sound.add(AUDIO.MYCARDS_BG_AUDIO.NAME, { loop: true });
     cardsBgAudio.play();
-    setBackground(this, IMAGES.MY_CARDS_BACKGROUND.NAME);
-    this.createMenyButton(this, cardsBgAudio);
-    create(this);
+    create(this, cardsBgAudio);
   }
 }

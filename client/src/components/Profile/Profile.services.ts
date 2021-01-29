@@ -19,6 +19,7 @@ import {
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
   positionDeckText,
+  BUTTON_SCALE,
 } from './constants';
 import { UserProfile, Level } from './Profile.model';
 
@@ -163,6 +164,8 @@ export const create = (scene: Phaser.Scene): void => {
     profileBgAudio.stop();
     browserHistory.push(MENU_URL);
   });
+
+  menuButton.setScale(BUTTON_SCALE);
 
   createInfoContainer(scene);
 };
