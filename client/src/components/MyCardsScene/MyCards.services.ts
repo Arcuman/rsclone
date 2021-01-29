@@ -1,33 +1,77 @@
 import {Deck} from '@/components/Deck/Deck.model';
-import {getUserDeckById} from '@/components/Deck/Deck.services';
+import {getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
 import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
-import { decksPosition, NAME_DECKS } from './constants';
+import { getUserCards } from '@/components/Card/Card.services';
 import { IMyCardsScene} from './MyCards.model';
-import { renderMyCards, controlCardsInfo, controlDeckInfo } from './MyCards.render';
+import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
 import { AllCards } from './CardsInfo';
 import { createMenyButton } from './Button/Button.render';
+import {
+  cardsPosition,
+  decksPosition,
+  cardsContainerPosition,
+  decksContainerPosition,  
+  NAME_CARDS,
+  NAME_DECKS,  
+  FIRST_PAGE,
+  NUMBER_CARDS_ON_PAGE,
+} from './constants';
 
 export const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<void> => { 
   const userDeckData = await getUserDeckById(userDeck.user_deck_id);
   if (!userDeckData) {
     throw new Error();
   } 
-  // console.log('userDeckData', userDeckData);
-  const cardsInSelectDeck: Card[] = userDeckData.cards;
+  
+  const cardsInSelectDeck = <Card[]>userDeckData.cards;
+  // const cardsInSelectDeck: Card[] = AllCards;
   const stateCardsOfDecks =  scene.getStateCardsOfDecks();
-  // stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck; !!!!!!!!!
-  stateCardsOfDecks.CARDS_DATA = AllCards;
-  const totalPage = (AllCards.length/12);
-  // console.log('totalPage', totalPage);
-  stateCardsOfDecks.TOTAL_PAGE = totalPage;
-   
-  // console.log('stateCardsOfDecks.CARDS_DATA', stateCardsOfDecks.CARDS_DATA);
-  const decksContainer = scene.getDeksContainer();
-  decksContainer.removeAll();
-  renderMyCards(scene, NAME_DECKS, AllCards, decksPosition, decksContainer);
-  // renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
+  stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
 
+  const totalPage = (cardsInSelectDeck.length / NUMBER_CARDS_ON_PAGE);
+  stateCardsOfDecks.TOTAL_PAGE = totalPage;
+
+  const decksContainer = scene.getDecksContainer();
+  decksContainer.removeAll();
+
+  renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
+};
+
+export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
+  const userCards = await getUserCards();
+  // const userCards = AllCards;
+  if (!userCards) {
+    throw new Error();
+  }
+  
+  scene.setUserCards(userCards);
+  scene.setMyCardsCurrentPage(FIRST_PAGE);
+
+  const totalPage = (userCards.length / NUMBER_CARDS_ON_PAGE);
+  scene.setMyCardsTotalPage(totalPage);
+  
+  const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
+  scene.setMyCardsContainer(cardsContainer);
+
+  renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);
+};
+
+export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
+  const userDecks = await getUserDecks();
+ 
+  if (!userDecks) {
+    throw new Error();
+  } 
+  
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition );
+  scene.setDecksContainer(decksContainer);
+  
+  const stateCardsOfDecks =  scene.getStateCardsOfDecks();
+  stateCardsOfDecks.CURRENT_PAGE = FIRST_PAGE;  
+  stateCardsOfDecks.DECKS_DATA = userDecks;
+
+  renderDeck(scene, userDecks, decksContainer);  
 };
 
 export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void => {

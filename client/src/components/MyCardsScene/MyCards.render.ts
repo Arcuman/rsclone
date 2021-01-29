@@ -1,13 +1,10 @@
 import { createBaseCard } from '@/components/Card/Card.render';
-import { setScalableCardInContainer, getUserCards } from '@/components/Card/Card.services';
+import { setScalableCardInContainer } from '@/components/Card/Card.services';
 import { Card } from '@/components/Card/Card.model';
-import { getUserDecks, setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
+import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
-import {
-  cardsPosition,
-  cardsContainerPosition,
-  decksContainerPosition,
+import { 
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
   DECKS_OFFSET_Y,
@@ -19,7 +16,8 @@ import {
   NAME_CARDS,
   NAME_DECKS,
   ZERO_POSITION_Y,  
-  TINT_VALUE_CLICK,  
+  TINT_VALUE_CLICK,
+  NUMBER_CARDS_ON_PAGE, 
 } from './constants';
 import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 
@@ -54,7 +52,7 @@ function getPositionX(index: number, cardsPositionInfo: CardsPosition): number {
   return posX;
 }
 
-const renderContainer = (
+export const renderContainer = (
   scene: IMyCardsScene,
   name: string,
   containerPosition: CardsContainerPosition,
@@ -71,19 +69,17 @@ export const renderMyCards = (
   allCards: Card[],
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
-): void => {
-  
+): void => {  
   let cardsOnOnePage = [];
-  if (name === NAME_DECKS) {    
+  let currentPage = 1;
+  if (name === NAME_DECKS) {
     const stateCardsOfDecks =  scene.getStateCardsOfDecks();
-    const currentPage =  stateCardsOfDecks.CURRENT_PAGE;
-    console.log('currentPage', currentPage);    
-    cardsOnOnePage = allCards.filter((item, id) => (id >= 12*(currentPage-1) && id < 12 * currentPage)? item: '');
-    // console.log('cardsOnOnePage', cardsOnOnePage);
-  } else {
-    cardsOnOnePage = allCards;
-  }  
-
+    currentPage =  stateCardsOfDecks.CURRENT_PAGE;
+  } else if (name === NAME_CARDS) {
+    currentPage = scene.getMyCardsCurrentPage();    
+  }
+  cardsOnOnePage = allCards.filter((item, id) => (id >= NUMBER_CARDS_ON_PAGE*(currentPage-1) && id < NUMBER_CARDS_ON_PAGE * currentPage)? item: '');
+  
   cardsOnOnePage.forEach((item: Card, id:number) => {
     const posX = getPositionX(id, cardsPositionInfo);    
     const posY = getPositionY(id, name);
@@ -116,33 +112,3 @@ export const renderDeck = (
     userDeck.add(userDeckName);
   });
 };
-
-export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
-  const userCards = await getUserCards();
-  if (!userCards) {
-    throw new Error();
-  }
-  scene.setUserCards(userCards);
-  // console.log('userCards', userCards);
-  const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
-  scene.setMyCardsContainer(cardsContainer);
-
-  renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);  
-};
-
-export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
-  const userDecks = await getUserDecks();
-  if (!userDecks) {
-    throw new Error();
-  } 
-  
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition );
-  scene.setDeksContainer(decksContainer);
-
-  const stateCardsOfDecks =  scene.getStateCardsOfDecks();
-  // console.log('stateCardsOfDecks', stateCardsOfDecks);
-  stateCardsOfDecks.CURRENT_PAGE =1;
-
-  renderDeck(scene, userDecks, decksContainer);  
-};
-

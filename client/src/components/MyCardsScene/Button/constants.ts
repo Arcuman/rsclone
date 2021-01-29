@@ -35,3 +35,4 @@ export const CARDS_RIGHT = 'cards_right';
 export const DECKS_LEFT = 'decks_left';
 export const DECKS_RIGHT = 'decks_right';
 export const MIN_POSSIBLE_PAGES = 1;
+export const ONE_PAGE = 1;

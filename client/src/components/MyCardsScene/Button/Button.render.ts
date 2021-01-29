@@ -33,9 +33,7 @@ export const renderArrowButton = (
     slideButton.on('pointerup', () => {
       slideButton.setScale(ARROW_BUTTON_RISE_SCALE, ARROW_BUTTON_RISE_SCALE);
       slideButton.clearTint();
-      slidePage(scene, slideButton.name);
-      console.log('arrowButton', slideButton);
-      console.log('arrowButton.name', slideButton.name);
+      slidePage(scene, slideButton.name);      
     });
   });
 };

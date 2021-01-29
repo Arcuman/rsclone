@@ -49,3 +49,4 @@ export const NAME_DECKS = 'decks';
 export const ZERO_POSITION_Y = 0;
 export const TINT_VALUE_CLICK = 0x59503d;
 export const NUMBER_CARDS_ON_PAGE = 12;
+export const FIRST_PAGE = 1;

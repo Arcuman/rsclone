@@ -10,13 +10,14 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private currentPageMyCards: number;
 
+  private totalPageMyCards: number;
+
   private myCardsContainer: Phaser.GameObjects.Container;
 
   private deksContainer: Phaser.GameObjects.Container;
 
-  private myCardsCurrentPage: number;  
-
   private stateCardsOfDecks: StateCardsOfDecks = {
+    DECKS_DATA: [],
     CARDS_DATA: [],
     CURRENT_PAGE: 1,
     TOTAL_PAGE: 1,  
@@ -46,21 +47,29 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     this.myCardsContainer= value;
   }
 
-  public getDeksContainer(): Phaser.GameObjects.Container {
+  public getDecksContainer(): Phaser.GameObjects.Container {
     return this.deksContainer;
   }
 
-  public setDeksContainer( value: Phaser.GameObjects.Container ): void {
+  public setDecksContainer( value: Phaser.GameObjects.Container ): void {
     this.deksContainer= value;
   }
 
   public getMyCardsCurrentPage(): number {
-    return this.myCardsCurrentPage;
+    return this.currentPageMyCards;
   }
 
   public setMyCardsCurrentPage(value: number): void {
-    this.myCardsCurrentPage = value;
+    this.currentPageMyCards = value;
   }
+
+  public getMyCardsTotalPage(): number {
+    return this.totalPageMyCards;
+  }
+
+  public setMyCardsTotalPage(value: number): void {
+    this.totalPageMyCards = value;
+  }  
 
   public getStateCardsOfDecks(): StateCardsOfDecks {
     return this.stateCardsOfDecks;
