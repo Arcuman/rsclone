@@ -5,7 +5,7 @@ export interface CardsContainerPosition {
   CONTAINER_Y: number;
 }
 
-export interface CardsPosition {  
+export interface CardsPosition {
   OFFSET_X: number;
   EXTRA_OFFSET_X: number;
   REDUCE_ID_1: number;
@@ -13,7 +13,7 @@ export interface CardsPosition {
   REDUCE_ID_3: number;
 }
 
-export interface IMyCardsScene extends Phaser.Scene{
+export interface IMyCardsScene extends Phaser.Scene {
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
 }

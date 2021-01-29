@@ -14,7 +14,7 @@ export const positionInfo: PositionText = {
   TEXT_Y: 160,
 };
 
-export const positionDeckText: PositionText = {  
+export const positionDeckText: PositionText = {
   TEXT_X: 70,
   TEXT_Y: -60,
 };

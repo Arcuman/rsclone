@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { IMAGES, SCENES, AUDIO, ATLASES, MENU_IMAGES} from '@/components/Game/constant';
+import { IMAGES, SCENES, AUDIO, ATLASES, MENU_IMAGES } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { Card } from '@/components/Card/Card.model';
 import { browserHistory } from '@/router/history';
@@ -12,6 +12,8 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
   private userCards: Card[] = [];
 
   private currentPageMyCards: number;
+
+  private menuButton: Phaser.GameObjects.Sprite;
 
   constructor() {
     super({
@@ -29,7 +31,7 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     this.userCards = value;
   }
 
-  public createMenyButton(scene: IMyCardsScene, cardsBgAudio:Phaser.Sound.BaseSound): void {
+  public createMenyButton(scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void {
     const positionMenu = {
       OFFSET_X: 180,
       Y: 20,
@@ -38,8 +40,8 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
       X: scene.cameras.main.width - positionMenu.OFFSET_X,
       Y: positionMenu.Y,
     };
-  
-    const menuButton = createButton(
+
+    this.menuButton = createButton(
       scene,
       positionMenuCoords,
       0,
@@ -47,13 +49,13 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
       MENU_IMAGES.MENU_BUTTON,
       500,
     );
-  
-    menuButton.on('pointerup', () => {
+
+    this.menuButton.on('pointerup', () => {
       cardsBgAudio.stop();
       browserHistory.push(MENU_URL);
     });
   }
-  
+
   create(): void {
     const cardsBgAudio = this.sound.add(AUDIO.MYCARDS_BG_AUDIO.NAME, { loop: true });
     cardsBgAudio.play();

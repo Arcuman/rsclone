@@ -2,6 +2,8 @@ import { Level, levelModel } from '@/resources/level/level.model';
 
 const getLevelById = (id: number): Promise<Level> => levelModel.getLevelById(id);
 
+const getLevelByExp = (exp: number): Promise<number> => levelModel.getLevelByExp(exp);
+
 const getLevelByLevelValue = (levelValue: number): Promise<Level> =>
   levelModel.getLevelByLevelValue(levelValue);
 
@@ -30,4 +32,5 @@ export const levelService = {
   createLevel,
   updateLevelById,
   deleteLevelById,
+  getLevelByExp,
 };

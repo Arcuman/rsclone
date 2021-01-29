@@ -4,7 +4,6 @@ import { Card } from '@/components/Card/Card.model';
 import { getUserDecks, setColoredDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
-
 import {
   cardsPosition,
   cardsContainerPosition,
@@ -96,9 +95,9 @@ const renderDeck = (
   userDecks.forEach(item => {
     const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
-    setColoredDeck(lastCardInDeck);
+    setColoredDeck(<Phaser.GameObjects.Sprite>lastCardInDeck);
 
-    setClickableDeck(scene, item, lastCardInDeck);
+    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck);
     const userDeckName = createDeckName(scene, item, positionDeckName);
 
     decksContainer.add(userDeck);
@@ -128,7 +127,6 @@ const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
 };
 
 export const create = (scene: IMyCardsScene): void => {
-  
   controlCardsInfo(scene);
   controlDeckInfo(scene);
 };

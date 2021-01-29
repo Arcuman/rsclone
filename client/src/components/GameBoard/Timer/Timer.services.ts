@@ -8,10 +8,12 @@ export function addTimerEndSprite(scene: Phaser.Scene): void {
     repeat: SPRITE_ANIMATION_CONFIG.CONFIG_EXPLOSION.REPEAT,
   };
   scene.anims.create(configExplosion);
-  scene.add.sprite(
-    SPRITE_POSITION.EXPLOSION_SPRITE.POS_X,
-    SPRITE_POSITION.EXPLOSION_SPRITE.POS_Y,
-    SPRITE_ANIMATION_CONFIG.CONFIG_EXPLOSION.FRAMES)
+  scene.add
+    .sprite(
+      SPRITE_POSITION.EXPLOSION_SPRITE.POS_X,
+      SPRITE_POSITION.EXPLOSION_SPRITE.POS_Y,
+      SPRITE_ANIMATION_CONFIG.CONFIG_EXPLOSION.FRAMES,
+    )
     .play(SPRITE_ANIMATION_CONFIG.CONFIG_EXPLOSION.KEY);
 }
 export function addTimerAlmostExpiredSprite(scene: Phaser.Scene): void {
@@ -22,17 +24,15 @@ export function addTimerAlmostExpiredSprite(scene: Phaser.Scene): void {
     repeat: SPRITE_ANIMATION_CONFIG.CONFIG_WICK.REPEAT,
   };
   scene.anims.create(configWick);
-  scene.add.sprite(
-    SPRITE_POSITION.WICK_SPRITE.POS_X,
-    SPRITE_POSITION.WICK_SPRITE.POS_Y,
-    SPRITE_ANIMATION_CONFIG.CONFIG_WICK.FRAMES)
+  scene.add
+    .sprite(
+      SPRITE_POSITION.WICK_SPRITE.POS_X,
+      SPRITE_POSITION.WICK_SPRITE.POS_Y,
+      SPRITE_ANIMATION_CONFIG.CONFIG_WICK.FRAMES,
+    )
     .play(SPRITE_ANIMATION_CONFIG.CONFIG_WICK.KEY);
 }
 
 export function setTimerBackground(scene: Phaser.Scene): void {
-  scene.add.image(
-    BOMB_IMAGE.POS_X,
-    BOMB_IMAGE.POS_Y,
-    BOMB_IMAGE.TEXTURE,
-  );
+  scene.add.image(BOMB_IMAGE.POS_X, BOMB_IMAGE.POS_Y, BOMB_IMAGE.TEXTURE);
 }

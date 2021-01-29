@@ -13,6 +13,7 @@ import {
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
+import { GameOverScene } from '@/components/GameOverScene/GameOverScene.render';
 import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 
@@ -98,25 +99,20 @@ function loadScenes(scene: Phaser.Scene) {
   scene.scene.add(SCENES.MY_CARDS, MyCardsScene, false);
   scene.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
   scene.scene.add(SCENES.PROFILE, ProfileScene, false);
+  scene.scene.add(SCENES.GAME_OVER, GameOverScene, false);
 }
 
 function loadSpritesheets(scene: Phaser.Scene) {
-  scene.load.spritesheet(
-    'boom',
-    BOOM_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
-    });
-  scene.load.spritesheet(
-    'wick',
-    WICK_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
-    });
+  scene.load.spritesheet('boom', BOOM_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
+  });
+  scene.load.spritesheet('wick', WICK_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
+  });
 }
 
 export function preload(scene: Phaser.Scene, nextScene: string): void {
