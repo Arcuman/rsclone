@@ -31,8 +31,6 @@ export function nextTurn(openRoom: Room, player: Player, io: Server): void {
     const deckCard = enemy.deckCards.pop();
     if (enemy.handCards.length < MAX_HAND_CARDS) {
       enemy.handCards.push(deckCard!);
-      console.log(enemy.name);
-      console.log(player.name);
       enemy.socket.emit(GET_DECK_CARD, deckCard);
       player.socket.emit(ENEMY_GET_DECK_CARD);
     } else {

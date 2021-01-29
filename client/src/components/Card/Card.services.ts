@@ -46,12 +46,14 @@ export function calcNewPosition(
 ): number {
   const sortedCards = cards;
   let newDeletedIndex = deletedIndex;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  console.log(cards.map(cardd => cardd.getData(CARD_ID_FIELD)));
   if (newDeletedIndex % 2 === 1) {
-    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
-    for (let i = 1; i < newDeletedIndex; i += 2) {
-      if (!sortedCards[i + 2]) break;
-      [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
+    for (let i = newDeletedIndex; i > 1; i -= 2) {
+      console.log('in first cycle');
+      [sortedCards[i], sortedCards[i - 2]] = [sortedCards[i - 2], sortedCards[i]];
     }
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
     newDeletedIndex = 0;
   }
   for (let i = newDeletedIndex; i < sortedCards.length; i += 2) {
