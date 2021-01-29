@@ -2,6 +2,18 @@ import { TextDecoration } from '@/types/types';
 
 export const LEVEL_TEXT = 'Уровень:';
 export const EXP_TEXT = 'Опыт:';
+export const NEEDED_EXP_TEXT = 'Необходимо опыта:';
+export const ARROW_TEXT = '->';
+
+export const TEXT_POSITION_X_CENTER = 640;
+export const TEXT_POSITION_X_COL_1 = 350;
+export const TEXT_POSITION_X_COL_2 = 600;
+export const TEXT_POSITION_X_COL_3 = 740;
+export const TEXT_POSITION_X_COL_4 = 880;
+export const TEXT_POSITION_X_NEEDED_EXP = 800;
+
+export const TEXT_POSITION_Y = 120;
+export const TEXT_POSITION_Y_OFFSET = 80;
 
 export const messageDecoration: TextDecoration = {
   FONT_SIZE: '70px',
