@@ -1,10 +1,9 @@
 import { createBaseCard } from '@/components/Card/Card.render';
 import { setScalableCardInContainer, getUserCards } from '@/components/Card/Card.services';
 import { Card } from '@/components/Card/Card.model';
-import { getUserDecks, setColoredDeck } from '@/components/Deck/Deck.services';
+import { getUserDecks, setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
-
 import {
   cardsPosition,
   cardsContainerPosition,
@@ -19,10 +18,10 @@ import {
   NUMBER_CARDS_IN_DECK,
   NAME_CARDS,
   NAME_DECKS,
-  ZERO_POSITION_Y,
+  ZERO_POSITION_Y,  
+  TINT_VALUE_CLICK,  
 } from './constants';
 import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
-import { setClickableDeck } from './MyCards.services';
 
 function getPositionY(index: number, name: string): number {
   const weightId = Math.floor(index / NUMBER_CARDS_IN_ROW);
@@ -72,8 +71,20 @@ export const renderMyCards = (
   allCards: Card[],
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
-): void => { 
-  allCards.forEach((item: Card, id:number) => {   
+): void => {
+  
+  let cardsOnOnePage = [];
+  if (name === NAME_DECKS) {    
+    const stateCardsOfDecks =  scene.getStateCardsOfDecks();
+    const currentPage =  stateCardsOfDecks.CURRENT_PAGE;
+    console.log('currentPage', currentPage);    
+    cardsOnOnePage = allCards.filter((item, id) => (id >= 12*(currentPage-1) && id < 12 * currentPage)? item: '');
+    // console.log('cardsOnOnePage', cardsOnOnePage);
+  } else {
+    cardsOnOnePage = allCards;
+  }  
+
+  cardsOnOnePage.forEach((item: Card, id:number) => {
     const posX = getPositionX(id, cardsPositionInfo);    
     const posY = getPositionY(id, name);
     const card = createBaseCard({
@@ -98,7 +109,7 @@ export const renderDeck = (
     const lastCardInDeck = userDeck.last;
     setColoredDeck(<Phaser.GameObjects.Sprite>lastCardInDeck);
 
-    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck);
+    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
     const userDeckName = createDeckName(scene, item, positionDeckName);
 
     decksContainer.add(userDeck);
@@ -115,6 +126,7 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   // console.log('userCards', userCards);
   const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
   scene.setMyCardsContainer(cardsContainer);
+
   renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);  
 };
 
@@ -125,9 +137,12 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
   } 
   
   const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition );
-  decksContainer.setScrollFactor(0.25, 0.25, true); // check scroll!!!!!!!!!!!
-  decksContainer.setSize(400, 400);
   scene.setDeksContainer(decksContainer);
+
+  const stateCardsOfDecks =  scene.getStateCardsOfDecks();
+  // console.log('stateCardsOfDecks', stateCardsOfDecks);
+  stateCardsOfDecks.CURRENT_PAGE =1;
+
   renderDeck(scene, userDecks, decksContainer);  
 };
 

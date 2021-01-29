@@ -1,17 +1,28 @@
 import {Deck} from '@/components/Deck/Deck.model';
 import {getUserDeckById} from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
-import { TINT_VALUE_CLICK, decksPosition, NAME_DECKS } from './constants';
+import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
+import { decksPosition, NAME_DECKS } from './constants';
 import { IMyCardsScene} from './MyCards.model';
 import { renderMyCards, controlCardsInfo, controlDeckInfo } from './MyCards.render';
 import { AllCards } from './CardsInfo';
+import { createMenyButton } from './Button/Button.render';
 
-const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<void> => { 
+export const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<void> => { 
   const userDeckData = await getUserDeckById(userDeck.user_deck_id);
+  if (!userDeckData) {
+    throw new Error();
+  } 
   // console.log('userDeckData', userDeckData);
   const cardsInSelectDeck: Card[] = userDeckData.cards;
-  // console.log('userDeckData', cardsInSelectDeck);
-  // console.log('getDeksContainer', scene.getDeksContainer());
+  const stateCardsOfDecks =  scene.getStateCardsOfDecks();
+  // stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck; !!!!!!!!!
+  stateCardsOfDecks.CARDS_DATA = AllCards;
+  const totalPage = (AllCards.length/12);
+  // console.log('totalPage', totalPage);
+  stateCardsOfDecks.TOTAL_PAGE = totalPage;
+   
+  // console.log('stateCardsOfDecks.CARDS_DATA', stateCardsOfDecks.CARDS_DATA);
   const decksContainer = scene.getDeksContainer();
   decksContainer.removeAll();
   renderMyCards(scene, NAME_DECKS, AllCards, decksPosition, decksContainer);
@@ -19,22 +30,9 @@ const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<void> =>
 
 };
 
-export const setClickableDeck = (
-  scene: IMyCardsScene,
-  userDeck: Deck,
-  topCard: Phaser.GameObjects.Sprite,
-): void => {
-  topCard.setInteractive();
-  topCard.on('pointerdown', () => {
-    topCard.setTint(TINT_VALUE_CLICK);
-  });
-  topCard.on('pointerup', () => {
-    topCard.clearTint();
-    openDeck(scene, userDeck);
-  });
-};
-
-export const create = (scene: IMyCardsScene): void => {
+export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void => {
   controlCardsInfo(scene);
-  controlDeckInfo(scene);  
+  controlDeckInfo(scene);
+  renderArrowButton(scene);
+  createMenyButton(scene, cardsBgAudio);
 };

@@ -100,6 +100,14 @@ export const IMAGES = {
     NAME: 'bomb',
     PATH: '../../assets/images/Timer/bomb-explosion.png',
   },
+  ARROW_BUTTON_LEFT: {
+    NAME: 'arrow_left',
+    PATH: 'assets/images/arrow_left.png',
+  },
+  ARROW_BUTTON_RIGHT: {
+    NAME: 'arrow_right',
+    PATH: 'assets/images/arrow_right.png',
+  },
 };
 
 export const MENU_IMAGES = {

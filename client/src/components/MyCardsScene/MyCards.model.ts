@@ -13,6 +13,12 @@ export interface CardsPosition {
   REDUCE_ID_3: number;
 }
 
+export interface StateCardsOfDecks {
+  CARDS_DATA: Card[];
+  CURRENT_PAGE: number;
+  TOTAL_PAGE: number;  
+}
+
 export interface IMyCardsScene extends Phaser.Scene{
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
@@ -22,4 +28,10 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getDeksContainer(): Phaser.GameObjects.Container;
   setDeksContainer(value: Phaser.GameObjects.Container): void;
+
+  getMyCardsCurrentPage(): number;
+  setMyCardsCurrentPage(value: number): void;  
+
+  getStateCardsOfDecks(): StateCardsOfDecks;
+  setStateCardsOfDecks(value: StateCardsOfDecks): void;
 }

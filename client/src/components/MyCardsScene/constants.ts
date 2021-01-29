@@ -39,7 +39,7 @@ export const positionDeckName: PositionText = {
 };
 
 export const CARDS_POS_UP_Y = 0;
-export const CARDS_POS_DOWN_Y = 155;
+export const CARDS_POS_DOWN_Y = 150;
 export const DECKS_OFFSET_Y = 140;
 export const CARDS_SCALE = 0.7;
 export const NUMBER_CARDS_IN_ROW = 3;
@@ -48,3 +48,4 @@ export const NAME_CARDS = 'cards';
 export const NAME_DECKS = 'decks';
 export const ZERO_POSITION_Y = 0;
 export const TINT_VALUE_CLICK = 0x59503d;
+export const NUMBER_CARDS_ON_PAGE = 12;
