@@ -13,6 +13,9 @@ const NOT_ENOUGH_MANA = 'notEnoughMana';
 const START_GAME = 'startGame';
 const PLAYER_WIN = 'PLAYER_WIN';
 const PLAYER_LOSE = 'PLAYER_LOSE';
+const GET_DECK_CARD = 'GET_DECK_CARD';
+const ENEMY_GET_DECK_CARD = 'ENEMY_GET_DECK_CARD';
+const DESTROY_DECK_CARD = 'DESTROY_DECK_CARD';
 
 const WIN = 'ПОБЕДА';
 const LOSE = 'ПОРАЖЕНИЕ';
@@ -35,4 +38,7 @@ export {
   PLAYER_LOSE,
   WIN,
   LOSE,
+  GET_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
+  DESTROY_DECK_CARD,
 };

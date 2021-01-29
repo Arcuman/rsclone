@@ -26,6 +26,9 @@ import {
   PLAYER_LOSE,
   WIN,
   LOSE,
+  GET_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
+  DESTROY_DECK_CARD,
 } from '@/components/GameBoard/constants';
 import {
   activateTableCards,
@@ -44,6 +47,10 @@ import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/c
 import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
 import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
+import { addNewCard } from '@/components/GameBoard/UserCards/UserCards.services';
+import { enemyCardCover } from '@/components/GameBoard/EnemyCards/constant';
+import { COVER_CARD } from '@/constants/constants';
+import { PLAYER_CARDS_POSITION } from '@/components/GameBoard/UserCards/constants';
 import { createTimer } from './Timer/Timer.render';
 import {
   addTimerAlmostExpiredSprite,
@@ -209,6 +216,25 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     this.socket.on(HAND_CARD_PLAY, (card: Card, isPlayerOne: boolean) => {
       onHandCardPlay(this, card, isPlayerOne);
     });
+
+    this.socket.on(GET_DECK_CARD, (deckCard: Card) => {
+      addNewCard(this, this.playerCards, deckCard, this.playerCards.length, PLAYER_CARDS_POSITION);
+    });
+
+    this.socket.on(ENEMY_GET_DECK_CARD, () => {
+      addNewCard(this, this.enemyCards, enemyCardCover, this.enemyCards.length, COVER_CARD.POS_Y);
+    });
+
+    this.socket.on(DESTROY_DECK_CARD, (deckCard: Card, isPlayerOne: boolean) => {
+      if (isPlayerOne === this.isPlayerOne) {
+        console.log(deckCard);
+        console.log('my');
+      } else {
+        console.log(deckCard);
+        console.log('enemy');
+      }
+    });
+
     this.socket.on(TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
       damageCard(this.playerTableCards, attackingCard);
       damageCard(this.enemyTableCards, damagedCard);

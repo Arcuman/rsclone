@@ -15,6 +15,7 @@ const INIT_STATE = 'initState';
 const START_GAME = 'startGame';
 const NEXT_TURN = 'nextTurn';
 const GET_DECK_CARD = 'GET_DECK_CARD';
+const ENEMY_GET_DECK_CARD = 'ENEMY_GET_DECK_CARD';
 const DESTROY_DECK_CARD = 'DESTROY_DECK_CARD';
 const TIMER = 'timer';
 const WAIT_SECOND_PLAYER = 'waitSecondPlayer';
@@ -54,5 +55,6 @@ export {
   PLAYER_WIN,
   PLAYER_LOSE,
   GET_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
   DESTROY_DECK_CARD,
 };
