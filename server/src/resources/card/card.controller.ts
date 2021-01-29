@@ -1,4 +1,3 @@
-import statusCodes from '@/resources/users/user.constants';
 import { Card, cardModel } from './card.model';
 
 const getAll = (): Promise<Card[]> => cardModel.getAll();

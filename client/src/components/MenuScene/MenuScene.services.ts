@@ -1,5 +1,5 @@
 import { setBackground } from '@/utils/utils';
-import { ATLASES, IMAGES, MENU_IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/constants';
 import { browserHistory } from '@/router/history';
 import { GAME_URL, MY_CARDS_URL, PROFILE_URL } from '@/router/constants';

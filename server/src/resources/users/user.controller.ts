@@ -5,7 +5,6 @@ import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
 import {levelService} from '@/resources/level/level.controller';
 import {Card} from '@/resources/card/card.model';
-import {Deck} from '@/resources/decks/decks.model';
 import statusCodes from './user.constants';
 import {usersModel, User, Session, UserProfile, UpdatedUserLevelInfo} from './user.model';
 
