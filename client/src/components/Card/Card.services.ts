@@ -44,26 +44,25 @@ export function calcNewPosition(
   cards: Phaser.GameObjects.Container[],
   deletedIndex: number,
 ): number {
-  const newCards = cards;
+  const sortedCards = cards;
   let newDeletedIndex = deletedIndex;
   if (newDeletedIndex % 2 === 1) {
-    [newCards[0], newCards[1]] = [newCards[1], newCards[0]];
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
     for (let i = 1; i < newDeletedIndex; i += 2) {
-      if (!newCards[i + 2]) break;
-      [newCards[i], newCards[i + 2]] = [newCards[i + 2], newCards[i]];
+      if (!sortedCards[i + 2]) break;
+      [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
     }
     newDeletedIndex = 0;
   }
-  for (let i = newDeletedIndex; i < newCards.length; i += 2) {
-    if (!newCards[i + 2]) {
+  for (let i = newDeletedIndex; i < sortedCards.length; i += 2) {
+    if (!sortedCards[i + 2]) {
       break;
     }
     newDeletedIndex += 2;
-    [newCards[i], newCards[i + 2]] = [newCards[i + 2], newCards[i]];
+    [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
   }
-  if (newDeletedIndex === 0 && newCards.length === 2) {
-    console.log('here');
-    [newCards[0], newCards[1]] = [newCards[1], newCards[0]];
+  if (newDeletedIndex === 0 && sortedCards.length === 2) {
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
     newDeletedIndex = 1;
   }
   return newDeletedIndex;
@@ -74,16 +73,11 @@ export function animateNewPosition(
   cards: Phaser.GameObjects.Container[],
 ): void {
   cards.forEach((card, index) => {
-    console.log(card);
-    const newCard = card;
     const newPosX = getPositionOfCard(scene, index);
-    if (newPosX > newCard.x) {
-      while (newPosX - newCard.x > 0) {
-        newCard.x += 0.000001;
-      }
-    } else {
-      newCard.x = newPosX;
-    }
+    scene.tweens.add({
+      targets: card,
+      x: { value: newPosX, duration: 1500, ease: 'Power2' },
+    });
   });
 }
 
