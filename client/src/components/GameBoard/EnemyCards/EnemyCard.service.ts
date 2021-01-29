@@ -8,6 +8,7 @@ import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: boolean) {
   if (scene.getIsPlayerOne() !== isPlayerOne) {
     scene.getEnemyCards().pop()!.destroy();
+
     const enemyCard = createScalableCard({
       scene,
       posX: getPositionOfCard(scene, scene.getEnemyTableCards().length),

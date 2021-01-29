@@ -21,6 +21,7 @@ import {
   CARD_IS_ACTIVE_FIELD,
   CARD_IS_PLAYED_FIELD,
   CARD_IS_PLAYED_FIELD_INIT,
+  SIZE_LARGE_CARD,
 } from './constants';
 
 export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Container {
@@ -109,5 +110,11 @@ export function createScalableCard(data: CardCreateInfo): Phaser.GameObjects.Con
   const cardContainer = createBaseCard(data);
   setScalableCard(data.scene, cardContainer, SIZE_TINY_CARD);
   cardContainer.setScale(SIZE_TINY_CARD);
+  return cardContainer;
+}
+export function createLargeScalableCard(data: CardCreateInfo): Phaser.GameObjects.Container {
+  const cardContainer = createBaseCard(data);
+  setScalableCard(data.scene, cardContainer, SIZE_LARGE_CARD);
+  cardContainer.setScale(SIZE_LARGE_CARD);
   return cardContainer;
 }

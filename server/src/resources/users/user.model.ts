@@ -1,3 +1,4 @@
+import { Card } from '@/resources/card/card.model';
 import { db } from '../../../db';
 
 export interface User {
@@ -20,6 +21,16 @@ export interface Session {
   user_id: number;
   ip: string;
   expiresIn: number;
+}
+
+export interface UpdatedUserLevelInfo {
+  prevLevel: number;
+  newLevel: number;
+  prevExp: number;
+  curExp: number;
+  nextLevelExp: number;
+  totalLevelExp: number;
+  newCard?: Card;
 }
 
 const getAll = async (): Promise<User[]> => {

@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 import Phaser from 'phaser';
+import {
+  GameState,
+  IGameBoardScene,
+  UpdatedUserLevelInfo,
+} from '@/components/GameBoard/GameBoard.model';
 import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
-import { GameState, IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
@@ -19,6 +23,9 @@ import {
   ENEMY_TABLE_CARD_DAMAGE,
   PLAYER_DAMAGE,
   PLAYER_WIN,
+  PLAYER_LOSE,
+  WIN,
+  LOSE,
 } from '@/components/GameBoard/constants';
 import {
   activateTableCards,
@@ -44,7 +51,7 @@ import {
   setTimerBackground,
 } from './Timer/Timer.services';
 import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
-import { create, damageCard, destroyCard } from './GameBoard.services';
+import { create, damageCard, destroyEnemyCard, destroyPlayerCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -213,9 +220,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.socket.on(TABLE_CARD_DESTROY, (destroyedCard: Card, isPlayerOnePlay: boolean) => {
       if (isPlayerOnePlay === this.isPlayerOne) {
-        destroyCard(this.playerTableCards, destroyedCard);
+        destroyPlayerCard(this, this.playerTableCards, destroyedCard);
       } else {
-        destroyCard(this.enemyTableCards, destroyedCard);
+        destroyEnemyCard(this, this.enemyTableCards, destroyedCard);
       }
     });
 
@@ -227,12 +234,12 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       }
     });
 
-    this.socket.on(PLAYER_WIN, (isPlayerOnePlay: boolean) => {
-      if (isPlayerOnePlay === this.isPlayerOne) {
-        console.log('win');
-      } else {
-        console.log('lose');
-      }
+    this.socket.on(PLAYER_WIN, (info: UpdatedUserLevelInfo) => {
+      this.scene.start(SCENES.GAME_OVER, { message: WIN, playerInfo: info });
+    });
+
+    this.socket.on(PLAYER_LOSE, (info: UpdatedUserLevelInfo) => {
+      this.scene.start(SCENES.GAME_OVER, { message: LOSE, playerInfo: info });
     });
   }
 }

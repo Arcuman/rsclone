@@ -10,12 +10,12 @@ export const textDecoration: TextDecoration = {
 };
 
 export const positionInfo: PositionText = {
-  TEXT_X: 150,
-  TEXT_Y: 160,
+  TEXT_X: 210,
+  TEXT_Y: 150,
 };
 
-export const positionDeckText: PositionText = {  
-  TEXT_X: 70,
+export const positionDeckText: PositionText = {
+  TEXT_X: 75,
   TEXT_Y: -60,
 };
 
@@ -26,11 +26,12 @@ export const positionMenu = {
 
 export const BUTTON_HEIGHT = 126;
 export const HEIGHT_OFFSET = 50;
+export const BUTTON_SCALE = 0.4;
 
 export const INFO_BLOCK_SCALE = 0.8;
-export const INFO_BLOCK_X = 270;
+export const INFO_BLOCK_X = 330;
 export const USER_PROFILE_INFO = {
-  nickName: 'Ник:',
+  nickName: '  Ник:',
   level: 'Уровень:',
   exp: 'Опыт:',
   cards: 'Мои карты:',

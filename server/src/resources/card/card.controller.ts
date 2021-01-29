@@ -1,9 +1,12 @@
+import statusCodes from '@/resources/users/user.constants';
 import { Card, cardModel } from './card.model';
 
 const getAll = (): Promise<Card[]> => cardModel.getAll();
 const getAllByUserId = (user_id: number): Promise<Card[]> => cardModel.getAllByUserId(user_id);
 const getCardById = (id: number): Promise<Card> => cardModel.getCardById(id);
 const getInitialCards = (count: number): Promise<Card[]> => cardModel.getInitialCards(count);
+const getUnavailableCards = (user_id: number): Promise<Card[]> =>
+  cardModel.getUnavailableCards(user_id);
 
 const deleteCardById = async (id: number): Promise<number> => {
   const count = await cardModel.deleteCardById(id);
@@ -30,6 +33,13 @@ const setUserCards = async (cards: Card[], userId: number): Promise<boolean> => 
   return notError;
 };
 
+function randomCard(min: number, max: number) {
+  const rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+
+const getRandomCard = (cards: Card[]): Card => cards[randomCard(0, cards.length - 1)];
+
 export const cardService = {
   getAll,
   getAllByUserId,
@@ -39,4 +49,6 @@ export const cardService = {
   setUserCards,
   updateCardById,
   deleteCardById,
+  getUnavailableCards,
+  getRandomCard,
 };

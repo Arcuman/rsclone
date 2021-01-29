@@ -6,7 +6,7 @@ export interface CardsContainerPosition {
   CONTAINER_Y: number;
 }
 
-export interface CardsPosition {  
+export interface CardsPosition {
   OFFSET_X: number;
   EXTRA_OFFSET_X: number;
   REDUCE_ID_1: number;

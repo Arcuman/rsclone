@@ -7,7 +7,7 @@ export const ENV_NAME = '../remoute.env';
 export const MAX_CARDS_IN_DECK = 10;
 export const INITIAL = 'Initial';
 export const INITIAL_LEVEL = 1;
-export const INITIAL_EXP = 1;
+export const INITIAL_EXP = 0;
 
 export const HTTP_HEADERS = [
   ['Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept,Authorization,Origin'],
