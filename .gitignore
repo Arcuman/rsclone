@@ -10,3 +10,4 @@ build/
 remoute.env
 logs
 debug.log
+client/src/assets/audio.zip

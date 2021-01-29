@@ -1,6 +1,6 @@
 import { setBackground, createTextData } from '@/utils/utils';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
-import { ATLASES, IMAGES, MENU_IMAGES, AUDIO} from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
 import { getUserDeckById } from '@/components/Deck/Deck.services';
@@ -10,6 +10,7 @@ import { MENU_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
 import { countCards } from '@/components/Card/Card.services';
+import { AUDIO_CONFIG } from '@/constants/constants';
 import {
   textDecoration,
   positionInfo,
@@ -57,7 +58,7 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
     )
     .then(async (userProfileData: UserProfile) => {
       const levelInfo: Level = await getLevelInfo(userProfileData.level_id);
-      return {...userProfileData, level:levelInfo.level};
+      return { ...userProfileData, level: levelInfo.level };
     })
     .catch(error => {
       throw new Error(error);
@@ -121,9 +122,9 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  const userCurrDeck = createDeck(scene, positionDeckContainer); 
+  const userCurrDeck = createDeck(scene, positionDeckContainer);
   const userCurrDeckName = createDeckName(scene, userCurrDeckInfo, positionDeckText);
-  const userCurrDeckNumber =createDeckInfo(scene, userCurrDeckInfo);
+  const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
   userCurrDeck.add(userCurrDeckName);
   userCurrDeck.add(userCurrDeckNumber);
 
@@ -134,14 +135,18 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
     textUserExp,
     textUserCards,
     textCurrDeck,
-    userCurrDeck,    
+    userCurrDeck,
   ];
 
   scene.add.container(0, 0, userInfoBLock);
 };
 
 export const create = (scene: Phaser.Scene): void => {
-  const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, {loop:true});  
+  scene.sound.pauseOnBlur = false;
+  const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, {
+    loop: true,
+    volume: AUDIO_CONFIG.volume.bg,
+  });
   profileBgAudio.play();
   setBackground(scene, IMAGES.PROFILE_BACKGROUND.NAME);
 

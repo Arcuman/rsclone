@@ -101,22 +101,16 @@ function loadScenes(scene: Phaser.Scene) {
 }
 
 function loadSpritesheets(scene: Phaser.Scene) {
-  scene.load.spritesheet(
-    'boom',
-    BOOM_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
-    });
-  scene.load.spritesheet(
-    'wick',
-    WICK_SPRITESHEET,
-    {
-      frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
-      frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
-      endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
-    });
+  scene.load.spritesheet('boom', BOOM_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.BOOM_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.BOOM_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.BOOM_FRAME.END_FRAME,
+  });
+  scene.load.spritesheet('wick', WICK_SPRITESHEET, {
+    frameWidth: FRAME_SIZE.WICK_FRAME.WIDTH,
+    frameHeight: FRAME_SIZE.WICK_FRAME.HEIGHT,
+    endFrame: FRAME_SIZE.WICK_FRAME.END_FRAME,
+  });
 }
 
 export function preload(scene: Phaser.Scene, nextScene: string): void {
