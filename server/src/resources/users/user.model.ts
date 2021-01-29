@@ -1,3 +1,4 @@
+import {Card} from '@/resources/card/card.model';
 import { db } from '../../../db';
 
 export interface User {
@@ -13,6 +14,7 @@ export interface UserProfile {
   level_id: number;
   exp: number;
   cur_user_deck_id: number;
+  countCards?: number;
 }
 
 export interface Session {
@@ -20,6 +22,16 @@ export interface Session {
   user_id: number;
   ip: string;
   expiresIn: number;
+}
+
+export interface UpdatedUserLevelInfo{
+  prevLevel: number;
+  newLevel: number;
+  prevExp: number;
+  curExp: number;
+  nextLevelExp: number;
+  totalLevelExp: number;
+  newCard?: Card;
 }
 
 const getAll = async (): Promise<User[]> => {

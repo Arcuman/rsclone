@@ -3,9 +3,11 @@ import { webToken } from '@/helpers/webToken';
 import { MAX_CARDS_IN_DECK, INITIAL, INITIAL_LEVEL, INITIAL_EXP } from '@/constants/constants';
 import { cardService } from '@/resources/card/card.controller';
 import { decksService } from '@/resources/decks/decks.controller';
-import { levelService } from '@/resources/level/level.controller';
+import {levelService} from '@/resources/level/level.controller';
+import {Card} from '@/resources/card/card.model';
+import {Deck} from '@/resources/decks/decks.model';
 import statusCodes from './user.constants';
-import { usersModel, User, Session, UserProfile } from './user.model';
+import {usersModel, User, Session, UserProfile, UpdatedUserLevelInfo} from './user.model';
 
 const createInitialUserData = async (userId: number, name: string): Promise<void> => {
   const initialCards = await cardService.getInitialCards(MAX_CARDS_IN_DECK);
@@ -54,7 +56,10 @@ export const getUserById = (id: number): Promise<User> => usersModel.getUserById
 const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLogin(login);
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
-const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
+const getUserProfile = async (id: number): Promise<UserProfile> => {
+  const userProfile:UserProfile = await usersModel.getUserProfile(id);
+  return userProfile;
+};
 
 const setUser = async (userData: User): Promise<number> => {
   const user = await usersModel.getUserByLogin(userData.login);
@@ -86,6 +91,48 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);
+
+const addNewCard = async (unavailableCards : Card[], user_id : number) : Promise<Card> =>{
+  const newCard = cardService.getRandomCard(unavailableCards);
+  const isSetUserCards = await cardService.setUserCards([newCard], user_id);
+  if (!isSetUserCards) {
+    throw new Error(statusCodes[400].addCard);
+  }
+  return cardService.getCardById(newCard.id);
+};
+
+const updateUserExp = async (user_id: number, receivedExp: number): Promise<UpdatedUserLevelInfo> => {
+  const user = await getUserProfile(user_id);
+  const userLevel = await levelService.getLevelById(user.level_id);
+  const newUserProfileData = {...user};
+  const res: UpdatedUserLevelInfo = {
+    prevLevel : userLevel.level,
+    newLevel: userLevel.level,
+    prevExp: user.exp,
+    curExp: user.exp,
+    nextLevelExp: userLevel.exp_to_lvl,
+    totalLevelExp: userLevel.exp_total,
+  };
+
+  if (user.exp + receivedExp >= userLevel.exp_total + userLevel.exp_to_lvl) {
+    let newLevel = await levelService.getLevelByLevelValue(userLevel.level + 1);
+    if (!newLevel) {
+      newLevel = userLevel;
+    }
+    const unavailableCards = await cardService.getUnavailableCards(user_id);
+    if (unavailableCards) {
+      res.newCard = await addNewCard(unavailableCards, user_id);
+    }
+    newUserProfileData.level_id = newLevel.level_id;
+    res.newLevel = newLevel.level;
+    res.nextLevelExp = newLevel.exp_to_lvl;
+    res.totalLevelExp = newLevel.exp_total;
+  }
+  newUserProfileData.exp += receivedExp;
+  res.curExp = newUserProfileData.exp;
+  await updateUserProfile(user.user_id, newUserProfileData);
+  return res;
+};
 
 const deleteUserById = (id: number): Promise<number> => usersModel.deleteUserById(id);
 
@@ -132,4 +179,5 @@ export const usersService = {
   deleteSessionByUserId,
   addRefreshSession,
   getDefaultDeckId,
+  updateUserExp,
 };

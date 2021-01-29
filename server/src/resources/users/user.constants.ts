@@ -10,6 +10,8 @@ const statusCodes = {
     initialDeck: "Cann't create initial user Deck",
     initialProfile: "Cann't create initial user profile",
     initialCards: 'Error during set initial cards to user',
+    addCard: 'Error during add new Card',
+    profile: 'Error during get profile data',
   },
   '404': {
     all: 'User not found',

@@ -14,6 +14,8 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private currentPageMyCards: number;
 
+  private menuButton: Phaser.GameObjects.Sprite;
+
   constructor() {
     super({
       key: SCENES.MY_CARDS,
@@ -40,7 +42,7 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
       Y: positionMenu.Y,
     };
 
-    const menuButton = createButton(
+    this.menuButton = createButton(
       scene,
       positionMenuCoords,
       0,
@@ -49,7 +51,7 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
       500,
     );
 
-    menuButton.on('pointerup', () => {
+    this.menuButton.on('pointerup', () => {
       cardsBgAudio.stop();
       browserHistory.push(MENU_URL);
     });

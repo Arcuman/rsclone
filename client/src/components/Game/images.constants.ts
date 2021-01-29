@@ -1,4 +1,3 @@
-
 export const IMAGES = {
   MENU_BACKGROUND: {
     NAME: 'menu-background',

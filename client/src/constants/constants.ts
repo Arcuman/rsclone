@@ -3,6 +3,7 @@ export const WEBSOCKET_HOST_PORT = 'ws://localhost:3000';
 export const WEBSOCKET_PATH = '/websocket';
 export const HEADER_JSON = { 'Content-Type': 'application/json' };
 export const AUDIO_CONFIG = {volume:{bg:0.3, button:0.2, card:0.5}}; 
+export const TINT_VALUE_CLICK = 0x59503d;
 
 export const COVER_CARD = {
   POS_Y: 90,

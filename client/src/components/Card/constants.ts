@@ -34,6 +34,7 @@ export const DEPTH_NORMAL_CARD = 1;
 export const DEPTH_CLICK_CARD = 10;
 export const SIZE_LITTLE_CARD = 0.8;
 export const SIZE_TINY_CARD = 0.7;
+export const SIZE_LARGE_CARD = 0.9;
 export const CARD_CONTAINER_DEPTH = 1;
 export const CARD_ORIGIN_CENTER = 0.5;
 export const IMAGE_CARD_SIZE = 147;
