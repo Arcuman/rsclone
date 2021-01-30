@@ -55,7 +55,7 @@ function getPositionX(index: number, cardsPositionInfo: CardsPosition): number {
 export const renderContainer = (
   scene: IMyCardsScene,
   name: string,
-  containerPosition: CardsContainerPosition
+  containerPosition: CardsContainerPosition,
 ): Phaser.GameObjects.Container => {
   const { CONTAINER_X, CONTAINER_Y } = containerPosition;
   const cardContainer = scene.add.container(CONTAINER_X, CONTAINER_Y);
@@ -68,7 +68,7 @@ export const renderMyCards = (
   name: string,
   allCards: Card[],
   cardsPositionInfo: CardsPosition,
-  cardsContainer: Phaser.GameObjects.Container
+  cardsContainer: Phaser.GameObjects.Container,
 ): void => {
   let cardsOnOnePage = [];
   let currentPage = 1;
@@ -81,7 +81,7 @@ export const renderMyCards = (
   cardsOnOnePage = allCards.filter((item, id) =>
     id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
       ? item
-      : ''
+      : '',
   );
 
   cardsOnOnePage.forEach((item: Card, id: number) => {
@@ -102,7 +102,7 @@ export const renderMyCards = (
 export const renderDeck = (
   scene: IMyCardsScene,
   userDecks: Deck[],
-  decksContainer: Phaser.GameObjects.Container
+  decksContainer: Phaser.GameObjects.Container,
 ): void => {
   userDecks.forEach(item => {
     const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);

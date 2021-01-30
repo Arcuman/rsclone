@@ -79,4 +79,9 @@ export const AUDIO = {
     NAME: 'timer-expire-audio',
     PATH: 'assets/audio/timer_expire.ogg',
   },
+  PAGE_TURN_AUDIO:{    
+    NAME: 'page-turn-audio',
+    PATH: 'assets/audio/page_turn.ogg',
+  },
+  
 };
