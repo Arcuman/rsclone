@@ -14,6 +14,7 @@ export interface UserProfile {
   level_id: number;
   exp: number;
   cur_user_deck_id: number;
+  countCards?: number;
 }
 
 export interface Session {

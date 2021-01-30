@@ -147,8 +147,8 @@ export const MENU_IMAGES = {
     CLICK: 'exit-button-click-ru.png',
   },
   MENU_BUTTON: {
-    IDLE: 'exit-button-ru.png',
-    HOVER: 'exit-button-hover-ru.png',
-    CLICK: 'exit-button-click-ru.png',
+    IDLE: 'menu-button-ru.png',
+    HOVER: 'menu-button-hover-ru.png',
+    CLICK: 'menu-button-click-ru.png',
   },
 };

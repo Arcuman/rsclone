@@ -17,6 +17,8 @@ import {
   REFRESH_TOKEN,
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
+  AUTH_AUDIO,
+  AUTH_AUDIO_CONFIG,
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
@@ -27,6 +29,15 @@ const requestInit: RequestInit = {
   cache: 'default',
   credentials: 'include',
   body: '',
+};
+
+export const playAudio = (attr: string): void => {
+  const audio = <HTMLAudioElement>document.querySelector(`audio[data-audio="${attr}"]`);
+  if (audio) {
+    audio.currentTime = AUTH_AUDIO_CONFIG.currentTime;
+    audio.volume = AUTH_AUDIO_CONFIG.volume;
+    audio.play();
+  }
 };
 
 export const buttonStyleClick = (event: MouseEvent): void => {
@@ -87,6 +98,7 @@ const isConfirmedPassword = (password: string, confirmPassword: string): boolean
   password === confirmPassword;
 
 export const handleRegister = (event: MouseEvent): void => {
+  playAudio(AUTH_AUDIO.btnPress.name);
   const element = <HTMLElement>event.target;
   element.classList.remove('active');
 
@@ -126,6 +138,7 @@ export const handleRegister = (event: MouseEvent): void => {
 };
 
 export const handleLogin = (event: MouseEvent): void => {
+  playAudio(AUTH_AUDIO.btnPress.name);
   const element = <HTMLElement>event.target;
   element.classList.remove('active');
 

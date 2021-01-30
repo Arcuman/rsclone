@@ -16,9 +16,9 @@ import {
   NUMBER_CARDS_IN_DECK,
   NAME_CARDS,
   NAME_DECKS,
-  ZERO_POSITION_Y,  
+  ZERO_POSITION_Y,
   TINT_VALUE_CLICK,
-  NUMBER_CARDS_ON_PAGE, 
+  NUMBER_CARDS_ON_PAGE,
 } from './constants';
 import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 
@@ -70,20 +70,23 @@ export const renderMyCards = (
   allCards: Card[],
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
-): void => {  
+): void => {
   let cardsOnOnePage = [];
   let currentPage = 1;
   if (name === NAME_DECKS) {
-    const stateCardsOfDecks =  scene.getStateCardsOfDecks();
-    currentPage =  stateCardsOfDecks.CURRENT_PAGE;
+    const stateCardsOfDecks = scene.getStateCardsOfDecks();
+    currentPage = stateCardsOfDecks.CURRENT_PAGE;
   } else if (name === NAME_CARDS) {
-    currentPage = scene.getMyCardsCurrentPage();    
+    currentPage = scene.getMyCardsCurrentPage();
   }
-  cardsOnOnePage = allCards.filter((item, id) => (id >= NUMBER_CARDS_ON_PAGE*(currentPage-1) && id < NUMBER_CARDS_ON_PAGE * currentPage)? item: '');
-  
-  cardsOnOnePage.forEach((item: Card, id:number) => {
-    // console.log('item', item);
-    const posX = getPositionX(id, cardsPositionInfo);    
+  cardsOnOnePage = allCards.filter((item, id) =>
+    id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
+      ? item
+      : '',
+  );
+
+  cardsOnOnePage.forEach((item: Card, id: number) => {
+    const posX = getPositionX(id, cardsPositionInfo);
     const posY = getPositionY(id, name);
     const card = createBaseCard({
       scene,
@@ -105,14 +108,14 @@ export const renderMyCards = (
 };
 
 export const renderDeck = (
-  scene: IMyCardsScene, 
+  scene: IMyCardsScene,
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
   userDecks.forEach(item => {
     const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
-    setColoredDeck(<Phaser.GameObjects.Sprite>lastCardInDeck);
+    setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
 
     setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
     const userDeckName = createDeckName(scene, item, positionDeckName);

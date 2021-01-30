@@ -55,7 +55,10 @@ export const getUserById = (id: number): Promise<User> => usersModel.getUserById
 const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLogin(login);
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
-const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
+const getUserProfile = async (id: number): Promise<UserProfile> => {
+  const userProfile: UserProfile = await usersModel.getUserProfile(id);
+  return userProfile;
+};
 
 const setUser = async (userData: User): Promise<number> => {
   const user = await usersModel.getUserByLogin(userData.login);
