@@ -18,6 +18,7 @@ import {
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
   AUTH_AUDIO,
+  AUTH_AUDIO_CONFIG
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
@@ -33,8 +34,8 @@ const requestInit: RequestInit = {
 export const playAudio = (attr: string): void => {
   const audio = <HTMLAudioElement>document.querySelector(`audio[data-audio="${attr}"]`);
   if (audio) {
-    audio.currentTime = 0;
-    audio.volume = 0.7;
+    audio.currentTime = AUTH_AUDIO_CONFIG.currentTime;
+    audio.volume = AUTH_AUDIO_CONFIG.volume;
     audio.play();
   }
 };

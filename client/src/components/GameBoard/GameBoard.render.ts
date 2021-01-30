@@ -139,7 +139,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     isPlayerOne: boolean;
   }): void {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
-
+    this.sound.pauseOnBlur = false;
+    
     create(this);
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;

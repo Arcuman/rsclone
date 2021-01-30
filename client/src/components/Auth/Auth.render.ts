@@ -75,12 +75,10 @@ const setCurrAuthForm = (event: Event) => {
   target.classList.add('active');
 
   document.querySelector('.auth-form')?.remove();
-  // const authWrapper = document.querySelector('.auth-wrapper');
-
+ 
   const renderFormFuncs = { loginItem: renderLoginForm, registerItem: renderRegisterForm };
   const renderAuthForm: RenderFunction = <RenderFunction>renderFormFuncs[menuItemId!];
   menu?.after(renderAuthForm());
-  // authWrapper?.append(renderAuthForm());
 };
 
 const renderMenuAuth = (): HTMLElement => {
