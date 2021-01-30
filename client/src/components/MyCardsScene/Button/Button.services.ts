@@ -1,7 +1,16 @@
 import { IMyCardsScene} from '@/components/MyCardsScene/MyCards.model';
 import { decksPosition, NAME_DECKS, cardsPosition, NAME_CARDS } from '@/components/MyCardsScene/constants';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
-import { CARDS_LEFT, CARDS_RIGHT, DECKS_RIGHT, DECKS_LEFT, MIN_POSSIBLE_PAGES, ONE_PAGE } from './constants';
+import { setUserDeckWithCards} from '@/components/Deck/Deck.services';
+import { createNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
+import { CARDS_LEFT,
+  CARDS_RIGHT,
+  DECKS_RIGHT,
+  DECKS_LEFT,
+  MIN_POSSIBLE_PAGES,
+  ONE_PAGE,
+  CREATE_BUTTON,
+} from './constants';
 
 const slideDecksPage = (scene: IMyCardsScene, name: string): void => {
   const stateCardsOfDecks =  scene.getStateCardsOfDecks();
@@ -47,5 +56,15 @@ export const slidePage = (scene: IMyCardsScene, name: string): void => {
     slideDecksPage(scene, name);
   } else if (name === CARDS_LEFT || name === CARDS_RIGHT) {
     slideCardsPage(scene, name);
+  }
+};
+
+export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
+  if (name === CREATE_BUTTON ) {
+    createNewDeck(scene); 
+    // } else if ( name === EDIT_BUTTON) {
+
+    // } else if ( name === DONE_BUTTON) {
+
   }
 };

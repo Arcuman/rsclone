@@ -4,6 +4,7 @@ import { Card } from '@/components/Card/Card.model';
 import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
+import { createDeleteButton } from '@/components/MyCardsScene/Button/Button.render';
 import { 
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
@@ -81,6 +82,7 @@ export const renderMyCards = (
   cardsOnOnePage = allCards.filter((item, id) => (id >= NUMBER_CARDS_ON_PAGE*(currentPage-1) && id < NUMBER_CARDS_ON_PAGE * currentPage)? item: '');
   
   cardsOnOnePage.forEach((item: Card, id:number) => {
+    // console.log('item', item);
     const posX = getPositionX(id, cardsPositionInfo);    
     const posY = getPositionY(id, name);
     const card = createBaseCard({
@@ -90,7 +92,14 @@ export const renderMyCards = (
       card: item,
     });
     card.setScale(CARDS_SCALE, CARDS_SCALE);
+
+    if (name === NAME_DECKS) {
+      const deleteButton = createDeleteButton(scene, item.id);
+      card.add(deleteButton);
+    }
+    
     cardsContainer.add(card);
+   
     setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
   });
 };

@@ -2,6 +2,8 @@ export const BASE_HTTP_URL = process.env.BASE_URL?.replace(/\/$/, '');
 export const WEBSOCKET_HOST_PORT = 'ws://localhost:3000';
 export const WEBSOCKET_PATH = '/websocket';
 export const HEADER_JSON = { 'Content-Type': 'application/json' };
+export const CURSOR_DEFAULT = 'url(assets/images/cursor.png), pointer';
+export const CURSOR_POINTER = 'url(assets/images/cursor_pointer.png), pointer';
 
 export const COVER_CARD = {
   POS_Y: 90,
