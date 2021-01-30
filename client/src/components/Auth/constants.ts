@@ -23,6 +23,15 @@ const AUTH_MESSAGE = {
   successRegistration: 'Вы зарегистрированы',
 };
 
+const AUTH_AUDIO = {
+  cursor: { name: 'cursor', audio: 'cursor.wav' },
+  inputA: { name: 'inputA', audio: 'input_active.wav' },
+  btnOver: { name: 'btnOver', audio: 'button_mouse_over.ogg' },
+  btnPress: { name: 'btnPress', audio: 'button_press.ogg' },
+  linkPress: { name: 'linkPress', audio: 'link_press.ogg' },
+};
+const AUDIO_PATH = '../../assets/audio/';
+
 export {
   authForm,
   LOGIN_ACTION,
@@ -31,4 +40,6 @@ export {
   REFRESH_TOKEN,
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
+  AUTH_AUDIO,
+  AUDIO_PATH,
 };

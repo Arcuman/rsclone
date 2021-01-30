@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
-import { IMAGES, SCENES } from '@/components/Game/constant';
+import { IMAGES, SCENES, AUDIO} from '@/components/Game/constant';
 import { UpdatedUserLevelInfo } from '@/components/GameBoard/GameBoard.model';
 import { createTextData, setBackground } from '@/utils/utils';
+import { AUDIO_CONFIG } from '@/constants/constants';
+
 import {
   ARROW_TEXT,
   EXP_TEXT,
@@ -55,8 +57,13 @@ export class GameOverScene extends Phaser.Scene {
     });
   }
 
-  create(data: { message: string; playerInfo: UpdatedUserLevelInfo }): void {
+  create(data: {  isWin:boolean;message: string; playerInfo: UpdatedUserLevelInfo }): void {
     setBackground(this, IMAGES.LOAD_BACKGROUND.NAME);
+    
+    const audioName = data.isWin ?  AUDIO.VICTORY_AUDIO.NAME : AUDIO.LOSE_AUDIO.NAME;
+    const scrAudio = this.sound.add(audioName, {volume: AUDIO_CONFIG.volume.card});
+    scrAudio.play();
+
     this.info = data.playerInfo;
     this.textMessage = createTextData(
       this,

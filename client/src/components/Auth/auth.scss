@@ -121,3 +121,40 @@
     }
   }
 }
+.copyright {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  column-gap: 2rem;
+  margin-left: 3.5rem;
+  justify-self: end;
+
+  &-logo {
+    align-content: flex-end;
+    img {
+      width: 10rem;
+    }
+  }
+
+  &-authors-right,
+  &-authors-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.5rem;
+    a {
+      color: #9a665f;
+    }
+    a:hover {
+      color: #cfbf61;
+      text-decoration: none;
+    }
+  }
+  &-authors-right {
+    align-items: flex-start;
+  }
+
+  &-authors-left {
+    align-items: flex-end;
+  }
+}

@@ -55,7 +55,10 @@ export const getUserById = (id: number): Promise<User> => usersModel.getUserById
 const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLogin(login);
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
-const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
+const getUserProfile = async (id: number): Promise<UserProfile> => {
+  const userProfile:UserProfile = await usersModel.getUserProfile(id);
+  return userProfile;
+};
 
 const setUser = async (userData: User): Promise<number> => {
   const user = await usersModel.getUserByLogin(userData.login);
@@ -99,7 +102,7 @@ const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Ca
 
 const updateUserExp = async (
   user_id: number,
-  receivedExp: number
+  receivedExp: number,
 ): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);

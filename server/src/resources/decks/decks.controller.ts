@@ -12,7 +12,8 @@ const isInitialDeck = async (id: number): Promise<boolean> => {
 };
 
 const getAll = (user_id: number): Promise<Deck[]> => decksModel.getAll(user_id);
-const getDeckById = (id: number): Promise<Deck> => decksModel.getDeckById(id);
+const getDeckById = async (id: number): Promise<Deck> => decksModel.getDeckById(id);
+const getDeckCards =  (id: number) => decksModel.getDeckCards(id);
 
 const getDeckByIdCards = async (id: number): Promise<Deck> => {
   const deck: Deck = await decksModel.getDeckById(id);
@@ -20,7 +21,8 @@ const getDeckByIdCards = async (id: number): Promise<Deck> => {
     throw new Error(statusCodes[StatusCodes.NOT_FOUND]);
   }
 
-  deck.cards = await decksModel.getDeckCards(id);
+  deck.cards = await getDeckCards(id);
+  deck.cards_count = deck.cards.length;
   return deck;
 };
 
@@ -31,7 +33,7 @@ export const getUserDefaultDeck = async (userId: number): Promise<Deck> => {
     throw new Error(statusCodes[StatusCodes.NOT_FOUND]);
   }
 
-  deck.cards = await decksModel.getDeckCards(deckId);
+  deck.cards = await getDeckCards(deckId);
   return deck;
 };
 

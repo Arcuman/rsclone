@@ -1,4 +1,5 @@
 import { AUDIO } from '@/components/Game/constant';
+import {AUDIO_CONFIG} from '@/constants/constants';
 import { BUTTON_SCALE } from './constants';
 
 interface Position {
@@ -28,7 +29,7 @@ export function createButton(
   );
   button.setScale(BUTTON_SCALE, BUTTON_SCALE).setInteractive();
   button.on('pointerover', () => {
-    const btnAudio = scene.sound.add(AUDIO.BUTTON_OVER_AUDIO.NAME);
+    const btnAudio = scene.sound.add(AUDIO.BUTTON_OVER_AUDIO.NAME, {volume:AUDIO_CONFIG.volume.button});
     btnAudio.play();
     button.setFrame(image.HOVER);
   });
@@ -36,7 +37,7 @@ export function createButton(
     button.setFrame(image.IDLE);
   });
   button.on('pointerdown', () => {
-    const btnAudio = scene.sound.add(AUDIO.BUTTON_CLICK_AUDIO.NAME);
+    const btnAudio = scene.sound.add(AUDIO.BUTTON_CLICK_AUDIO.NAME, {volume:AUDIO_CONFIG.volume.button});
     btnAudio.play();
     button.setFrame(image.CLICK);
   });

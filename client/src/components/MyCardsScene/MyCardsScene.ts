@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { Card } from '@/components/Card/Card.model';
+import { AUDIO_CONFIG } from '@/constants/constants';
 import { create } from './MyCards.services';
 import { IMyCardsScene, StateCardsOfDecks } from './MyCards.model';
 
@@ -20,7 +21,7 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     DECKS_DATA: [],
     CARDS_DATA: [],
     CURRENT_PAGE: 1,
-    TOTAL_PAGE: 1,  
+    TOTAL_PAGE: 1,
   };
 
   constructor() {
@@ -43,16 +44,16 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     return this.myCardsContainer;
   }
 
-  public setMyCardsContainer( value: Phaser.GameObjects.Container ): void {
-    this.myCardsContainer= value;
+  public setMyCardsContainer(value: Phaser.GameObjects.Container): void {
+    this.myCardsContainer = value;
   }
 
   public getDecksContainer(): Phaser.GameObjects.Container {
     return this.deksContainer;
   }
 
-  public setDecksContainer( value: Phaser.GameObjects.Container ): void {
-    this.deksContainer= value;
+  public setDecksContainer(value: Phaser.GameObjects.Container): void {
+    this.deksContainer = value;
   }
 
   public getMyCardsCurrentPage(): number {
@@ -69,7 +70,7 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   public setMyCardsTotalPage(value: number): void {
     this.totalPageMyCards = value;
-  }  
+  }
 
   public getStateCardsOfDecks(): StateCardsOfDecks {
     return this.stateCardsOfDecks;
@@ -78,10 +79,15 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
   public setStateCardsOfDecks(value: StateCardsOfDecks): void {
     this.stateCardsOfDecks = value;
   }
-  
-  create(): void {    
+
+  create(): void {
     setBackground(this, IMAGES.MY_CARDS_BACKGROUND.NAME);
-    const cardsBgAudio = this.sound.add(AUDIO.MYCARDS_BG_AUDIO.NAME, { loop: true });
+    this.sound.pauseOnBlur = false;
+    const cardsBgAudio = this.sound.add(AUDIO.MYCARDS_BG_AUDIO.NAME, {
+      loop: true,
+      volume: AUDIO_CONFIG.volume.bg,
+    });
+
     cardsBgAudio.play();
     create(this, cardsBgAudio);
   }
