@@ -78,7 +78,7 @@ export function animateNewPosition(
     const newPosX = getPositionOfCard(scene, index);
     scene.tweens.add({
       targets: card,
-      x: { value: newPosX, duration: 1500, ease: 'Power2' },
+      x: { value: newPosX, duration: 1000, ease: 'Power2' },
     });
   });
 }

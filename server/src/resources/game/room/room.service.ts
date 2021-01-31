@@ -30,6 +30,7 @@ export function createRoom(): Room {
   return {
     id: uuidv4(),
     isPlayerOneTurn: Math.random() < 0.5,
+    playerOne: null,
     players: [],
     timer: null,
     newRound: false,

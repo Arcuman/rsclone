@@ -11,14 +11,14 @@ export function addNewCard(
   card: Card,
   index: number,
   posY: number,
-): void {
+): Phaser.GameObjects.Container {
   const posX = getPositionOfCard(scene, index);
-  cards.push(
-    createPlayerHandCard({
-      scene,
-      posX,
-      posY,
-      card,
-    }),
-  );
+  const newCard = createPlayerHandCard({
+    scene,
+    posX,
+    posY,
+    card,
+  });
+  cards.push(newCard);
+  return newCard;
 }

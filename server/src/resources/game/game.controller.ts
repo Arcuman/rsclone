@@ -32,7 +32,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>,
+  rooms: Array<Room>
 ): Promise<void> {
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {
@@ -50,6 +50,7 @@ export default async function gameLogic(
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
   } else {
+    openRoom.playerOne = player;
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
 
@@ -62,6 +63,7 @@ export default async function gameLogic(
   player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId: number) => {
     tableCardPlayTargetPlayer(cardId, openRoom, player, io);
   });
+
   player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId: number, targetId: number) => {
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
   });
@@ -70,7 +72,10 @@ export default async function gameLogic(
     openRoom.playersReady += 1;
     if (openRoom.playersReady === 2) {
       io.to(openRoom.id).emit(START_GAME);
-      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
+      openRoom.timer = setInterval(
+        () => countDownTimer(openRoom, openRoom.playerOne!, io),
+        ONE_SEC
+      );
     }
   });
 

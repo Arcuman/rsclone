@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+
 import { IMAGES, MENU_IMAGES } from './images.constants';
 import { AUDIO } from './audio.constants';
 
@@ -52,7 +53,8 @@ export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig 
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   dom: {
-    createContainer: false,
+    createContainer: true,
   },
   scene: [],
+
 });

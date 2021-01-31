@@ -79,8 +79,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
   private playerTableZone: Phaser.GameObjects.Zone;
 
-  private enemyTableZone: Phaser.GameObjects.Zone;
-
   private gameTableImg: Phaser.GameObjects.Container;
 
   private timerLabel: Phaser.GameObjects.Text;
@@ -198,6 +196,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
+      console.log('next turn');
       bgAudio.stop();
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
@@ -218,7 +217,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(GET_DECK_CARD, (deckCard: Card) => {
-      addNewCard(this, this.playerCards, deckCard, this.playerCards.length, PLAYER_CARDS_POSITION);
+      const addedCard = addNewCard(this, this.playerCards, deckCard, this.playerCards.length, PLAYER_CARDS_POSITION);
+      setDraggableCardsDependOnPlayerMana(this);
     });
 
     this.socket.on(ENEMY_GET_DECK_CARD, () => {
