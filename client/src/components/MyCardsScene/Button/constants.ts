@@ -11,6 +11,7 @@ export const ONE_PAGE = 1;
 export const CREATE_BUTTON = 'create_button';
 export const EDIT_BUTTON = 'edit_button';
 export const DONE_BUTTON = 'done_button';
+export const DELETE_BUTTON = 'delete_button';
 
 export const arrowButtonSettings: ButtonSettings = {
   NORMAL_SCALE: 0.35,
@@ -28,6 +29,13 @@ export const controlButtonSettings: ButtonSettings = {
   NORMAL_SCALE: 0.3,
   RISE_SCALE: 0.35,
   TINT_CLICK: 0x59503d,
+};
+
+export const deleteButtonPosition: ArrowButton = {
+  NAME: DELETE_BUTTON,
+  IMG: DELETE_BUTTON,
+  POS_X: 65,
+  POS_Y: -85,
 };
 
 export const arrowButton: ArrowButton[] = [

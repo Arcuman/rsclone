@@ -15,6 +15,7 @@ import {
   arrowButtonSettings,
   deleteButtonSettings,
   controlButtonSettings,
+  deleteButtonPosition,
 } from './constants';
 
 const setInteractiveOnButton = (
@@ -66,7 +67,8 @@ export const renderArrowButton = (
 };
 
 export const createDeleteButton = (scene: IMyCardsScene, idCard: number): Phaser.GameObjects.Image => {
-  const deleteButton = scene.add.image(65, -85, 'delete_button'); 
+  const { IMG, POS_X, POS_Y} = deleteButtonPosition;
+  const deleteButton = scene.add.image(POS_X, POS_Y, IMG); 
   const { NORMAL_SCALE } = deleteButtonSettings;
 
   deleteButton.setScale(NORMAL_SCALE);
