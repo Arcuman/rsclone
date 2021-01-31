@@ -1,4 +1,4 @@
-import { SCENES, AUDIO} from '@/components/Game/constant';
+import { SCENES, AUDIO } from '@/components/Game/constant';
 import Phaser from 'phaser';
 import { Deck } from '@/components/Deck/Deck.model';
 import { setColoredDeck } from '@/components/Deck/Deck.services';
@@ -12,9 +12,25 @@ import {
   NUMBER_CARDS_IN_DECK,
   positionDeckName,
   TINT_VALUE,
+  NUMBER_DECKS_ON_PAGE,
 } from './constants';
+import { ICurrDeckChooseScene, StateOfDecks } from './CurrDeckChoose.model';
 
-export class CurrDeckChooseScene extends Phaser.Scene {
+export class CurrDeckChooseScene extends Phaser.Scene implements ICurrDeckChooseScene {
+  private userDecks: Deck[] = [];
+
+  private currentPage: number;
+
+  private totalPage: number;
+
+  private decksContainer: Phaser.GameObjects.Container;
+
+  private stateCardsOfDecks: StateOfDecks = {
+    DECKS_DATA: [],
+    CURRENT_PAGE: 1,
+    TOTAL_PAGE: 1,
+  };
+
   constructor() {
     super({
       key: SCENES.CHOOSE_DECK,
@@ -23,13 +39,54 @@ export class CurrDeckChooseScene extends Phaser.Scene {
     });
   }
 
+  public getUserDecks(): Deck[] {
+    return this.userDecks;
+  }
+
+  public setUserDecks(value: Deck[]): void {
+    this.userDecks = value;
+  }
+
+  public getDecksContainer(): Phaser.GameObjects.Container {
+    return this.decksContainer;
+  }
+
+  public setDecksContainer(value: Phaser.GameObjects.Container): void {
+    this.decksContainer = value;
+  }
+
+  public getCurrentPage(): number {
+    return this.currentPage;
+  }
+
+  public setCurrentPage(value: number): void {
+    this.currentPage = value;
+  }
+
+  public getTotalPage(): number {
+    return this.totalPage;
+  }
+
+  public setTotalPage(value: number): void {
+    this.totalPage = value;
+  }
+
+  public getStateOfDecks(): StateOfDecks {
+    return this.stateCardsOfDecks;
+  }
+
+  public setStateOfDecks(value: StateOfDecks): void {
+    this.stateCardsOfDecks = value;
+  }
+
   create(): void {
     create(this);
+
   }
 }
 
 export const renderContainer = (
-  scene: Phaser.Scene,
+  scene: ICurrDeckChooseScene,
   name: string,
   containerPosition: CardsContainerPosition,
 ): Phaser.GameObjects.Container => {
@@ -49,7 +106,6 @@ const coloredTopCardSelectesDeck = (topCard: Phaser.GameObjects.Sprite): void =>
 const selectDeck = async (
   scene: Phaser.Scene,
   item: Deck,
-  cur_user_deck_id: number,
   topCard: Phaser.GameObjects.Sprite,
   decksContainer: Phaser.GameObjects.Container,
 ): Promise<void> => {
@@ -57,7 +113,6 @@ const selectDeck = async (
 
   if (isUpdate) {
     decksContainer.list.forEach((deck: Phaser.GameObjects.Container) => {
-      const lastCardInDeckItem = deck.last;
       if (deck.list.length > 1) {
         const topCardItem = <Phaser.GameObjects.Sprite>deck.list[deck.list.length - 2];
         topCardItem.clearTint();
@@ -73,14 +128,27 @@ const selectDeck = async (
     });
   }
 };
+
 export const renderDeck = (
-  scene: Phaser.Scene,
+  scene: ICurrDeckChooseScene,
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
   cur_user_deck_id: number,
 ): void => {
   const { IMG_X, IMG_Y } = positionDeckContainer;
-  userDecks.forEach((item, index) => {
+
+  const currentPage = scene.getCurrentPage();
+  console.log('d', userDecks);
+
+  const decksOnOnePage: Deck[] = userDecks.filter((item, index) => {
+    console.log(`c=${  currentPage  } i=${  index}`);
+    return index >= NUMBER_DECKS_ON_PAGE * (currentPage - 1) &&
+      index < NUMBER_DECKS_ON_PAGE * currentPage
+      ? item
+      : '';
+  });
+  console.log('d2', decksOnOnePage);
+  decksOnOnePage.forEach((item, index) => {
     let coord;
     if (index % 2 === 0) {
       coord = { IMG_X, IMG_Y: IMG_Y + 180 * (index / 2) };
@@ -102,7 +170,7 @@ export const renderDeck = (
       });
       audio.play();
 
-      await selectDeck(scene, item, cur_user_deck_id, topCard, decksContainer);
+      await selectDeck(scene, item, topCard, decksContainer);
     });
 
     const userDeckName = createDeckName(scene, item, positionDeckName);
