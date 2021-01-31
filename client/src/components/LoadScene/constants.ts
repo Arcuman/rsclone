@@ -18,4 +18,5 @@ export const PROGRESS_BAR = {
   color: 0xffffff,
   alpha: 1,
 };
-export const LOADINT_ASSETS = (name: string) => `Loading asset: ${name}`;
+
+export const LOADINT_ASSETS = (name: string):string => `Loading asset: ${name}`;

@@ -2,7 +2,7 @@ import { TextDecoration } from '@/types/types';
 import { PositionDeckContainer } from './Deck.model';
 
 export const positionDeckContainer: PositionDeckContainer = {
-  IMG_X: 180,
+  IMG_X: 240,
   IMG_Y: 480,
 };
 

@@ -99,6 +99,14 @@ export const IMAGES = {
     NAME: 'bomb',
     PATH: '../../assets/images/Timer/bomb-explosion.png',
   },
+  ARROW_BUTTON_LEFT: {
+    NAME: 'arrow_left',
+    PATH: 'assets/images/arrow_left.png',
+  },
+  ARROW_BUTTON_RIGHT: {
+    NAME: 'arrow_right',
+    PATH: 'assets/images/arrow_right.png',
+  },
 };
 
 export const MENU_IMAGES = {
@@ -123,8 +131,8 @@ export const MENU_IMAGES = {
     CLICK: 'exit-button-click-ru.png',
   },
   MENU_BUTTON: {
-    IDLE: 'exit-button-ru.png',
-    HOVER: 'exit-button-hover-ru.png',
-    CLICK: 'exit-button-click-ru.png',
+    IDLE: 'menu-button-ru.png',
+    HOVER: 'menu-button-hover-ru.png',
+    CLICK: 'menu-button-click-ru.png',
   },
 };

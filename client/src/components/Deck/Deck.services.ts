@@ -1,6 +1,10 @@
 import { Deck } from '@/components/Deck/Deck.model';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
+import { AUDIO_CONFIG } from '@/constants/constants';
+import {AUDIO} from '@/components/Game/constant';
+import { IMyCardsScene} from '@/components/MyCardsScene/MyCards.model';
+import { openDeck } from '@/components/MyCardsScene/MyCards.services';
 import { TINT_VALUE } from './constants';
 
 export const getUserDeckById = async (deckId: number): Promise<Deck> => {
@@ -106,15 +110,34 @@ export const updateUserDeckWithCards = async (deckData: Deck): Promise<boolean> 
   return isUpdateDeck;
 };
 
-export const setColoredDeck = (topCard: Phaser.GameObjects.Sprite): void => {
+export const setColoredDeck = (scene:Phaser.Scene, topCard: Phaser.GameObjects.Sprite): void => {
   topCard.setInteractive();
   topCard.removeListener('pointerover');
   topCard.on('pointerover', () => {
     topCard.setTint(TINT_VALUE);
+    
+    const cardAudio = scene.sound.add(AUDIO.DECK_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
+    cardAudio.play();
   });
 
   topCard.removeListener('pointerout');
   topCard.on('pointerout', () => {
     topCard.clearTint();
+  });
+};
+
+export const setClickableDeck = (
+  scene: IMyCardsScene,
+  userDeck: Deck,
+  topCard: Phaser.GameObjects.Sprite,
+  tintValue: number,
+): void => {
+  topCard.setInteractive();
+  topCard.on('pointerdown', () => {
+    topCard.setTint(tintValue);
+  });
+  topCard.on('pointerup', () => {
+    topCard.clearTint();
+    openDeck(scene, userDeck);
   });
 };

@@ -1,13 +1,10 @@
 import { createBaseCard } from '@/components/Card/Card.render';
-import { setScalableCardInContainer, getUserCards } from '@/components/Card/Card.services';
+import { setScalableCardInContainer } from '@/components/Card/Card.services';
 import { Card } from '@/components/Card/Card.model';
-import { getUserDecks, setColoredDeck } from '@/components/Deck/Deck.services';
+import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
 import {
-  cardsPosition,
-  cardsContainerPosition,
-  decksContainerPosition,
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
   DECKS_OFFSET_Y,
@@ -19,9 +16,10 @@ import {
   NAME_CARDS,
   NAME_DECKS,
   ZERO_POSITION_Y,
+  TINT_VALUE_CLICK,
+  NUMBER_CARDS_ON_PAGE,
 } from './constants';
 import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
-import { setClickableDeck } from './MyCards.services';
 
 function getPositionY(index: number, name: string): number {
   const weightId = Math.floor(index / NUMBER_CARDS_IN_ROW);
@@ -54,7 +52,7 @@ function getPositionX(index: number, cardsPositionInfo: CardsPosition): number {
   return posX;
 }
 
-const renderContainer = (
+export const renderContainer = (
   scene: IMyCardsScene,
   name: string,
   containerPosition: CardsContainerPosition,
@@ -65,14 +63,28 @@ const renderContainer = (
   return cardContainer;
 };
 
-const renderMyCards = (
+export const renderMyCards = (
   scene: IMyCardsScene,
   name: string,
   allCards: Card[],
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
 ): void => {
-  allCards.forEach((item: Card, id: number) => {
+  let cardsOnOnePage = [];
+  let currentPage = 1;
+  if (name === NAME_DECKS) {
+    const stateCardsOfDecks = scene.getStateCardsOfDecks();
+    currentPage = stateCardsOfDecks.CURRENT_PAGE;
+  } else if (name === NAME_CARDS) {
+    currentPage = scene.getMyCardsCurrentPage();
+  }
+  cardsOnOnePage = allCards.filter((item, id) =>
+    id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
+      ? item
+      : '',
+  );
+
+  cardsOnOnePage.forEach((item: Card, id: number) => {
     const posX = getPositionX(id, cardsPositionInfo);
     const posY = getPositionY(id, name);
     const card = createBaseCard({
@@ -87,7 +99,7 @@ const renderMyCards = (
   });
 };
 
-const renderDeck = (
+export const renderDeck = (
   scene: IMyCardsScene,
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
@@ -95,38 +107,12 @@ const renderDeck = (
   userDecks.forEach(item => {
     const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
-    setColoredDeck(<Phaser.GameObjects.Sprite>lastCardInDeck);
+    setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
 
-    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck);
+    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
     const userDeckName = createDeckName(scene, item, positionDeckName);
 
     decksContainer.add(userDeck);
     userDeck.add(userDeckName);
   });
-};
-
-const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
-  const userCards = await getUserCards();
-  if (!userCards) {
-    throw new Error();
-  }
-  scene.setUserCards(userCards);
-
-  const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
-  renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);
-};
-
-const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
-  const userDecks = await getUserDecks();
-  if (!userDecks) {
-    throw new Error();
-  }
-
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  renderDeck(scene, userDecks, decksContainer);
-};
-
-export const create = (scene: IMyCardsScene): void => {
-  controlCardsInfo(scene);
-  controlDeckInfo(scene);
 };

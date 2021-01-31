@@ -56,5 +56,8 @@ export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig 
     createContainer: true,
   },
   scene: [],
-
+  audio: {
+    disableWebAudio: true,
+    context:  new (window.AudioContext)(),
+  },
 });

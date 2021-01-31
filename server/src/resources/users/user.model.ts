@@ -1,4 +1,4 @@
-import {Card} from '@/resources/card/card.model';
+import { Card } from '@/resources/card/card.model';
 import { db } from '../../../db';
 
 export interface User {
@@ -14,6 +14,7 @@ export interface UserProfile {
   level_id: number;
   exp: number;
   cur_user_deck_id: number;
+  countCards?: number;
 }
 
 export interface Session {
@@ -23,7 +24,7 @@ export interface Session {
   expiresIn: number;
 }
 
-export interface UpdatedUserLevelInfo{
+export interface UpdatedUserLevelInfo {
   prevLevel: number;
   newLevel: number;
   prevExp: number;
@@ -237,7 +238,7 @@ const addRefreshSession = async ({
     } = await db.query(
       `INSERT INTO "UsersRefreshSession" ("refreshToken", "user_id", "ip","expiresIn")
                                             VALUES ('${refreshToken}', ${user_id}, '${ip}', ${expiresIn}) RETURNING "refreshToken"`,
-      [],
+      []
     ));
   } catch (error) {
     throw new Error(error);

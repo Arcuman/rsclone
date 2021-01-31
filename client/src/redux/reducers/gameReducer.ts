@@ -16,8 +16,6 @@ export function gameReducer(
       return { ...state, game: action.payload };
       break;
     case END_GAME:
-      // eslint-disable-next-line no-console
-      console.log(state.game);
       if (state.game !== null) {
         state.game.destroy(true);
       }

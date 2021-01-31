@@ -21,13 +21,16 @@ const getLevelById = async (id: number): Promise<Level> => {
   return level;
 };
 
-const getLevelByExp = async (exp:number): Promise<number> =>{
-  let res: {level: number};
+const getLevelByExp = async (exp: number): Promise<number> => {
+  let res: { level: number };
 
   try {
     ({
       rows: [res],
-    } = await db.query('SELECT MAX(t.level) FROM (SELECT level FROM "Levels" WHERE exp_total - $1 <= 0) t', [exp]));
+    } = await db.query(
+      'SELECT MAX(t.level) FROM (SELECT level FROM "Levels" WHERE exp_total - $1 <= 0) t',
+      [exp]
+    ));
   } catch (error) {
     throw new Error('500');
   }
