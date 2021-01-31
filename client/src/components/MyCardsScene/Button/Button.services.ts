@@ -20,7 +20,11 @@ import {
   CREATE_BUTTON,
 } from './constants';
 
-const slideDecksPage = (scene: IMyCardsScene, name: string, audio:Phaser.Sound.BaseSound): void => {
+const slideDecksPage = (
+  scene: IMyCardsScene,
+  name: string,
+  audio: Phaser.Sound.BaseSound,
+): void => {
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const cardsCurrent = stateCardsOfDecks.CARDS_DATA;
   const decksContainer = scene.getDecksContainer();
@@ -41,7 +45,11 @@ const slideDecksPage = (scene: IMyCardsScene, name: string, audio:Phaser.Sound.B
   renderMyCards(scene, NAME_DECKS, cardsCurrent, decksPosition, decksContainer);
 };
 
-const slideCardsPage = (scene: IMyCardsScene, name: string, audio:Phaser.Sound.BaseSound): void => {
+const slideCardsPage = (
+  scene: IMyCardsScene,
+  name: string,
+  audio: Phaser.Sound.BaseSound,
+): void => {
   const cardsCurrent = scene.getUserCards();
   const myCardsContainer = scene.getMyCardsContainer();
   const myCardsCurrentPage = scene.getMyCardsCurrentPage();
@@ -49,13 +57,11 @@ const slideCardsPage = (scene: IMyCardsScene, name: string, audio:Phaser.Sound.B
   myCardsContainer.removeAll();
 
   if (name === CARDS_RIGHT) {
-
     if (myCardsCurrentPage < myCardsTotalPage) {
       audio.play();
       scene.setMyCardsCurrentPage(myCardsCurrentPage + ONE_PAGE);
     }
   } else if (name === CARDS_LEFT) {
-
     if (myCardsCurrentPage > MIN_POSSIBLE_PAGES) {
       audio.play();
       scene.setMyCardsCurrentPage(myCardsCurrentPage - ONE_PAGE);

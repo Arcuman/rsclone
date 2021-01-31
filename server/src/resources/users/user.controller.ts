@@ -85,8 +85,18 @@ const updateUserById = async (id: number, userData: User): Promise<User> => {
   return usersModel.updateUserById(id, newUserData);
 };
 
-const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> =>
-  usersModel.updateUserProfile(id, data);
+const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> => {
+  const profile = await getUserProfile(id);
+
+  const newProfile = Object.entries(profile).reduce((prev, curr) => {
+    if (curr[0] !== 'user_id' && data[curr[0]]) {
+      return { ...prev, [curr[0]]: data[curr[0]] };
+    }
+    return { ...prev, [curr[0]]: curr[1] };
+  }, {});
+
+  return usersModel.updateUserProfile(id, <UserProfile>newProfile);
+};
 
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);

@@ -109,7 +109,10 @@ export const decksControlButton = ( scene: IMyCardsScene): void => {
   });
 };
 
-export const createMenyButton = (scene: IMyCardsScene, cardsBgAudio:Phaser.Sound.BaseSound): void => {
+export const createMenyButton = (
+  scene: IMyCardsScene,
+  cardsBgAudio: Phaser.Sound.BaseSound,
+): void => {
   const positionMenu = {
     OFFSET_X: 650,
     Y: 140,
