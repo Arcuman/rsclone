@@ -3,15 +3,16 @@ import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
-import {Deck} from '@/components/Deck/Deck.model';
+import { Deck } from '@/components/Deck/Deck.model';
 import { getUserDeckById, setColoredDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckInfo, createDeckName } from '@/components/Deck/Deck.render';
 import { positionDeckContainer } from '@/components/Deck/constants';
-import { MENU_URL } from '@/router/constants';
+import { MENU_URL, CURR_DECK_CHOOSE_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
 import { countCards } from '@/components/Card/Card.services';
-import { AUDIO_CONFIG,  TINT_VALUE_CLICK  } from '@/constants/constants';
+import { AUDIO_CONFIG, TINT_VALUE_CLICK } from '@/constants/constants';
+
 import {
   textDecoration,
   positionInfo,
@@ -46,7 +47,7 @@ const getLevelInfo = async (levelId: number): Promise<Level> => {
   return level;
 };
 
-const getUserProfileInfo = async (): Promise<UserProfile> => {
+export const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
   const requestInit = getRequestInit();
 
@@ -70,6 +71,36 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
   return user;
 };
 
+export const changeCurrUserDeck = async (
+  newDeckId: number,
+  oldDeckId: number,
+): Promise<boolean> => {
+  if (newDeckId === oldDeckId) {
+    return false;
+  }
+  console.log('is0=');
+  const { user_id: userId } = store.getState().authUser;
+  const requestInit = getRequestInit('PUT');
+  requestInit.body = JSON.stringify({ cur_user_deck_id: newDeckId });
+
+  const isUpdate = await fetch(`${API_INFO_URLS.users}/${userId}/profile`, requestInit)
+    .then(
+      (response): Promise<boolean> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        console.log('is000=');
+        return response.json();
+      },
+    )
+    .catch(error => {
+      
+      throw new Error(error);
+    });
+  console.log('is=', isUpdate);
+  return isUpdate;
+};
+
 export const setClickableDeck = (
   scene: Phaser.Scene,
   userDeck: Deck,
@@ -81,7 +112,7 @@ export const setClickableDeck = (
   });
   topCard.on('pointerup', () => {
     topCard.clearTint();
-    
+    browserHistory.push(CURR_DECK_CHOOSE_URL);
   });
 };
 
@@ -140,7 +171,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  
+
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
@@ -149,7 +180,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
   userCurrDeck.add(userCurrDeckName);
   userCurrDeck.add(userCurrDeckNumber);
-  
+
   const userInfoBLock = [
     userInfoBgr,
     textUserName,

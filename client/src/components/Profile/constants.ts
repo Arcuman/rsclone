@@ -26,7 +26,7 @@ export const positionMenu = {
 
 export const BUTTON_HEIGHT = 126;
 export const HEIGHT_OFFSET = 50;
-export const BUTTON_SCALE = 0.4;
+export const BUTTON_SCALE = 0.5;
 
 export const INFO_BLOCK_SCALE = 0.8;
 export const INFO_BLOCK_X = 330;

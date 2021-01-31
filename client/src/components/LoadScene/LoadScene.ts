@@ -19,6 +19,7 @@ export class LoadScene extends Phaser.Scene {
   }
 
   preload(): void {
+    console.log('sc=', this.nextScene);
     preload(this, this.nextScene);
   }
 }

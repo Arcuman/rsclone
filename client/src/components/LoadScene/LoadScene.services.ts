@@ -14,6 +14,7 @@ import {
 } from '@/components/LoadScene/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
 import { GameOverScene } from '@/components/GameOverScene/GameOverScene.render';
+import {CurrDeckChooseScene} from '@/components/Profile/CurrDeckChoose/CurrDeckChoose.render';
 import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 
@@ -100,6 +101,7 @@ function loadScenes(scene: Phaser.Scene) {
   scene.scene.add(SCENES.FIND_ENEMY, FindEnemyScene, false);
   scene.scene.add(SCENES.PROFILE, ProfileScene, false);
   scene.scene.add(SCENES.GAME_OVER, GameOverScene, false);
+  scene.scene.add(SCENES.CHOOSE_DECK, CurrDeckChooseScene, false);
 }
 
 function loadSpritesheets(scene: Phaser.Scene) {

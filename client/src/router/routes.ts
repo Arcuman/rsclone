@@ -6,6 +6,7 @@ import {
   GAME_URL,
   MY_CARDS_URL,
   PROFILE_URL,
+  CURR_DECK_CHOOSE_URL,
 } from '@/router/constants';
 import { SCENES } from '@/components/Game/constant';
 import { ResolveContext } from 'universal-router';
@@ -67,6 +68,12 @@ export const routes: Route[] = [
         path: PROFILE_URL,
         action: (context: ResolveContext): RouteResultResponse =>
           createRouteResult(null, null, SCENES.PROFILE),
+        children: null,
+      },
+      {
+        path:CURR_DECK_CHOOSE_URL,
+        action: (context: ResolveContext): RouteResultResponse =>
+          createRouteResult(null, null, SCENES.CHOOSE_DECK),
         children: null,
       },
     ],

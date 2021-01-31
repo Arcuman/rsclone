@@ -25,7 +25,7 @@ export const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<v
   } 
   
   const cardsInSelectDeck = <Card[]>userDeckData.cards;
-  //const cardsInSelectDeck: Card[] = AllCards;
+  // const cardsInSelectDeck: Card[] = AllCards;
   const stateCardsOfDecks =  scene.getStateCardsOfDecks();
   stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
 
@@ -40,7 +40,7 @@ export const openDeck = async ( scene: IMyCardsScene, userDeck: Deck): Promise<v
 
 export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
-  //const userCards = AllCards;
+  // const userCards = AllCards;
   if (!userCards) {
     throw new Error();
   }

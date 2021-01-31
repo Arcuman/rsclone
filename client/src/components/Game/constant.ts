@@ -26,8 +26,8 @@ export const ATLASES = {
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
   MENU_ATLAS: {
-    NAME: 'exit_atlas',
-    PATH: 'assets/images/menu/exit_atlas.json',
+    NAME: 'menu_button_atlas',
+    PATH: 'assets/images/menu/menu_button_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
 };
@@ -40,6 +40,7 @@ export const SCENES = {
   GAME_BOARD: 'GAME_BOARD',
   PROFILE: 'PROFILE',
   GAME_OVER: 'GAME_OVER',
+  CHOOSE_DECK: 'CHOOSE_DECK',
 };
 
 export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig => ({
