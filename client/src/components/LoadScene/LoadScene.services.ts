@@ -14,7 +14,7 @@ import {
 } from '@/components/LoadScene/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
 import { GameOverScene } from '@/components/GameOverScene/GameOverScene.render';
-import {CurrDeckChooseScene} from '@/components/Profile/CurrDeckChoose/CurrDeckChoose.render';
+import {CurrDeckChooseScene} from '@/components/Profile/CurrDeckChoose/CurrDeckChooseScene';
 import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 

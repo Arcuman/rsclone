@@ -19,6 +19,9 @@ export interface ICurrDeckChooseScene extends Phaser.Scene{
   getTotalPage(): number;
   setTotalPage(value: number): void; 
 
+  getCurUserDeckId():number;
+  setCurUserDeckId(value: number): void; 
+
   getStateOfDecks(): StateOfDecks;
   setStateOfDecks(value: StateOfDecks): void;
 }

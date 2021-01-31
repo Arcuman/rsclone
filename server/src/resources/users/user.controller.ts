@@ -56,7 +56,7 @@ const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLog
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
 const getUserProfile = async (id: number): Promise<UserProfile> => {
-  const userProfile:UserProfile = await usersModel.getUserProfile(id);
+  const userProfile: UserProfile = await usersModel.getUserProfile(id);
   return userProfile;
 };
 
@@ -85,16 +85,16 @@ const updateUserById = async (id: number, userData: User): Promise<User> => {
   return usersModel.updateUserById(id, newUserData);
 };
 
-const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> =>{
+const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> => {
   const profile = await getUserProfile(id);
-  console.log(`id=${id} `, data);
-  const newProfile = Object.entries(profile).reduce((prev, curr) =>{
-    if (curr[0]!=='user_id' &&  data[curr[0]]){
-      return  ({...prev, [curr[0]]: data[curr[0]]});
+
+  const newProfile = Object.entries(profile).reduce((prev, curr) => {
+    if (curr[0] !== 'user_id' && data[curr[0]]) {
+      return { ...prev, [curr[0]]: data[curr[0]] };
     }
-    return ({...prev, [curr[0]]: curr[1]});
+    return { ...prev, [curr[0]]: curr[1] };
   }, {});
- 
+
   return usersModel.updateUserProfile(id, <UserProfile>newProfile);
 };
 

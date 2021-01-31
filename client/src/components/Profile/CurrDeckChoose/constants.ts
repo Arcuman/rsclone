@@ -21,6 +21,10 @@ export const positionDeckContainer: PositionDeckContainer = {
   IMG_X: 10,
   IMG_Y: 0,
 };
+export const offsetDeck ={
+  X:150,
+  Y:180,
+};
 export const positionDeckName: PositionText = {
   TEXT_X: -30,
   TEXT_Y: 70,
