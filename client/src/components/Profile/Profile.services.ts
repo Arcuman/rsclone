@@ -81,7 +81,7 @@ export const setClickableDeck = (
   });
   topCard.on('pointerup', () => {
     topCard.clearTint();
-    
+
   });
 };
 
@@ -140,7 +140,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  
+
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
@@ -149,7 +149,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
   userCurrDeck.add(userCurrDeckName);
   userCurrDeck.add(userCurrDeckNumber);
-  
+
   const userInfoBLock = [
     userInfoBgr,
     textUserName,
@@ -164,6 +164,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
 };
 
 export const create = (scene: Phaser.Scene): void => {
+  // eslint-disable-next-line no-param-reassign
   scene.sound.pauseOnBlur = false;
   const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, {
     loop: true,

@@ -4,7 +4,8 @@ import { Server } from 'socket.io';
 import { getEnemyPlayer } from '@/resources/game/room/room.service';
 import {
   COUNTDOWN_SEC,
-  DESTROY_DECK_CARD, ENEMY_GET_DECK_CARD,
+  DESTROY_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
   GET_DECK_CARD,
   MAX_HAND_CARDS,
   NEXT_ROUND,
@@ -27,7 +28,7 @@ export function nextTurn(openRoom: Room, player: Player, io: Server): void {
   openRoom.setIsPlayerOneTurn(!openRoom.isPlayerOneTurn);
   openRoom.setCountDown(COUNTDOWN_SEC);
   io.to(openRoom.id).emit(NEXT_TURN, openRoom.isPlayerOneTurn);
-  if (enemy.deckCards.length){
+  if (enemy.deckCards.length) {
     const deckCard = enemy.deckCards.pop();
     if (enemy.handCards.length < MAX_HAND_CARDS) {
       enemy.handCards.push(deckCard!);

@@ -18,7 +18,7 @@ import {
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
   AUTH_AUDIO,
-  AUTH_AUDIO_CONFIG
+  AUTH_AUDIO_CONFIG,
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 

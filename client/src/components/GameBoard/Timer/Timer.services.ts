@@ -29,7 +29,7 @@ export function addTimerAlmostExpiredSprite(scene: Phaser.Scene): void {
       SPRITE_POSITION.WICK_SPRITE.POS_X,
       SPRITE_POSITION.WICK_SPRITE.POS_Y,
       SPRITE_ANIMATION_CONFIG.CONFIG_WICK.FRAMES,
-    )
+    ).setDepth(1000)
     .play(SPRITE_ANIMATION_CONFIG.CONFIG_WICK.KEY);
 }
 

@@ -41,7 +41,7 @@ export const createEndTurnButton = (
     },
   );
   buttonContainer.setSize(textButton.width, textButton.height);
-  buttonContainer.setInteractive();
+  buttonContainer.disableInteractive();
   buttonContainer.on('pointerup', () => {
     if (scene.getIsPlayerOne() === buttonContainer.getData(IS_PLAYER_ONE_TURN_FIELD)) {
       scene.getSocket().emit(NEXT_TURN);

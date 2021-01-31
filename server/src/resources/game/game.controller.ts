@@ -61,7 +61,7 @@ export default async function gameLogic(
   });
 
   player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId: number) => {
-    tableCardPlayTargetPlayer(cardId, openRoom, player, io);
+    tableCardPlayTargetPlayer(cardId, openRoom, player, io, rooms);
   });
 
   player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId: number, targetId: number) => {

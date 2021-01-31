@@ -31,20 +31,8 @@ function createConfig(
 }
 
 export function create(scene: Phaser.Scene): void {
-  
-  const endTurnButton = createConfig(1160, 360, 75, 75, 0xbbaa98);
   const playerMana = createConfig(220, 650, 200, 50, 0x005588);
   const enemyMana = createConfig(1060, 70, 200, 50, 0x005588);
-  const playerDeck = createConfig(1200, 600, 130, 150, 0x00ff88);
-  const enemyDeck = createConfig(80, 120, 130, 150, 0x00ff88);
-
-  scene.add.rectangle(
-    endTurnButton.positionX,
-    endTurnButton.positionY,
-    endTurnButton.width,
-    endTurnButton.height,
-    endTurnButton.color,
-  );
 
   scene.add.rectangle(
     playerMana.positionX,
@@ -60,22 +48,6 @@ export function create(scene: Phaser.Scene): void {
     enemyMana.width,
     enemyMana.height,
     enemyMana.color,
-  );
-
-  scene.add.rectangle(
-    playerDeck.positionX,
-    playerDeck.positionY,
-    playerDeck.width,
-    playerDeck.height,
-    playerDeck.color,
-  );
-
-  scene.add.rectangle(
-    enemyDeck.positionX,
-    enemyDeck.positionY,
-    enemyDeck.width,
-    enemyDeck.height,
-    enemyDeck.color,
   );
 }
 

@@ -47,11 +47,8 @@ export function calcNewPosition(
 ): number {
   const sortedCards = cards;
   let newDeletedIndex = deletedIndex;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  console.log(cards.map(cardd => cardd.getData(CARD_ID_FIELD)));
   if (newDeletedIndex % 2 === 1) {
     for (let i = newDeletedIndex; i > 1; i -= 2) {
-      console.log('in first cycle');
       [sortedCards[i], sortedCards[i - 2]] = [sortedCards[i - 2], sortedCards[i]];
     }
     [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
@@ -79,7 +76,7 @@ export function animateNewPosition(
     const newPosX = getPositionOfCard(scene, index);
     scene.tweens.add({
       targets: card,
-      x: { value: newPosX, duration: 1000, ease: 'Power2' },
+      x: { value: newPosX, duration: 700, ease: 'Power2' },
     });
   });
 }
@@ -200,7 +197,8 @@ export const setDropEventOnHandCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
+        || scene.getPlayerTableCards().length === 7) {
         setStartDragCoordinates(cardContainer);
         return;
       }

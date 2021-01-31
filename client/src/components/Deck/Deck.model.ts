@@ -10,6 +10,8 @@ export interface Deck {
   cards?: Card[];
 }
 
+export const COUNT_OF_DECK_CARD = 'COUNT_OF_DECK_CARD';
+
 export interface PositionDeckContainer {
   IMG_X: number;
   IMG_Y: number;
