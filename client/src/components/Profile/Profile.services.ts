@@ -71,14 +71,7 @@ export const getUserProfileInfo = async (): Promise<UserProfile> => {
   return user;
 };
 
-export const changeCurrUserDeck = async (
-  newDeckId: number,
-  oldDeckId: number,
-): Promise<boolean> => {
-  if (newDeckId === oldDeckId) {
-    return false;
-  }
-  console.log('is0=');
+export const changeCurrUserDeck = async (newDeckId: number): Promise<boolean> => {
   const { user_id: userId } = store.getState().authUser;
   const requestInit = getRequestInit('PUT');
   requestInit.body = JSON.stringify({ cur_user_deck_id: newDeckId });
@@ -89,15 +82,13 @@ export const changeCurrUserDeck = async (
         if (response.status !== StatusCodes.OK) {
           throw new Error();
         }
-        console.log('is000=');
         return response.json();
       },
     )
     .catch(error => {
-      
       throw new Error(error);
     });
-  console.log('is=', isUpdate);
+
   return isUpdate;
 };
 
@@ -111,6 +102,11 @@ export const setClickableDeck = (
     topCard.setTint(TINT_VALUE_CLICK);
   });
   topCard.on('pointerup', () => {
+    const audio = scene.sound.add(AUDIO.DECK_PRESS_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
     topCard.clearTint();
     browserHistory.push(CURR_DECK_CHOOSE_URL);
   });

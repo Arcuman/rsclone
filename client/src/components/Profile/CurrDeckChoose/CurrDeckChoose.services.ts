@@ -36,7 +36,7 @@ const createDecksContainer = async (scene:Phaser.Scene): Promise<void> => {
   const {cur_user_deck_id} = await getUserProfileInfo();
 
   const userDecks = await getUserDecks();
-  console.log(userDecks);
+ 
   if (!userDecks) {
     throw new Error();
   } 
@@ -49,10 +49,10 @@ const createDecksContainer = async (scene:Phaser.Scene): Promise<void> => {
   stateCardsOfDecks.DECKS_DATA = userDecks; */
 
   renderDeck(scene, userDecks, decksContainer, cur_user_deck_id);  
+  console.log('de=', decksContainer);
 };
   
 export const create = (scene: Phaser.Scene): void => {
-  console.log('s');
   setBackground(scene, IMAGES.PROFILE_BACKGROUND.NAME);
   
   const positionMenuCoords = {
@@ -64,8 +64,8 @@ export const create = (scene: Phaser.Scene): void => {
     scene,
     positionMenuCoords,
     0,
-    ATLASES.MENU_ATLAS.NAME,
-    MENU_IMAGES.MENU_BUTTON,
+    ATLASES.SETTINGS_ATLAS.NAME,
+    MENU_IMAGES.MENU_SETTINGS,
     HEIGHT_OFFSET,
   );
   
