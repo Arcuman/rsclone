@@ -9,7 +9,7 @@ import {
 } from '@/redux/actions/actions';
 import { browserHistory } from '@/router/history';
 import { AUTH_URL, MENU_URL } from '@/router/constants';
-import { HEADER_JSON } from '@/constants/constants';
+import { HEADER_JSON, IS_MUTE_ON_LS_PARAM} from '@/constants/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
@@ -18,7 +18,7 @@ import {
   AUTH_MESSAGE,
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
   AUTH_AUDIO,
-  AUTH_AUDIO_CONFIG
+  AUTH_AUDIO_CONFIG,
 } from './constants';
 import { parseTokenData, isAccessTokenExpired } from './webToken.service';
 
@@ -33,7 +33,9 @@ const requestInit: RequestInit = {
 
 export const playAudio = (attr: string): void => {
   const audio = <HTMLAudioElement>document.querySelector(`audio[data-audio="${attr}"]`);
-  if (audio) {
+  const isMuteOn = localStorage.getItem(IS_MUTE_ON_LS_PARAM) === 'true';
+ 
+  if (audio && !isMuteOn) {
     audio.currentTime = AUTH_AUDIO_CONFIG.currentTime;
     audio.volume = AUTH_AUDIO_CONFIG.volume;
     audio.play();

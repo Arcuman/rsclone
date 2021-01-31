@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "mute_on_atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 400,
+				"h": 202
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "mute_off.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 198,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 198,
+						"h": 200
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 198,
+						"h": 200
+					}
+				},
+				{
+					"filename": "mute_on.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 198,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 198,
+						"h": 200
+					},
+					"frame": {
+						"x": 201,
+						"y": 1,
+						"w": 198,
+						"h": 200
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:23a39c4ae41d1d5c5b53cf8046fa229d:0d238dae267b31de7909d7972cdb4fec:54103a8bdebeb8f6c40ed1247600bc44$"
+	}
+}

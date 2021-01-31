@@ -107,6 +107,7 @@ export const IMAGES = {
     NAME: 'arrow_right',
     PATH: 'assets/images/arrow_right.png',
   },
+ 
 };
 
 export const MENU_IMAGES = {
@@ -134,5 +135,15 @@ export const MENU_IMAGES = {
     IDLE: 'menu-button-ru.png',
     HOVER: 'menu-button-hover-ru.png',
     CLICK: 'menu-button-click-ru.png',
+  },
+  MUTE_ON_BUTTON:{
+    IDLE: 'mute_on.png',
+    HOVER: 'mute_on.png',
+    CLICK: 'mute_off.png',
+  },
+  MUTE_OFF_BUTTON:{
+    IDLE: 'mute_off.png',
+    HOVER: 'mute_off.png',
+    CLICK: 'mute_on.png',
   },
 };
