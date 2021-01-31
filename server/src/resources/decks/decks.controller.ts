@@ -13,7 +13,7 @@ const isInitialDeck = async (id: number): Promise<boolean> => {
 
 const getAll = (user_id: number): Promise<Deck[]> => decksModel.getAll(user_id);
 const getDeckById = async (id: number): Promise<Deck> => decksModel.getDeckById(id);
-const getDeckCards =  (id: number) => decksModel.getDeckCards(id);
+const getDeckCards = (id: number) => decksModel.getDeckCards(id);
 
 const getDeckByIdCards = async (id: number): Promise<Deck> => {
   const deck: Deck = await decksModel.getDeckById(id);

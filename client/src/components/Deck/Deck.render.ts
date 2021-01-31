@@ -6,6 +6,7 @@ import { positionDeckText } from '@/components/Profile/constants';
 import { Deck, PositionDeckContainer } from './Deck.model';
 import {
   textDecoration,
+  deckNameDecoration,
   CHANGE_POSITION_DECK_Y,
   CARDS_COUNT_TEXT,
   RATIO_OFFSET_X,
@@ -16,11 +17,12 @@ import {
 
 export function createDeck(
   scene: Phaser.Scene,
-  position: PositionDeckContainer,
+  position: PositionDeckContainer,  
   numberCard?: number,
 ): Phaser.GameObjects.Container {
+  const {IMG_X, IMG_Y} = position;
   const numberCardsInDeck = numberCard || STANDART_NUMBER_CARD;
-  const deck = scene.add.container(position.IMG_X, position.IMG_Y);
+  const deck = scene.add.container(IMG_X, IMG_Y);
 
   for (let x = 0; x < numberCardsInDeck; x += 1) {
     const offsetCardX = x * RATIO_OFFSET_X;
@@ -40,16 +42,17 @@ export function createDeck(
 export function createDeckName(
   scene: Phaser.Scene,
   deckInfo: Deck,
-  positionDeckName: PositionText,
+  deckNamePosition: PositionText, 
 ): Phaser.GameObjects.Text {
+  const {TEXT_X, TEXT_Y} = deckNamePosition;
   const textName: Phaser.GameObjects.Text = createTextData(
     scene,
-    positionDeckName.TEXT_X,
-    positionDeckName.TEXT_Y,
+    TEXT_X,
+    TEXT_Y,
     deckInfo.name,
-    textDecoration,
+    deckNameDecoration,
   );
-
+  
   return textName;
 }
 

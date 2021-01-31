@@ -86,6 +86,5 @@ export const AUDIO = {
   PAGE_TURN_AUDIO:{    
     NAME: 'page-turn-audio',
     PATH: 'assets/audio/page_turn.ogg',
-  },
-  
+  },  
 };

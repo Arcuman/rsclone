@@ -14,7 +14,7 @@ import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/c
 import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import { AUDIO } from '@/components/Game/constant';
-import { AUDIO_CONFIG } from '@/constants/constants';
+import { CURSOR_POINTER, AUDIO_CONFIG } from '@/constants/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -87,7 +87,7 @@ export const setScalableCard = (
   cardContainer: Phaser.GameObjects.Container,
   scale: number,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
     const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
@@ -110,7 +110,7 @@ export const setScalableCardInContainer = (
   scale: number,
   generalСontainer: Phaser.GameObjects.Container,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
     const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
@@ -265,7 +265,7 @@ export const setClickableCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.on('pointerdown', () => {
     cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
     cardContainer.setDepth(DEPTH_CLICK_CARD);

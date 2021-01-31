@@ -1,5 +1,5 @@
 import { AUDIO } from '@/components/Game/constant';
-import {AUDIO_CONFIG} from '@/constants/constants';
+import { CURSOR_POINTER, AUDIO_CONFIG } from '@/constants/constants';
 import { BUTTON_SCALE } from './constants';
 
 interface Position {
@@ -27,7 +27,7 @@ export function createButton(
     atlasName,
     image.IDLE,
   );
-  button.setScale(BUTTON_SCALE, BUTTON_SCALE).setInteractive();
+  button.setScale(BUTTON_SCALE, BUTTON_SCALE).setInteractive({ cursor: CURSOR_POINTER });
   button.on('pointerover', () => {
     const btnAudio = scene.sound.add(AUDIO.BUTTON_OVER_AUDIO.NAME, {volume:AUDIO_CONFIG.volume.button});
     btnAudio.play();
