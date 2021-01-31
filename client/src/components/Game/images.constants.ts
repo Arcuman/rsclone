@@ -107,7 +107,22 @@ export const IMAGES = {
     NAME: 'arrow_right',
     PATH: 'assets/images/arrow_right.png',
   },
- 
+  DELETE_BUTTON: {
+    NAME: 'delete_button',
+    PATH: 'assets/images/delete_button.png',
+  },
+  EDIT_BUTTON: {
+    NAME: 'edit_button',
+    PATH: 'assets/images/edit_button.png',
+  },
+  CREATE_BUTTON: {
+    NAME: 'create_button',
+    PATH: 'assets/images/create_button.png',
+  },
+  DONE_BUTTON: {
+    NAME: 'done_button',
+    PATH: 'assets/images/done_button.png',
+  }, 
 };
 
 export const MENU_IMAGES = {

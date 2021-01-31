@@ -103,7 +103,7 @@ export const setClickableDeck = (
     topCard.setTint(TINT_VALUE_CLICK);
   });
   topCard.on('pointerup', () => {
-    const audio = scene.sound.add(AUDIO.DECK_PRESS_AUDIO.NAME, {
+    const audio = scene.sound.add( AUDIO.DECK_PRESS_AUDIO.NAME, {
       volume: AUDIO_CONFIG.volume.card,
     });
     audio.play();
@@ -168,7 +168,6 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);

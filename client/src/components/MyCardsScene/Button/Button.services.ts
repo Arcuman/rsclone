@@ -6,6 +6,8 @@ import {
   NAME_CARDS,
 } from '@/components/MyCardsScene/constants';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
+import { setUserDeckWithCards} from '@/components/Deck/Deck.services';
+import { createNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
 import { AUDIO_CONFIG } from '@/constants/constants';
 import { AUDIO } from '@/components/Game/constant';
 import {
@@ -15,6 +17,7 @@ import {
   DECKS_LEFT,
   MIN_POSSIBLE_PAGES,
   ONE_PAGE,
+  CREATE_BUTTON,
 } from './constants';
 
 const slideDecksPage = (
@@ -76,5 +79,15 @@ export const slidePage = (scene: IMyCardsScene, name: string): void => {
     slideDecksPage(scene, name, audio);
   } else if (name === CARDS_LEFT || name === CARDS_RIGHT) {
     slideCardsPage(scene, name, audio);
+  }
+};
+
+export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
+  if (name === CREATE_BUTTON ) {
+    createNewDeck(scene); 
+    // } else if ( name === EDIT_BUTTON) {
+
+    // } else if ( name === DONE_BUTTON) {
+
   }
 };

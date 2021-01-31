@@ -15,6 +15,15 @@ export const textDecoration: TextDecoration = {
   TEXT_DEPTH: 2,
 };
 
+export const deckNameDecoration: TextDecoration = {
+  FONT_SIZE: '20px',
+  FONT_FAMILY: 'number_font',
+  FONT_COLOR: '#eddeb0',
+  TEXT_OUTLINE_COLOR: '#120805',
+  TEXT_OUTLINE_SIZE: 5,
+  TEXT_DEPTH: 2,
+};
+
 export const RATIO_OFFSET_X = 1.5;
 export const RATIO_OFFSET_Y = 0.9;
 export const SCALE_CARD_IN_DECK = 0.7;

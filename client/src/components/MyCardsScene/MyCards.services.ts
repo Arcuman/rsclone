@@ -1,12 +1,12 @@
 import { Deck } from '@/components/Deck/Deck.model';
 import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
-import { renderArrowButtonMyCardsScene } from '@/components/MyCardsScene/Button/Button.render';
+import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
 import { getUserCards } from '@/components/Card/Card.services';
 import { IMyCardsScene } from './MyCards.model';
 import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
 import { AllCards } from './CardsInfo';
-import { createMenyButton } from './Button/Button.render';
+import { createMenyButton, decksControlButton } from './Button/Button.render';
 import {
   cardsPosition,
   decksPosition,
@@ -74,9 +74,22 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
   renderDeck(scene, userDecks, decksContainer);
 };
 
+export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void => {
+  const stateCardsOfDecks =  scene.getStateCardsOfDecks();
+  const cards = stateCardsOfDecks.CARDS_DATA;
+  const newCards = cards.filter((item) => item.id !== idCard);
+  
+  const decksContainer = scene.getDecksContainer();
+  decksContainer.removeAll();
+  
+  renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
+
+};
+
 export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void => {
   controlCardsInfo(scene);
   controlDeckInfo(scene);
-  renderArrowButtonMyCardsScene(scene);
+  renderArrowButton(scene);
   createMenyButton(scene, cardsBgAudio);
+  decksControlButton(scene);
 };
