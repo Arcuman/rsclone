@@ -31,7 +31,7 @@ const AUTH_AUDIO = {
   linkPress: { name: 'linkPress', audio: 'link_press.ogg' },
 };
 const AUDIO_PATH = '../../assets/audio/';
-const AUTH_AUDIO_CONFIG = {currentTime:0, volume:0.7}
+const AUTH_AUDIO_CONFIG = {currentTime:0, volume:0.7};
 export {
   authForm,
   LOGIN_ACTION,
@@ -42,5 +42,5 @@ export {
   AUTH_LOGIN_EXISTS_ERROR_STATUS,
   AUTH_AUDIO,
   AUDIO_PATH,
-  AUTH_AUDIO_CONFIG
+  AUTH_AUDIO_CONFIG,
 };

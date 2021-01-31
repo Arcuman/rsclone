@@ -6,7 +6,6 @@ import { router } from '@/router/routers';
 import { isUserAuthenticate } from '@/components/Auth/Auth.services';
 import { RouteResultResponse } from '@/router/routes.model';
 import { createGameObj, getGame } from '@/components/Game/Game.services';
-import { SCENES } from '@/components/Game/constant';
 import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
 import SettingsConfig = Phaser.Types.Scenes.SettingsConfig;

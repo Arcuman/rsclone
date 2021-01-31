@@ -43,6 +43,10 @@ export const AUDIO = {
     NAME: 'deck-over-audio',
     PATH: 'assets/audio/deck_mouse_over.ogg',
   },
+  DECK_PRESS_AUDIO:{    
+    NAME: 'deck-press-audio',
+    PATH: 'assets/audio/deck_press.ogg',
+  },
   VICTORY_AUDIO:{  
     NAME: 'victory-audio',
     PATH: 'assets/audio/victory_screen.ogg',
