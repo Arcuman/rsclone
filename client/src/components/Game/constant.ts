@@ -1,4 +1,7 @@
 import Phaser from 'phaser';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin';
 import { IMAGES, MENU_IMAGES } from './images.constants';
 import { AUDIO } from './audio.constants';
 
@@ -52,11 +55,21 @@ export const createConfig = (parent: HTMLElement): Phaser.Types.Core.GameConfig 
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   dom: {
-    createContainer: false,
+    createContainer: true,
   },
   scene: [],
   audio: {
     disableWebAudio: true,
     context:  new (window.AudioContext)(),
+  },
+  plugins: {
+    scene: [
+      {
+        key: 'rexUI',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        plugin: RexUIPlugin,
+        mapping: 'rexUI',
+      },
+    ],
   },
 });

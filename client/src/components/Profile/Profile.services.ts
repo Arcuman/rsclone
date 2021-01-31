@@ -140,7 +140,6 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
-  
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
