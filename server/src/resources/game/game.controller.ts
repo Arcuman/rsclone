@@ -32,7 +32,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>
+  rooms: Array<Room>,
 ): Promise<void> {
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {

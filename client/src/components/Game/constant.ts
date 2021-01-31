@@ -33,6 +33,16 @@ export const ATLASES = {
     PATH: 'assets/images/menu/menu_button_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
+  MUTE_ON_ATLAS: {
+    NAME: 'mute_on_atlas',
+    PATH: 'assets/images/menu/mute_on_atlas.json',
+    IMAGES_CONTAINER: 'assets/images/menu/',
+  },
+  MUTE_OFF_ATLAS: {
+    NAME: 'mute_off_atlas',
+    PATH: 'assets/images/menu/mute_off_atlas.json',
+    IMAGES_CONTAINER: 'assets/images/menu/',
+  },
 };
 
 export const SCENES = {
