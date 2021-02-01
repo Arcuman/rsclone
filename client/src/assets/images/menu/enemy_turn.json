@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "enemy_turn.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 393,
+				"h": 181
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "enemy_turn.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 391,
+						"h": 179
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:310cc92a1b897e3b67895d3932ee7fac:709c04637377ae17bf7c5b3906ada084:a29b02886b49b442a3636942fc0cbab1$"
+	}
+}

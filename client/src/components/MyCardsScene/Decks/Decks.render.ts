@@ -7,6 +7,7 @@ import { getUserProfileInfo } from '@/components/Profile/Profile.services';
 import { createTextData, makeDisableButton, makeEnableButton } from '@/utils/utils';
 import { Math } from 'phaser';
 import { textDecoration } from '@/components/GameBoard/UserAvatar/constants';
+import { store } from '@/redux/store/rootStore';
 import {  
   newDeckText,
   positionNewDeck,
@@ -33,14 +34,10 @@ const receiveDeckName = async (
 
   if (newText !== '') {
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
-    const user = await getUserProfileInfo();
-    if (!user) {
-      throw new Error();
-    }
-    console.log('user', user);
-
+   
+    const userId = store.getState().authUser.user_id;
     const newDeck = {
-      user_id: user.user_id,
+      user_id: userId,
       name: <string>newText,
       isCurr: true,
       cards: [],
@@ -48,7 +45,7 @@ const receiveDeckName = async (
     console.log('newDeck', newDeck);
 
     scene.setNewDeck(newDeck);
-    console.log('newDeck', scene.getNewDeck());
+    console.log('newDeck2', scene.getNewDeck());
   } else {
     textInput.setText(NAME_INPUT_DEFAULT);
   }
@@ -113,14 +110,11 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
 };
 
 export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
-  // console.log('saveNewDeck');
-
   const newDeck =  scene.getNewDeck();
-  // console.log('newDeck', newDeck);
-
-  const userDeckSend = await setUserDeckWithCards(newDeck);
-  // console.log('userDeckSend', userDeckSend);
-
+ 
+  const deckId = await setUserDeckWithCards(newDeck);
+  console.log('deckId=', deckId);
+  newDeck.user_deck_id = deckId;
   if (Object.keys(newDeck).length !== 0) {
     // console.log('open deck');
     openDeck(scene, newDeck);
