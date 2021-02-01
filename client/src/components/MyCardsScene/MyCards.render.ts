@@ -4,20 +4,23 @@ import { Card } from '@/components/Card/Card.model';
 import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
-import {
+import { createDeleteButton } from '@/components/MyCardsScene/Button/Button.render';
+import { 
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
   DECKS_OFFSET_Y,
   CARDS_SCALE,
   NUMBER_CARDS_IN_ROW,
-  positionDeckName,
-  positionDeckContainer,
+  NAME_POS_Y,
   NUMBER_CARDS_IN_DECK,
+  NAME_OFFSET_X,
   NAME_CARDS,
   NAME_DECKS,
   ZERO_POSITION_Y,
   TINT_VALUE_CLICK,
   NUMBER_CARDS_ON_PAGE,
+  decksPosition,
+  ORIGIN_HALF,
 } from './constants';
 import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 
@@ -94,7 +97,14 @@ export const renderMyCards = (
       card: item,
     });
     card.setScale(CARDS_SCALE, CARDS_SCALE);
+
+    if (name === NAME_DECKS) {
+      const deleteButton = createDeleteButton(scene, item.id);
+      card.add(deleteButton);
+    }
+    
     cardsContainer.add(card);
+   
     setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
   });
 };
@@ -104,15 +114,20 @@ export const renderDeck = (
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
-  userDecks.forEach(item => {
-    const userDeck = createDeck(scene, positionDeckContainer, NUMBER_CARDS_IN_DECK);
+  userDecks.forEach((item, id) => {    
+    const posX = getPositionX(id, decksPosition);
+    const posY = getPositionY(id, NAME_DECKS);
+    
+    const userDeck = createDeck(scene, {IMG_X: posX, IMG_Y: posY}, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
     setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
 
     setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
-    const userDeckName = createDeckName(scene, item, positionDeckName);
+    const namePosX = decksContainer.width + NAME_OFFSET_X;
+    const userDeckName = createDeckName(scene, item, {TEXT_X: namePosX, TEXT_Y: NAME_POS_Y} ).setOrigin(ORIGIN_HALF, ORIGIN_HALF);
 
     decksContainer.add(userDeck);
     userDeck.add(userDeckName);
+    
   });
 };

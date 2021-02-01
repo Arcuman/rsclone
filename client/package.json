@@ -69,7 +69,6 @@
     "page": "^1.11.6",
     "phaser": "^3.51.0",
     "phaser3-rex-plugins": "^1.1.39",
-    "phaser3-rex-plugins-types": "0.0.3",
     "prettier": "^2.1.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
