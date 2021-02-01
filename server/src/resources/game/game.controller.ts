@@ -42,7 +42,6 @@ export default async function gameLogic(
   }
   const player = await createPlayer(userId, socket);
   const openRoom: Room = getOrCreateOpenRoom(rooms);
-
   openRoom.players.push(player);
   player.socket.join(openRoom.id);
 

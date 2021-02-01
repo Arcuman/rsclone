@@ -63,6 +63,7 @@ const BOMB_IMAGE = {
   POS_Y: 350,
   TEXTURE: IMAGES.BOMB.NAME,
 };
+export const TIMER_TOP_DEPTH = 1000;
 
 export {
   TIMER,

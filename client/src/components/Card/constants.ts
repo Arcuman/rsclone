@@ -39,6 +39,8 @@ export const CARD_CONTAINER_DEPTH = 1;
 export const CARD_ORIGIN_CENTER = 0.5;
 export const IMAGE_CARD_SIZE = 147;
 
+export const MAX_TABLE_SIZE = 7;
+
 export const CARD_HEALTH_FIELD = 'CARD_HEALTH_FIELD';
 export const CARD_ID_FIELD = 'CARD_ID_FIELD';
 export const CARD_MANA_FIELD = 'CARD_MANA_FIELD';

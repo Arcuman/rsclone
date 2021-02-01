@@ -24,7 +24,7 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
-  CARD_IS_PLAYED_FIELD,
+  CARD_IS_PLAYED_FIELD, MAX_TABLE_SIZE,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -198,7 +198,7 @@ export const setDropEventOnHandCard = (
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
       if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
-        || scene.getPlayerTableCards().length === 7) {
+        || scene.getPlayerTableCards().length === MAX_TABLE_SIZE) {
         setStartDragCoordinates(cardContainer);
         return;
       }

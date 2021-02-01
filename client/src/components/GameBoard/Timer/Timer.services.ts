@@ -1,4 +1,4 @@
-import { BOMB_IMAGE, SPRITE_ANIMATION_CONFIG, SPRITE_POSITION } from './constants';
+import {BOMB_IMAGE, SPRITE_ANIMATION_CONFIG, SPRITE_POSITION, TIMER_TOP_DEPTH} from './constants';
 
 export function addTimerEndSprite(scene: Phaser.Scene): void {
   const configExplosion = {
@@ -29,7 +29,7 @@ export function addTimerAlmostExpiredSprite(scene: Phaser.Scene): void {
       SPRITE_POSITION.WICK_SPRITE.POS_X,
       SPRITE_POSITION.WICK_SPRITE.POS_Y,
       SPRITE_ANIMATION_CONFIG.CONFIG_WICK.FRAMES,
-    ).setDepth(1000)
+    ).setDepth(TIMER_TOP_DEPTH)
     .play(SPRITE_ANIMATION_CONFIG.CONFIG_WICK.KEY);
 }
 

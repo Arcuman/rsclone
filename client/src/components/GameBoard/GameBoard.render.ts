@@ -28,7 +28,7 @@ import {
   LOSE,
   GET_DECK_CARD,
   ENEMY_GET_DECK_CARD,
-  DESTROY_DECK_CARD,
+  DESTROY_DECK_CARD, DESTROY_DECK_CARD_TIME,
 } from '@/components/GameBoard/constants';
 import { AUDIO_CONFIG, COVER_CARD } from '@/constants/constants';
 import {
@@ -55,6 +55,7 @@ import { PLAYER_CARDS_POSITION } from '@/components/GameBoard/UserCards/constant
 import {createDeck} from '@/components/Deck/Deck.render';
 import {COUNT_OF_DECK_CARD, PositionDeckContainer} from '@/components/Deck/Deck.model';
 import {createBaseCard} from '@/components/Card/Card.render';
+import {positionEnemyDeck, positionPlayerDeck} from '@/components/Deck/constants';
 import { createTimer } from './Timer/Timer.render';
 import {
   addTimerAlmostExpiredSprite,
@@ -165,16 +166,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
-    const positionPlayerDeck : PositionDeckContainer = {
-      IMG_X: 1200,
-      IMG_Y:600,
-    };
     this.playerDeck = createDeck(this, positionPlayerDeck, data.initState.deckCountCards).setScale(1.2);
 
-    const positionEnemyDeck : PositionDeckContainer = {
-      IMG_X: 80,
-      IMG_Y:120,
-    };
     this.enemyDeck = createDeck(this, positionEnemyDeck, data.initState.enemy.deckCountCards, true).setScale(1.2);
 
     this.enemyAvatar = createEnemyAvatar(
@@ -278,7 +271,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.socket.on(DESTROY_DECK_CARD, (deckCard: Card, isPlayerOne: boolean) => {
       const destoyedCard = createBaseCard({scene: this, card: deckCard, posX: 640, posY: 360}).setScale(1.3);
-      setTimeout(()=> destoyedCard.destroy(), 1500);
+      setTimeout(()=> destoyedCard.destroy(), DESTROY_DECK_CARD_TIME);
       if (isPlayerOne === this.isPlayerOne) {
         console.log('my card');
       } else {
