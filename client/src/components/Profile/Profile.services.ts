@@ -109,7 +109,11 @@ export const setClickableDeck = (
     audio.play();
 
     topCard.clearTint();
+<<<<<<< HEAD
+
+=======
     browserHistory.push(CURR_DECK_CHOOSE_URL);
+>>>>>>> develop
   });
 };
 
@@ -168,6 +172,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
+
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
@@ -248,6 +253,6 @@ export const create = (scene: Phaser.Scene): void => {
   menuButton.setScale(BUTTON_SCALE);
   const isMuteOn = localStorage.getItem(IS_MUTE_ON_LS_PARAM) === 'true';
   renderMuteButton(scene, isMuteOn);
-  
+
   createInfoContainer(scene);
 };

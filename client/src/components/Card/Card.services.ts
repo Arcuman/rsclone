@@ -24,7 +24,7 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
-  CARD_IS_PLAYED_FIELD,
+  CARD_IS_PLAYED_FIELD, MAX_TABLE_SIZE,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -48,11 +48,10 @@ export function calcNewPosition(
   const sortedCards = cards;
   let newDeletedIndex = deletedIndex;
   if (newDeletedIndex % 2 === 1) {
-    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
-    for (let i = 1; i < newDeletedIndex; i += 2) {
-      if (!sortedCards[i + 2]) break;
-      [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
+    for (let i = newDeletedIndex; i > 1; i -= 2) {
+      [sortedCards[i], sortedCards[i - 2]] = [sortedCards[i - 2], sortedCards[i]];
     }
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
     newDeletedIndex = 0;
   }
   for (let i = newDeletedIndex; i < sortedCards.length; i += 2) {
@@ -77,7 +76,7 @@ export function animateNewPosition(
     const newPosX = getPositionOfCard(scene, index);
     scene.tweens.add({
       targets: card,
-      x: { value: newPosX, duration: 1500, ease: 'Power2' },
+      x: { value: newPosX, duration: 700, ease: 'Power2' },
     });
   });
 }
@@ -198,7 +197,8 @@ export const setDropEventOnHandCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
+        || scene.getPlayerTableCards().length === MAX_TABLE_SIZE) {
         setStartDragCoordinates(cardContainer);
         return;
       }

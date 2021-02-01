@@ -16,7 +16,7 @@ export function create(scene: Phaser.Scene): void {
     volume: AUDIO_CONFIG.volume.bg,
   });
   menuBgAudio.play();
-   
+
   const position = { X: scene.game.renderer.width / 2, Y: scene.game.renderer.height / 2 };
 
   const startButton = createButton(

@@ -1,5 +1,6 @@
 export const NUMBER_OF_HAND_CARDS = 3;
 export const MAX_HEALTH = 1;
+export const MAX_HAND_CARDS = 5;
 export const START_MANA = 3;
 export const COUNTDOWN_SEC = 15;
 export const PLAYER_READY = 0;
@@ -13,6 +14,9 @@ const ALREADY_PLAY = 'already_play';
 const INIT_STATE = 'initState';
 const START_GAME = 'startGame';
 const NEXT_TURN = 'nextTurn';
+const GET_DECK_CARD = 'GET_DECK_CARD';
+const ENEMY_GET_DECK_CARD = 'ENEMY_GET_DECK_CARD';
+const DESTROY_DECK_CARD = 'DESTROY_DECK_CARD';
 const TIMER = 'timer';
 const WAIT_SECOND_PLAYER = 'waitSecondPlayer';
 const NEXT_ROUND = 'nextRound';
@@ -50,4 +54,7 @@ export {
   ENEMY_TABLE_CARD_DAMAGE,
   PLAYER_WIN,
   PLAYER_LOSE,
+  GET_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
+  DESTROY_DECK_CARD,
 };

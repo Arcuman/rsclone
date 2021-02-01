@@ -26,6 +26,7 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
 
   const cardsInSelectDeck = <Card[]>userDeckData.cards;
   // const cardsInSelectDeck: Card[] = AllCards;
+
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
 
@@ -78,10 +79,10 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
   const stateCardsOfDecks =  scene.getStateCardsOfDecks();
   const cards = stateCardsOfDecks.CARDS_DATA;
   const newCards = cards.filter((item) => item.id !== idCard);
-  
+
   const decksContainer = scene.getDecksContainer();
   decksContainer.removeAll();
-  
+
   renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
 
 };
