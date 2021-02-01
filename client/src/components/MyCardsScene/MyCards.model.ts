@@ -21,11 +21,14 @@ export interface StateCardsOfDecks {
   TOTAL_PAGE: number;
 }
 
-export interface ArrowButton {
-  DECKS_LEFT: Phaser.GameObjects.Image;
-  DECKS_RIGHT: Phaser.GameObjects.Image;
-  CARDS_RIGHT: Phaser.GameObjects.Image;
-  CARDS_LEFT: Phaser.GameObjects.Image;
+export interface ControlButton {
+  DECKS_LEFT: Phaser.GameObjects.Image | null;
+  DECKS_RIGHT: Phaser.GameObjects.Image | null;
+  CARDS_RIGHT: Phaser.GameObjects.Image | null;
+  CARDS_LEFT: Phaser.GameObjects.Image | null;
+  CREATE_BUTTON: Phaser.GameObjects.Image | null;
+  EDIT_BUTTON: Phaser.GameObjects.Image | null;
+  DONE_BUTTON: Phaser.GameObjects.Image | null;
 }
 
 export interface IMyCardsScene extends Phaser.Scene{
@@ -50,6 +53,19 @@ export interface IMyCardsScene extends Phaser.Scene{
   getCurrentPageDecks(): boolean;
   setCurrentPageDecks(value: boolean): void;
 
-  getArrowButton(): ArrowButton;
-  setArrowButton(value: ArrowButton): void;
+  getArrowButton(): ControlButton;
+  setArrowButton(value: ControlButton): void;
+
+  getstatusDecksPage(): string;
+  setstatusDecksPage(value: string): void;
+
+  getNewDeck(): Deck;
+  setNewDeck(value: Deck): void;
+
+  getDeckNameInput():  Phaser.GameObjects.Text;
+  setDeckNameInput(value:  Phaser.GameObjects.Text): void;
 }
+
+export const CREATE_NEW_DECK = 'create_new_deck';
+// export const CREATE_NEW_DECK = 'create_new_deck';
+// export const CREATE_NEW_DECK = 'create_new_deck';

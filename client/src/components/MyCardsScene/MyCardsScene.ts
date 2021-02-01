@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
+import { Deck } from '@/components/Deck/Deck.model';
 import { setBackground } from '@/utils/utils';
 import { Card } from '@/components/Card/Card.model';
 import { AUDIO_CONFIG } from '@/constants/constants';
 import { create } from './MyCards.services';
-import { IMyCardsScene, StateCardsOfDecks, ArrowButton } from './MyCards.model';
+import { IMyCardsScene, StateCardsOfDecks, ControlButton } from './MyCards.model';
 
 export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
   private userCards: Card[] = [];
@@ -19,6 +20,12 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private currentPageDecks: boolean;
 
+  private statusDecksPage: string;
+
+  private newDeck: Deck;
+
+  private deckNameInput: Phaser.GameObjects.Text;
+
   private stateCardsOfDecks: StateCardsOfDecks = {
     DECKS_DATA: [],
     CARDS_DATA: [],
@@ -26,11 +33,14 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     TOTAL_PAGE: 1,
   };
 
-  private arrowButton: ArrowButton = {   
-    DECKS_LEFT: Phaser.GameObjects.Image,
-    DECKS_RIGHT: Phaser.GameObjects.Image,
-    CARDS_RIGHT: Phaser.GameObjects.Image,
-    CARDS_LEFT: Phaser.GameObjects.Image,
+  private arrowButton: ControlButton = {   
+    DECKS_LEFT: null,
+    DECKS_RIGHT: null,
+    CARDS_RIGHT: null,
+    CARDS_LEFT: null,
+    CREATE_BUTTON: null,
+    EDIT_BUTTON: null,
+    DONE_BUTTON: null,
   };
 
   constructor() {
@@ -97,12 +107,36 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
     this.currentPageDecks = value;
   }
   
-  public getArrowButton(): ArrowButton {
+  public getArrowButton(): ControlButton {
     return this.arrowButton;
   }
 
-  public setArrowButton(value: ArrowButton): void {
+  public setArrowButton(value: ControlButton): void {
     this.arrowButton = value;
+  }
+
+  public getstatusDecksPage(): string {
+    return this.statusDecksPage;
+  }
+
+  public setstatusDecksPage(value: string): void {
+    this.statusDecksPage = value;
+  }
+
+  public getNewDeck(): Deck {
+    return this.newDeck;
+  }
+
+  public setNewDeck(value: Deck): void {
+    this.newDeck = value;
+  }
+
+  public getDeckNameInput(): Phaser.GameObjects.Text {
+    return this.deckNameInput;
+  }
+
+  public setDeckNameInput(value: Phaser.GameObjects.Text): void {
+    this.deckNameInput = value;
   }
 
   create(): void {

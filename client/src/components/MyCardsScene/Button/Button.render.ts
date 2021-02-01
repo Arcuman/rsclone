@@ -20,6 +20,9 @@ import {
   CARDS_RIGHT,
   DECKS_LEFT,
   DECKS_RIGHT,
+  CREATE_BUTTON,
+  EDIT_BUTTON,
+  DONE_BUTTON,
 } from './constants';
 
 export const setInteractiveOnButton = (
@@ -102,6 +105,7 @@ export const decksControlButton = ( scene: IMyCardsScene): void => {
   decksControlButtonData.forEach(item => {
     const {NAME, IMG, PROMPT, POS_X, POS_Y, PROMPT_X, PROMPT_Y } = item;
     const { NORMAL_SCALE } = controlButtonSettings;
+    const arrowButtonSave = scene.getArrowButton();
     const slideButton: Phaser.GameObjects.Sprite = scene.add.sprite(POS_X, POS_Y, IMG);
     slideButton.setName(NAME);
     slideButton.setScale(NORMAL_SCALE);
@@ -116,6 +120,14 @@ export const decksControlButton = ( scene: IMyCardsScene): void => {
 
     setInteractiveOnButton(controlButtonSettings, slideButton, textName);
     
+    if (NAME === CREATE_BUTTON) {
+      arrowButtonSave.CREATE_BUTTON = slideButton;
+    } else if (NAME === EDIT_BUTTON) {
+      arrowButtonSave.EDIT_BUTTON = slideButton;
+    } else if (NAME === DONE_BUTTON) {
+      arrowButtonSave.DONE_BUTTON = slideButton;
+    } 
+
     slideButton.on('pointerup', () => {    
       slideButton.setScale(NORMAL_SCALE);
       slideButton.clearTint();      

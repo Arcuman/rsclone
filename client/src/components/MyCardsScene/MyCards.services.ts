@@ -20,13 +20,16 @@ import {
 } from './constants';
 
 export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<void> => {
-  const userDeckData = await getUserDeckById(userDeck.user_deck_id);
+  console.log('userDeck', userDeck);
+  const userDeckId = userDeck.user_deck_id || 0;
+  const userDeckData = await getUserDeckById(userDeckId);
   if (!userDeckData) {
     throw new Error();
   }
 
-  // const cardsInSelectDeck = <Card[]>userDeckData.cards;
-  const cardsInSelectDeck: Card[] = AllCards;
+  console.log('userDeckData', userDeckData);
+  const cardsInSelectDeck = <Card[]>userDeckData.cards;
+  // const cardsInSelectDeck: Card[] = AllCards;
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
 
@@ -56,9 +59,9 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   scene.setMyCardsContainer(cardsContainer);
 
   const arrowButtonSave = scene.getArrowButton();
-  makeDisableButton(arrowButtonSave.CARDS_LEFT);
+  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_LEFT);
   if (totalPage < FIRST_PAGE + FIRST_PAGE) {
-    makeDisableButton(arrowButtonSave.CARDS_RIGHT);
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_RIGHT);
   }
  
   renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);
@@ -83,9 +86,9 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
   scene.setCurrentPageDecks(true);
 
   const arrowButtonSave = scene.getArrowButton();
-  makeDisableButton(arrowButtonSave.DECKS_LEFT);
+  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
   if (totalPage === FIRST_PAGE) {
-    makeDisableButton(arrowButtonSave.DECKS_RIGHT);
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
   }
 
   renderDeck(scene, userDecks, decksContainer);

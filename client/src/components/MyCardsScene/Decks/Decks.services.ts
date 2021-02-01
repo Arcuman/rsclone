@@ -26,20 +26,20 @@ export const slideDecksInMyDecks = (
       audio.play();
       stateCardsOfDecks.CURRENT_PAGE += ONE_PAGE;
 
-      makeEnableButton(arrowButtonSave.DECKS_LEFT);
+      makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
     } 
     if (stateCardsOfDecks.CURRENT_PAGE >= stateCardsOfDecks.TOTAL_PAGE) {
-      makeDisableButton(arrowButtonSave.DECKS_RIGHT);
+      makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
     }
   } else if (name === DECKS_LEFT) {
     if (stateCardsOfDecks.CURRENT_PAGE > MIN_POSSIBLE_PAGES) {
       audio.play();
       stateCardsOfDecks.CURRENT_PAGE -= ONE_PAGE;
 
-      makeEnableButton(arrowButtonSave.DECKS_RIGHT);
+      makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
     }
     if ( stateCardsOfDecks.CURRENT_PAGE === MIN_POSSIBLE_PAGES) {
-      makeDisableButton(arrowButtonSave.DECKS_LEFT);
+      makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
     }
   }
 
