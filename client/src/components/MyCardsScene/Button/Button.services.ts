@@ -1,10 +1,11 @@
-import { IMyCardsScene, CREATE_NEW_DECK } from '@/components/MyCardsScene/MyCards.model';
+import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { makeDisableButton, makeEnableButton } from '@/utils/utils';
 import {
   decksPosition,
   NAME_DECKS,
   cardsPosition,
   NAME_CARDS,
+  CREATE_NEW_DECK,
 } from '@/components/MyCardsScene/constants';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
 import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
@@ -38,11 +39,21 @@ const slideCardsInMyDecks = (
     if (stateCardsOfDecks.CURRENT_PAGE < stateCardsOfDecks.TOTAL_PAGE) {
       audio.play();
       stateCardsOfDecks.CURRENT_PAGE += ONE_PAGE;
+
+      makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
+    }
+    if (stateCardsOfDecks.CURRENT_PAGE >= stateCardsOfDecks.TOTAL_PAGE) {
+      makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
     }
   } else if (name === DECKS_LEFT) {
     if (stateCardsOfDecks.CURRENT_PAGE > MIN_POSSIBLE_PAGES) {
       audio.play();
       stateCardsOfDecks.CURRENT_PAGE -= ONE_PAGE;
+
+      makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
+    }
+    if ( stateCardsOfDecks.CURRENT_PAGE === MIN_POSSIBLE_PAGES) {
+      makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
     }
   }
 

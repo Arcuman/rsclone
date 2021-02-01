@@ -65,7 +65,3 @@ export interface IMyCardsScene extends Phaser.Scene{
   getDeckNameInput():  Phaser.GameObjects.Text;
   setDeckNameInput(value:  Phaser.GameObjects.Text): void;
 }
-
-export const CREATE_NEW_DECK = 'create_new_deck';
-// export const CREATE_NEW_DECK = 'create_new_deck';
-// export const CREATE_NEW_DECK = 'create_new_deck';

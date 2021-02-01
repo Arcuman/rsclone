@@ -42,3 +42,10 @@ export const TINT_VALUE_CLICK = 0x59503d;
 export const NUMBER_CARDS_ON_PAGE = 12;
 export const FIRST_PAGE = 1;
 export const ORIGIN_HALF = 0.5;
+
+export const CREATE_NEW_DECK = 'create_new_deck';
+export const CARDS_VIEW_DECK = 'cards_view_deck';
+export const DECKS_VIEW_DECK = 'decks_view_deck';
+export const CARDS_EDIT_DECK = 'cards_edit_deck';
+export const DECKS_EDIT_DECK = 'decks_edit_deck';
+
