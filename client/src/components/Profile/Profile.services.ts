@@ -214,6 +214,7 @@ const renderMuteButton = (scene: Phaser.Scene, isMuteOn:boolean): void =>{
   );
   muteButton.setScale(MUTE_BUTTON_SCALE);
   muteButton.on('pointerup', () => {
+    // eslint-disable-next-line no-param-reassign
     scene.sound.mute=!isMuteOn;
     localStorage.setItem(IS_MUTE_ON_LS_PARAM, (!isMuteOn).toString());
     muteButton.destroy();

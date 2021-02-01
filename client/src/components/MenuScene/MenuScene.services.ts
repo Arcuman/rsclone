@@ -9,7 +9,6 @@ import { AUDIO_CONFIG } from '@/constants/constants';
 
 export function create(scene: Phaser.Scene): void {
   setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
-
   // eslint-disable-next-line no-param-reassign
   scene.sound.pauseOnBlur = false;
   const menuBgAudio = scene.sound.add(AUDIO.MENU_BG_AUDIO.NAME, {
