@@ -24,7 +24,7 @@ export const positionMenu = {
   Y: 20,
 };
 export const positionMute = {
-  OFFSET_X: 300,
+  OFFSET_X: 340,
   Y: 20,
 };
 export const MUTE_BUTTON_SCALE = 0.3;

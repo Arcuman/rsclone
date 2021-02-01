@@ -52,6 +52,7 @@ const refreshTokenSession = async (): Promise<boolean> =>
     .then(
       (response): Promise<string> => {
         if (response.status !== StatusCodes.OK) {
+          localStorage.removeItem('refreshToken');
           throw new Error();
         }
         return response.json();
@@ -61,6 +62,7 @@ const refreshTokenSession = async (): Promise<boolean> =>
       const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
 
       if (!authObj.accessToken) {
+        localStorage.removeItem('refreshToken');
         return false;
       }
 
@@ -73,6 +75,8 @@ const refreshTokenSession = async (): Promise<boolean> =>
       return true;
     })
     .catch(error => {
+      localStorage.removeItem('refreshToken');
+      browserHistory.replace(AUTH_URL);
       throw new Error(error);
     });
 

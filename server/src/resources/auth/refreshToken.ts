@@ -32,8 +32,8 @@ export const createCookieData = (value: string): Cookie => ({
   options: {
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
-    //для heroku
-    //secure: true,
+    // для heroku
+    // secure: true,
     secure: false,
     httpOnly: true,
     signed: false,
@@ -57,21 +57,24 @@ const getCookieValue = (cookie: string, name: string) =>
 export const RefreshTokensAction = async (req: Request): Promise<AuthUser> => {
   const { cookie } = req.headers;
   const cookieRefrehToken = cookie ? getCookieValue(cookie, REFRESH_TOKEN) : false;
+  console.log('cook=', cookieRefrehToken);
   const reqRefreshToken =
     (cookie && cookieRefrehToken) ||
     (req.cookies && req.cookies.refreshToken) ||
     (req.body && req.body.refreshToken);
-
+  console.log('reqRefreshToken=', reqRefreshToken);
   const oldRefreshSession = await usersService.getSessionByRefreshToken(reqRefreshToken);
+  console.log('oldRefreshSession=', oldRefreshSession);
+  setInLogExpireToken(oldRefreshSession.expiresIn);
 
   if (!oldRefreshSession) {
     throw new Error(BAD_REFRESH_TOKEN);
   }
 
   await usersService.deleteSessionByRefreshToken(reqRefreshToken);
-  setInLogExpireToken(oldRefreshSession.expiresIn);
 
   const user = await usersService.getUserById(oldRefreshSession.user_id);
+  console.log('user=', user);
   const authUser: AuthUser = { user, token: await getNewRefreshToken(user.user_id, req) };
 
   return authUser;
