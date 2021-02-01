@@ -4,7 +4,7 @@ import { setBackground } from '@/utils/utils';
 import { Card } from '@/components/Card/Card.model';
 import { AUDIO_CONFIG } from '@/constants/constants';
 import { create } from './MyCards.services';
-import { IMyCardsScene, StateCardsOfDecks } from './MyCards.model';
+import { IMyCardsScene, StateCardsOfDecks, ArrowButton } from './MyCards.model';
 
 export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
   private userCards: Card[] = [];
@@ -17,11 +17,20 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private deksContainer: Phaser.GameObjects.Container;
 
+  private currentPageDecks: boolean;
+
   private stateCardsOfDecks: StateCardsOfDecks = {
     DECKS_DATA: [],
     CARDS_DATA: [],
     CURRENT_PAGE: 1,
     TOTAL_PAGE: 1,
+  };
+
+  private arrowButton: ArrowButton = {   
+    DECKS_LEFT: Phaser.GameObjects.Image,
+    DECKS_RIGHT: Phaser.GameObjects.Image,
+    CARDS_RIGHT: Phaser.GameObjects.Image,
+    CARDS_LEFT: Phaser.GameObjects.Image,
   };
 
   constructor() {
@@ -78,6 +87,22 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   public setStateCardsOfDecks(value: StateCardsOfDecks): void {
     this.stateCardsOfDecks = value;
+  }
+
+  public getCurrentPageDecks(): boolean {
+    return this.currentPageDecks;
+  }
+
+  public setCurrentPageDecks(value: boolean): void {
+    this.currentPageDecks = value;
+  }
+  
+  public getArrowButton(): ArrowButton {
+    return this.arrowButton;
+  }
+
+  public setArrowButton(value: ArrowButton): void {
+    this.arrowButton = value;
   }
 
   create(): void {

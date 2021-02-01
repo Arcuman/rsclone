@@ -16,9 +16,13 @@ import {
   deleteButtonSettings,
   controlButtonSettings,
   deleteButtonPosition,
+  CARDS_LEFT,
+  CARDS_RIGHT,
+  DECKS_LEFT,
+  DECKS_RIGHT,
 } from './constants';
 
-const setInteractiveOnButton = (
+export const setInteractiveOnButton = (
   buttonSettings: ButtonSettings,
   button: Phaser.GameObjects.Image,
   promptText?: Phaser.GameObjects.Text,
@@ -49,6 +53,7 @@ const setInteractiveOnButton = (
 export const renderArrowButton = (
   scene: IMyCardsScene,
 ): void => {
+  const arrowButtonSave = scene.getArrowButton();
   arrowButton.forEach(item => {
     const { NAME, IMG, POS_X, POS_Y } = item;
     const { NORMAL_SCALE } = arrowButtonSettings;
@@ -58,9 +63,19 @@ export const renderArrowButton = (
     
     setInteractiveOnButton(arrowButtonSettings, slideButton);
 
+    if (NAME === CARDS_LEFT) {
+      arrowButtonSave.CARDS_LEFT = slideButton;
+    } else if (NAME === CARDS_RIGHT) {
+      arrowButtonSave.CARDS_RIGHT = slideButton;
+    } else if (NAME === DECKS_LEFT) {
+      arrowButtonSave.DECKS_LEFT = slideButton;
+    } else if (NAME === DECKS_RIGHT) {
+      arrowButtonSave.DECKS_RIGHT = slideButton;
+    }
+
     slideButton.on('pointerup', () => {    
       slideButton.setScale(NORMAL_SCALE);
-      slideButton.clearTint();
+      slideButton.clearTint();     
       slidePage(scene, slideButton.name);
     });
   });

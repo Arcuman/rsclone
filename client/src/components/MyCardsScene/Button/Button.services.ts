@@ -1,4 +1,5 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
+import { makeDisableButton, makeEnableButton } from '@/utils/utils';
 import {
   decksPosition,
   NAME_DECKS,
@@ -6,10 +7,11 @@ import {
   NAME_CARDS,
 } from '@/components/MyCardsScene/constants';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
-import { setUserDeckWithCards} from '@/components/Deck/Deck.services';
 import { createNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
+import { slideDecksInMyDecks } from '@/components/MyCardsScene/Decks/Decks.services';
 import { AUDIO_CONFIG } from '@/constants/constants';
 import { AUDIO } from '@/components/Game/constant';
+
 import {
   CARDS_LEFT,
   CARDS_RIGHT,
@@ -20,13 +22,14 @@ import {
   CREATE_BUTTON,
 } from './constants';
 
-const slideDecksPage = (
+const slideCardsInMyDecks = (
   scene: IMyCardsScene,
   name: string,
   audio: Phaser.Sound.BaseSound,
 ): void => {
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const cardsCurrent = stateCardsOfDecks.CARDS_DATA;
+  const arrowButtonSave = scene.getArrowButton();
   const decksContainer = scene.getDecksContainer();
   decksContainer.removeAll();
 
@@ -52,22 +55,35 @@ const slideCardsPage = (
 ): void => {
   const cardsCurrent = scene.getUserCards();
   const myCardsContainer = scene.getMyCardsContainer();
-  const myCardsCurrentPage = scene.getMyCardsCurrentPage();
+  let myCardsCurrentPage = scene.getMyCardsCurrentPage();
+  const arrowButtonSave = scene.getArrowButton();
   const myCardsTotalPage = scene.getMyCardsTotalPage();
   myCardsContainer.removeAll();
-
+  
   if (name === CARDS_RIGHT) {
     if (myCardsCurrentPage < myCardsTotalPage) {
       audio.play();
-      scene.setMyCardsCurrentPage(myCardsCurrentPage + ONE_PAGE);
+      myCardsCurrentPage += 1;
+      scene.setMyCardsCurrentPage(myCardsCurrentPage);
+      
+      makeEnableButton(arrowButtonSave.CARDS_LEFT);
+    }
+    if (myCardsCurrentPage >= myCardsTotalPage) {
+      makeDisableButton(arrowButtonSave.CARDS_RIGHT);
     }
   } else if (name === CARDS_LEFT) {
     if (myCardsCurrentPage > MIN_POSSIBLE_PAGES) {
       audio.play();
-      scene.setMyCardsCurrentPage(myCardsCurrentPage - ONE_PAGE);
+      myCardsCurrentPage -= 1;
+      scene.setMyCardsCurrentPage(myCardsCurrentPage);
+    
+      makeEnableButton(arrowButtonSave.CARDS_RIGHT);
+    }
+    if ( myCardsCurrentPage === MIN_POSSIBLE_PAGES) {
+      makeDisableButton(arrowButtonSave.CARDS_LEFT);
     }
   }
-
+  
   renderMyCards(scene, NAME_CARDS, cardsCurrent, cardsPosition, myCardsContainer);
 };
 
@@ -76,7 +92,13 @@ export const slidePage = (scene: IMyCardsScene, name: string): void => {
     volume: AUDIO_CONFIG.volume.button,
   });
   if (name === DECKS_RIGHT || name === DECKS_LEFT) {
-    slideDecksPage(scene, name, audio);
+    const currentPageDecks = scene.getCurrentPageDecks();
+    
+    if (currentPageDecks === true) {
+      slideDecksInMyDecks(scene, name, audio);
+    } else {
+      slideCardsInMyDecks(scene, name, audio);
+    }    
   } else if (name === CARDS_LEFT || name === CARDS_RIGHT) {
     slideCardsPage(scene, name, audio);
   }

@@ -6,6 +6,7 @@ export const CURSOR_DEFAULT = 'url(assets/images/cursor.png), pointer';
 export const CURSOR_POINTER = 'url(assets/images/cursor_pointer.png), pointer';
 export const AUDIO_CONFIG = { volume: { bg: 0.3, button: 0.5, card: 0.5 } };
 export const TINT_VALUE_CLICK = 0x59503d;
+export const TINT_VALUE_DISABLE = 0x9a8b6a;
 
 export const COVER_CARD = {
   POS_Y: 90,

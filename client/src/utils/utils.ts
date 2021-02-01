@@ -1,5 +1,6 @@
 import { TextDecoration } from '@/types/types';
 import Phaser from 'phaser';
+import { TINT_VALUE_DISABLE } from '@/constants/constants';
 
 export function deleteOldMain(): void {
   const oldMain: HTMLElement | null = document.body.querySelector('.main');
@@ -74,4 +75,14 @@ export const setShadow = (
   shadow.alpha = alphaValue;
 
   return shadow;
+};
+
+export const makeDisableButton = (button: Phaser.GameObjects.Image): void => {
+  button.disableInteractive();
+  button.setTint(TINT_VALUE_DISABLE);
+};
+
+export const makeEnableButton = (button: Phaser.GameObjects.Image): void => {
+  button.setInteractive();
+  button.clearTint();
 };

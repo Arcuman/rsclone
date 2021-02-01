@@ -5,6 +5,7 @@ import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.service
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
 import { createDeleteButton } from '@/components/MyCardsScene/Button/Button.render';
+import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 import { 
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
@@ -22,7 +23,6 @@ import {
   decksPosition,
   ORIGIN_HALF,
 } from './constants';
-import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 
 function getPositionY(index: number, name: string): number {
   const weightId = Math.floor(index / NUMBER_CARDS_IN_ROW);
@@ -73,7 +73,6 @@ export const renderMyCards = (
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
 ): void => {
-  let cardsOnOnePage = [];
   let currentPage = 1;
   if (name === NAME_DECKS) {
     const stateCardsOfDecks = scene.getStateCardsOfDecks();
@@ -81,7 +80,7 @@ export const renderMyCards = (
   } else if (name === NAME_CARDS) {
     currentPage = scene.getMyCardsCurrentPage();
   }
-  cardsOnOnePage = allCards.filter((item, id) =>
+  const cardsOnOnePage = allCards.filter((item, id) =>
     id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
       ? item
       : '',
@@ -114,7 +113,15 @@ export const renderDeck = (
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
-  userDecks.forEach((item, id) => {    
+  const stateCardsOfDecks = scene.getStateCardsOfDecks();
+  const currentPage = stateCardsOfDecks.CURRENT_PAGE;
+  const cardsOnOnePage = userDecks.filter((item, id) =>
+    id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
+      ? item
+      : '',
+  );
+  
+  cardsOnOnePage.forEach((item, id) => {    
     const posX = getPositionX(id, decksPosition);
     const posY = getPositionY(id, NAME_DECKS);
     

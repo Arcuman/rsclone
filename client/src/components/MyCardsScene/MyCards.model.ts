@@ -21,6 +21,13 @@ export interface StateCardsOfDecks {
   TOTAL_PAGE: number;
 }
 
+export interface ArrowButton {
+  DECKS_LEFT: Phaser.GameObjects.Image;
+  DECKS_RIGHT: Phaser.GameObjects.Image;
+  CARDS_RIGHT: Phaser.GameObjects.Image;
+  CARDS_LEFT: Phaser.GameObjects.Image;
+}
+
 export interface IMyCardsScene extends Phaser.Scene{
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
@@ -39,4 +46,10 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getStateCardsOfDecks(): StateCardsOfDecks;
   setStateCardsOfDecks(value: StateCardsOfDecks): void;
+
+  getCurrentPageDecks(): boolean;
+  setCurrentPageDecks(value: boolean): void;
+
+  getArrowButton(): ArrowButton;
+  setArrowButton(value: ArrowButton): void;
 }

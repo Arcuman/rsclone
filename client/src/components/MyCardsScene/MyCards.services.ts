@@ -3,6 +3,7 @@ import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
 import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
 import { getUserCards } from '@/components/Card/Card.services';
+import { makeDisableButton } from '@/utils/utils';
 import { IMyCardsScene } from './MyCards.model';
 import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
 import { AllCards } from './CardsInfo';
@@ -24,8 +25,8 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
     throw new Error();
   }
 
-  const cardsInSelectDeck = <Card[]>userDeckData.cards;
-  // const cardsInSelectDeck: Card[] = AllCards;
+  // const cardsInSelectDeck = <Card[]>userDeckData.cards;
+  const cardsInSelectDeck: Card[] = AllCards;
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
 
@@ -54,6 +55,12 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const cardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
   scene.setMyCardsContainer(cardsContainer);
 
+  const arrowButtonSave = scene.getArrowButton();
+  makeDisableButton(arrowButtonSave.CARDS_LEFT);
+  if (totalPage < FIRST_PAGE + FIRST_PAGE) {
+    makeDisableButton(arrowButtonSave.CARDS_RIGHT);
+  }
+ 
   renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);
 };
 
@@ -69,7 +76,17 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
 
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CURRENT_PAGE = FIRST_PAGE;
+  const totalPage = userDecks.length / NUMBER_CARDS_ON_PAGE;
+  stateCardsOfDecks.TOTAL_PAGE = totalPage;
   stateCardsOfDecks.DECKS_DATA = userDecks;
+
+  scene.setCurrentPageDecks(true);
+
+  const arrowButtonSave = scene.getArrowButton();
+  makeDisableButton(arrowButtonSave.DECKS_LEFT);
+  if (totalPage === FIRST_PAGE) {
+    makeDisableButton(arrowButtonSave.DECKS_RIGHT);
+  }
 
   renderDeck(scene, userDecks, decksContainer);
 };
@@ -87,9 +104,10 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
 };
 
 export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void => {
-  controlCardsInfo(scene);
-  controlDeckInfo(scene);
   renderArrowButton(scene);
   createMenyButton(scene, cardsBgAudio);
   decksControlButton(scene);
+  controlCardsInfo(scene);
+  controlDeckInfo(scene);
+  
 };

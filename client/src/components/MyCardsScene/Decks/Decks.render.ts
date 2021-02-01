@@ -44,7 +44,26 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
     const editor = scene.rexUI.edit(textInput);
-    const elem = editor.inputText.node;
+    editor.inputText.node;
+
+    const click = scene.input.on('pointerup', (eventName, event) => {
+      console.log('eventName', eventName);
+      console.log('event', event);
+      const newText = textInput.text;
+      console.log('newText', newText);
+      event.stopImmediatePropagation();
+     
+    });
+
+    scene.input.keyboard.on('keydown', (eventName, event) => {      
+      if (event.code === 'Enter') {
+        console.log('eventName', eventName);
+        console.log('event', event);
+        const newText = textInput.text;
+        console.log('newText', newText);
+        event.stopImmediatePropagation();
+      }     
+    });
   });
 
   decksContainer.add(newDeckImg);
