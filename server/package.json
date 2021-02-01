@@ -4,9 +4,10 @@
   "author": "Card Team",
   "license": "ISC",
   "scripts": {
-    "start:dev": "node --inspect ./dist/server",
+    "start:dev2": "node --inspect ./dist/server",
     "build:dev": "webpack --env.development",
-    "start": " webpack --progress --env.development --env.nodemon",
+    "start": "webpack --mode production --config ./webpack.config.js",
+    "start:dev": " webpack --progress --env.development --env.nodemon",
     "start:heroku": "webpack --mode production --config ./webpack.config.js",
     "start:prod": "webpack --progress --env.nodemon",
     "build:prod": "webpack --progress",

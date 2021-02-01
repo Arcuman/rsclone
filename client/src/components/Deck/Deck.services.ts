@@ -66,24 +66,24 @@ export const deleteUserDeckById = async (deckId: number): Promise<boolean> => {
   return isDelete;
 };
 
-export const setUserDeckWithCards = async (deckData: Deck): Promise<boolean> => {
+export const setUserDeckWithCards = async (deckData: Deck): Promise<number> => {
   const requestInit = getRequestInit('POST');
   const body = JSON.stringify(deckData);
   requestInit.body = body;
 
-  const isSetDeck = fetch(`${API_INFO_URLS.userDeck}`, requestInit)
+  const newDeckId = fetch(`${API_INFO_URLS.userDeck}`, requestInit)
     .then(
-      (response): Promise<boolean> => {
+      (response): Promise<number> => {
         if (response.status !== StatusCodes.OK) {
           throw new Error();
         }
-        return new Promise(() => true);
-      },
-    )
+        return response.json();
+      })
+    .then((deckId: number) => deckId)
     .catch(error => {
       throw new Error(error);
     });
-  return isSetDeck;
+  return newDeckId;
 };
 
 export const updateUserDeckWithCards = async (deckData: Deck): Promise<boolean> => {

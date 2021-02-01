@@ -112,7 +112,7 @@ const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Ca
 
 const updateUserExp = async (
   user_id: number,
-  receivedExp: number,
+  receivedExp: number
 ): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);

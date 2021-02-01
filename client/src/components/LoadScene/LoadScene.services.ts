@@ -98,6 +98,7 @@ function loadAtlases(scene: Phaser.Scene) {
 function loadScenes(scene: Phaser.Scene) {
   const isMuteOn = localStorage.getItem(IS_MUTE_ON_LS_PARAM) === 'true';
   if (isMuteOn){
+    // eslint-disable-next-line no-param-reassign
     scene.sound.mute = true;
   }
   scene.scene.add(SCENES.MENU, MenuScene, false);
