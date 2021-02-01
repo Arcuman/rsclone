@@ -22,12 +22,12 @@ router
   .post(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
       const newDeck: Deck = req.body;
+      const userId: number = req.user!.user_id;
 
-      if (!newDeck.name) {
+      if (!newDeck.name || !userId) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
-
-      const deckId = await decksService.createDeck(newDeck);
+      const deckId = await decksService.createDeck({ ...newDeck, user_id: userId });
 
       res.statusMessage = statusCodes[StatusCodes.OK].create;
       res.type('application/json').json(deckId).status(StatusCodes.OK).end();

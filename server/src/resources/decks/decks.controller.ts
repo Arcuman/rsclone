@@ -54,7 +54,9 @@ const createDeck = async (data: Deck): Promise<number> => {
     return 0;
   }
 
-  await decksModel.setDeckCards(deckId, data.cards!);
+  if (data.cards?.length) {
+    await decksModel.setDeckCards(deckId, data.cards);
+  }
 
   return deckId;
 };
