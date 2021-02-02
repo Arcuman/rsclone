@@ -2,7 +2,7 @@ import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { renderDeck } from '@/components/MyCardsScene/MyCards.render';
 import { controlDeckInfo } from '@/components/MyCardsScene/MyCards.services';
 import { makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
-import { updateUserDeckWithCards, deleteUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
+import { updateUserDeckWithCards, deleteUserDeckById } from '@/components/Deck/Deck.services';
 import {
   DECKS_RIGHT,
   DECKS_LEFT,
@@ -45,12 +45,10 @@ export const slideDecksInMyDecks = (
       makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
     }
   }
-
   renderDeck(scene, decksCurrent, decksContainer);  
 };
 
 export const saveEditDeckInDB = (scene:  IMyCardsScene): void => {
-
   const newCards = scene.getNewCardsArray();  
   if (newCards.length === 10) {
     const newDeck = scene.getNewDeck();
@@ -64,24 +62,16 @@ export const saveEditDeckInDB = (scene:  IMyCardsScene): void => {
       const decksContainerOld = scene.getDecksContainer();
       decksContainerOld.destroy();      
       controlDeckInfo(scene);      
-    }, 1000);
-   
-  } else {
-    //
+    }, 1000);   
   } 
 };
 
-export const deleteDeckInDeck = async (scene:  IMyCardsScene, idDeck: number): Promise<void> => {
-  console.log('idDeck', idDeck);
-  const userDecks = await getUserDecks();
-  console.log('userDecks', userDecks);
-
+export const deleteDeckInDeck = (scene:  IMyCardsScene, idDeck: number): void => {
   deleteUserDeckById(idDeck);
  
   setTimeout(  () => {
     const decksContainerOld = scene.getDecksContainer();
     decksContainerOld.destroy();      
     controlDeckInfo(scene);      
-  }, 2000);
-  
+  }, 2000);  
 };

@@ -31,8 +31,7 @@ const receiveDeckName = (
   textInput,
   arrowButtonSave: ControlButton): void => {
   const newText = textInput.text;
-  console.log('newText', newText);
-
+  
   click.removeAllListeners();
   enterDown.removeAllListeners();
 
@@ -47,14 +46,11 @@ const receiveDeckName = (
       isCurr: false,
       cards: [],
     };
-    console.log('newDeck', newDeck);
-
-    scene.setNewDeck(newDeck);
-   
+    
+    scene.setNewDeck(newDeck);   
   } else {
     textInput.setText(NAME_INPUT_DEFAULT);
-  }
- 
+  } 
 };
 
 export const createNewDeck = (scene: IMyCardsScene): void => {
@@ -103,6 +99,7 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const editor = scene.rexUI.edit(textInput);
     editor.inputText.node;
 
@@ -126,10 +123,8 @@ export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
  
   if (Object.keys(newDeck).length !== 0) {
     const deckId = await setUserDeckWithCards(newDeck);
-    console.log('deckId=', deckId);
     newDeck.user_deck_id = deckId;
-    
-    console.log('open deck', newDeck);
+        
     scene.setCurrentPageDecks(false);
     scene.setstatusDecksPage(CARDS_EDIT_DECK);
 

@@ -101,9 +101,6 @@ export const renderMyCards = (
     card.setScale(CARDS_SCALE, CARDS_SCALE);
     card.name = item.name;
     
-    // console.log('card', card);
-    // console.log('card.name', card.name);
-
     if (name === NAME_DECKS && scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
       const deleteButton = createDeleteButton(scene, item.id, CARDS_EDIT_DECK);
       card.add(deleteButton);
@@ -122,7 +119,6 @@ export const renderDeck = (
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
-  // const currentPageDecks = scene.getCurrentPageDecks();
   const statusDecksPage = scene.getstatusDecksPage();
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const currentPage = stateCardsOfDecks.CURRENT_PAGE;
@@ -131,8 +127,6 @@ export const renderDeck = (
       ? item
       : '',
   );
-
-  console.log('cardsOnOnePage', cardsOnOnePage);
   
   cardsOnOnePage.forEach((item, id) => {    
     const posX = getPositionX(id, decksPosition);

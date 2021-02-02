@@ -69,3 +69,5 @@ export const DECKS_VIEW_DECK = 'decks_view_deck';
 export const CARDS_EDIT_DECK = 'cards_edit_deck';
 export const DECKS_EDIT_DECK = 'decks_edit_deck';
 
+export const WARNING_MAX_CARDS = 'У Вас максимальное количество\n карт в колоде';
+export const WARNING_EMPTY = '';

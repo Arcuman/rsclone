@@ -125,9 +125,7 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
   const statusDecksPage = scene.getstatusDecksPage();
   const currentPageDecks = scene.getCurrentPageDecks();
   const arrowButtonSave = scene.getArrowButton();
-  console.log('statusDecksPage', statusDecksPage);
-  console.log('currentPageDecks', currentPageDecks);
-
+  
   if (name === CREATE_BUTTON ) {
     createNewDeck(scene); 
   } else if ( name === EDIT_BUTTON) {

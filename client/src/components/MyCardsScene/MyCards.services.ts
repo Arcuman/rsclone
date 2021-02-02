@@ -3,10 +3,9 @@ import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
 import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
 import { getUserCards } from '@/components/Card/Card.services';
-import { makeDisableButton, makeEnableButton, clearDecksContainer, createTextData } from '@/utils/utils';
+import { makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
 import { IMyCardsScene } from './MyCards.model';
 import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
-import { AllCards } from './CardsInfo';
 import { createMenyButton, decksControlButton } from './Button/Button.render';
 import {
   cardsPosition,
@@ -18,7 +17,6 @@ import {
   FIRST_PAGE,
   NUMBER_CARDS_ON_PAGE,
   DECKS_VIEW_DECK,
-  CARDS_VIEW_DECK,
   DECKS_EDIT_DECK,
   CARDS_EDIT_DECK,
   positionWarningMessage,
@@ -26,12 +24,12 @@ import {
   WARNING_OUTLINE_COLOR,
   WARNING_OUTLINE_SIZE,
   WARNING_OUTLINE_DEPTH,
+  WARNING_MAX_CARDS,
+  WARNING_EMPTY,
 } from './constants';
 
 export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<void> => {
-  console.log('userDeck', userDeck);
-  console.log('statusDecksPage', scene.getstatusDecksPage());
-
+  
   const userDeckId = userDeck.user_deck_id || 0;
   const userDeckData = await getUserDeckById(userDeckId);
   if (!userDeckData) {
@@ -39,10 +37,8 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   }
 
   scene.setNewDeck(userDeck);
-  console.log('userDeckData', userDeckData);
 
   const cardsInSelectDeck = <Card[]>userDeckData.cards;
-  // const cardsInSelectDeck: Card[] = AllCards;
   
   scene.setNewCardsArray(cardsInSelectDeck);
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
@@ -103,12 +99,11 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
 
 export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
-  // const userCards = AllCards;
+  
   if (!userCards) {
     throw new Error();
   }
 
-  console.log('userCards', userCards);
   scene.setUserCards(userCards);
   scene.setMyCardsCurrentPage(FIRST_PAGE);
 
@@ -134,8 +129,6 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
     throw new Error();
   }
 
-  console.log('userDecks', userDecks);
-
   const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
   scene.setDecksContainer(decksContainer);
 
@@ -146,29 +139,21 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
 };
 
 export const editCardsInDeck = (scene: IMyCardsScene): void => {
-  console.log('editCardsInDeck');
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
 
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const cardsInSelectDeck = stateCardsOfDecks.CARDS_DATA;
   scene.setNewCardsArray(cardsInSelectDeck);
-  console.log('cardsInSelectDeck', cardsInSelectDeck);
-
+  
   const decksContainer = clearDecksContainer(scene);
 
   renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
 };
 
 export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void => {
-  // const stateCardsOfDecks =  scene.getStateCardsOfDecks();
-  // const cards = stateCardsOfDecks.CARDS_DATA;
-  // const newCards = cards.filter((item) => item.id !== idCard);
-  console.log('idCard', idCard);
   const newCards = scene.getNewCardsArray();
-  console.log('newCards', newCards);
   const changeNewCards = newCards.filter(item => item.id !== idCard);
-  console.log('changeNewCards', changeNewCards);
   scene.setNewCardsArray(changeNewCards);
 
   if (newCards.length < 10) {
@@ -179,10 +164,6 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
   const decksContainer = clearDecksContainer(scene);
  
   renderMyCards(scene, NAME_DECKS, changeNewCards, decksPosition, decksContainer);
-  console.log('newCards', newCards);
-  // const decksContainer = clearDecksContainer(scene);
-  // console.log('card', card);
-  // renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
 };
 
 export const addCardInDeck = (
@@ -194,13 +175,9 @@ export const addCardInDeck = (
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
     const card = <Card>userCards.find(item => item.name === cardName);
-    // const cardId = card.card_id;
-    // card.id = <number>cardId;
     card?.id = card.card_id;
-    console.log('card', card);
     const newCards = scene.getNewCardsArray();
-    console.log('newCards', newCards);
-
+    
     if (newCards.length < 10) {
       const haveCard = newCards.includes(card);
       
@@ -209,9 +186,9 @@ export const addCardInDeck = (
       }     
     } else {
       const warningMessage = scene.getWarningMessage();
-      warningMessage.text = 'У Вас максимальное количество\n карт в колоде';
+      warningMessage.text = WARNING_MAX_CARDS;
       setTimeout( () => {
-        warningMessage.text = '';   
+        warningMessage.text = WARNING_EMPTY;   
       }, 3000);
     }
     
@@ -222,8 +199,7 @@ export const addCardInDeck = (
 
     const decksContainer = clearDecksContainer(scene);
    
-    renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
-    console.log('newCards', newCards);
+    renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);    
   }
 };
 
@@ -233,7 +209,7 @@ const createWarningMessageBlock = (scene: IMyCardsScene): void => {
   const warningMessage = scene.add.text(
     TEXT_X,
     TEXT_Y,
-    'warning message long long\n long',
+    WARNING_EMPTY,
     warningMessageText,
   );
 
