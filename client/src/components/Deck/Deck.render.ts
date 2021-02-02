@@ -3,7 +3,7 @@ import * as Phaser from 'phaser';
 import { createTextData } from '@/utils/utils';
 import { PositionText } from '@/types/types';
 import { positionDeckText } from '@/components/Profile/constants';
-import { Deck, PositionDeckContainer } from './Deck.model';
+import {COUNT_OF_DECK_CARD, Deck, PositionDeckContainer} from './Deck.model';
 import {
   textDecoration,
   deckNameDecoration,
@@ -17,24 +17,31 @@ import {
 
 export function createDeck(
   scene: Phaser.Scene,
-  position: PositionDeckContainer,  
+  position: PositionDeckContainer,
   numberCard?: number,
+  isInverse?: boolean,
 ): Phaser.GameObjects.Container {
   const {IMG_X, IMG_Y} = position;
   const numberCardsInDeck = numberCard || STANDART_NUMBER_CARD;
-  const deck = scene.add.container(IMG_X, IMG_Y);
+  const deck = scene.add.container(position.IMG_X, position.IMG_Y);
+  const deckSprites: Phaser.GameObjects.Sprite[] = [];
 
   for (let x = 0; x < numberCardsInDeck; x += 1) {
     const offsetCardX = x * RATIO_OFFSET_X;
     const offsetCardY = x * RATIO_OFFSET_Y;
     const cardInDeck: Phaser.GameObjects.Sprite = scene.add.sprite(
-      offsetCardX,
-      offsetCardY,
+      isInverse ? -offsetCardX : offsetCardX,
+      isInverse ? -offsetCardY : offsetCardY,
       IMAGES.COVER.NAME,
     );
     cardInDeck.setScale(SCALE_CARD_IN_DECK);
     deck.add(cardInDeck);
+    deckSprites.push(cardInDeck);
   }
+  deck.setData(COUNT_OF_DECK_CARD, numberCardsInDeck);
+  deck.on('changedata', ()=>{
+    deck.remove(<Phaser.GameObjects.GameObject>deckSprites.pop());
+  });
 
   return deck;
 }
@@ -42,7 +49,7 @@ export function createDeck(
 export function createDeckName(
   scene: Phaser.Scene,
   deckInfo: Deck,
-  deckNamePosition: PositionText, 
+  deckNamePosition: PositionText,
 ): Phaser.GameObjects.Text {
   const {TEXT_X, TEXT_Y} = deckNamePosition;
   const textName: Phaser.GameObjects.Text = createTextData(
@@ -52,7 +59,7 @@ export function createDeckName(
     deckInfo.name,
     deckNameDecoration,
   );
-  
+
   return textName;
 }
 

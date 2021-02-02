@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Player } from '@/resources/game/player/player.model';
 import { COUNTDOWN_SEC, PLAYER_READY } from '@/resources/game/constants';
 import { MAX_ROOM_PLAYERS_COUNT, NO_SECOND_PLAYER } from '@/resources/game/room/constants';
+import { clearTimeout } from 'timers';
 
 export function getEnemyPlayer(room: Room, curPlayer: Player): Player {
   const enemyPlayer = room.players.find((player: Player) => player.userId !== curPlayer.userId);
@@ -13,6 +14,7 @@ export function getEnemyPlayer(room: Room, curPlayer: Player): Player {
 }
 
 export function closeRoom(openRoom: Room, rooms: Array<Room>): void {
+  clearTimeout(openRoom.timer!);
   const roomId = rooms.findIndex((room: Room) => room.id === openRoom.id);
   if (roomId > -1) {
     rooms.splice(roomId, 1);
@@ -30,6 +32,7 @@ export function createRoom(): Room {
   return {
     id: uuidv4(),
     isPlayerOneTurn: Math.random() < 0.5,
+    playerOne: null,
     players: [],
     timer: null,
     newRound: false,

@@ -125,7 +125,6 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const authUser: AuthUser = await RefreshTokensAction(req);
-
     req.user = authUser.user;
     req.body = JSON.stringify({ token: authUser.token });
   } catch (error) {

@@ -175,6 +175,7 @@ export const addCardInDeck = (
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
     const card = <Card>userCards.find(item => item.name === cardName);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     card?.id = card.card_id;
     const newCards = scene.getNewCardsArray();
     

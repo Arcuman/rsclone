@@ -1,16 +1,18 @@
 import { Server, Socket } from 'socket.io';
-import { closeSocket, sendInitState } from '@/resources/game/game.service';
+import { closeSocket, enemyWin, sendInitState } from '@/resources/game/game.service';
 import { createPlayer } from '@/resources/game/player/player.service';
 import { Room } from '@/resources/game/room/room.model';
-import { closeRoom, getOrCreateOpenRoom } from '@/resources/game/room/room.service';
+import { closeRoom, getEnemyPlayer, getOrCreateOpenRoom } from '@/resources/game/room/room.service';
 import {
   ALREADY_PLAY,
   CLOSE_SOCKET,
   DISCONNECT,
+  EXP_LOSE,
   HAND_CARD_PLAY,
   NEXT_TURN,
   ONE_SEC,
   OPPONENT_FOUND,
+  PLAYER_WIN,
   START_GAME,
   TABLE_CARD_PLAY_CARD_TARGET,
   TABLE_CARD_PLAY_PLAYER_TARGET,
@@ -24,6 +26,8 @@ import { tableCardPlayTargetPlayer } from '@/resources/game/servicies/tableCardP
 import { tableCardPlayTargetCard } from '@/resources/game/servicies/tableCardPlayTargerCard.service';
 import { webToken } from '@/helpers/webToken';
 import { SocketQuery } from '@/resources/game/game.models';
+import { UpdatedUserLevelInfo } from '@/resources/users/user.model';
+import { usersService } from '@/resources/users/user.controller';
 
 function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
   return rooms.some(room => room.players.some(player => player.userId === userId));
@@ -42,7 +46,6 @@ export default async function gameLogic(
   }
   const player = await createPlayer(userId, socket);
   const openRoom: Room = getOrCreateOpenRoom(rooms);
-
   openRoom.players.push(player);
   player.socket.join(openRoom.id);
 
@@ -50,6 +53,7 @@ export default async function gameLogic(
     io.to(openRoom.id).emit(OPPONENT_FOUND);
     sendInitState(openRoom);
   } else {
+    openRoom.playerOne = player;
     io.to(openRoom.id).emit(WAIT_SECOND_PLAYER);
   }
 
@@ -60,8 +64,9 @@ export default async function gameLogic(
   });
 
   player.socket.on(TABLE_CARD_PLAY_PLAYER_TARGET, (cardId: number) => {
-    tableCardPlayTargetPlayer(cardId, openRoom, player, io);
+    tableCardPlayTargetPlayer(cardId, openRoom, player, io, rooms);
   });
+
   player.socket.on(TABLE_CARD_PLAY_CARD_TARGET, (cardId: number, targetId: number) => {
     tableCardPlayTargetCard(cardId, targetId, openRoom, player, io);
   });
@@ -70,12 +75,19 @@ export default async function gameLogic(
     openRoom.playersReady += 1;
     if (openRoom.playersReady === 2) {
       io.to(openRoom.id).emit(START_GAME);
-      openRoom.timer = setInterval(() => countDownTimer(openRoom, player, io), ONE_SEC);
+      openRoom.timer = setInterval(
+        () => countDownTimer(openRoom, openRoom.playerOne!, io),
+        ONE_SEC
+      );
     }
   });
 
-  player.socket.on(CLOSE_SOCKET, () => closeSocket(openRoom, rooms, player));
+  player.socket.on(CLOSE_SOCKET, () => {
+    closeSocket(openRoom, rooms, player);
+  });
+
   player.socket.on(DISCONNECT, () => {
+    enemyWin(openRoom, player);
     closeRoom(openRoom, rooms);
   });
 }

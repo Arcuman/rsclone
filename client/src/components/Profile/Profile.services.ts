@@ -11,8 +11,7 @@ import { MENU_URL, CURR_DECK_CHOOSE_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
 import { countCards } from '@/components/Card/Card.services';
-import { AUDIO_CONFIG, TINT_VALUE_CLICK } from '@/constants/constants';
-
+import { AUDIO_CONFIG, TINT_VALUE_CLICK, IS_MUTE_ON_LS_PARAM} from '@/constants/constants';
 import {
   textDecoration,
   positionInfo,
@@ -22,7 +21,9 @@ import {
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
   positionDeckText,
+  positionMute,
   BUTTON_SCALE,
+  MUTE_BUTTON_SCALE,
 } from './constants';
 
 import { UserProfile, Level } from './Profile.model';
@@ -167,6 +168,7 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
+
   const userCurrDeck = createDeck(scene, positionDeckContainer);
   const lastCardInDeck = userCurrDeck.last;
   setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
@@ -189,7 +191,36 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   scene.add.container(0, 0, userInfoBLock);
 };
 
+const renderMuteButton = (scene: Phaser.Scene, isMuteOn:boolean): void =>{
+  const positionMuteCoords = {
+    X: scene.cameras.main.width - positionMute.OFFSET_X,
+    Y: positionMute.Y,
+  };
+  let image =  MENU_IMAGES.MUTE_OFF_BUTTON;
+  if (isMuteOn){
+    image = MENU_IMAGES.MUTE_ON_BUTTON;
+  }
+  const muteButton = createButton(
+    scene,
+    positionMuteCoords,
+    0,
+    ATLASES.MUTE_ON_ATLAS.NAME,
+    image,
+    HEIGHT_OFFSET,
+  );
+  muteButton.setScale(MUTE_BUTTON_SCALE);
+  muteButton.on('pointerup', () => {
+    // eslint-disable-next-line no-param-reassign
+    scene.sound.mute=!isMuteOn;
+    const userLogin = store.getState().authUser.login;
+    localStorage.setItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`, (!isMuteOn).toString());
+    muteButton.destroy();
+    renderMuteButton(scene, !isMuteOn);
+  });
+};
+
 export const create = (scene: Phaser.Scene): void => {
+  // eslint-disable-next-line no-param-reassign
   scene.sound.pauseOnBlur = false;
   const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, {
     loop: true,
@@ -216,8 +247,10 @@ export const create = (scene: Phaser.Scene): void => {
     profileBgAudio.stop();
     browserHistory.push(MENU_URL);
   });
-
   menuButton.setScale(BUTTON_SCALE);
+  const userLogin = store.getState().authUser.login;
+  const isMuteOn = localStorage.getItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`) === 'true';
+  renderMuteButton(scene, isMuteOn);
 
   createInfoContainer(scene);
 };

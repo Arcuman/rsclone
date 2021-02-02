@@ -30,6 +30,7 @@ const receiveDeckName = (
   enterDown: Phaser.Input.Keyboard.Key,
   textInput,
   arrowButtonSave: ControlButton): void => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
   const newText = textInput.text;
   
   click.removeAllListeners();
@@ -49,6 +50,7 @@ const receiveDeckName = (
     
     scene.setNewDeck(newDeck);   
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     textInput.setText(NAME_INPUT_DEFAULT);
   } 
 };
@@ -96,11 +98,9 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
   textInput.setInteractive().on('pointerdown', () => {
     textInput.setText('');
     
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const editor = scene.rexUI.edit(textInput);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-expressions
     editor.inputText.node;
 
     const enterDown = scene.input.keyboard.addKey('Enter');

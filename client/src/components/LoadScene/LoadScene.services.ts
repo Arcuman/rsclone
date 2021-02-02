@@ -12,9 +12,11 @@ import {
   TEXT_FONT,
   TEXT_ZERO_PROCENT,
 } from '@/components/LoadScene/constants';
+import { IS_MUTE_ON_LS_PARAM } from '@/constants/constants';
 import { FindEnemyScene } from '@/components/FindEnemyScene/FindEnemyScene';
 import { GameOverScene } from '@/components/GameOverScene/GameOverScene.render';
-import {CurrDeckChooseScene} from '@/components/Profile/CurrDeckChoose/CurrDeckChooseScene';
+import { CurrDeckChooseScene } from '@/components/Profile/CurrDeckChoose/CurrDeckChooseScene';
+import { store } from '@/redux/store/rootStore';
 import { BOOM_SPRITESHEET, FRAME_SIZE, WICK_SPRITESHEET } from '../GameBoard/Timer/constants';
 import File = Phaser.Loader.File;
 
@@ -95,6 +97,12 @@ function loadAtlases(scene: Phaser.Scene) {
   }
 }
 function loadScenes(scene: Phaser.Scene) {
+  const userLogin = store.getState().authUser.login;
+  const isMuteOn = localStorage.getItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`) === 'true';
+  if (isMuteOn) {
+    // eslint-disable-next-line no-param-reassign
+    scene.sound.mute = true;
+  }
   scene.scene.add(SCENES.MENU, MenuScene, false);
   scene.scene.add(SCENES.GAME_BOARD, GameBoardScene, false);
   scene.scene.add(SCENES.MY_CARDS, MyCardsScene, false);

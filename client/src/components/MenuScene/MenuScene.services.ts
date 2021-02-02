@@ -9,14 +9,14 @@ import { AUDIO_CONFIG } from '@/constants/constants';
 
 export function create(scene: Phaser.Scene): void {
   setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
-  
+  // eslint-disable-next-line no-param-reassign
   scene.sound.pauseOnBlur = false;
   const menuBgAudio = scene.sound.add(AUDIO.MENU_BG_AUDIO.NAME, {
     loop: true,
     volume: AUDIO_CONFIG.volume.bg,
   });
   menuBgAudio.play();
-   
+
   const position = { X: scene.game.renderer.width / 2, Y: scene.game.renderer.height / 2 };
 
   const startButton = createButton(

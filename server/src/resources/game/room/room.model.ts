@@ -3,6 +3,7 @@ import { Player } from '@/resources/game/player/player.model';
 export interface Room {
   id: string;
   isPlayerOneTurn: boolean;
+  playerOne: Player | null;
   players: Array<Player>;
   newRound: boolean;
   timer: NodeJS.Timeout | null;

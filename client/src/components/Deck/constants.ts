@@ -6,6 +6,15 @@ export const positionDeckContainer: PositionDeckContainer = {
   IMG_Y: 480,
 };
 
+export const positionPlayerDeck : PositionDeckContainer = {
+  IMG_X: 1200,
+  IMG_Y:600,
+};
+export const positionEnemyDeck : PositionDeckContainer = {
+  IMG_X: 80,
+  IMG_Y:120,
+};
+
 export const textDecoration: TextDecoration = {
   FONT_SIZE: '30px',
   FONT_FAMILY: 'number_font',
