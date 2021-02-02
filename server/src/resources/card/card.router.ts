@@ -16,7 +16,7 @@ router
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res.type('application/json').json(cards).status(StatusCodes.OK).end();
       next();
-    })
+    }),
   )
 
   .post(
@@ -38,7 +38,7 @@ router
       res.statusMessage = statusCodes[StatusCodes.OK].create;
       res.type('application/json').json(card).status(StatusCodes.OK).end();
       next();
-    })
+    }),
   );
 
 router.route('/all').get(
@@ -48,7 +48,7 @@ router.route('/all').get(
     res.statusMessage = statusCodes[StatusCodes.OK].all;
     res.type('application/json').json(cards).status(StatusCodes.OK).end();
     next();
-  })
+  }),
 );
 
 router
@@ -68,7 +68,7 @@ router
         res.type('application/json').json(card).status(StatusCodes.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .put(
@@ -96,7 +96,7 @@ router
         res.type('application/json').json(card).status(StatusCodes.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .delete(
@@ -116,6 +116,6 @@ router
         res.status(StatusCodes.NO_CONTENT).end();
       }
       next();
-    })
+    }),
   );
 export { router as cardRouter };
