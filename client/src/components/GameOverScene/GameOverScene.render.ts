@@ -6,7 +6,7 @@ import { createTextData, setBackground } from '@/utils/utils';
 import { AUDIO_CONFIG } from '@/constants/constants';
 
 import {
-  ARROW_TEXT, EXIT_POSITION_Y,
+  ARROW_TEXT, EXIT_POSITION_X, EXIT_POSITION_Y,
   EXP_TEXT,
   LEVEL_TEXT,
   levelDecoration,
@@ -169,8 +169,8 @@ export class GameOverScene extends Phaser.Scene {
     }
 
     const positionMenuCoords = {
-      X: EXIT_POSITION_Y,
-      Y: TEXT_POSITION_Y,
+      X: EXIT_POSITION_X,
+      Y: EXIT_POSITION_Y,
     };
 
     const menuButton = createButton(

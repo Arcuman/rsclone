@@ -272,11 +272,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     this.socket.on(DESTROY_DECK_CARD, (deckCard: Card, isPlayerOne: boolean) => {
       const destoyedCard = createBaseCard({scene: this, card: deckCard, posX: 640, posY: 360}).setScale(1.3);
       setTimeout(()=> destoyedCard.destroy(), DESTROY_DECK_CARD_TIME);
-      if (isPlayerOne === this.isPlayerOne) {
-        console.log('my card');
-      } else {
-        console.log('enemy card');
-      }
     });
     this.socket.on(TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
       const audio = this.sound.add(AUDIO.CARD_DAMAGE_AUDIO.NAME, {

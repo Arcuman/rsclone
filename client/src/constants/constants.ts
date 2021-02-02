@@ -1,3 +1,4 @@
+// export const WEBSOCKET_HOST_PORT = process.env.WEBSOCKET_URL;
 // export const BASE_HTTP_URL = process.env.BASE_URL;
 // для heroku
 export const BASE_HTTP_URL ='https://card-game-h.herokuapp.com';
