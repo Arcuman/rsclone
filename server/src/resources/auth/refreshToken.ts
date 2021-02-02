@@ -30,6 +30,9 @@ export const createCookieData = (value: string): Cookie => ({
   name: 'refreshToken',
   value,
   options: {
+    // локальное
+    domain:'localhost',
+    //
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
     // для heroku

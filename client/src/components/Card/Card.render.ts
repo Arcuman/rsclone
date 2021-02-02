@@ -47,6 +47,7 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
     );
     cardLayers.push(textMana);
   }
+
   const cardContainer = scene.add.container(posX, posY, cardLayers);
 
   if (card.isActive) {

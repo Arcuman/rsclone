@@ -1,8 +1,8 @@
 export const NUMBER_OF_HAND_CARDS = 3;
-export const MAX_HEALTH = 1;
+export const MAX_HEALTH = 12;
 export const MAX_HAND_CARDS = 5;
 export const START_MANA = 3;
-export const COUNTDOWN_SEC = 15;
+export const COUNTDOWN_SEC = 25;
 export const PLAYER_READY = 0;
 export const ONE_SEC = 1000;
 export const NO_SUCH_CARD_ERROR = 'NO SUCH CARD';
