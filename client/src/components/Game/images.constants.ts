@@ -122,7 +122,7 @@ export const IMAGES = {
   DONE_BUTTON: {
     NAME: 'done_button',
     PATH: 'assets/images/done_button.png',
-  }, 
+  },
 };
 
 export const MENU_IMAGES = {
@@ -161,4 +161,11 @@ export const MENU_IMAGES = {
     HOVER: 'mute_off.png',
     CLICK: 'mute_on.png',
   },
+};
+
+export const END_TURN_BUTTON = {
+  IDLE: 'end_turn.png',
+  HOVER: 'end_turn_light.png',
+  CLICK: 'end_turn_click.png',
+  ENEMY: 'enemy_turn.png',
 };

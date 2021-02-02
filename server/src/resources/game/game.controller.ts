@@ -1,16 +1,18 @@
 import { Server, Socket } from 'socket.io';
-import { closeSocket, sendInitState } from '@/resources/game/game.service';
+import { closeSocket, enemyWin, sendInitState } from '@/resources/game/game.service';
 import { createPlayer } from '@/resources/game/player/player.service';
 import { Room } from '@/resources/game/room/room.model';
-import { closeRoom, getOrCreateOpenRoom } from '@/resources/game/room/room.service';
+import { closeRoom, getEnemyPlayer, getOrCreateOpenRoom } from '@/resources/game/room/room.service';
 import {
   ALREADY_PLAY,
   CLOSE_SOCKET,
   DISCONNECT,
+  EXP_LOSE,
   HAND_CARD_PLAY,
   NEXT_TURN,
   ONE_SEC,
   OPPONENT_FOUND,
+  PLAYER_WIN,
   START_GAME,
   TABLE_CARD_PLAY_CARD_TARGET,
   TABLE_CARD_PLAY_PLAYER_TARGET,
@@ -24,6 +26,8 @@ import { tableCardPlayTargetPlayer } from '@/resources/game/servicies/tableCardP
 import { tableCardPlayTargetCard } from '@/resources/game/servicies/tableCardPlayTargerCard.service';
 import { webToken } from '@/helpers/webToken';
 import { SocketQuery } from '@/resources/game/game.models';
+import { UpdatedUserLevelInfo } from '@/resources/users/user.model';
+import { usersService } from '@/resources/users/user.controller';
 
 function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
   return rooms.some(room => room.players.some(player => player.userId === userId));
@@ -34,6 +38,7 @@ export default async function gameLogic(
   socket: Socket,
   rooms: Array<Room>
 ): Promise<void> {
+  console.log(rooms);
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {
     socket.emit(ALREADY_PLAY);
@@ -78,8 +83,12 @@ export default async function gameLogic(
     }
   });
 
-  player.socket.on(CLOSE_SOCKET, () => closeSocket(openRoom, rooms, player));
+  player.socket.on(CLOSE_SOCKET, () => {
+    closeSocket(openRoom, rooms, player);
+  });
+
   player.socket.on(DISCONNECT, () => {
+    enemyWin(openRoom, player);
     closeRoom(openRoom, rooms);
   });
 }

@@ -32,12 +32,13 @@ export const createCookieData = (value: string): Cookie => ({
   options: {
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
-    //для heroku
-    //secure: true,
+    // для heroku
+    // secure: true,
     secure: false,
     httpOnly: true,
     signed: false,
-    sameSite: 'none',
+    sameSite: true,
+    domain: 'localhost',
   },
 });
 

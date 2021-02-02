@@ -198,7 +198,7 @@ export const setDropEventOnHandCard = (
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
       if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
-        || scene.getPlayerTableCards().length === MAX_TABLE_SIZE) {
+        || <number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD)  === MAX_TABLE_SIZE) {
         setStartDragCoordinates(cardContainer);
         return;
       }
@@ -252,9 +252,10 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
-      if (!dropped) {
+      console.log(<number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD));
+      if (!dropped ) {
         setStartDragCoordinates(cardContainer);
-      } else {
+      } else if (scene.getPlayerTableCards().findIndex((card)=> card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD)) !== -1 ){
         setDropEventOnTableCard(scene, cardContainer);
       }
     },
