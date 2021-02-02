@@ -109,11 +109,7 @@ export const setClickableDeck = (
     audio.play();
 
     topCard.clearTint();
-<<<<<<< HEAD
-
-=======
     browserHistory.push(CURR_DECK_CHOOSE_URL);
->>>>>>> develop
   });
 };
 
