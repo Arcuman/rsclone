@@ -22,6 +22,7 @@ import {
   NUMBER_CARDS_ON_PAGE,
   decksPosition,
   ORIGIN_HALF,
+  CARDS_EDIT_DECK,
 } from './constants';
 
 function getPositionY(index: number, name: string): number {
@@ -96,15 +97,20 @@ export const renderMyCards = (
       card: item,
     });
     card.setScale(CARDS_SCALE, CARDS_SCALE);
+    card.name = item.name;
+    
+    // console.log('card', card);
+    // console.log('card.name', card.name);
 
-    if (name === NAME_DECKS) {
+    if (name === NAME_DECKS && scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
       const deleteButton = createDeleteButton(scene, item.id);
       card.add(deleteButton);
     }
     
     cardsContainer.add(card);
-   
+
     setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
+    
   });
 };
 

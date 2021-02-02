@@ -15,6 +15,8 @@ import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import { AUDIO } from '@/components/Game/constant';
 import { CURSOR_POINTER, AUDIO_CONFIG } from '@/constants/constants';
+import { addCardInDeck } from '@/components/MyCardsScene/MyCards.services';
+import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -105,7 +107,7 @@ export const setScalableCard = (
 };
 
 export const setScalableCardInContainer = (
-  scene: Phaser.Scene,
+  scene: IMyCardsScene,
   cardContainer: Phaser.GameObjects.Container,
   scale: number,
   generalСontainer: Phaser.GameObjects.Container,
@@ -118,11 +120,16 @@ export const setScalableCardInContainer = (
     cardContainer.setScale(SIZE_NORMAL_CARD);
     generalСontainer.bringToTop(cardContainer);
   });
+
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
     const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
     cardAudio.play();
     cardContainer.setScale(scale);
+  });
+  
+  cardContainer.on('pointerdown', () => {
+    addCardInDeck(scene, cardContainer);
   });
 };
 

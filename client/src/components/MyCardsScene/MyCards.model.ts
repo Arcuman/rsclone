@@ -64,4 +64,7 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getDeckNameInput():  Phaser.GameObjects.Text;
   setDeckNameInput(value:  Phaser.GameObjects.Text): void;
+
+  getNewCardsArray():  Card[];
+  setNewCardsArray(value:  Card[]): void;
 }

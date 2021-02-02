@@ -6,8 +6,14 @@ import {
   cardsPosition,
   NAME_CARDS,
   CREATE_NEW_DECK,
+  CARDS_VIEW_DECK,
+  decksContainerPosition,
+  cardsContainerPosition,
+  DECKS_EDIT_DECK,
+  CARDS_EDIT_DECK,
 } from '@/components/MyCardsScene/constants';
-import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
+import { renderMyCards, renderContainer } from '@/components/MyCardsScene/MyCards.render';
+import { renderDecksBlock } from '@/components/MyCardsScene/MyCards.services';
 import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
 import { slideDecksInMyDecks } from '@/components/MyCardsScene/Decks/Decks.services';
 import { AUDIO_CONFIG } from '@/constants/constants';
@@ -21,6 +27,7 @@ import {
   MIN_POSSIBLE_PAGES,
   ONE_PAGE,
   CREATE_BUTTON,
+  EDIT_BUTTON,
   DONE_BUTTON,
 } from './constants';
 
@@ -32,8 +39,11 @@ const slideCardsInMyDecks = (
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const cardsCurrent = stateCardsOfDecks.CARDS_DATA;
   const arrowButtonSave = scene.getArrowButton();
-  const decksContainer = scene.getDecksContainer();
-  decksContainer.removeAll();
+
+  const decksContainerOld = scene.getDecksContainer();
+  decksContainerOld.destroy();
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
+  scene.setDecksContainer(decksContainer);
 
   if (name === DECKS_RIGHT) {
     if (stateCardsOfDecks.CURRENT_PAGE < stateCardsOfDecks.TOTAL_PAGE) {
@@ -66,11 +76,14 @@ const slideCardsPage = (
   audio: Phaser.Sound.BaseSound,
 ): void => {
   const cardsCurrent = scene.getUserCards();
-  const myCardsContainer = scene.getMyCardsContainer();
   let myCardsCurrentPage = scene.getMyCardsCurrentPage();
   const arrowButtonSave = scene.getArrowButton();
   const myCardsTotalPage = scene.getMyCardsTotalPage();
-  myCardsContainer.removeAll();
+  
+  const cardsContainerOld = scene.getMyCardsContainer();
+  cardsContainerOld.destroy();
+  const myCardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
+  scene.setMyCardsContainer(myCardsContainer);
   
   if (name === CARDS_RIGHT) {
     if (myCardsCurrentPage < myCardsTotalPage) {
@@ -118,15 +131,36 @@ export const slidePage = (scene: IMyCardsScene, name: string): void => {
 
 export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
   const statusDecksPage = scene.getstatusDecksPage();
+  const currentPageDecks = scene.getCurrentPageDecks();
+  const arrowButtonSave = scene.getArrowButton();
+  console.log('statusDecksPage', statusDecksPage);
+  console.log('currentPageDecks', currentPageDecks);
+
   if (name === CREATE_BUTTON ) {
     createNewDeck(scene); 
-    // } else if ( name === EDIT_BUTTON) {
-
+  } else if ( name === EDIT_BUTTON) {
+    if (currentPageDecks === false) {
+      //
+    } else {
+      //
+    }
   } else if ( name === DONE_BUTTON) {
-    if (statusDecksPage === CREATE_NEW_DECK) {
-      console.log('CREATE_NEW_DECK');
-      saveNewDeck(scene);
-      
+    if (currentPageDecks === false) {
+      if (statusDecksPage === CREATE_NEW_DECK) {
+        //    
+      } else if ( statusDecksPage === CARDS_VIEW_DECK ) {
+        makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
+        renderDecksBlock(scene);
+      } else if (statusDecksPage === CARDS_VIEW_DECK) {
+        //
+      }
+    } else if (currentPageDecks === true) {
+      if (statusDecksPage === CREATE_NEW_DECK) {
+        console.log('CREATE_NEW_DECK');
+        saveNewDeck(scene);      
+      } else if (statusDecksPage === DECKS_EDIT_DECK) {
+        //
+      }      
     }
   }
 };

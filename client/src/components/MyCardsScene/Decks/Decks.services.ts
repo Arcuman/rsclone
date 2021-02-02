@@ -1,5 +1,5 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
-import { renderDeck } from '@/components/MyCardsScene/MyCards.render';
+import { renderDeck, renderContainer } from '@/components/MyCardsScene/MyCards.render';
 import { makeDisableButton, makeEnableButton } from '@/utils/utils';
 import {
   DECKS_RIGHT,
@@ -7,6 +7,10 @@ import {
   MIN_POSSIBLE_PAGES,
   ONE_PAGE, 
 } from '@/components/MyCardsScene/Button/constants';
+import {
+  NAME_DECKS,
+  decksContainerPosition,
+} from '@/components/MyCardsScene/constants';
 
 export const slideDecksInMyDecks = (
   scene: IMyCardsScene,
@@ -16,11 +20,12 @@ export const slideDecksInMyDecks = (
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const decksCurrent = stateCardsOfDecks.DECKS_DATA;
   const arrowButtonSave = scene.getArrowButton();
-  const decksContainer = scene.getDecksContainer();
-  decksContainer.removeAll();
+  
+  const decksContainerOld = scene.getDecksContainer();
+  decksContainerOld.destroy();
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
+  scene.setDecksContainer(decksContainer);
 
-  // console.log('stateCardsOfDecks.CURRENT_PAGE', stateCardsOfDecks.CURRENT_PAGE);
-  // console.log('stateCardsOfDecks.TOTAL_PAGE', stateCardsOfDecks.TOTAL_PAGE);
   if (name === DECKS_RIGHT) {
     if (stateCardsOfDecks.CURRENT_PAGE < stateCardsOfDecks.TOTAL_PAGE) {
       audio.play();
@@ -42,8 +47,6 @@ export const slideDecksInMyDecks = (
       makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
     }
   }
-
-  // console.log('change current page', stateCardsOfDecks.CURRENT_PAGE);
 
   renderDeck(scene, decksCurrent, decksContainer);  
 };
