@@ -1,6 +1,4 @@
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
-import { createTextData } from '@/utils/utils';
-import { textDecoration } from '@/components/GameBoard/UserAvatar/constants';
 import {
   BUTTON_X,
   BUTTON_Y,

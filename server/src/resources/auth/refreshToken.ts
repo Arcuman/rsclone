@@ -37,8 +37,11 @@ export const createCookieData = (value: string): Cookie => ({
     secure: false,
     httpOnly: true,
     signed: false,
-    sameSite: true,
-    domain: 'localhost',
+    // для heroku
+    sameSite: 'none',
+    // sameSite: true,
+    // локальное
+    // domain:'localhost',
   },
 });
 
