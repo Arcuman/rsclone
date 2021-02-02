@@ -26,6 +26,10 @@ import {
   CREATE_BUTTON,
   EDIT_BUTTON,
   DONE_BUTTON,
+  MENU_BUTTON_OFFSET_X,
+  MENU_BUTTON_Y,
+  MENU_BUTTON_OFFSET,
+  MENU_BUTTON_SCALE,
 } from './constants';
 
 export const setInteractiveOnButton = (
@@ -152,13 +156,9 @@ export const createMenyButton = (
   scene: IMyCardsScene,
   cardsBgAudio: Phaser.Sound.BaseSound,
 ): void => {
-  const positionMenu = {
-    OFFSET_X: 650,
-    Y: 140,
-  };
   const positionMenuCoords = {
-    X: scene.cameras.main.width - positionMenu.OFFSET_X,
-    Y: positionMenu.Y,
+    X: scene.cameras.main.width - MENU_BUTTON_OFFSET_X,
+    Y: MENU_BUTTON_Y,
   };
 
   const menuButton = createButton(
@@ -167,9 +167,9 @@ export const createMenyButton = (
     0,
     ATLASES.MENU_ATLAS.NAME,
     MENU_IMAGES.MENU_BUTTON,
-    500,
+    MENU_BUTTON_OFFSET,
   );
-  menuButton.setScale(0.4);
+  menuButton.setScale(MENU_BUTTON_SCALE);
 
   menuButton.on('pointerup', () => {
     cardsBgAudio.stop();

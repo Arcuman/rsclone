@@ -70,4 +70,7 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getNewCardsArray():  Card[];
   setNewCardsArray(value:  Card[]): void;
+
+  getWarningMessage():  Phaser.GameObjects.Text;
+  setWarningMessage(value:  Phaser.GameObjects.Text): void;
 }

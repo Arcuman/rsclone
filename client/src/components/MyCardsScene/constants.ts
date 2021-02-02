@@ -1,3 +1,5 @@
+import {  PositionText } from '@/types/types';
+import { NewDeckInput } from '@/components/MyCardsScene/Decks/Decks.model';
 import { CardsPosition, CardsContainerPosition } from './MyCards.model';
 
 export const cardsContainerPosition: CardsContainerPosition = {
@@ -25,6 +27,24 @@ export const decksPosition: CardsPosition = {
   REDUCE_ID_2: 6,
   REDUCE_ID_3: 9,
 };
+
+export const positionWarningMessage: PositionText = {
+  TEXT_X: 480,
+  TEXT_Y: 510,
+};
+
+export const warningMessageText: NewDeckInput = {
+  fontFamily: 'number_font',
+  fontSize: '20px',
+  color: '#d1c49a',
+  align: 'center',
+  fixedWidth: 300,
+  fixedHeight: 200,
+};
+
+export const WARNING_OUTLINE_COLOR ='#292321';
+export const WARNING_OUTLINE_SIZE = 5;
+export const WARNING_OUTLINE_DEPTH = 2;
 
 export const NAME_POS_Y = 60;
 export const NAME_OFFSET_X = 5;

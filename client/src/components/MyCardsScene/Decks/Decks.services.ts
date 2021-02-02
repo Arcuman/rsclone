@@ -51,7 +51,7 @@ export const slideDecksInMyDecks = (
 
 export const saveEditDeckInDB = (scene:  IMyCardsScene): void => {
 
-  const newCards = scene.getNewCardsArray();
+  const newCards = scene.getNewCardsArray();  
   if (newCards.length === 10) {
     const newDeck = scene.getNewDeck();
     newDeck.cards = newCards;

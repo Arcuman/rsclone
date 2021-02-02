@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { IMyCardsScene, ControlButton } from '@/components/MyCardsScene/MyCards.model';
 import { openDeck } from '@/components/MyCardsScene/MyCards.services';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';

@@ -30,6 +30,8 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private deckNameInput: Phaser.GameObjects.Text;
 
+  private warningMessage: Phaser.GameObjects.Text;
+
   private stateCardsOfDecks: StateCardsOfDecks = {
     DECKS_DATA: [],
     CARDS_DATA: [],
@@ -157,6 +159,14 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   public setNewCardsArray(value: Card[]): void {
     this.newCardsArray = value;
+  }
+
+  public getWarningMessage(): Phaser.GameObjects.Text {
+    return this.warningMessage;
+  }
+
+  public setWarningMessage(value: Phaser.GameObjects.Text): void {
+    this.warningMessage = value;
   }
 
   create(): void {

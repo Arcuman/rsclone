@@ -13,6 +13,11 @@ export const EDIT_BUTTON = 'edit_button';
 export const DONE_BUTTON = 'done_button';
 export const DELETE_BUTTON = 'delete_button';
 
+export const MENU_BUTTON_OFFSET_X = 650;
+export const MENU_BUTTON_Y = 140;
+export const MENU_BUTTON_OFFSET = 500;
+export const MENU_BUTTON_SCALE = 0.4;
+
 export const arrowButtonSettings: ButtonSettings = {
   NORMAL_SCALE: 0.35,
   RISE_SCALE: 0.38,

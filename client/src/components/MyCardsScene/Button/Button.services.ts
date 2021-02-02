@@ -1,7 +1,7 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { makeDisableButton, makeEnableButton, clearDecksContainer, clearCardsContainer } from '@/utils/utils';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
-import { renderDecksBlock } from '@/components/MyCardsScene/MyCards.services';
+import { renderDecksBlock, editCardsInDeck } from '@/components/MyCardsScene/MyCards.services';
 import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
 import { slideDecksInMyDecks, saveEditDeckInDB } from '@/components/MyCardsScene/Decks/Decks.services';
 import { AUDIO_CONFIG } from '@/constants/constants';
@@ -132,7 +132,8 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
     createNewDeck(scene); 
   } else if ( name === EDIT_BUTTON) {
     if (currentPageDecks === false) {
-      //
+      scene.setstatusDecksPage(CARDS_EDIT_DECK);
+      editCardsInDeck(scene);
     } else if (currentPageDecks === true) {
       scene.setstatusDecksPage(DECKS_EDIT_DECK);
       renderDecksBlock(scene);
