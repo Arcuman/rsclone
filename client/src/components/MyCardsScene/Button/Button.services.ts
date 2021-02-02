@@ -1,5 +1,11 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
-import { makeDisableButton, makeEnableButton } from '@/utils/utils';
+import { makeDisableButton, makeEnableButton, clearDecksContainer, clearCardsContainer } from '@/utils/utils';
+import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
+import { renderDecksBlock } from '@/components/MyCardsScene/MyCards.services';
+import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
+import { slideDecksInMyDecks, saveEditDeckInDB } from '@/components/MyCardsScene/Decks/Decks.services';
+import { AUDIO_CONFIG } from '@/constants/constants';
+import { AUDIO } from '@/components/Game/constant';
 import {
   decksPosition,
   NAME_DECKS,
@@ -7,18 +13,10 @@ import {
   NAME_CARDS,
   CREATE_NEW_DECK,
   CARDS_VIEW_DECK,
-  decksContainerPosition,
-  cardsContainerPosition,
   DECKS_EDIT_DECK,
   CARDS_EDIT_DECK,
+  DECKS_VIEW_DECK,
 } from '@/components/MyCardsScene/constants';
-import { renderMyCards, renderContainer } from '@/components/MyCardsScene/MyCards.render';
-import { renderDecksBlock } from '@/components/MyCardsScene/MyCards.services';
-import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
-import { slideDecksInMyDecks, saveEditDeckInDB } from '@/components/MyCardsScene/Decks/Decks.services';
-import { AUDIO_CONFIG } from '@/constants/constants';
-import { AUDIO } from '@/components/Game/constant';
-
 import {
   CARDS_LEFT,
   CARDS_RIGHT,
@@ -40,10 +38,7 @@ const slideCardsInMyDecks = (
   const cardsCurrent = stateCardsOfDecks.CARDS_DATA;
   const arrowButtonSave = scene.getArrowButton();
 
-  const decksContainerOld = scene.getDecksContainer();
-  decksContainerOld.destroy();
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  const decksContainer = clearDecksContainer(scene);
 
   if (name === DECKS_RIGHT) {
     if (stateCardsOfDecks.CURRENT_PAGE < stateCardsOfDecks.TOTAL_PAGE) {
@@ -80,11 +75,8 @@ const slideCardsPage = (
   const arrowButtonSave = scene.getArrowButton();
   const myCardsTotalPage = scene.getMyCardsTotalPage();
   
-  const cardsContainerOld = scene.getMyCardsContainer();
-  cardsContainerOld.destroy();
-  const myCardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
-  scene.setMyCardsContainer(myCardsContainer);
-  
+  const myCardsContainer = clearCardsContainer(scene);
+   
   if (name === CARDS_RIGHT) {
     if (myCardsCurrentPage < myCardsTotalPage) {
       audio.play();
@@ -141,8 +133,9 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
   } else if ( name === EDIT_BUTTON) {
     if (currentPageDecks === false) {
       //
-    } else {
-      //
+    } else if (currentPageDecks === true) {
+      scene.setstatusDecksPage(DECKS_EDIT_DECK);
+      renderDecksBlock(scene);
     }
   } else if ( name === DONE_BUTTON) {
     if (currentPageDecks === false) {
@@ -150,16 +143,19 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
         //    
       } else if ( statusDecksPage === CARDS_VIEW_DECK ) {
         makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
+        scene.setCurrentPageDecks(true);
+        scene.setstatusDecksPage(DECKS_VIEW_DECK);
         renderDecksBlock(scene);
       } else if (statusDecksPage === CARDS_EDIT_DECK) {
         saveEditDeckInDB(scene);
       }
     } else if (currentPageDecks === true) {
-      if (statusDecksPage === CREATE_NEW_DECK) {
-        console.log('CREATE_NEW_DECK');
+      if (statusDecksPage === CREATE_NEW_DECK) {        
         saveNewDeck(scene);      
       } else if (statusDecksPage === DECKS_EDIT_DECK) {
-        //
+        scene.setCurrentPageDecks(true);
+        scene.setstatusDecksPage(DECKS_VIEW_DECK);
+        renderDecksBlock(scene);
       }      
     }
   }

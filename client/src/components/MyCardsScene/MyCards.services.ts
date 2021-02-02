@@ -19,6 +19,7 @@ import {
   NUMBER_CARDS_ON_PAGE,
   DECKS_VIEW_DECK,
   CARDS_VIEW_DECK,
+  DECKS_EDIT_DECK,
   CARDS_EDIT_DECK,
 } from './constants';
 
@@ -47,6 +48,9 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);  
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
+  if (cardsInSelectDeck.length === 10) {
+    makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
+  }
   if (FIRST_PAGE >= totalPage) {
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
   }
@@ -68,14 +72,21 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
   const totalPage = userDecks.length / NUMBER_CARDS_ON_PAGE;
   stateCardsOfDecks.TOTAL_PAGE = totalPage;
   
-  scene.setCurrentPageDecks(true);
-  scene.setstatusDecksPage(DECKS_VIEW_DECK);
-
   const arrowButtonSave = scene.getArrowButton();
-  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
+  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT); 
+  makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
   
+  if (scene.getstatusDecksPage() === DECKS_EDIT_DECK) {
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
+    makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
+  } else {
+    makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
+  }
   if (totalPage > FIRST_PAGE) {
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
+  } else {
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
   }
 
   const decksContainer = clearDecksContainer(scene);
@@ -116,6 +127,8 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
     throw new Error();
   }
 
+  console.log('userDecks', userDecks);
+
   const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
   scene.setDecksContainer(decksContainer);
 
@@ -130,10 +143,7 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
   const cards = stateCardsOfDecks.CARDS_DATA;
   const newCards = cards.filter((item) => item.id !== idCard);
   
-  const decksContainerOld = scene.getDecksContainer();
-  decksContainerOld.destroy();
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  const decksContainer = clearDecksContainer(scene);
   
   renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
 
@@ -148,6 +158,7 @@ export const addCardInDeck = (
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
     const card = userCards.find(item => item.name === cardName);
+    card?.id = card.card_id;
     console.log('card', card);
     const newCards = scene.getNewCardsArray();
     console.log('newCards', newCards);
@@ -165,13 +176,11 @@ export const addCardInDeck = (
       makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
     }
 
-    const decksContainerOld = scene.getDecksContainer();
-    decksContainerOld.destroy();
-    const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-    scene.setDecksContainer(decksContainer);
-
+    const decksContainer = clearDecksContainer(scene);
+   
     renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
     console.log('newCards', newCards);
+    
   }
   
 };
@@ -185,5 +194,7 @@ export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSoun
   createMenyButton(scene, cardsBgAudio);
   decksControlButton(scene);
   controlCardsInfo(scene);
-  controlDeckInfo(scene); 
+  controlDeckInfo(scene);
+  scene.setCurrentPageDecks(true);
+  scene.setstatusDecksPage(DECKS_VIEW_DECK);
 };

@@ -1,8 +1,8 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
-import { renderDeck, renderContainer } from '@/components/MyCardsScene/MyCards.render';
-import { makeDisableButton, makeEnableButton } from '@/utils/utils';
-import { Deck } from '@/components/Deck/Deck.model';
-import { updateUserDeckWithCards } from '@/components/Deck/Deck.services';
+import { renderDeck } from '@/components/MyCardsScene/MyCards.render';
+import { controlDeckInfo } from '@/components/MyCardsScene/MyCards.services';
+import { makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
+import { updateUserDeckWithCards, deleteUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import {
   DECKS_RIGHT,
   DECKS_LEFT,
@@ -10,8 +10,7 @@ import {
   ONE_PAGE, 
 } from '@/components/MyCardsScene/Button/constants';
 import {
-  NAME_DECKS,
-  decksContainerPosition,
+  DECKS_VIEW_DECK,
 } from '@/components/MyCardsScene/constants';
 
 export const slideDecksInMyDecks = (
@@ -23,10 +22,7 @@ export const slideDecksInMyDecks = (
   const decksCurrent = stateCardsOfDecks.DECKS_DATA;
   const arrowButtonSave = scene.getArrowButton();
   
-  const decksContainerOld = scene.getDecksContainer();
-  decksContainerOld.destroy();
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  const decksContainer = clearDecksContainer(scene);
 
   if (name === DECKS_RIGHT) {
     if (stateCardsOfDecks.CURRENT_PAGE < stateCardsOfDecks.TOTAL_PAGE) {
@@ -57,17 +53,35 @@ export const saveEditDeckInDB = (scene:  IMyCardsScene): void => {
 
   const newCards = scene.getNewCardsArray();
   if (newCards.length === 10) {
-    // makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
-   
     const newDeck = scene.getNewDeck();
-    console.log('newDeck', newDeck);
-    
     newDeck.cards = newCards;
-    console.log('newDeck', newDeck);
-    updateUserDeckWithCards(newDeck);
     
+    updateUserDeckWithCards(newDeck);
+       
+    setTimeout( () => {
+      scene.setCurrentPageDecks(true);
+      scene.setstatusDecksPage(DECKS_VIEW_DECK);
+      const decksContainerOld = scene.getDecksContainer();
+      decksContainerOld.destroy();      
+      controlDeckInfo(scene);      
+    }, 1000);
+   
   } else {
     //
-  }
-  // updateUserDeckWithCards();
+  } 
+};
+
+export const deleteDeckInDeck = async (scene:  IMyCardsScene, idDeck: number): Promise<void> => {
+  console.log('idDeck', idDeck);
+  const userDecks = await getUserDecks();
+  console.log('userDecks', userDecks);
+
+  deleteUserDeckById(idDeck);
+ 
+  setTimeout(  () => {
+    const decksContainerOld = scene.getDecksContainer();
+    decksContainerOld.destroy();      
+    controlDeckInfo(scene);      
+  }, 2000);
+  
 };

@@ -23,6 +23,8 @@ import {
   decksPosition,
   ORIGIN_HALF,
   CARDS_EDIT_DECK,
+  DECKS_VIEW_DECK,
+  DECKS_EDIT_DECK,
 } from './constants';
 
 function getPositionY(index: number, name: string): number {
@@ -103,7 +105,7 @@ export const renderMyCards = (
     // console.log('card.name', card.name);
 
     if (name === NAME_DECKS && scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
-      const deleteButton = createDeleteButton(scene, item.id);
+      const deleteButton = createDeleteButton(scene, item.id, CARDS_EDIT_DECK);
       card.add(deleteButton);
     }
     
@@ -119,6 +121,8 @@ export const renderDeck = (
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
+  // const currentPageDecks = scene.getCurrentPageDecks();
+  const statusDecksPage = scene.getstatusDecksPage();
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const currentPage = stateCardsOfDecks.CURRENT_PAGE;
   const cardsOnOnePage = userDecks.filter((item, id) =>
@@ -126,6 +130,8 @@ export const renderDeck = (
       ? item
       : '',
   );
+
+  console.log('cardsOnOnePage', cardsOnOnePage);
   
   cardsOnOnePage.forEach((item, id) => {    
     const posX = getPositionX(id, decksPosition);
@@ -134,8 +140,14 @@ export const renderDeck = (
     const userDeck = createDeck(scene, {IMG_X: posX, IMG_Y: posY}, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
     setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
-
-    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
+    
+    if ( statusDecksPage === DECKS_VIEW_DECK ) {
+      setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
+    } else if ( statusDecksPage === DECKS_EDIT_DECK) {
+      const deleteButton = createDeleteButton(scene, <number>item.user_deck_id, DECKS_EDIT_DECK);
+      userDeck.add(deleteButton);
+    }
+   
     const namePosX = decksContainer.width + NAME_OFFSET_X;
     const userDeckName = createDeckName(scene, item, {TEXT_X: namePosX, TEXT_Y: NAME_POS_Y} ).setOrigin(ORIGIN_HALF, ORIGIN_HALF);
 

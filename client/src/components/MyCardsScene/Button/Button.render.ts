@@ -1,11 +1,13 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { deleteCardFromDeck } from '@/components/MyCardsScene/MyCards.services';
+import { deleteDeckInDeck } from '@/components/MyCardsScene/Decks/Decks.services';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
 import { MENU_URL } from '@/router/constants';
 import { ATLASES, MENU_IMAGES } from '@/components/Game/constant';
 import { createTextData } from '@/utils/utils';
 import { CURSOR_POINTER } from '@/constants/constants';
+import { CARDS_EDIT_DECK, DECKS_EDIT_DECK } from '@/components/MyCardsScene/constants';
 import { ButtonSettings } from './Button.model';
 import { slidePage, choiceAction } from './Button.services';
 import { 
@@ -16,6 +18,7 @@ import {
   deleteButtonSettings,
   controlButtonSettings,
   deleteButtonPosition,
+  deleteButtonForDecks,
   CARDS_LEFT,
   CARDS_RIGHT,
   DECKS_LEFT,
@@ -84,8 +87,13 @@ export const renderArrowButton = (
   });
 };
 
-export const createDeleteButton = (scene: IMyCardsScene, idCard: number): Phaser.GameObjects.Image => {
-  const { IMG, POS_X, POS_Y} = deleteButtonPosition;
+export const createDeleteButton = (scene: IMyCardsScene, idItem: number, status: string): Phaser.GameObjects.Image => {
+  let buttonPosition = deleteButtonPosition;
+  if (status === DECKS_EDIT_DECK) {
+    buttonPosition = deleteButtonForDecks;
+  } 
+
+  const { IMG, POS_X, POS_Y} = buttonPosition;
   const deleteButton = scene.add.image(POS_X, POS_Y, IMG); 
   const { NORMAL_SCALE } = deleteButtonSettings;
 
@@ -96,7 +104,11 @@ export const createDeleteButton = (scene: IMyCardsScene, idCard: number): Phaser
   deleteButton.on('pointerup', () => {
     deleteButton.setScale(NORMAL_SCALE);
     deleteButton.clearTint();
-    deleteCardFromDeck(scene, idCard);    
+    if (status === DECKS_EDIT_DECK) {
+      deleteDeckInDeck(scene, idItem);
+    } else if (status === CARDS_EDIT_DECK ){
+      deleteCardFromDeck(scene, idItem);   
+    }    
   });
   return deleteButton;
 };

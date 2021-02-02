@@ -38,6 +38,13 @@ export const deleteButtonPosition: ArrowButton = {
   POS_Y: -85,
 };
 
+export const deleteButtonForDecks: ArrowButton = {
+  NAME: DELETE_BUTTON,
+  IMG: DELETE_BUTTON,
+  POS_X: 50,
+  POS_Y: -60,
+};
+
 export const arrowButton: ArrowButton[] = [
   {
     NAME: CARDS_LEFT,
@@ -87,7 +94,7 @@ export const decksControlButtonData: ControlButton[] = [
   {
     NAME: DONE_BUTTON,
     IMG: DONE_BUTTON,
-    PROMPT: 'Сохранить',
+    PROMPT: 'Сохранить/выйти',
     POS_X: 1100,
     POS_Y: 680,
     PROMPT_X: 1120,

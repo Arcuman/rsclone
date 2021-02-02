@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import { TINT_VALUE_DISABLE } from '@/constants/constants';
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { renderContainer } from '@/components/MyCardsScene/MyCards.render';
-import { NAME_DECKS, decksContainerPosition } from '@/components/MyCardsScene/constants';
+import { NAME_DECKS, decksContainerPosition, cardsContainerPosition, NAME_CARDS } from '@/components/MyCardsScene/constants';
 
 export function deleteOldMain(): void {
   const oldMain: HTMLElement | null = document.body.querySelector('.main');
@@ -97,4 +97,13 @@ export const clearDecksContainer = (scene:  IMyCardsScene): Phaser.GameObjects.C
   scene.setDecksContainer(decksContainer);
 
   return decksContainer;
+};
+
+export const clearCardsContainer = (scene:  IMyCardsScene): Phaser.GameObjects.Container => {
+  const cardsContainerOld = scene.getMyCardsContainer();
+  cardsContainerOld.destroy();
+  const myCardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
+  scene.setMyCardsContainer(myCardsContainer);
+
+  return myCardsContainer;
 };

@@ -1,17 +1,15 @@
 import { IMyCardsScene, ControlButton } from '@/components/MyCardsScene/MyCards.model';
 import { openDeck } from '@/components/MyCardsScene/MyCards.services';
-import { renderMyCards, renderContainer } from '@/components/MyCardsScene/MyCards.render';
+import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
 import { createDeck } from '@/components/Deck/Deck.render';
 import { setUserDeckWithCards } from '@/components/Deck/Deck.services';
-import { createTextData, makeDisableButton, makeEnableButton } from '@/utils/utils';
+import { createTextData, makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
 import { store } from '@/redux/store/rootStore';
 import {
   CREATE_NEW_DECK,
   CARDS_EDIT_DECK,
   NAME_CARDS,
   cardsPosition,
-  NAME_DECKS,
-  decksContainerPosition,
 } from '@/components/MyCardsScene/constants';
 import {  
   newDeckText,
@@ -25,12 +23,12 @@ import {
   NAME_INPUT_DEPTH,
 } from './constants';
 
-const receiveDeckName = async (
+const receiveDeckName = (
   scene: IMyCardsScene,
   click: Phaser.Input.InputPlugin,
   enterDown: Phaser.Input.Keyboard.Key,
   textInput,
-  arrowButtonSave: ControlButton): Promise<void> => {
+  arrowButtonSave: ControlButton): void => {
   const newText = textInput.text;
   console.log('newText', newText);
 
@@ -51,7 +49,7 @@ const receiveDeckName = async (
     console.log('newDeck', newDeck);
 
     scene.setNewDeck(newDeck);
-    console.log('newDeck2', scene.getNewDeck());
+   
   } else {
     textInput.setText(NAME_INPUT_DEFAULT);
   }
@@ -60,16 +58,16 @@ const receiveDeckName = async (
 
 export const createNewDeck = (scene: IMyCardsScene): void => {
   const { TEXT_X, TEXT_Y} = positionNewDeckName;
-  const decksContainerOld = scene.getDecksContainer();
-  decksContainerOld.destroy();
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  
+  const decksContainer = clearDecksContainer(scene);
 
   const myCards = scene.getUserCards(); //
   const myCardsContainer = scene.getMyCardsContainer(); //
   renderMyCards(scene, NAME_CARDS, myCards, cardsPosition, myCardsContainer); //
 
   scene.setstatusDecksPage(CREATE_NEW_DECK);
+  scene.setCurrentPageDecks(true);
+
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
@@ -129,7 +127,7 @@ export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
     const deckId = await setUserDeckWithCards(newDeck);
     console.log('deckId=', deckId);
     newDeck.user_deck_id = deckId;
-    // scene.setOpenDeckId(deckId);
+    
     console.log('open deck', newDeck);
     scene.setCurrentPageDecks(false);
     scene.setstatusDecksPage(CARDS_EDIT_DECK);
@@ -140,7 +138,6 @@ export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
     const arrowButtonSave = scene.getArrowButton();
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
 
-    openDeck(scene, newDeck);
-    // controlCardsInfo(scene);
+    openDeck(scene, newDeck);   
   }
 };
