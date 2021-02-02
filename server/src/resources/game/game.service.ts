@@ -34,7 +34,6 @@ export function generateInitialGameState(room: Room, curPlayer: Player): GameSta
 }
 
 export function closeSocket(openRoom: Room, rooms: Array<Room>, player: Player): void {
-  console.log('1');
   deletePlayerFromRoom(openRoom.players, player);
   if (openRoom.players.length === 0) {
     deleteRoom(rooms, openRoom);

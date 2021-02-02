@@ -38,7 +38,6 @@ export default async function gameLogic(
   socket: Socket,
   rooms: Array<Room>
 ): Promise<void> {
-  console.log(rooms);
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {
     socket.emit(ALREADY_PLAY);
