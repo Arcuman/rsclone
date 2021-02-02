@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "turn_button_atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 395,
+				"h": 726
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "end_turn.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 391,
+						"h": 179
+					}
+				},
+				{
+					"filename": "end_turn_click.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 1,
+						"y": 182,
+						"w": 391,
+						"h": 179
+					}
+				},
+				{
+					"filename": "end_turn_light.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 1,
+						"y": 363,
+						"w": 391,
+						"h": 179
+					}
+				},
+				{
+					"filename": "enemy_turn.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 393,
+						"h": 181
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 393,
+						"h": 181
+					},
+					"frame": {
+						"x": 1,
+						"y": 544,
+						"w": 393,
+						"h": 181
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:e5851f3d77cdbf63be004657d82e2839:111fe4a41fddc869d05de5942506f096:c1aa83c1d43b06ff469a6a7b05a3f0e2$"
+	}
+}

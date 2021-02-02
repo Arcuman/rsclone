@@ -38,6 +38,11 @@ export const ATLASES = {
     PATH: 'assets/images/menu/mute_on_atlas.json',
     IMAGES_CONTAINER: 'assets/images/menu/',
   },
+  TURN_BUTTON_ATLAS: {
+    NAME: 'TURN_BUTTON_ATLAS',
+    PATH: 'assets/images/turn_button_atlas.json',
+    IMAGES_CONTAINER: 'assets/images/',
+  },
 };
 
 export const SCENES = {

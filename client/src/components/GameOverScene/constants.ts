@@ -15,7 +15,8 @@ export const TEXT_POSITION_X_NEEDED_EXP = 800;
 export const TEXT_POSITION_Y = 120;
 export const TEXT_POSITION_Y_OFFSET = 80;
 
-export const EXIT_POSITION_Y = 1000;
+export const EXIT_POSITION_X = 1150;
+export const EXIT_POSITION_Y = 70;
 
 export const messageDecoration: TextDecoration = {
   FONT_SIZE: '70px',

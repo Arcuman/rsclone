@@ -6,7 +6,9 @@ import {
   deleteRoom,
   getEnemyPlayer,
 } from '@/resources/game/room/room.service';
-import { INIT_STATE } from '@/resources/game/constants';
+import { EXP_WIN, INIT_STATE, PLAYER_WIN } from '@/resources/game/constants';
+import { UpdatedUserLevelInfo } from '@/resources/users/user.model';
+import { usersService } from '@/resources/users/user.controller';
 
 export function generateInitialGameState(room: Room, curPlayer: Player): GameState {
   const enemyPlayer = getEnemyPlayer(room, curPlayer);
@@ -45,4 +47,10 @@ export function sendInitState(room: Room): void {
     const initialState = generateInitialGameState(room, player);
     player.socket.emit(INIT_STATE, initialState);
   });
+}
+
+export async function enemyWin(openRoom: Room, player: Player): Promise<void> {
+  const enemy = getEnemyPlayer(openRoom, player);
+  const enemyInfo: UpdatedUserLevelInfo = await usersService.updateUserExp(enemy.userId, EXP_WIN);
+  enemy.socket.emit(PLAYER_WIN, enemyInfo);
 }
