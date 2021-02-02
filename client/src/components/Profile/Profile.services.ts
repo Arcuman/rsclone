@@ -212,7 +212,8 @@ const renderMuteButton = (scene: Phaser.Scene, isMuteOn:boolean): void =>{
   muteButton.on('pointerup', () => {
     // eslint-disable-next-line no-param-reassign
     scene.sound.mute=!isMuteOn;
-    localStorage.setItem(IS_MUTE_ON_LS_PARAM, (!isMuteOn).toString());
+    const userLogin = store.getState().authUser.login;
+    localStorage.setItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`, (!isMuteOn).toString());
     muteButton.destroy();
     renderMuteButton(scene, !isMuteOn);
   });
@@ -247,7 +248,8 @@ export const create = (scene: Phaser.Scene): void => {
     browserHistory.push(MENU_URL);
   });
   menuButton.setScale(BUTTON_SCALE);
-  const isMuteOn = localStorage.getItem(IS_MUTE_ON_LS_PARAM) === 'true';
+  const userLogin = store.getState().authUser.login;
+  const isMuteOn = localStorage.getItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`) === 'true';
   renderMuteButton(scene, isMuteOn);
 
   createInfoContainer(scene);
