@@ -9,7 +9,7 @@ import {
 } from '@/redux/actions/actions';
 import { browserHistory } from '@/router/history';
 import { AUTH_URL, MENU_URL } from '@/router/constants';
-import { HEADER_JSON, IS_MUTE_ON_LS_PARAM} from '@/constants/constants';
+import { HEADER_JSON, IS_MUTE_ON_LS_PARAM } from '@/constants/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,
@@ -33,9 +33,7 @@ const requestInit: RequestInit = {
 
 export const playAudio = (attr: string): void => {
   const audio = <HTMLAudioElement>document.querySelector(`audio[data-audio="${attr}"]`);
-  const isMuteOn = localStorage.getItem(IS_MUTE_ON_LS_PARAM) === 'true';
- 
-  if (audio && !isMuteOn) {
+  if (audio) {
     audio.currentTime = AUTH_AUDIO_CONFIG.currentTime;
     audio.volume = AUTH_AUDIO_CONFIG.volume;
     audio.play();
@@ -47,12 +45,13 @@ export const buttonStyleClick = (event: MouseEvent): void => {
   element.classList.add('active');
 };
 
-const refreshTokenSession = async (): Promise<boolean> =>
-  fetch(REFRESH_TOKEN, requestInit)
+const refreshTokenSession = async (): Promise<boolean> => {
+  const userLogin = localStorage.getItem('gameUserLogin') || '';
+  return fetch(REFRESH_TOKEN, requestInit)
     .then(
       (response): Promise<string> => {
         if (response.status !== StatusCodes.OK) {
-          localStorage.removeItem('refreshToken');
+          localStorage.removeItem(`${userLogin}_refreshToken`);
           throw new Error();
         }
         return response.json();
@@ -62,7 +61,7 @@ const refreshTokenSession = async (): Promise<boolean> =>
       const authObj: AuthUser = <AuthUser>JSON.parse(bodyValue);
 
       if (!authObj.accessToken) {
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem(`${userLogin}_refreshToken`);
         return false;
       }
 
@@ -70,15 +69,16 @@ const refreshTokenSession = async (): Promise<boolean> =>
       authObj.tokenExpDate = exp;
 
       store.dispatch(setAuthInformation(authObj));
-      localStorage.setItem('refreshToken', 'true');
-
+      localStorage.setItem(`${userLogin}_refreshToken`, 'true');
+      localStorage.setItem('gameUserLogin', userLogin);
       return true;
     })
     .catch(error => {
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem(`${userLogin}_refreshToken`);
       browserHistory.replace(AUTH_URL);
       throw new Error(error);
     });
+};
 
 export const isUserAuthenticate = async (): Promise<boolean> => {
   const { accessToken } = store.getState().authUser;
@@ -86,8 +86,9 @@ export const isUserAuthenticate = async (): Promise<boolean> => {
   if (accessToken !== '' && !isAccessTokenExpired()) {
     return true;
   }
+  const userLogin = localStorage.getItem('gameUserLogin') || '';
 
-  if (localStorage.getItem('refreshToken')) {
+  if (localStorage.getItem(`${userLogin}_refreshToken`)) {
     await refreshTokenSession();
     return store.getState().authUser.accessToken !== '';
   }
@@ -174,7 +175,9 @@ export const handleLogin = (event: MouseEvent): void => {
       const { exp } = parseTokenData(authObj.accessToken);
       authObj.tokenExpDate = exp;
       store.dispatch(setAuthInformation(authObj));
-      localStorage.setItem('refreshToken', 'true');
+
+      localStorage.setItem(`${authObj.user.login}_refreshToken`, 'true');
+      localStorage.setItem('gameUserLogin', authObj.user.login);
       browserHistory.push(MENU_URL);
     })
     .catch(() => {
@@ -192,7 +195,7 @@ export const handleLogout = (): void => {
     .then((): void => {
       store.dispatch(removeAuthInformation(login));
       store.dispatch(endGame());
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem(`${login}_refreshToken`);
       browserHistory.push(AUTH_URL);
     })
     .catch(error => {

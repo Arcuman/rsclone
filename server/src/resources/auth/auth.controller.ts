@@ -125,11 +125,8 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const authUser: AuthUser = await RefreshTokensAction(req);
-    console.log('authUser=', authUser);
-    // 6f2eb378-5b59-4aef-8c08-175522969d7e
     req.user = authUser.user;
     req.body = JSON.stringify({ token: authUser.token });
-    console.log('req2=', req);
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).send(getReasonPhrase(StatusCodes.BAD_REQUEST));
     return next(error);
