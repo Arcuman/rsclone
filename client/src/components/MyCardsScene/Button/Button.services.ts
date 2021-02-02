@@ -15,7 +15,7 @@ import {
 import { renderMyCards, renderContainer } from '@/components/MyCardsScene/MyCards.render';
 import { renderDecksBlock } from '@/components/MyCardsScene/MyCards.services';
 import { createNewDeck, saveNewDeck } from '@/components/MyCardsScene/Decks/Decks.render';
-import { slideDecksInMyDecks } from '@/components/MyCardsScene/Decks/Decks.services';
+import { slideDecksInMyDecks, saveEditDeckInDB } from '@/components/MyCardsScene/Decks/Decks.services';
 import { AUDIO_CONFIG } from '@/constants/constants';
 import { AUDIO } from '@/components/Game/constant';
 
@@ -151,8 +151,8 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
       } else if ( statusDecksPage === CARDS_VIEW_DECK ) {
         makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
         renderDecksBlock(scene);
-      } else if (statusDecksPage === CARDS_VIEW_DECK) {
-        //
+      } else if (statusDecksPage === CARDS_EDIT_DECK) {
+        saveEditDeckInDB(scene);
       }
     } else if (currentPageDecks === true) {
       if (statusDecksPage === CREATE_NEW_DECK) {

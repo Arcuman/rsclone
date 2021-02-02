@@ -45,7 +45,7 @@ const receiveDeckName = async (
     const newDeck = {
       user_id: userId,
       name: <string>newText,
-      isCurr: true,
+      isCurr: false,
       cards: [],
     };
     console.log('newDeck', newDeck);
@@ -129,7 +129,8 @@ export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
     const deckId = await setUserDeckWithCards(newDeck);
     console.log('deckId=', deckId);
     newDeck.user_deck_id = deckId;
-    // console.log('open deck');
+    // scene.setOpenDeckId(deckId);
+    console.log('open deck', newDeck);
     scene.setCurrentPageDecks(false);
     scene.setstatusDecksPage(CARDS_EDIT_DECK);
 

@@ -24,6 +24,8 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   private newDeck: Deck;
 
+  private openDeckId: number;
+
   private newCardsArray: Card[] = [];
 
   private deckNameInput: Phaser.GameObjects.Text;
@@ -131,6 +133,14 @@ export class MyCardsScene extends Phaser.Scene implements IMyCardsScene {
 
   public setNewDeck(value: Deck): void {
     this.newDeck = value;
+  }
+
+  public getOpenDeckId(): number {
+    return this.openDeckId;
+  }
+
+  public setOpenDeckId(value: number): void {
+    this.openDeckId = value;
   }
 
   public getDeckNameInput(): Phaser.GameObjects.Text {

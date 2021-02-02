@@ -3,7 +3,7 @@ import { getUserDeckById, getUserDecks } from '@/components/Deck/Deck.services';
 import { Card } from '@/components/Card/Card.model';
 import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
 import { getUserCards } from '@/components/Card/Card.services';
-import { makeDisableButton, makeEnableButton } from '@/utils/utils';
+import { makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
 import { IMyCardsScene } from './MyCards.model';
 import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
 import { AllCards } from './CardsInfo';
@@ -55,17 +55,13 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON); 
   }
 
-  const decksContainerOld = scene.getDecksContainer();
-  decksContainerOld.destroy();
-
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  const decksContainer = clearDecksContainer(scene);
 
   renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
 };
 
 export const renderDecksBlock = (scene: IMyCardsScene) : void => {
-  const decksContainerOld = scene.getDecksContainer();
+  
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CURRENT_PAGE = FIRST_PAGE;
   const userDecks = stateCardsOfDecks.DECKS_DATA;
@@ -82,9 +78,7 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_RIGHT);
   }
 
-  decksContainerOld.destroy();
-  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
-  scene.setDecksContainer(decksContainer);
+  const decksContainer = clearDecksContainer(scene);
  
   renderDeck(scene, userDecks, decksContainer);
 };
@@ -96,6 +90,7 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
     throw new Error();
   }
 
+  console.log('userCards', userCards);
   scene.setUserCards(userCards);
   scene.setMyCardsCurrentPage(FIRST_PAGE);
 
@@ -181,15 +176,14 @@ export const addCardInDeck = (
   
 };
 
+// const createWarningMessage = () => {
+//  const warningMessage = 
+// }
+
 export const create = (scene: IMyCardsScene, cardsBgAudio: Phaser.Sound.BaseSound): void => {
   renderArrowButton(scene);
   createMenyButton(scene, cardsBgAudio);
   decksControlButton(scene);
   controlCardsInfo(scene);
-  controlDeckInfo(scene);
-
-  // const click = scene.input.addListener('pointerup', (event) => {
-  //  console.log('event', event);
-  // });
-  
+  controlDeckInfo(scene); 
 };

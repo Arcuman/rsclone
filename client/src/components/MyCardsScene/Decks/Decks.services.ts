@@ -1,6 +1,8 @@
 import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
 import { renderDeck, renderContainer } from '@/components/MyCardsScene/MyCards.render';
 import { makeDisableButton, makeEnableButton } from '@/utils/utils';
+import { Deck } from '@/components/Deck/Deck.model';
+import { updateUserDeckWithCards } from '@/components/Deck/Deck.services';
 import {
   DECKS_RIGHT,
   DECKS_LEFT,
@@ -49,4 +51,23 @@ export const slideDecksInMyDecks = (
   }
 
   renderDeck(scene, decksCurrent, decksContainer);  
+};
+
+export const saveEditDeckInDB = (scene:  IMyCardsScene): void => {
+
+  const newCards = scene.getNewCardsArray();
+  if (newCards.length === 10) {
+    // makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
+   
+    const newDeck = scene.getNewDeck();
+    console.log('newDeck', newDeck);
+    
+    newDeck.cards = newCards;
+    console.log('newDeck', newDeck);
+    updateUserDeckWithCards(newDeck);
+    
+  } else {
+    //
+  }
+  // updateUserDeckWithCards();
 };

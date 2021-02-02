@@ -1,6 +1,9 @@
 import { TextDecoration } from '@/types/types';
 import Phaser from 'phaser';
 import { TINT_VALUE_DISABLE } from '@/constants/constants';
+import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
+import { renderContainer } from '@/components/MyCardsScene/MyCards.render';
+import { NAME_DECKS, decksContainerPosition } from '@/components/MyCardsScene/constants';
 
 export function deleteOldMain(): void {
   const oldMain: HTMLElement | null = document.body.querySelector('.main');
@@ -85,4 +88,13 @@ export const makeDisableButton = (button: Phaser.GameObjects.Image): void => {
 export const makeEnableButton = (button: Phaser.GameObjects.Image): void => {
   button.setInteractive();
   button.clearTint();
+};
+
+export const clearDecksContainer = (scene:  IMyCardsScene): Phaser.GameObjects.Container => {
+  const decksContainerOld = scene.getDecksContainer();
+  decksContainerOld.destroy();
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
+  scene.setDecksContainer(decksContainer);
+
+  return decksContainer;
 };
