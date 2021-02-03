@@ -196,6 +196,7 @@ export const setDropEventOnTableCard = (
   );
 
   cardContainer.removeListener('dragend');
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {

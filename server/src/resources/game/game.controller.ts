@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { closeSocket, enemyWin, sendInitState } from '@/resources/game/game.service';
+import { enemyWin, sendInitState } from '@/resources/game/game.service';
 import { createPlayer } from '@/resources/game/player/player.service';
 import { Room } from '@/resources/game/room/room.model';
 import { closeRoom, getOrCreateOpenRoom } from '@/resources/game/room/room.service';
@@ -79,11 +79,18 @@ export default async function gameLogic(
   });
 
   player.socket.on(CLOSE_SOCKET, () => {
-    closeSocket(openRoom, rooms, player);
-  });
-
-  player.socket.on(DISCONNECT, () => {
     enemyWin(openRoom, player);
     closeRoom(openRoom, rooms);
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  player.socket.on(DISCONNECT, async () => {
+    if (!openRoom) {
+      return;
+    }
+    if (rooms.findIndex(room => room.id === openRoom.id) !== -1) {
+      await enemyWin(openRoom, player);
+      closeRoom(openRoom, rooms);
+    }
   });
 }

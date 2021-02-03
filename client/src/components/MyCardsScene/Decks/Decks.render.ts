@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import { IMyCardsScene, ControlButton } from '@/components/MyCardsScene/MyCards.model';
 import { openDeck } from '@/components/MyCardsScene/MyCards.services';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
@@ -31,6 +31,8 @@ import {
   NAME_INPUT_DEPTH,
 } from './constants';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const receiveDeckName = (
   scene: IMyCardsScene,
   click: Phaser.Input.InputPlugin,
@@ -109,13 +111,14 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
 
     textInput.setText('');
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const editor = scene.rexUI.edit(textInput);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-expressions
     editor.inputText.node;
 
     const enterDown = scene.input.keyboard.addKey('Enter');
-   
+
     const click = scene.input.addListener('pointerup', () => {
       receiveDeckName(scene, click, enterDown, textInput, arrowButtonSave);
     });

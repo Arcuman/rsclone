@@ -53,4 +53,5 @@ export async function enemyWin(openRoom: Room, player: Player): Promise<void> {
   const enemy = getEnemyPlayer(openRoom, player);
   const enemyInfo: UpdatedUserLevelInfo = await usersService.updateUserExp(enemy.userId, EXP_WIN);
   enemy.socket.emit(PLAYER_WIN, enemyInfo);
+  enemy.socket.disconnect();
 }

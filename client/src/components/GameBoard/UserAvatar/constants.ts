@@ -23,6 +23,15 @@ export const textDecoration: TextDecoration = {
   TEXT_DEPTH: 2,
 };
 
+export const textManaDecoration: TextDecoration = {
+  FONT_SIZE: '34px',
+  FONT_FAMILY: 'number_font',
+  FONT_COLOR: '#000000',
+  TEXT_OUTLINE_COLOR: '#000000',
+  TEXT_OUTLINE_SIZE: 5,
+  TEXT_DEPTH: 2,
+};
+
 export const AvatarNameDecoration: TextDecoration = {
   FONT_SIZE: '24px',
   FONT_FAMILY: 'number_font',

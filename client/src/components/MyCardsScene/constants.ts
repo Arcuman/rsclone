@@ -70,4 +70,5 @@ export const CARDS_EDIT_DECK = 'cards_edit_deck';
 export const DECKS_EDIT_DECK = 'decks_edit_deck';
 
 export const WARNING_MAX_CARDS = 'У Вас максимальное количество\n карт в колоде';
+export const WARNING_ADD_CARDS = 'Добавьте карты в колоду \n и сохраните';
 export const WARNING_EMPTY = '';

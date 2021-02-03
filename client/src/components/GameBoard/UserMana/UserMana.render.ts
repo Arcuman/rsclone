@@ -1,11 +1,11 @@
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { createTextData } from '@/utils/utils';
-import { textDecoration } from '@/components/GameBoard/UserAvatar/constants';
+import { textManaDecoration } from '@/components/GameBoard/UserAvatar/constants';
 import {
+  BACKGROUND_USER_MANA_X, BACKGROUND_USER_MANA_Y,
   MANA_COUNT_FIELD,
-  PLAYER_MANA_X,
-  PLAYER_MANA_Y,
 } from '@/components/GameBoard/UserMana/constants';
+import {setBackgroundForUserMana} from '@/components/GameBoard/UserMana/UserMana.services';
 
 export const createPlayerMana = (
   scene: IGameBoardScene,
@@ -16,12 +16,13 @@ export const createPlayerMana = (
     0,
     0,
     mana.toString(),
-    textDecoration,
+    textManaDecoration,
   ).setOrigin(0.5, 0.5);
+  const manaBackground = setBackgroundForUserMana(scene);
   const manaContainer: Phaser.GameObjects.Container = scene.add.container(
-    PLAYER_MANA_X,
-    PLAYER_MANA_Y,
-    textMana,
+    BACKGROUND_USER_MANA_X,
+    BACKGROUND_USER_MANA_Y,
+    [manaBackground, textMana],
   );
   manaContainer.setData(MANA_COUNT_FIELD, mana);
   manaContainer.on(
