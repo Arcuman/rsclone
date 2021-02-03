@@ -25,6 +25,7 @@ import {
   WARNING_OUTLINE_SIZE,
   WARNING_OUTLINE_DEPTH,
   WARNING_MAX_CARDS,
+  WARNING_ADD_CARDS,
   WARNING_EMPTY,
 } from './constants';
 
@@ -44,7 +45,7 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
 
   if (cardsInSelectDeck.length < 10) {
     const warningMessage = scene.getWarningMessage();
-    warningMessage.text = 'Добавьте карты в колоду \n и сохраните';
+    warningMessage.text = WARNING_ADD_CARDS;
     setTimeout( () => {
       warningMessage.text = WARNING_EMPTY;
     }, 5000);
@@ -108,8 +109,7 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
 
 export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
-  // eslint-disable-next-line no-console
-  console.log('userCards', userCards);
+
   if (!userCards) {
     throw new Error();
   }
