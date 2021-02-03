@@ -125,7 +125,7 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
 
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_LEFT);
-  if (totalPage < FIRST_PAGE + FIRST_PAGE) {
+  if (totalPage <= FIRST_PAGE) {
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_RIGHT);
   }
 
