@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import { IMyCardsScene, ControlButton } from '@/components/MyCardsScene/MyCards.model';
 import { openDeck } from '@/components/MyCardsScene/MyCards.services';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
@@ -12,7 +12,7 @@ import {
   NAME_CARDS,
   cardsPosition,
 } from '@/components/MyCardsScene/constants';
-import {  
+import {
   newDeckText,
   positionNewDeck,
   positionNewDeckName,
@@ -24,21 +24,23 @@ import {
   NAME_INPUT_DEPTH,
 } from './constants';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const receiveDeckName = (
   scene: IMyCardsScene,
   click: Phaser.Input.InputPlugin,
   enterDown: Phaser.Input.Keyboard.Key,
-  textInput,
+  textInput : any,
   arrowButtonSave: ControlButton): void => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
   const newText = textInput.text;
-  
+
   click.removeAllListeners();
   enterDown.removeAllListeners();
 
   if (newText !== '') {
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
-   
+
     const userId = store.getState().authUser.user_id;
 
     const newDeck = {
@@ -47,17 +49,17 @@ const receiveDeckName = (
       isCurr: false,
       cards: [],
     };
-    
-    scene.setNewDeck(newDeck);   
+
+    scene.setNewDeck(newDeck);
   } else {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     textInput.setText(NAME_INPUT_DEFAULT);
-  } 
+  }
 };
 
 export const createNewDeck = (scene: IMyCardsScene): void => {
   const { TEXT_X, TEXT_Y} = positionNewDeckName;
-  
+
   const decksContainer = clearDecksContainer(scene);
 
   const myCards = scene.getUserCards(); //
@@ -81,24 +83,25 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
     NAME_DECK_TEXT,
     newDeckText,
   );
-  
+
   const textInput = scene.add.text(
     positionNewDeckInput.TEXT_X,
     positionNewDeckInput.TEXT_Y,
     NAME_INPUT_DEFAULT,
     newDeckInput,
   );
- 
+
   textInput
     .setOrigin(NAME_INPUT_ORIGIN, NAME_INPUT_ORIGIN)
     .setDepth(NAME_INPUT_DEPTH);
-  
+
   scene.setDeckNameInput(textInput);
 
   textInput.setInteractive().on('pointerdown', () => {
     textInput.setText('');
-    
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const editor = scene.rexUI.edit(textInput);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-expressions
     editor.inputText.node;
@@ -108,7 +111,7 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
     const click = scene.input.addListener('pointerup', () => {
       receiveDeckName(scene, click, enterDown, textInput, arrowButtonSave);
     });
-    
+
     enterDown.addListener('down', () => {
       receiveDeckName(scene, click, enterDown, textInput, arrowButtonSave);
     });
@@ -120,20 +123,20 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
 
 export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
   const newDeck =  scene.getNewDeck();
- 
+
   if (Object.keys(newDeck).length !== 0) {
     const deckId = await setUserDeckWithCards(newDeck);
     newDeck.user_deck_id = deckId;
-        
+
     scene.setCurrentPageDecks(false);
     scene.setstatusDecksPage(CARDS_EDIT_DECK);
 
     const textInput = scene.getDeckNameInput();
-    textInput.destroy(); 
+    textInput.destroy();
 
     const arrowButtonSave = scene.getArrowButton();
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
 
-    openDeck(scene, newDeck);   
+    openDeck(scene, newDeck);
   }
 };

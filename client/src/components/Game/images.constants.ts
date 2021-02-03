@@ -114,6 +114,7 @@ export const IMAGES = {
   MANA_BACKGROUND: {
     NAME: 'user_mana',
     PATH: '../../assets/images/user_mana.png',
+  },
   DELETE_BUTTON: {
     NAME: 'delete_button',
     PATH: 'assets/images/delete_button.png',

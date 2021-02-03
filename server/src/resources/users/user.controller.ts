@@ -101,7 +101,10 @@ const updateUserProfile = async (id: number, data: UserProfile): Promise<UserPro
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);
 
-const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Card> => {
+const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Card | undefined> => {
+  if (unavailableCards.length === 0) {
+    return undefined;
+  }
   const newCard = cardService.getRandomCard(unavailableCards);
   const isSetUserCards = await cardService.setUserCards([newCard], user_id);
   if (!isSetUserCards) {

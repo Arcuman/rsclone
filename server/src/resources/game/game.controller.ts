@@ -83,11 +83,19 @@ export default async function gameLogic(
   });
 
   player.socket.on(CLOSE_SOCKET, () => {
-    closeSocket(openRoom, rooms, player);
-  });
-
-  player.socket.on(DISCONNECT, () => {
+    console.log(4);
     enemyWin(openRoom, player);
     closeRoom(openRoom, rooms);
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  player.socket.on(DISCONNECT, async () => {
+    if (!openRoom) {
+      return;
+    }
+    if (rooms.findIndex(room => room.id === openRoom.id) !== -1) {
+      await enemyWin(openRoom, player);
+      closeRoom(openRoom, rooms);
+    }
   });
 }
