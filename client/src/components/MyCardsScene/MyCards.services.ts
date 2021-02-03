@@ -25,11 +25,12 @@ import {
   WARNING_OUTLINE_SIZE,
   WARNING_OUTLINE_DEPTH,
   WARNING_MAX_CARDS,
+  WARNING_ADD_CARDS,
   WARNING_EMPTY,
 } from './constants';
 
 export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<void> => {
-  
+
   const userDeckId = userDeck.user_deck_id || 0;
   const userDeckData = await getUserDeckById(userDeckId);
   if (!userDeckData) {
@@ -39,8 +40,17 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   scene.setNewDeck(userDeck);
 
   const cardsInSelectDeck = <Card[]>userDeckData.cards;
-  
+
   scene.setNewCardsArray(cardsInSelectDeck);
+
+  if (cardsInSelectDeck.length < 10) {
+    const warningMessage = scene.getWarningMessage();
+    warningMessage.text = WARNING_ADD_CARDS;
+    setTimeout( () => {
+      warningMessage.text = WARNING_EMPTY;
+    }, 5000);
+  }
+
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CARDS_DATA = cardsInSelectDeck;
   stateCardsOfDecks.CURRENT_PAGE = FIRST_PAGE;
@@ -49,7 +59,7 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   stateCardsOfDecks.TOTAL_PAGE = totalPage;
 
   const arrowButtonSave = scene.getArrowButton();
-  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);  
+  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
   if (cardsInSelectDeck.length === 10) {
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
@@ -59,7 +69,7 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   }
   scene.getstatusDecksPage();
   if (scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
-    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON); 
+    makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
   }
 
   const decksContainer = clearDecksContainer(scene);
@@ -68,17 +78,17 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
 };
 
 export const renderDecksBlock = (scene: IMyCardsScene) : void => {
-  
+
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   stateCardsOfDecks.CURRENT_PAGE = FIRST_PAGE;
   const userDecks = stateCardsOfDecks.DECKS_DATA;
   const totalPage = userDecks.length / NUMBER_CARDS_ON_PAGE;
   stateCardsOfDecks.TOTAL_PAGE = totalPage;
-  
+
   const arrowButtonSave = scene.getArrowButton();
-  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT); 
+  makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DECKS_LEFT);
   makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
-  
+
   if (scene.getstatusDecksPage() === DECKS_EDIT_DECK) {
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
@@ -93,13 +103,13 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
   }
 
   const decksContainer = clearDecksContainer(scene);
- 
+
   renderDeck(scene, userDecks, decksContainer);
 };
 
 export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
   const userCards = await getUserCards();
-  
+
   if (!userCards) {
     throw new Error();
   }
@@ -115,10 +125,10 @@ export const controlCardsInfo = async (scene: IMyCardsScene): Promise<void> => {
 
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_LEFT);
-  if (totalPage < FIRST_PAGE + FIRST_PAGE) {
+  if (totalPage <= FIRST_PAGE) {
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.CARDS_RIGHT);
   }
- 
+
   renderMyCards(scene, NAME_CARDS, userCards, cardsPosition, cardsContainer);
 };
 
@@ -145,7 +155,7 @@ export const editCardsInDeck = (scene: IMyCardsScene): void => {
   const stateCardsOfDecks = scene.getStateCardsOfDecks();
   const cardsInSelectDeck = stateCardsOfDecks.CARDS_DATA;
   scene.setNewCardsArray(cardsInSelectDeck);
-  
+
   const decksContainer = clearDecksContainer(scene);
 
   renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
@@ -162,7 +172,7 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
   }
 
   const decksContainer = clearDecksContainer(scene);
- 
+
   renderMyCards(scene, NAME_DECKS, changeNewCards, decksPosition, decksContainer);
 };
 
@@ -170,37 +180,41 @@ export const addCardInDeck = (
   scene: IMyCardsScene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
-  
+
   if (scene.getstatusDecksPage() === CARDS_EDIT_DECK && !scene.getCurrentPageDecks()) {
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
     const card = <Card>userCards.find(item => item.name === cardName);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    card?.id = card.card_id;
+    card.id = card.card_id!;
     const newCards = scene.getNewCardsArray();
-    
+    const warningMessage = scene.getWarningMessage();
+
     if (newCards.length < 10) {
-      const haveCard = newCards.includes(card);
-      
+      const haveCard = newCards.find(item => item.id === card.id);
+
       if (!haveCard) {
         newCards.push(card);
-      }     
+      } else {
+        warningMessage.text = 'Такая карта уже есть в колоде. \n  Выберите другую карту.';
+        setTimeout( () => {
+          warningMessage.text = WARNING_EMPTY;
+        }, 3000);
+      }
     } else {
-      const warningMessage = scene.getWarningMessage();
       warningMessage.text = WARNING_MAX_CARDS;
       setTimeout( () => {
-        warningMessage.text = WARNING_EMPTY;   
+        warningMessage.text = WARNING_EMPTY;
       }, 3000);
     }
-    
+
     if (newCards.length === 10) {
       const arrowButtonSave = scene.getArrowButton();
       makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
     }
 
     const decksContainer = clearDecksContainer(scene);
-   
-    renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);    
+
+    renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);
   }
 };
 

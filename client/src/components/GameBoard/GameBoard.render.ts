@@ -5,7 +5,7 @@ import {
   IGameBoardScene,
   UpdatedUserLevelInfo,
 } from '@/components/GameBoard/GameBoard.model';
-import { IMAGES, SCENES, AUDIO} from '@/components/Game/constant';
+import {IMAGES, SCENES, AUDIO, ATLASES, MENU_IMAGES} from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
@@ -28,7 +28,7 @@ import {
   LOSE,
   GET_DECK_CARD,
   ENEMY_GET_DECK_CARD,
-  DESTROY_DECK_CARD, DESTROY_DECK_CARD_TIME,
+  DESTROY_DECK_CARD, DESTROY_DECK_CARD_TIME, CLOSE_SOCKET,
 } from '@/components/GameBoard/constants';
 import { AUDIO_CONFIG, COVER_CARD } from '@/constants/constants';
 import {
@@ -56,6 +56,11 @@ import {createDeck} from '@/components/Deck/Deck.render';
 import {COUNT_OF_DECK_CARD, PositionDeckContainer} from '@/components/Deck/Deck.model';
 import {createBaseCard} from '@/components/Card/Card.render';
 import {positionEnemyDeck, positionPlayerDeck} from '@/components/Deck/constants';
+import {createButton} from '@/components/Button/Button.services';
+import {HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT} from '@/components/MenuScene/constants';
+import {handleLogout} from '@/components/Auth/Auth.services';
+import {browserHistory} from '@/router/history';
+import {MENU_URL} from '@/router/constants';
 import { createTimer } from './Timer/Timer.render';
 import {
   addTimerAlmostExpiredSprite,
@@ -63,7 +68,7 @@ import {
   setTimerBackground,
 } from './Timer/Timer.services';
 import { TIMER, TIMER_COUNTDOWN } from './Timer/constants';
-import { create, damageCard, destroyEnemyCard, destroyPlayerCard } from './GameBoard.services';
+import { damageCard, destroyEnemyCard, destroyPlayerCard } from './GameBoard.services';
 
 export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private socket: SocketIOClient.Socket;
@@ -97,6 +102,8 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private playerDeck: Phaser.GameObjects.Container;
 
   private enemyDeck: Phaser.GameObjects.Container;
+
+  private exitButton: Phaser.GameObjects.Sprite;
 
   constructor() {
     super({
@@ -154,7 +161,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
     this.sound.pauseOnBlur = false;
 
-    create(this);
     this.socket = data.socket;
     this.isPlayerOne = data.isPlayerOne;
 
@@ -165,6 +171,22 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     this.gameTableImg = createGameTableImg(this);
 
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
+
+    const position = { X: 1150, Y: 0 };
+
+    this.exitButton = createButton(
+      this,
+      position,
+      0,
+      ATLASES.EXIT_ATLAS.NAME,
+      MENU_IMAGES.MENU_EXIT,
+      HEIGHT_COEFFICIENT,
+    ).setScale(0.5);
+
+    this.exitButton.on('pointerup', () => {
+      this.socket.disconnect();
+      browserHistory.push(MENU_URL);
+    });
 
     this.playerDeck = createDeck(this, positionPlayerDeck, data.initState.deckCountCards).setScale(1.2);
 

@@ -38,5 +38,7 @@ export async function tableCardPlayTargetPlayer(
     enemy.socket.emit(PLAYER_LOSE, enemyInfo);
     closeRoom(openRoom, rooms);
     clearInterval(openRoom.timer!);
+    enemy.socket.disconnect();
+    player.socket.disconnect();
   }
 }
