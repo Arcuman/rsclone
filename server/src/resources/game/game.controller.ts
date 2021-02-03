@@ -36,7 +36,7 @@ function isPlayerPlayed(rooms: Array<Room>, userId: number): boolean {
 export default async function gameLogic(
   io: Server,
   socket: Socket,
-  rooms: Array<Room>
+  rooms: Array<Room>,
 ): Promise<void> {
   const userId = webToken.getDataFromToken((<SocketQuery>socket.handshake.query).token);
   if (isPlayerPlayed(rooms, userId)) {
@@ -77,7 +77,7 @@ export default async function gameLogic(
       io.to(openRoom.id).emit(START_GAME);
       openRoom.timer = setInterval(
         () => countDownTimer(openRoom, openRoom.playerOne!, io),
-        ONE_SEC
+        ONE_SEC,
       );
     }
   });
