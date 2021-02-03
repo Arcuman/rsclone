@@ -88,40 +88,43 @@
 
     .button-enter {
       width: 22rem;
-      height: 9rem;
+      height: 8rem;
       border: 0;
       background: url('../../assets/images/enter_button.png') no-repeat;
-      background-size: contain;
+      background-position: 0 0;
       outline: none;
       &:hover {
-        background: url('../../assets/images/enter_button_light.png') no-repeat;
-        background-size: contain;
+        background: url('../../assets/images/enter_button.png') no-repeat;
+        background-position: 0 -15rem;
       }
       &.active {
-        background: url('../../assets/images/enter_button_click.png') no-repeat;
-        background-size: contain;
+        background: url('../../assets/images/enter_button.png') no-repeat;
+        background-position: 0 -7.5rem;
       }
     }
 
     .button-send {
-      width: 22rem;
-      height: 9rem;
+      width: 24rem;
+      height: 8rem;
       border: 0;
       background: url('../../assets/images/send_button.png') no-repeat;
-      background-size: contain;
+      background-position: 0 0;
       outline: none;
       &:hover {
-        background: url('../../assets/images/send_button_light.png') no-repeat;
-        background-size: contain;
+        background: url('../../assets/images/send_button.png') no-repeat;
+        background-position: 0 -16.5rem;
       }
       &.active {
-        background: url('../../assets/images/send_button_click.png') no-repeat;
-        background-size: contain;
+        background: url('../../assets/images/send_button.png') no-repeat;
+        background-position: 0 -8.5rem;
       }
     }
   }
 }
 .copyright {
+  position: absolute;
+  top:3rem;
+  right:8rem;
   display: flex;
   flex-direction: row;
   justify-content: space-around;

@@ -16,23 +16,23 @@ router
       res.statusMessage = statusCodes[StatusCodes.OK].all;
       res.type('application/json').json(decks).status(StatusCodes.OK).end();
       next();
-    }),
+    })
   )
 
   .post(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
       const newDeck: Deck = req.body;
+      const userId: number = req.user!.user_id;
 
-      if (!newDeck.name) {
+      if (!newDeck.name || !userId) {
         throw new ErrorHandler(StatusCodes.BAD_REQUEST);
       }
-
-      const deckId = await decksService.createDeck(newDeck);
+      const deckId = await decksService.createDeck({ ...newDeck, user_id: userId });
 
       res.statusMessage = statusCodes[StatusCodes.OK].create;
       res.type('application/json').json(deckId).status(StatusCodes.OK).end();
       next();
-    }),
+    })
   );
 
 router
@@ -52,7 +52,7 @@ router
         res.type('application/json').json(deck).status(StatusCodes.OK).end();
       }
       next();
-    }),
+    })
   )
 
   .put(
@@ -73,7 +73,7 @@ router
         res.type('application/json').json(deck).status(StatusCodes.OK).end();
       }
       next();
-    }),
+    })
   )
 
   .delete(
@@ -93,6 +93,6 @@ router
         res.status(StatusCodes.NO_CONTENT).end();
       }
       next();
-    }),
+    })
   );
 export { router as decksRouter };

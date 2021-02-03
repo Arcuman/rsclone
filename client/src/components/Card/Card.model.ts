@@ -7,7 +7,7 @@ export interface Card {
   health: number;
   attack: number;
   manaCost: number;
-  image: string;
+  image: string;  
 }
 
 export interface CardCreateInfo {

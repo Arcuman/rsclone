@@ -5,6 +5,7 @@ import { AUDIO_CONFIG, CURSOR_POINTER } from '@/constants/constants';
 import { AUDIO } from '@/components/Game/constant';
 import { IMyCardsScene} from '@/components/MyCardsScene/MyCards.model';
 import { openDeck } from '@/components/MyCardsScene/MyCards.services';
+import { CARDS_VIEW_DECK } from '@/components/MyCardsScene/constants';
 import { TINT_VALUE } from './constants';
 
 export const getUserDeckById = async (deckId: number): Promise<Deck> => {
@@ -138,6 +139,8 @@ export const setClickableDeck = (
   });
   topCard.on('pointerup', () => {
     topCard.clearTint();
+    scene.setCurrentPageDecks(false);
+    scene.setstatusDecksPage(CARDS_VIEW_DECK);
     openDeck(scene, userDeck);
   });
 };

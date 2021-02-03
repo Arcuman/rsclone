@@ -1,7 +1,7 @@
 import { Card } from '@/components/Card/Card.model';
 
 export interface Deck {
-  user_deck_id: number;
+  user_deck_id?: number;
   user_id: number;
   name: string;
   isinitial?: boolean;

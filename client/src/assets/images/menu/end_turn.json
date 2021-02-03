@@ -1,0 +1,83 @@
+{
+	"textures": [
+		{
+			"image": "end_turn.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1179,
+				"h": 181
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "end_turn.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 391,
+						"h": 179
+					}
+				},
+				{
+					"filename": "end_turn_click.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 394,
+						"y": 1,
+						"w": 391,
+						"h": 179
+					}
+				},
+				{
+					"filename": "end_turn_light.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 391,
+						"h": 179
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 391,
+						"h": 179
+					},
+					"frame": {
+						"x": 787,
+						"y": 1,
+						"w": 391,
+						"h": 179
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:460f3ada9c4a739f27b740efceab6100:cffb9e34432f1e54c482d3d7edc5a98d:ecd426b69c2039a4f09669b30c09af91$"
+	}
+}

@@ -13,6 +13,11 @@ export const EDIT_BUTTON = 'edit_button';
 export const DONE_BUTTON = 'done_button';
 export const DELETE_BUTTON = 'delete_button';
 
+export const MENU_BUTTON_OFFSET_X = 650;
+export const MENU_BUTTON_Y = 140;
+export const MENU_BUTTON_OFFSET = 500;
+export const MENU_BUTTON_SCALE = 0.4;
+
 export const arrowButtonSettings: ButtonSettings = {
   NORMAL_SCALE: 0.35,
   RISE_SCALE: 0.38,
@@ -36,6 +41,13 @@ export const deleteButtonPosition: ArrowButton = {
   IMG: DELETE_BUTTON,
   POS_X: 65,
   POS_Y: -85,
+};
+
+export const deleteButtonForDecks: ArrowButton = {
+  NAME: DELETE_BUTTON,
+  IMG: DELETE_BUTTON,
+  POS_X: 50,
+  POS_Y: -60,
 };
 
 export const arrowButton: ArrowButton[] = [
@@ -87,7 +99,7 @@ export const decksControlButtonData: ControlButton[] = [
   {
     NAME: DONE_BUTTON,
     IMG: DONE_BUTTON,
-    PROMPT: 'Сохранить',
+    PROMPT: 'Сохранить/выйти',
     POS_X: 1100,
     POS_Y: 680,
     PROMPT_X: 1120,

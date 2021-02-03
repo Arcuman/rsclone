@@ -43,8 +43,8 @@ passport.use(
       } catch (error) {
         return done(null, false);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -62,7 +62,7 @@ passport.use(
     } catch (error) {
       return done(null, false);
     }
-  }),
+  })
 );
 
 const authenticate = (req: Request, res: Response, next: NextFunction): void => {
@@ -96,7 +96,7 @@ const authenticateLocal = (req: Request, res: Response, next: NextFunction): voi
       }
       req.user = user;
       return next();
-    },
+    }
   )(req, res, next);
 };
 
@@ -125,7 +125,6 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const authUser: AuthUser = await RefreshTokensAction(req);
-
     req.user = authUser.user;
     req.body = JSON.stringify({ token: authUser.token });
   } catch (error) {
