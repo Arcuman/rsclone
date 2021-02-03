@@ -59,11 +59,11 @@ https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone
   
 3. в корневой папке сервера (/client/) создайте файл **.env** и заполните данными
  
-     BASE_URL = хост сервера 
-     WEBSOCKET_URL=ws://имя сервера 
+     BASE_URL = хост сервера   
+     WEBSOCKET_URL=ws://имя сервера   
 
   
-4. запустите сервер (убедитесь что порт свободен)
+4. запустите клиент (убедитесь что порт свободен)
 
     **npm run start**
 5. В браузере запуститься клиент
