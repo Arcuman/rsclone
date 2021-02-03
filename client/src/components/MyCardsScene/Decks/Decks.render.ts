@@ -43,10 +43,9 @@ const receiveDeckName = (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
   const newText = textInput.text;
 
-  click.removeAllListeners();
-  enterDown.removeAllListeners();
-
   if (newText !== '') {
+    click.removeAllListeners();
+    enterDown.removeAllListeners();
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
 
     const userId = store.getState().authUser.user_id;

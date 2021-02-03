@@ -107,12 +107,15 @@ const slideCurrDecksPage = (scene: ICurrDeckChooseScene, name: string): void => 
     volume: AUDIO_CONFIG.volume.button,
   });
 
-  const cardsCurrent = scene.getUserDecks();
-  const decksContainer = scene.getDecksContainer();
+  const cardsCurrent = scene.getUserDecks();  
   const currentPage = scene.getCurrentPage();
   const totalPage = scene.getTotalPage();
-  decksContainer.removeAll();
 
+  const decksContainerOld = scene.getDecksContainer();
+  decksContainerOld.destroy();
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
+  scene.setDecksContainer(decksContainer);
+  
   if (name === DECKS_RIGHT) {
     if (currentPage < totalPage) {
       audio.play();
