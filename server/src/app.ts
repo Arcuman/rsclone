@@ -23,7 +23,7 @@ app.use(passport.initialize());
 app.use(
   morgan(morganFormat, {
     stream: new LoggerStream(),
-  }),
+  })
 );
 
 app.use((req, res, next) => {

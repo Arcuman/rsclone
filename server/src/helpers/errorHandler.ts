@@ -30,7 +30,7 @@ const returnError = (err: ErrorHandler, res: Response): void => {
 const catchError = (fn: any): any => async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     await fn(req, res, next);
