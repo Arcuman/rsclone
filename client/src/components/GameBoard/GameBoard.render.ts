@@ -151,7 +151,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   public setPlayerMana(value: number): void {
     this.playerMana.data.values[MANA_COUNT_FIELD] = value;
   }
-
+  
   create(data: {
     initState: GameState;
     socket: SocketIOClient.Socket;
@@ -171,6 +171,18 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
 
+    const bgEnemyAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, {
+      loop: true,
+      volume: AUDIO_CONFIG.volume.bg,
+    });
+    const bgPlayerAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, {
+      loop: true,
+      volume: AUDIO_CONFIG.volume.bg,
+    });
+    const timerExpireAudio = this.sound.add(AUDIO.TIMER_EXPIRE_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+      loop: true,
+    });
     const position = { X: 1150, Y: 0 };
 
     this.exitButton = createButton(
@@ -215,14 +227,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     setTimerBackground(this);
     this.timerLabel = createTimer(this);
-    const bgEnemyAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, {
-      loop: true,
-      volume: AUDIO_CONFIG.volume.bg,
-    });
-    const bgPlayerAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, {
-      loop: true,
-      volume: AUDIO_CONFIG.volume.bg,
-    });
 
     this.socket.on(START_GAME, () => {
       this.endTurnButton.setInteractive();
@@ -236,10 +240,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
       const audio = this.sound.add(AUDIO.GAME_START.NAME, { volume: AUDIO_CONFIG.volume.card });
       audio.play();
     });
-    const timerExpireAudio = this.sound.add(AUDIO.TIMER_EXPIRE_AUDIO.NAME, {
-      volume: AUDIO_CONFIG.volume.card,
-      loop: true,
-    });
+   
     this.socket.on(TIMER, (countDown: string | string[]) => {
       if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
         timerExpireAudio.play();

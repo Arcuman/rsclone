@@ -31,18 +31,18 @@ export const createCookieData = (value: string): Cookie => ({
   value,
   options: {
     // локальное
-    domain: 'localhost',
+    // domain: 'localhost',
     //
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
     // для heroku
-    // secure: true,
-    secure: false,
+    secure: true,
+    // secure: false,
     httpOnly: true,
     signed: false,
     // для heroku
-    // sameSite: 'none',
-    sameSite: true,
+    sameSite: 'none',
+    // sameSite: true,
   },
 });
 

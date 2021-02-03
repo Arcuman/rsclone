@@ -76,7 +76,7 @@ const refreshTokenSession = async (): Promise<boolean> => {
     .catch(error => {
       localStorage.removeItem(`${userLogin}_refreshToken`);
       browserHistory.replace(AUTH_URL);
-      throw new Error(error);
+      return !error;
     });
 };
 

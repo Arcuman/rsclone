@@ -1,8 +1,8 @@
 import { TextDecoration } from '@/types/types';
 
-export const FIND_ENEMY_PLAYER = 'FINDING ENEMY PLAYER...';
-export const ENEMY_FOUND = 'ENEMY FOUND';
-export const END_YOYR_MATCH = 'END YOYR MATCH BEFORE START NEW';
+export const FIND_ENEMY_PLAYER = 'ИЩУ ПРОТИВНИКА...';
+export const ENEMY_FOUND = 'ПРОТИВНИК НАЙДЕН';
+export const END_YOYR_MATCH = 'ЗАКОНЧИТЕ ПРЕДЫДУЩУЮ ИГРУ';
 
 export const TEXT_POSITION_Y = 100;
 

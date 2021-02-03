@@ -88,7 +88,7 @@
 
     .button-enter {
       width: 22rem;
-      height: 8rem;
+      height: 7.8rem;
       border: 0;
       background: url('../../assets/images/enter_button.png') no-repeat;
       background-position: 0 0;
@@ -99,7 +99,7 @@
       }
       &.active {
         background: url('../../assets/images/enter_button.png') no-repeat;
-        background-position: 0 -7.5rem;
+        background-position: 0 -7.4rem;
       }
     }
 
