@@ -1,16 +1,11 @@
 import { AUDIO } from '@/components/Game/constant';
 import { CURSOR_POINTER, AUDIO_CONFIG } from '@/constants/constants';
+import {ImageState} from '@/types/types';
 import { BUTTON_SCALE } from './constants';
 
 interface Position {
   X: number;
   Y: number;
-}
-
-interface ImageState {
-  IDLE: string;
-  HOVER: string;
-  CLICK: string;
 }
 
 export function createButton(

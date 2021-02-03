@@ -87,4 +87,57 @@ export const AUDIO = {
     NAME: 'page-turn-audio',
     PATH: 'assets/audio/page_turn.ogg',
   },  
+  ADD_CARD_TO_HAND:{
+    NAME: 'add-card-to-hand-audio',
+    PATH: 'assets/audio/add_card_to_hand.ogg',
+  },
+  DECK_SAVE:{
+    NAME: 'deck-save-audio',
+    PATH: 'assets/audio/deck_save.ogg',
+  },
+  DECK_EDIT:{
+    NAME: 'deck-edit-audio',
+    PATH: 'assets/audio/deck_edit.ogg',
+  },
+  DECK_CREATE:{
+    NAME: 'deck-create-audio',
+    PATH: 'assets/audio/deck_create.ogg',
+  },
+  DECK_NAME_ENTER:{
+    NAME: 'r-audio',
+    PATH: 'assets/audio/cursor.wav',
+  },
+  DECK_INPUT_ACTIVE:{
+    NAME: 'input-active-audio',
+    PATH: 'assets/audio/input_active.wav',
+  },
+  DECK_CARDS_SHOW:{
+    NAME: 'deck-cards-show-audio',
+    PATH: 'assets/audio/deck_cards_show.ogg',
+  },
+  CARD_DELETE:{
+    NAME: 'card-delete-audio',
+    PATH: 'assets/audio/card_delete.ogg',
+  },
+  MANA_ADD:{
+    NAME: 'mana-add-audio',
+    PATH: 'assets/audio/mana_add.ogg',
+  },
+  MANA_EMPTY:{
+    NAME: 'mana-empty-audio',
+    PATH: 'assets/audio/mana_empty.ogg',
+  },
+  MANA_EXPEND:{
+    NAME: 'mana-expend-audio',
+    PATH: 'assets/audio/mana_expend.ogg',
+  },
+  LEVEL_UP:{
+    NAME: 'level-up-audio',
+    PATH: 'assets/audio/level_up.ogg',
+  },
+  GET_LEVEL_CARD:{
+    NAME: 'card-add-audio',
+    PATH: 'assets/audio/card_add.ogg',
+  },
+
 };

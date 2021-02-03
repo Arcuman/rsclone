@@ -8,7 +8,7 @@ import { RouteResultResponse } from '@/router/routes.model';
 import { createGameObj, getGame } from '@/components/Game/Game.services';
 import { deleteOldMain } from '@/utils/utils';
 import { store } from './redux/store/rootStore';
-import SettingsConfig = Phaser.Types.Scenes.SettingsConfig;
+// import SettingsConfig = Phaser.Types.Scenes.SettingsConfig;
 
 async function onLocationChange(changes: Update): Promise<void> {
   router

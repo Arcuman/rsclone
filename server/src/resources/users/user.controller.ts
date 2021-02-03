@@ -112,11 +112,12 @@ const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Ca
 
 const updateUserExp = async (
   user_id: number,
-  receivedExp: number
+  receivedExp: number,
 ): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);
   const newUserProfileData = { ...user };
+  
   const res: UpdatedUserLevelInfo = {
     prevLevel: userLevel.level,
     newLevel: userLevel.level,
@@ -125,13 +126,15 @@ const updateUserExp = async (
     nextLevelExp: userLevel.exp_to_lvl,
     totalLevelExp: userLevel.exp_total,
   };
-
+  
   if (user.exp + receivedExp >= userLevel.exp_total + userLevel.exp_to_lvl) {
     let newLevel = await levelService.getLevelByLevelValue(userLevel.level + 1);
     if (!newLevel) {
       newLevel = userLevel;
     }
+  
     const unavailableCards = await cardService.getUnavailableCards(user_id);
+  
     if (unavailableCards) {
       res.newCard = await addNewCard(unavailableCards, user_id);
     }
@@ -140,6 +143,7 @@ const updateUserExp = async (
     res.nextLevelExp = newLevel.exp_to_lvl;
     res.totalLevelExp = newLevel.exp_total;
   }
+  
   newUserProfileData.exp += receivedExp;
   res.curExp = newUserProfileData.exp;
   await updateUserProfile(user.user_id, newUserProfileData);

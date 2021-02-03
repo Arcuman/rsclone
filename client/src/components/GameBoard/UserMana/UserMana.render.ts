@@ -1,6 +1,6 @@
 import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { createTextData } from '@/utils/utils';
-import { PLAYER_HEALTH_FIELD, textDecoration } from '@/components/GameBoard/UserAvatar/constants';
+import { textDecoration } from '@/components/GameBoard/UserAvatar/constants';
 import {
   MANA_COUNT_FIELD,
   PLAYER_MANA_X,
@@ -26,7 +26,7 @@ export const createPlayerMana = (
   manaContainer.setData(MANA_COUNT_FIELD, mana);
   manaContainer.on(
     'changedata',
-    (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
+    () => {
       textMana.setText(manaContainer.getData(MANA_COUNT_FIELD));
     },
   );

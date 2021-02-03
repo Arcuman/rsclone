@@ -17,7 +17,6 @@
     "prettier:format": "prettier --write \"**/*.+(ts|tsx|scss)\""
   },
   "dependencies": {
-    //"@types/bcrypt": "^3.0.0",
     "@types/crypto-js": "^4.0.1",
     "@types/express": "^4.17.9",
     "@types/jsonwebtoken": "^8.5.0",
@@ -30,7 +29,6 @@
     "@types/winston": "^2.4.4",
     "@types/yamljs": "^0.2.31",
     "aws-sdk": "^2.822.0",
-    //"bcrypt": "^5.0.0",
     "bufferutil": "^4.0.3",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",

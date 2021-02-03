@@ -9,7 +9,7 @@ import {
 } from '@/redux/actions/actions';
 import { browserHistory } from '@/router/history';
 import { AUTH_URL, MENU_URL } from '@/router/constants';
-import { HEADER_JSON, IS_MUTE_ON_LS_PARAM } from '@/constants/constants';
+import { HEADER_JSON } from '@/constants/constants';
 import {
   LOGIN_ACTION,
   LOGOUT_ACTION,

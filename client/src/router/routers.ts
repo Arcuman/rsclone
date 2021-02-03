@@ -1,8 +1,6 @@
 import UniversalRouter, {
   RouteContext,
   RouteResult,
-  ResolveContext,
-  RouteError,
   RouteParams,
 } from 'universal-router';
 import { renderMain } from '@/components/Main/Main.render';
@@ -18,7 +16,7 @@ const options = {
     }
     return undefined;
   },
-  errorHandler(error: RouteError): RouteResult<RouteResultResponse> {
+  errorHandler(): RouteResult<RouteResultResponse> {
     return {
       page: renderMain(ERROR_404_URL),
       redirect: null,

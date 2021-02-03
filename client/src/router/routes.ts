@@ -42,37 +42,37 @@ export const routes: Route[] = [
     children: [
       {
         path: GAME_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(null, null, SCENES.FIND_ENEMY),
         children: null,
       },
       {
         path: MENU_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(null, null, SCENES.MENU),
         children: null,
       },
       {
         path: MY_CARDS_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(null, null, SCENES.MY_CARDS),
         children: null,
       },
       {
         path: ROOT_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(MENU_URL, null, null),
         children: null,
       },
       {
         path: PROFILE_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(null, null, SCENES.PROFILE),
         children: null,
       },
       {
         path:CURR_DECK_CHOOSE_URL,
-        action: (context: ResolveContext): RouteResultResponse =>
+        action: (): RouteResultResponse =>
           createRouteResult(null, null, SCENES.CHOOSE_DECK),
         children: null,
       },

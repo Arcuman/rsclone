@@ -4,6 +4,8 @@ import { Card } from '@/components/Card/Card.model';
 import { renderArrowButton } from '@/components/MyCardsScene/Button/Button.render';
 import { getUserCards } from '@/components/Card/Card.services';
 import { makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
+import { AUDIO } from '@/components/Game/constant';
+import { AUDIO_CONFIG} from '@/constants/constants';
 import { IMyCardsScene } from './MyCards.model';
 import { renderMyCards, renderDeck, renderContainer } from './MyCards.render';
 import { createMenyButton, decksControlButton } from './Button/Button.render';
@@ -29,7 +31,7 @@ import {
 } from './constants';
 
 export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<void> => {
-  
+
   const userDeckId = userDeck.user_deck_id || 0;
   const userDeckData = await getUserDeckById(userDeckId);
   if (!userDeckData) {
@@ -61,10 +63,13 @@ export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<vo
   if (scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON); 
   }
-
   const decksContainer = clearDecksContainer(scene);
-
   renderMyCards(scene, NAME_DECKS, cardsInSelectDeck, decksPosition, decksContainer);
+  
+  const audio = scene.sound.add( AUDIO.DECK_CARDS_SHOW.NAME, {
+    volume: AUDIO_CONFIG.volume.card,
+  });
+  audio.play();
 };
 
 export const renderDecksBlock = (scene: IMyCardsScene) : void => {
@@ -80,6 +85,11 @@ export const renderDecksBlock = (scene: IMyCardsScene) : void => {
   makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
   
   if (scene.getstatusDecksPage() === DECKS_EDIT_DECK) {
+    const audio = scene.sound.add( AUDIO.DECK_EDIT.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
     makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
   } else {
@@ -139,6 +149,11 @@ export const controlDeckInfo = async (scene: IMyCardsScene): Promise<void> => {
 };
 
 export const editCardsInDeck = (scene: IMyCardsScene): void => {
+  const audio = scene.sound.add( AUDIO.DECK_EDIT.NAME, {
+    volume: AUDIO_CONFIG.volume.card,
+  });
+  audio.play();
+
   const arrowButtonSave = scene.getArrowButton();
   makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.EDIT_BUTTON);
 
@@ -160,7 +175,7 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
     const arrowButtonSave = scene.getArrowButton();
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
   }
-
+  
   const decksContainer = clearDecksContainer(scene);
  
   renderMyCards(scene, NAME_DECKS, changeNewCards, decksPosition, decksContainer);
@@ -174,9 +189,12 @@ export const addCardInDeck = (
   if (scene.getstatusDecksPage() === CARDS_EDIT_DECK && !scene.getCurrentPageDecks()) {
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
-    const card = <Card>userCards.find(item => item.name === cardName);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    card?.id = card.card_id;
+    interface addCard extends Card {
+      card_id:number;      
+    }
+    const card:addCard = <addCard>userCards.find(item => item.name === cardName);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/naming-convention
+    card.id = card.card_id;
     const newCards = scene.getNewCardsArray();
     
     if (newCards.length < 10) {
@@ -184,6 +202,11 @@ export const addCardInDeck = (
       
       if (!haveCard) {
         newCards.push(card);
+
+        const audio = scene.sound.add( AUDIO.CARD_DROP_AUDIO.NAME, {
+          volume: AUDIO_CONFIG.volume.card,
+        });
+        audio.play();
       }     
     } else {
       const warningMessage = scene.getWarningMessage();
@@ -197,7 +220,7 @@ export const addCardInDeck = (
       const arrowButtonSave = scene.getArrowButton();
       makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
     }
-
+  
     const decksContainer = clearDecksContainer(scene);
    
     renderMyCards(scene, NAME_DECKS, newCards, decksPosition, decksContainer);    

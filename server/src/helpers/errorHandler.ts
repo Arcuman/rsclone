@@ -26,11 +26,11 @@ const returnError = (err: ErrorHandler, res: Response): void => {
   });
 };
 
-/* eslint consistent-return: 1 */
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const catchError = (fn: any): any => async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     await fn(req, res, next);

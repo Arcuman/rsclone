@@ -23,7 +23,7 @@ import {
 } from '@/components/GameOverScene/constants';
 import { createLargeScalableCard } from '@/components/Card/Card.render';
 import {createButton} from '@/components/Button/Button.services';
-import {BUTTON_SCALE, HEIGHT_OFFSET, positionMenu} from '@/components/Profile/constants';
+import {BUTTON_SCALE, HEIGHT_OFFSET} from '@/components/Profile/constants';
 import {browserHistory} from '@/router/history';
 import {MENU_URL} from '@/router/constants';
 
@@ -143,6 +143,11 @@ export class GameOverScene extends Phaser.Scene {
     );
 
     if (this.info.prevLevel < this.info.newLevel) {
+      const audio = this.sound.add(AUDIO.LEVEL_UP.NAME, {
+        volume: AUDIO_CONFIG.volume.button,
+      });
+      audio.play();
+
       this.arrowLevel = createTextData(
         this,
         TEXT_POSITION_X_COL_3,
@@ -160,6 +165,10 @@ export class GameOverScene extends Phaser.Scene {
       );
     }
     if (this.info.newCard) {
+      const audio = this.sound.add(AUDIO.GET_LEVEL_CARD.NAME, {
+        volume: AUDIO_CONFIG.volume.button,
+      });
+      audio.play();
       this.cardContainer = createLargeScalableCard({
         scene: this,
         posX: TEXT_POSITION_X_CENTER,

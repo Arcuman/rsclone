@@ -13,7 +13,7 @@ export function handCardPlay(cardId: number, player: Player, openRoom: Room, io:
     player.setCurrentMana(player.currentMana - card.manaCost);
     player.handCards.splice(
       player.handCards.findIndex((handCard: Card) => handCard.id === card.id),
-      1
+      1,
     );
     player.tableCards.push(card);
     io.to(openRoom.id).emit(HAND_CARD_PLAY, card, openRoom.isPlayerOneTurn);

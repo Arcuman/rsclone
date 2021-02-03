@@ -46,3 +46,19 @@ export interface PositionText {
   TEXT_X: number;
   TEXT_Y: number;
 }
+
+export interface ImageState {
+  IDLE: string;
+  HOVER: string;
+  CLICK: string;
+}
+
+export interface menuImages {
+  MENU_START_GAME: ImageState;
+  MENU_MY_CARDS: ImageState;
+  MENU_SETTINGS: ImageState;
+  MENU_EXIT: ImageState;
+  MENU_BUTTON: ImageState;
+  MUTE_ON_BUTTON: ImageState;
+  MUTE_OFF_BUTTON: ImageState;
+}

@@ -1,3 +1,5 @@
+import {menuImages} from '@/types/types';
+
 export const IMAGES = {
   MENU_BACKGROUND: {
     NAME: 'menu-background',
@@ -114,6 +116,7 @@ export const IMAGES = {
   MANA_BACKGROUND: {
     NAME: 'user_mana',
     PATH: '../../assets/images/user_mana.png',
+  },
   DELETE_BUTTON: {
     NAME: 'delete_button',
     PATH: 'assets/images/delete_button.png',
@@ -132,7 +135,7 @@ export const IMAGES = {
   },
 };
 
-export const MENU_IMAGES = {
+export const MENU_IMAGES:menuImages = {
   MENU_START_GAME: {
     IDLE: 'start-game-button-ru.png',
     HOVER: 'start-game-button-hover-ru.png',
