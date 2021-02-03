@@ -18,7 +18,7 @@ export async function tableCardPlayTargetPlayer(
   openRoom: Room,
   player: Player,
   io: Server,
-  rooms: Room[]
+  rooms: Room[],
 ): Promise<void> {
   const enemy = getEnemyPlayer(openRoom, player);
   const playerCard = getCardById(player, cardId);
@@ -29,12 +29,12 @@ export async function tableCardPlayTargetPlayer(
   if (enemy.health <= 0) {
     const playerInfo: UpdatedUserLevelInfo = await usersService.updateUserExp(
       player.userId,
-      EXP_WIN
+      EXP_WIN,
     );
 
     const enemyInfo: UpdatedUserLevelInfo = await usersService.updateUserExp(
       enemy.userId,
-      EXP_LOSE
+      EXP_LOSE,
     );
 
     player.socket.emit(PLAYER_WIN, playerInfo);

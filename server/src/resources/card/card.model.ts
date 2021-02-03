@@ -31,7 +31,7 @@ const getAllByUserId = async (user_id: number): Promise<Card[]> => {
         'From "UserCards" JOIN "Cards" ' +
         'ON "UserCards".card_id = "Cards".card_id ' +
         'Where "UserCards".user_id=$1',
-      [user_id.toString()]
+      [user_id.toString()],
     );
     cards = rows;
   } catch (error) {
@@ -78,7 +78,7 @@ const getUnavailableCards = async (user_id: number): Promise<Card[]> => {
       rows,
     } = await db.query(
       'select card_id as id from "Cards" EXCEPT  select card_id as id from "UserCards" where user_id = $1 ',
-      [user_id]
+      [user_id],
     );
     cards = rows;
   } catch (error) {

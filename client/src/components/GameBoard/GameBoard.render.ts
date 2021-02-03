@@ -183,6 +183,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     ).setScale(0.5);
 
     this.exitButton.on('pointerup', () => {
+      timerExpireAudio.stop();
+      bgEnemyAudio.stop();
+      bgPlayerAudio.stop();
       this.socket.disconnect();
       browserHistory.push(MENU_URL);
     });
