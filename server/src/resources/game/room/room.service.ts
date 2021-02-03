@@ -14,10 +14,14 @@ export function getEnemyPlayer(room: Room, curPlayer: Player): Player {
 }
 
 export function closeRoom(openRoom: Room, rooms: Array<Room>): void {
-  clearTimeout(openRoom.timer!);
-  const roomId = rooms.findIndex((room: Room) => room.id === openRoom.id);
-  if (roomId > -1) {
-    rooms.splice(roomId, 1);
+  try {
+    clearTimeout(openRoom.timer!);
+    const roomId = rooms.findIndex((room: Room) => room.id === openRoom.id);
+    if (roomId > -1) {
+      rooms.splice(roomId, 1);
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
 

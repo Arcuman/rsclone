@@ -10,10 +10,10 @@ export const selectDeck = async (
   topCard: Phaser.GameObjects.Sprite,
   decksContainer: Phaser.GameObjects.Container,
 ): Promise<void> => {
-  const isUpdate = await changeCurrUserDeck(item.user_deck_id);
+  const isUpdate = await changeCurrUserDeck(item.user_deck_id!);
 
   if (isUpdate) {
-    scene.setCurUserDeckId(item.user_deck_id);
+    scene.setCurUserDeckId(item.user_deck_id!);
     decksContainer.list.forEach((deck: Phaser.GameObjects.Container) => {
       if (deck.list.length > 1) {
         const topCardItem = <Phaser.GameObjects.Sprite>deck.list[deck.list.length - 2];
@@ -23,7 +23,7 @@ export const selectDeck = async (
         });
       }
     });
-    
+
     setColoredDeck(scene, topCard);
     topCard.setTint(TINT_VALUE);
     topCard.on('pointerout', () => {
