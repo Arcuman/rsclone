@@ -1,3 +1,16 @@
+## 3 Feb, 2021 
+### Added
+@Ilya-Baklanov
+- added mana crystal
+
+ @Arcuman
+- add exit button in game
+
+### Fixed
+- fixed bugs before last deploy
+- write instruction for start
+- add database dump
+
 ## 31 Jan- 2 Feb, 2021 ##
 
 ### Added
