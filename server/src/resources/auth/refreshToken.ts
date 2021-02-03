@@ -30,13 +30,19 @@ export const createCookieData = (value: string): Cookie => ({
   name: 'refreshToken',
   value,
   options: {
-    domain: 'localhost',
+    // локальное
+    domain:'localhost',
+    //
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
+    // для heroku
+    // secure: true,
     secure: false,
     httpOnly: true,
     signed: false,
-    sameSite: true,
+    // для heroku
+    // sameSite: 'none',
+    sameSite:true,
   },
 });
 
@@ -60,15 +66,14 @@ export const RefreshTokensAction = async (req: Request): Promise<AuthUser> => {
     (cookie && cookieRefrehToken) ||
     (req.cookies && req.cookies.refreshToken) ||
     (req.body && req.body.refreshToken);
-
   const oldRefreshSession = await usersService.getSessionByRefreshToken(reqRefreshToken);
+  setInLogExpireToken(oldRefreshSession.expiresIn);
 
   if (!oldRefreshSession) {
     throw new Error(BAD_REFRESH_TOKEN);
   }
 
   await usersService.deleteSessionByRefreshToken(reqRefreshToken);
-  setInLogExpireToken(oldRefreshSession.expiresIn);
 
   const user = await usersService.getUserById(oldRefreshSession.user_id);
   const authUser: AuthUser = { user, token: await getNewRefreshToken(user.user_id, req) };

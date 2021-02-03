@@ -3,9 +3,9 @@ import { Server, Socket } from 'socket.io';
 import gameLogic from '@/resources/game/game.controller';
 import { Room } from '@/resources/game/room/room.model';
 
-export default (server: http.Server): void => {
+export default (htppServer: http.Server): void => {
   const rooms: Array<Room> = [];
-  const io = new Server(server, {
+  const io = new Server(htppServer, {
     path: '/websocket',
     cors: {
       origin: '*',

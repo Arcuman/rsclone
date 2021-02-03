@@ -6,11 +6,29 @@ export const positionDeckContainer: PositionDeckContainer = {
   IMG_Y: 480,
 };
 
+export const positionPlayerDeck : PositionDeckContainer = {
+  IMG_X: 1200,
+  IMG_Y:600,
+};
+export const positionEnemyDeck : PositionDeckContainer = {
+  IMG_X: 80,
+  IMG_Y:120,
+};
+
 export const textDecoration: TextDecoration = {
   FONT_SIZE: '30px',
   FONT_FAMILY: 'number_font',
   FONT_COLOR: '#d1c49a',
   TEXT_OUTLINE_COLOR: '#292321',
+  TEXT_OUTLINE_SIZE: 5,
+  TEXT_DEPTH: 2,
+};
+
+export const deckNameDecoration: TextDecoration = {
+  FONT_SIZE: '20px',
+  FONT_FAMILY: 'number_font',
+  FONT_COLOR: '#eddeb0',
+  TEXT_OUTLINE_COLOR: '#120805',
   TEXT_OUTLINE_SIZE: 5,
   TEXT_DEPTH: 2,
 };

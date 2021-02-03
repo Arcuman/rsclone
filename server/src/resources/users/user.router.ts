@@ -15,7 +15,7 @@ router
       res.statusMessage = statusCodes[HttpStatus.OK].all;
       res.type('application/json').json(users).status(HttpStatus.OK).end();
       next();
-    })
+    }),
   )
 
   .post(
@@ -35,7 +35,7 @@ router
       res.statusMessage = statusCodes[HttpStatus.OK].update;
       res.type('application/json').json(user).status(HttpStatus.OK).end();
       next();
-    })
+    }),
   );
 
 router
@@ -55,7 +55,7 @@ router
         res.type('application/json').json(user).status(HttpStatus.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .put(
@@ -75,7 +75,7 @@ router
         res.type('application/json').json(user).status(HttpStatus.OK).end();
       }
       next();
-    })
+    }),
   )
 
   .delete(
@@ -95,7 +95,7 @@ router
         res.status(HttpStatus.NO_CONTENT).end();
       }
       next();
-    })
+    }),
   );
 
 router
@@ -116,7 +116,7 @@ router
         res.type('application/json').json(profile).status(HttpStatus.OK).end();
       }
       next();
-    })
+    }),
   )
   .put(
     catchError(async (req: Request, res: Response, next: NextFunction) => {
@@ -135,7 +135,7 @@ router
         res.type('application/json').json(profile).status(HttpStatus.OK).end();
       }
       next();
-    })
+    }),
   );
 
 export { router };

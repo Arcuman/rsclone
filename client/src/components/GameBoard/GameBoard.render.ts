@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import Phaser from 'phaser';
 import {
   GameState,
   IGameBoardScene,
   UpdatedUserLevelInfo,
 } from '@/components/GameBoard/GameBoard.model';
-import { IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
+import { IMAGES, SCENES, AUDIO} from '@/components/Game/constant';
 import { setBackground } from '@/utils/utils';
 import { createEnemyCards } from '@/components/GameBoard/EnemyCards/EnenmyCards.render';
 import { createPlayerCards } from '@/components/GameBoard/UserCards/UserCards.render';
@@ -26,7 +26,11 @@ import {
   PLAYER_LOSE,
   WIN,
   LOSE,
+  GET_DECK_CARD,
+  ENEMY_GET_DECK_CARD,
+  DESTROY_DECK_CARD, DESTROY_DECK_CARD_TIME,
 } from '@/components/GameBoard/constants';
+import { AUDIO_CONFIG, COVER_CARD } from '@/constants/constants';
 import {
   activateTableCards,
   setDraggableCardsDependOnPlayerMana,
@@ -44,6 +48,14 @@ import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/c
 import { CARD_HEALTH_FIELD, CARD_ID_FIELD } from '@/components/Card/constants';
 import { PLAYER_HEALTH_FIELD } from '@/components/GameBoard/UserAvatar/constants';
 import { createReadyButton } from '@/components/GameBoard/ReadyButton/ReadyButton.render';
+import { addNewCard } from '@/components/GameBoard/UserCards/UserCards.services';
+import { enemyCardCover } from '@/components/GameBoard/EnemyCards/constant';
+
+import { PLAYER_CARDS_POSITION } from '@/components/GameBoard/UserCards/constants';
+import {createDeck} from '@/components/Deck/Deck.render';
+import {COUNT_OF_DECK_CARD, PositionDeckContainer} from '@/components/Deck/Deck.model';
+import {createBaseCard} from '@/components/Card/Card.render';
+import {positionEnemyDeck, positionPlayerDeck} from '@/components/Deck/constants';
 import { createTimer } from './Timer/Timer.render';
 import {
   addTimerAlmostExpiredSprite,
@@ -72,8 +84,6 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
   private playerTableZone: Phaser.GameObjects.Zone;
 
-  private enemyTableZone: Phaser.GameObjects.Zone;
-
   private gameTableImg: Phaser.GameObjects.Container;
 
   private timerLabel: Phaser.GameObjects.Text;
@@ -83,6 +93,10 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
   private endTurnButton: Phaser.GameObjects.Container;
 
   private readyButton: Phaser.GameObjects.Container;
+
+  private playerDeck: Phaser.GameObjects.Container;
+
+  private enemyDeck: Phaser.GameObjects.Container;
 
   constructor() {
     super({
@@ -138,6 +152,7 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     isPlayerOne: boolean;
   }): void {
     setBackground(this, IMAGES.GAME_BACKGROUND.NAME);
+    this.sound.pauseOnBlur = false;
 
     create(this);
     this.socket = data.socket;
@@ -150,6 +165,10 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     this.gameTableImg = createGameTableImg(this);
 
     this.playerTableZone = createPlayerTableZone(this, this.gameTableImg);
+
+    this.playerDeck = createDeck(this, positionPlayerDeck, data.initState.deckCountCards).setScale(1.2);
+
+    this.enemyDeck = createDeck(this, positionEnemyDeck, data.initState.enemy.deckCountCards, true).setScale(1.2);
 
     this.enemyAvatar = createEnemyAvatar(
       this,
@@ -167,36 +186,60 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
 
     setTimerBackground(this);
     this.timerLabel = createTimer(this);
-    let bgAudio: Phaser.Sound.BaseSound;
-
-    this.socket.on(START_GAME, () => {
-      if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
-        bgAudio = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, { loop: true });
-        bgAudio.play();
-        setDraggableCardsDependOnPlayerMana(this);
-      } else {
-        bgAudio = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, { loop: true });
-        bgAudio.play();
-        this.input.setDraggable(this.playerCards, false);
-      }
+    const bgEnemyAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.ENEMY_TURN_BG_AUDIO.NAME, {
+      loop: true,
+      volume: AUDIO_CONFIG.volume.bg,
+    });
+    const bgPlayerAudio: Phaser.Sound.BaseSound = this.sound.add(AUDIO.PLAYER_TURN_BG_AUDIO.NAME, {
+      loop: true,
+      volume: AUDIO_CONFIG.volume.bg,
     });
 
+    this.socket.on(START_GAME, () => {
+      this.endTurnButton.setInteractive();
+      if (this.isPlayerOne === data.initState.isPlayerOneTurn) {
+        bgPlayerAudio.play();
+        setDraggableCardsDependOnPlayerMana(this);
+      } else {
+        bgEnemyAudio.play();
+        this.input.setDraggable(this.playerCards, false);
+      }
+      const audio = this.sound.add(AUDIO.GAME_START.NAME, { volume: AUDIO_CONFIG.volume.card });
+      audio.play();
+    });
+    const timerExpireAudio = this.sound.add(AUDIO.TIMER_EXPIRE_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+      loop: true,
+    });
     this.socket.on(TIMER, (countDown: string | string[]) => {
       if (Number(countDown) === TIMER_COUNTDOWN.ALMOST_EXPIRED) {
+        timerExpireAudio.play();
         addTimerAlmostExpiredSprite(this);
       } else if (Number(countDown) === TIMER_COUNTDOWN.EXPIRED) {
+        timerExpireAudio.stop();
+        const audio = this.sound.add(AUDIO.TIMER_EXPLOSION_AUDIO.NAME, {
+          volume: AUDIO_CONFIG.volume.card,
+        });
+        audio.play();
         addTimerEndSprite(this);
       }
       this.timerLabel.setText(countDown);
     });
 
     this.socket.on(NEXT_TURN, (isPlayerOneTurn: boolean) => {
-      bgAudio.stop();
+
+      timerExpireAudio.stop();
+      const audio = this.sound.add(AUDIO.PLAYER_TURN.NAME, { volume: AUDIO_CONFIG.volume.card });
+      audio.play();
       this.endTurnButton.setData(IS_PLAYER_ONE_TURN_FIELD, isPlayerOneTurn);
       if (this.isPlayerOne === isPlayerOneTurn) {
+        bgEnemyAudio.stop();
+        bgPlayerAudio.play();
         setDraggableCardsDependOnPlayerMana(this);
         activateTableCards(this);
       } else {
+        bgPlayerAudio.stop();
+        bgEnemyAudio.play();
         this.input.setDraggable(this.playerCards, false);
         this.input.setDraggable(this.playerTableCards, false);
       }
@@ -207,18 +250,55 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(HAND_CARD_PLAY, (card: Card, isPlayerOne: boolean) => {
+      const audio = this.sound.add(AUDIO.CARD_DROP_AUDIO.NAME, {
+        volume: AUDIO_CONFIG.volume.card,
+      });
+      audio.play();
+
       onHandCardPlay(this, card, isPlayerOne);
     });
+
+    this.socket.on(GET_DECK_CARD, (deckCard: Card) => {
+      this.playerDeck.setData(COUNT_OF_DECK_CARD, this.enemyDeck.getData(COUNT_OF_DECK_CARD) - 1);
+      addNewCard(this, this.playerCards, deckCard, this.playerCards.length, PLAYER_CARDS_POSITION);
+      setDraggableCardsDependOnPlayerMana(this);
+    });
+
+    this.socket.on(ENEMY_GET_DECK_CARD, () => {
+      this.enemyDeck.setData(COUNT_OF_DECK_CARD, this.enemyDeck.getData(COUNT_OF_DECK_CARD) - 1);
+      addNewCard(this, this.enemyCards, enemyCardCover, this.enemyCards.length, COVER_CARD.POS_Y);
+    });
+
+    this.socket.on(DESTROY_DECK_CARD, (deckCard: Card, isPlayerOne: boolean) => {
+      const destoyedCard = createBaseCard({scene: this, card: deckCard, posX: 640, posY: 360}).setScale(1.3);
+      setTimeout(()=> destoyedCard.destroy(), DESTROY_DECK_CARD_TIME);
+    });
     this.socket.on(TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
+      const audio = this.sound.add(AUDIO.CARD_DAMAGE_AUDIO.NAME, {
+        volume: AUDIO_CONFIG.volume.card,
+      });
+      audio.play();
+
       damageCard(this.playerTableCards, attackingCard);
       damageCard(this.enemyTableCards, damagedCard);
     });
+
     this.socket.on(ENEMY_TABLE_CARD_DAMAGE, (attackingCard: Card, damagedCard: Card) => {
+      const audio = this.sound.add(AUDIO.CARD_DAMAGE_AUDIO.NAME, {
+        volume: AUDIO_CONFIG.volume.card,
+      });
+      audio.play();
+
       damageCard(this.enemyTableCards, attackingCard);
       damageCard(this.playerTableCards, damagedCard);
     });
 
     this.socket.on(TABLE_CARD_DESTROY, (destroyedCard: Card, isPlayerOnePlay: boolean) => {
+      const audio = this.sound.add(AUDIO.CARD_DESTROY_AUDIO.NAME, {
+        volume: AUDIO_CONFIG.volume.card,
+      });
+      audio.play();
+
       if (isPlayerOnePlay === this.isPlayerOne) {
         destroyPlayerCard(this, this.playerTableCards, destroyedCard);
       } else {
@@ -227,6 +307,9 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(PLAYER_DAMAGE, (health: number, isPlayerOnePlay: boolean) => {
+      const audio = this.sound.add(AUDIO.HERO_DAMAGE.NAME, { volume: AUDIO_CONFIG.volume.card });
+      audio.play();
+
       if (isPlayerOnePlay === this.isPlayerOne) {
         this.enemyAvatar.setData(PLAYER_HEALTH_FIELD, health);
       } else {
@@ -235,11 +318,17 @@ export class GameBoardScene extends Phaser.Scene implements IGameBoardScene {
     });
 
     this.socket.on(PLAYER_WIN, (info: UpdatedUserLevelInfo) => {
-      this.scene.start(SCENES.GAME_OVER, { message: WIN, playerInfo: info });
+      timerExpireAudio.stop();
+      bgEnemyAudio.stop();
+      bgPlayerAudio.stop();
+      this.scene.start(SCENES.GAME_OVER, { isWin: true, message: WIN, playerInfo: info });
     });
 
     this.socket.on(PLAYER_LOSE, (info: UpdatedUserLevelInfo) => {
-      this.scene.start(SCENES.GAME_OVER, { message: LOSE, playerInfo: info });
+      timerExpireAudio.stop();
+      bgEnemyAudio.stop();
+      bgPlayerAudio.stop();
+      this.scene.start(SCENES.GAME_OVER, { isWin: false, message: LOSE, playerInfo: info });
     });
   }
 }

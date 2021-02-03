@@ -14,6 +14,7 @@ import { IS_PLAYER_ONE_TURN_FIELD } from '@/components/GameBoard/EndTurnButton/c
 import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 import { ENEMY_PLAYER } from '@/components/GameBoard/UserAvatar/constants';
 import { AUDIO } from '@/components/Game/constant';
+import { CURSOR_POINTER, AUDIO_CONFIG } from '@/constants/constants';
 import {
   SIZE_NORMAL_CARD,
   SIZE_LITTLE_CARD,
@@ -23,7 +24,7 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
-  CARD_IS_PLAYED_FIELD,
+  CARD_IS_PLAYED_FIELD, MAX_TABLE_SIZE,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -47,11 +48,10 @@ export function calcNewPosition(
   const sortedCards = cards;
   let newDeletedIndex = deletedIndex;
   if (newDeletedIndex % 2 === 1) {
-    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
-    for (let i = 1; i < newDeletedIndex; i += 2) {
-      if (!sortedCards[i + 2]) break;
-      [sortedCards[i], sortedCards[i + 2]] = [sortedCards[i + 2], sortedCards[i]];
+    for (let i = newDeletedIndex; i > 1; i -= 2) {
+      [sortedCards[i], sortedCards[i - 2]] = [sortedCards[i - 2], sortedCards[i]];
     }
+    [sortedCards[0], sortedCards[1]] = [sortedCards[1], sortedCards[0]];
     newDeletedIndex = 0;
   }
   for (let i = newDeletedIndex; i < sortedCards.length; i += 2) {
@@ -76,7 +76,7 @@ export function animateNewPosition(
     const newPosX = getPositionOfCard(scene, index);
     scene.tweens.add({
       targets: card,
-      x: { value: newPosX, duration: 1500, ease: 'Power2' },
+      x: { value: newPosX, duration: 700, ease: 'Power2' },
     });
   });
 }
@@ -86,17 +86,17 @@ export const setScalableCard = (
   cardContainer: Phaser.GameObjects.Container,
   scale: number,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME);
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
     cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     cardContainer.setDepth(DEPTH_CLICK_CARD);
   });
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME);
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
     cardAudio.play();
     cardContainer.setScale(scale);
     cardContainer.setDepth(DEPTH_NORMAL_CARD);
@@ -109,17 +109,17 @@ export const setScalableCardInContainer = (
   scale: number,
   generalСontainer: Phaser.GameObjects.Container,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME);
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
     cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     generalСontainer.bringToTop(cardContainer);
   });
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME);
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
     cardAudio.play();
     cardContainer.setScale(scale);
   });
@@ -197,7 +197,8 @@ export const setDropEventOnHandCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()) {
+      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
+        || <number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD)  === MAX_TABLE_SIZE) {
         setStartDragCoordinates(cardContainer);
         return;
       }
@@ -251,9 +252,10 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
-      if (!dropped) {
+      console.log(<number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD));
+      if (!dropped ) {
         setStartDragCoordinates(cardContainer);
-      } else {
+      } else if (scene.getPlayerTableCards().findIndex((card)=> card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD)) !== -1 ){
         setDropEventOnTableCard(scene, cardContainer);
       }
     },
@@ -264,7 +266,7 @@ export const setClickableCard = (
   scene: Phaser.Scene,
   cardContainer: Phaser.GameObjects.Container,
 ): void => {
-  cardContainer.setInteractive();
+  cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.on('pointerdown', () => {
     cardContainer.setScale(SIZE_NORMAL_CARD, SIZE_NORMAL_CARD);
     cardContainer.setDepth(DEPTH_CLICK_CARD);

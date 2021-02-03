@@ -1,0 +1,83 @@
+{
+	"textures": [
+		{
+			"image": "menu_button_atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 400,
+				"h": 378
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "menu-button-click-ru.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					}
+				},
+				{
+					"filename": "menu-button-hover-ru.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					},
+					"frame": {
+						"x": 0,
+						"y": 126,
+						"w": 400,
+						"h": 126
+					}
+				},
+				{
+					"filename": "menu-button-ru.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 400,
+						"h": 126
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 400,
+						"h": 126
+					},
+					"frame": {
+						"x": 0,
+						"y": 252,
+						"w": 400,
+						"h": 126
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:a5312f1aa80e6f9fcc0e2ca63edecac8:73dfc2b4dbd59e8760052e88fd6b01dc:11e030d9faa64429e0049b17defc6075$"
+	}
+}

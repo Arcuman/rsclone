@@ -1,5 +1,3 @@
-import { PositionText } from '@/types/types';
-import { PositionDeckContainer } from '@/components/Deck/Deck.model';
 import { CardsPosition, CardsContainerPosition } from './MyCards.model';
 
 export const cardsContainerPosition: CardsContainerPosition = {
@@ -28,15 +26,8 @@ export const decksPosition: CardsPosition = {
   REDUCE_ID_3: 9,
 };
 
-export const positionDeckContainer: PositionDeckContainer = {
-  IMG_X: 10,
-  IMG_Y: 10,
-};
-
-export const positionDeckName: PositionText = {
-  TEXT_X: -30,
-  TEXT_Y: 70,
-};
+export const NAME_POS_Y = 60;
+export const NAME_OFFSET_X = 5;
 
 export const CARDS_POS_UP_Y = 0;
 export const CARDS_POS_DOWN_Y = 150;
@@ -50,3 +41,4 @@ export const ZERO_POSITION_Y = 0;
 export const TINT_VALUE_CLICK = 0x59503d;
 export const NUMBER_CARDS_ON_PAGE = 12;
 export const FIRST_PAGE = 1;
+export const ORIGIN_HALF = 0.5;

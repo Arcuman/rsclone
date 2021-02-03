@@ -1,16 +1,22 @@
 import { setBackground } from '@/utils/utils';
-import { ATLASES, IMAGES, MENU_IMAGES, SCENES, AUDIO } from '@/components/Game/constant';
+import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { HEIGHT_COEFFICIENT, MENU_ITEM_HEIGHT } from '@/components/MenuScene/constants';
 import { browserHistory } from '@/router/history';
 import { GAME_URL, MY_CARDS_URL, PROFILE_URL } from '@/router/constants';
 import { handleLogout } from '@/components/Auth/Auth.services';
 import { createButton } from '@/components/Button/Button.services';
+import { AUDIO_CONFIG } from '@/constants/constants';
 
 export function create(scene: Phaser.Scene): void {
-  const menuBgAudio = scene.sound.add(AUDIO.MENU_BG_AUDIO.NAME, { loop: true });
+  setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
+  // eslint-disable-next-line no-param-reassign
+  scene.sound.pauseOnBlur = false;
+  const menuBgAudio = scene.sound.add(AUDIO.MENU_BG_AUDIO.NAME, {
+    loop: true,
+    volume: AUDIO_CONFIG.volume.bg,
+  });
   menuBgAudio.play();
 
-  setBackground(scene, IMAGES.MENU_BACKGROUND.NAME);
   const position = { X: scene.game.renderer.width / 2, Y: scene.game.renderer.height / 2 };
 
   const startButton = createButton(
@@ -21,6 +27,7 @@ export function create(scene: Phaser.Scene): void {
     MENU_IMAGES.MENU_START_GAME,
     HEIGHT_COEFFICIENT,
   );
+
   startButton.on('pointerup', () => {
     menuBgAudio.stop();
     browserHistory.push(GAME_URL);

@@ -21,7 +21,7 @@ router.route('/:id').get(
       res.type('application/json').json(user).status(HttpStatus.OK).end();
     }
     next();
-  })
+  }),
 );
 
 export { router as levelRouter };

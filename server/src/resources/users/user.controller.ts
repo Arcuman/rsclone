@@ -55,7 +55,10 @@ export const getUserById = (id: number): Promise<User> => usersModel.getUserById
 const getUserByLogin = (login: string): Promise<User> => usersModel.getUserByLogin(login);
 const getDefaultDeckId = (id: number): Promise<number> => usersModel.getDefaultDeckId(id);
 
-const getUserProfile = (id: number): Promise<UserProfile> => usersModel.getUserProfile(id);
+const getUserProfile = async (id: number): Promise<UserProfile> => {
+  const userProfile: UserProfile = await usersModel.getUserProfile(id);
+  return userProfile;
+};
 
 const setUser = async (userData: User): Promise<number> => {
   const user = await usersModel.getUserByLogin(userData.login);
@@ -82,8 +85,18 @@ const updateUserById = async (id: number, userData: User): Promise<User> => {
   return usersModel.updateUserById(id, newUserData);
 };
 
-const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> =>
-  usersModel.updateUserProfile(id, data);
+const updateUserProfile = async (id: number, data: UserProfile): Promise<UserProfile> => {
+  const profile = await getUserProfile(id);
+
+  const newProfile = Object.entries(profile).reduce((prev, curr) => {
+    if (curr[0] !== 'user_id' && data[curr[0]]) {
+      return { ...prev, [curr[0]]: data[curr[0]] };
+    }
+    return { ...prev, [curr[0]]: curr[1] };
+  }, {});
+
+  return usersModel.updateUserProfile(id, <UserProfile>newProfile);
+};
 
 const updateDefaultDeck = async (user_id: number, deck_id: number): Promise<number> =>
   usersModel.updateDefaultDeck(user_id, deck_id);
@@ -99,7 +112,7 @@ const addNewCard = async (unavailableCards: Card[], user_id: number): Promise<Ca
 
 const updateUserExp = async (
   user_id: number,
-  receivedExp: number
+  receivedExp: number,
 ): Promise<UpdatedUserLevelInfo> => {
   const user = await getUserProfile(user_id);
   const userLevel = await levelService.getLevelById(user.level_id);

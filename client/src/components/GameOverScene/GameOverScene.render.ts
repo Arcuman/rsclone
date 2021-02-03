@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import Phaser from 'phaser';
-import { IMAGES, SCENES } from '@/components/Game/constant';
+import {IMAGES, SCENES, AUDIO, ATLASES, MENU_IMAGES} from '@/components/Game/constant';
 import { UpdatedUserLevelInfo } from '@/components/GameBoard/GameBoard.model';
 import { createTextData, setBackground } from '@/utils/utils';
+import { AUDIO_CONFIG } from '@/constants/constants';
+
 import {
-  ARROW_TEXT,
+  ARROW_TEXT, EXIT_POSITION_X, EXIT_POSITION_Y,
   EXP_TEXT,
   LEVEL_TEXT,
   levelDecoration,
@@ -19,6 +22,10 @@ import {
   TEXT_POSITION_Y_OFFSET,
 } from '@/components/GameOverScene/constants';
 import { createLargeScalableCard } from '@/components/Card/Card.render';
+import {createButton} from '@/components/Button/Button.services';
+import {BUTTON_SCALE, HEIGHT_OFFSET, positionMenu} from '@/components/Profile/constants';
+import {browserHistory} from '@/router/history';
+import {MENU_URL} from '@/router/constants';
 
 export class GameOverScene extends Phaser.Scene {
   private info: UpdatedUserLevelInfo;
@@ -55,8 +62,13 @@ export class GameOverScene extends Phaser.Scene {
     });
   }
 
-  create(data: { message: string; playerInfo: UpdatedUserLevelInfo }): void {
+  create(data: {  isWin:boolean;message: string; playerInfo: UpdatedUserLevelInfo }): void {
     setBackground(this, IMAGES.LOAD_BACKGROUND.NAME);
+
+    const audioName = data.isWin ?  AUDIO.VICTORY_AUDIO.NAME : AUDIO.LOSE_AUDIO.NAME;
+    const scrAudio = this.sound.add(audioName, {volume: AUDIO_CONFIG.volume.card});
+    scrAudio.play();
+
     this.info = data.playerInfo;
     this.textMessage = createTextData(
       this,
@@ -155,5 +167,26 @@ export class GameOverScene extends Phaser.Scene {
         card: this.info.newCard,
       });
     }
+
+    const positionMenuCoords = {
+      X: EXIT_POSITION_X,
+      Y: EXIT_POSITION_Y,
+    };
+
+    const menuButton = createButton(
+      this,
+      positionMenuCoords,
+      0,
+      ATLASES.MENU_ATLAS.NAME,
+      MENU_IMAGES.MENU_BUTTON,
+      HEIGHT_OFFSET,
+    );
+
+    menuButton.on('pointerup', () => {
+      browserHistory.push(MENU_URL);
+    });
+
+    menuButton.setScale(BUTTON_SCALE);
+
   }
 }

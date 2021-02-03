@@ -45,17 +45,6 @@ export function createPlayerTableZone(
     );
   zone.setData(ZONE_COUNT_CARDS_FIELD, ZONE_COUNT_CARDS_FIELD_INIT);
   zone.setName(ZONE_TABLE_NAME);
-  const dropZoneOutline = scene.add.graphics();
-  dropZoneOutline.lineStyle(4, 0xff69b4);
-  dropZoneOutline.strokeRect(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    zone.x - zone.input.hitArea.width / 2,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    zone.y - zone.input.hitArea.height / 2,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    zone.input.hitArea.width,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    zone.input.hitArea.height,
-  );
+
   return zone;
 }

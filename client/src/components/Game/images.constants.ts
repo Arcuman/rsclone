@@ -110,6 +110,21 @@ export const IMAGES = {
   MANA_BACKGROUND: {
     NAME: 'user_mana',
     PATH: '../../assets/images/user_mana.png',
+  DELETE_BUTTON: {
+    NAME: 'delete_button',
+    PATH: 'assets/images/delete_button.png',
+  },
+  EDIT_BUTTON: {
+    NAME: 'edit_button',
+    PATH: 'assets/images/edit_button.png',
+  },
+  CREATE_BUTTON: {
+    NAME: 'create_button',
+    PATH: 'assets/images/create_button.png',
+  },
+  DONE_BUTTON: {
+    NAME: 'done_button',
+    PATH: 'assets/images/done_button.png',
   },
 };
 
@@ -135,8 +150,25 @@ export const MENU_IMAGES = {
     CLICK: 'exit-button-click-ru.png',
   },
   MENU_BUTTON: {
-    IDLE: 'exit-button-ru.png',
-    HOVER: 'exit-button-hover-ru.png',
-    CLICK: 'exit-button-click-ru.png',
+    IDLE: 'menu-button-ru.png',
+    HOVER: 'menu-button-hover-ru.png',
+    CLICK: 'menu-button-click-ru.png',
   },
+  MUTE_ON_BUTTON:{
+    IDLE: 'mute_on.png',
+    HOVER: 'mute_on.png',
+    CLICK: 'mute_off.png',
+  },
+  MUTE_OFF_BUTTON:{
+    IDLE: 'mute_off.png',
+    HOVER: 'mute_off.png',
+    CLICK: 'mute_on.png',
+  },
+};
+
+export const END_TURN_BUTTON = {
+  IDLE: 'end_turn.png',
+  HOVER: 'end_turn_light.png',
+  CLICK: 'end_turn_click.png',
+  ENEMY: 'enemy_turn.png',
 };

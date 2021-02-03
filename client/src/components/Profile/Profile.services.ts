@@ -3,13 +3,15 @@ import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
 import { ATLASES, IMAGES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
-import { getUserDeckById } from '@/components/Deck/Deck.services';
+import { Deck } from '@/components/Deck/Deck.model';
+import { getUserDeckById, setColoredDeck } from '@/components/Deck/Deck.services';
 import { createDeck, createDeckInfo, createDeckName } from '@/components/Deck/Deck.render';
 import { positionDeckContainer } from '@/components/Deck/constants';
-import { MENU_URL } from '@/router/constants';
+import { MENU_URL, CURR_DECK_CHOOSE_URL } from '@/router/constants';
 import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
 import { countCards } from '@/components/Card/Card.services';
+import { AUDIO_CONFIG, TINT_VALUE_CLICK, IS_MUTE_ON_LS_PARAM} from '@/constants/constants';
 import {
   textDecoration,
   positionInfo,
@@ -19,8 +21,11 @@ import {
   INFO_BLOCK_X,
   INFO_BLOCK_SCALE,
   positionDeckText,
+  positionMute,
   BUTTON_SCALE,
+  MUTE_BUTTON_SCALE,
 } from './constants';
+
 import { UserProfile, Level } from './Profile.model';
 
 const getLevelInfo = async (levelId: number): Promise<Level> => {
@@ -43,7 +48,7 @@ const getLevelInfo = async (levelId: number): Promise<Level> => {
   return level;
 };
 
-const getUserProfileInfo = async (): Promise<UserProfile> => {
+export const getUserProfileInfo = async (): Promise<UserProfile> => {
   const { user_id: userId } = store.getState().authUser;
   const requestInit = getRequestInit();
 
@@ -65,6 +70,47 @@ const getUserProfileInfo = async (): Promise<UserProfile> => {
     });
 
   return user;
+};
+
+export const changeCurrUserDeck = async (newDeckId: number): Promise<boolean> => {
+  const { user_id: userId } = store.getState().authUser;
+  const requestInit = getRequestInit('PUT');
+  requestInit.body = JSON.stringify({ cur_user_deck_id: newDeckId });
+
+  const isUpdate = await fetch(`${API_INFO_URLS.users}/${userId}/profile`, requestInit)
+    .then(
+      (response): Promise<boolean> => {
+        if (response.status !== StatusCodes.OK) {
+          throw new Error();
+        }
+        return response.json();
+      },
+    )
+    .catch(error => {
+      throw new Error(error);
+    });
+
+  return isUpdate;
+};
+
+export const setClickableDeck = (
+  scene: Phaser.Scene,
+  userDeck: Deck,
+  topCard: Phaser.GameObjects.Sprite,
+): void => {
+  topCard.setInteractive();
+  topCard.on('pointerdown', () => {
+    topCard.setTint(TINT_VALUE_CLICK);
+  });
+  topCard.on('pointerup', () => {
+    const audio = scene.sound.add( AUDIO.DECK_PRESS_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
+    topCard.clearTint();
+    browserHistory.push(CURR_DECK_CHOOSE_URL);
+  });
 };
 
 const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
@@ -122,7 +168,11 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   );
 
   const userCurrDeckInfo = await getUserDeckById(user.cur_user_deck_id);
+
   const userCurrDeck = createDeck(scene, positionDeckContainer);
+  const lastCardInDeck = userCurrDeck.last;
+  setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
+  setClickableDeck(scene, userCurrDeckInfo, <Phaser.GameObjects.Sprite>lastCardInDeck);
   const userCurrDeckName = createDeckName(scene, userCurrDeckInfo, positionDeckText);
   const userCurrDeckNumber = createDeckInfo(scene, userCurrDeckInfo);
   userCurrDeck.add(userCurrDeckName);
@@ -141,8 +191,41 @@ const createInfoContainer = async (scene: Phaser.Scene): Promise<void> => {
   scene.add.container(0, 0, userInfoBLock);
 };
 
+const renderMuteButton = (scene: Phaser.Scene, isMuteOn:boolean): void =>{
+  const positionMuteCoords = {
+    X: scene.cameras.main.width - positionMute.OFFSET_X,
+    Y: positionMute.Y,
+  };
+  let image =  MENU_IMAGES.MUTE_OFF_BUTTON;
+  if (isMuteOn){
+    image = MENU_IMAGES.MUTE_ON_BUTTON;
+  }
+  const muteButton = createButton(
+    scene,
+    positionMuteCoords,
+    0,
+    ATLASES.MUTE_ON_ATLAS.NAME,
+    image,
+    HEIGHT_OFFSET,
+  );
+  muteButton.setScale(MUTE_BUTTON_SCALE);
+  muteButton.on('pointerup', () => {
+    // eslint-disable-next-line no-param-reassign
+    scene.sound.mute=!isMuteOn;
+    const userLogin = store.getState().authUser.login;
+    localStorage.setItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`, (!isMuteOn).toString());
+    muteButton.destroy();
+    renderMuteButton(scene, !isMuteOn);
+  });
+};
+
 export const create = (scene: Phaser.Scene): void => {
-  const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, { loop: true });
+  // eslint-disable-next-line no-param-reassign
+  scene.sound.pauseOnBlur = false;
+  const profileBgAudio = scene.sound.add(AUDIO.PROFILE_BG_AUDIO.NAME, {
+    loop: true,
+    volume: AUDIO_CONFIG.volume.bg,
+  });
   profileBgAudio.play();
   setBackground(scene, IMAGES.PROFILE_BACKGROUND.NAME);
 
@@ -164,8 +247,10 @@ export const create = (scene: Phaser.Scene): void => {
     profileBgAudio.stop();
     browserHistory.push(MENU_URL);
   });
-
   menuButton.setScale(BUTTON_SCALE);
+  const userLogin = store.getState().authUser.login;
+  const isMuteOn = localStorage.getItem(`${userLogin}_${IS_MUTE_ON_LS_PARAM}`) === 'true';
+  renderMuteButton(scene, isMuteOn);
 
   createInfoContainer(scene);
 };

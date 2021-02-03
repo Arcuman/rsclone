@@ -28,6 +28,11 @@ html {
   background-color: #261c17;
 }
 
+@font-face {
+  font-family: 'Potta One';
+  src: url('../assets/fonts/PottaOne-Regular.woff');
+}
+
 .nav-bar {
   display: flex;
   justify-content: space-around;
