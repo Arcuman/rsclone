@@ -10,6 +10,6 @@ export interface ResolveContextWithNext extends ResolveContext {
 }
 export interface Route {
   path: string;
-  action: (context: ResolveContext) => RouteResultResponse;
+  action: (context?: ResolveContext) => RouteResultResponse;
   children: Array<Route> | null | undefined;
 }

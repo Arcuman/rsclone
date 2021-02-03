@@ -7,29 +7,6 @@ import { ZONE_COUNT_CARDS_FIELD } from '@/components/GameBoard/Table/constants';
 
 export function preload(this: Phaser.Scene): void {}
 
-interface ConfigOfRectangle {
-  positionX: number;
-  positionY: number;
-  width: number;
-  height: number;
-  color: number;
-}
-function createConfig(
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
-  color: number,
-): ConfigOfRectangle {
-  return {
-    positionX: posX,
-    positionY: posY,
-    width,
-    height,
-    color,
-  };
-}
-
 export function damageCard(cards: Phaser.GameObjects.Container[], damagedCard: Card): void {
   cards
     .find(card => <number>card.getData(CARD_ID_FIELD) === damagedCard.id)!

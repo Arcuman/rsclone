@@ -4,11 +4,12 @@ import { deleteDeckInDeck } from '@/components/MyCardsScene/Decks/Decks.services
 import { browserHistory } from '@/router/history';
 import { createButton } from '@/components/Button/Button.services';
 import { MENU_URL } from '@/router/constants';
-import { ATLASES, MENU_IMAGES } from '@/components/Game/constant';
+import { ATLASES, MENU_IMAGES, AUDIO } from '@/components/Game/constant';
 import { createTextData } from '@/utils/utils';
-import { CURSOR_POINTER } from '@/constants/constants';
+import { CURSOR_POINTER, AUDIO_CONFIG} from '@/constants/constants';
 import { CARDS_EDIT_DECK, DECKS_EDIT_DECK } from '@/components/MyCardsScene/constants';
 import { ButtonSettings } from './Button.model';
+
 import { slidePage, choiceAction } from './Button.services';
 import { 
   arrowButton,   
@@ -106,6 +107,11 @@ export const createDeleteButton = (scene: IMyCardsScene, idItem: number, status:
   setInteractiveOnButton(deleteButtonSettings, deleteButton);
   
   deleteButton.on('pointerup', () => {
+    const audio = scene.sound.add( AUDIO.CARD_DELETE.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+   
     deleteButton.setScale(NORMAL_SCALE);
     deleteButton.clearTint();
     if (status === DECKS_EDIT_DECK) {

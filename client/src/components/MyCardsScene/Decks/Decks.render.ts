@@ -4,8 +4,15 @@ import { openDeck } from '@/components/MyCardsScene/MyCards.services';
 import { renderMyCards } from '@/components/MyCardsScene/MyCards.render';
 import { createDeck } from '@/components/Deck/Deck.render';
 import { setUserDeckWithCards } from '@/components/Deck/Deck.services';
-import { createTextData, makeDisableButton, makeEnableButton, clearDecksContainer } from '@/utils/utils';
+import {
+  createTextData,
+  makeDisableButton,
+  makeEnableButton,
+  clearDecksContainer,
+} from '@/utils/utils';
 import { store } from '@/redux/store/rootStore';
+import { AUDIO_CONFIG } from '@/constants/constants';
+import { AUDIO } from '@/components/Game/constant';
 import {
   CREATE_NEW_DECK,
   CARDS_EDIT_DECK,
@@ -30,8 +37,9 @@ const receiveDeckName = (
   scene: IMyCardsScene,
   click: Phaser.Input.InputPlugin,
   enterDown: Phaser.Input.Keyboard.Key,
-  textInput : any,
-  arrowButtonSave: ControlButton): void => {
+  textInput: Phaser.GameObjects.Text,
+  arrowButtonSave: ControlButton,
+): void => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
   const newText = textInput.text;
 
@@ -45,7 +53,7 @@ const receiveDeckName = (
 
     const newDeck = {
       user_id: userId,
-      name: <string>newText,
+      name: newText,
       isCurr: false,
       cards: [],
     };
@@ -58,13 +66,13 @@ const receiveDeckName = (
 };
 
 export const createNewDeck = (scene: IMyCardsScene): void => {
-  const { TEXT_X, TEXT_Y} = positionNewDeckName;
+  const { TEXT_X, TEXT_Y } = positionNewDeckName;
 
   const decksContainer = clearDecksContainer(scene);
 
-  const myCards = scene.getUserCards(); //
-  const myCardsContainer = scene.getMyCardsContainer(); //
-  renderMyCards(scene, NAME_CARDS, myCards, cardsPosition, myCardsContainer); //
+  const myCards = scene.getUserCards();
+  const myCardsContainer = scene.getMyCardsContainer();
+  renderMyCards(scene, NAME_CARDS, myCards, cardsPosition, myCardsContainer);
 
   scene.setstatusDecksPage(CREATE_NEW_DECK);
   scene.setCurrentPageDecks(true);
@@ -91,13 +99,16 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
     newDeckInput,
   );
 
-  textInput
-    .setOrigin(NAME_INPUT_ORIGIN, NAME_INPUT_ORIGIN)
-    .setDepth(NAME_INPUT_DEPTH);
+  textInput.setOrigin(NAME_INPUT_ORIGIN, NAME_INPUT_ORIGIN).setDepth(NAME_INPUT_DEPTH);
 
   scene.setDeckNameInput(textInput);
 
   textInput.setInteractive().on('pointerdown', () => {
+    const audio = scene.sound.add(AUDIO.DECK_INPUT_ACTIVE.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
     textInput.setText('');
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment
@@ -121,8 +132,8 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
   decksContainer.add(NameDeck);
 };
 
-export const saveNewDeck = async (scene:  IMyCardsScene ): Promise<void> => {
-  const newDeck =  scene.getNewDeck();
+export const saveNewDeck = async (scene: IMyCardsScene): Promise<void> => {
+  const newDeck = scene.getNewDeck();
 
   if (Object.keys(newDeck).length !== 0) {
     const deckId = await setUserDeckWithCards(newDeck);

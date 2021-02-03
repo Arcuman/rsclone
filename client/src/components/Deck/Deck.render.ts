@@ -21,7 +21,6 @@ export function createDeck(
   numberCard?: number,
   isInverse?: boolean,
 ): Phaser.GameObjects.Container {
-  const {IMG_X, IMG_Y} = position;
   const numberCardsInDeck = numberCard || STANDART_NUMBER_CARD;
   const deck = scene.add.container(position.IMG_X, position.IMG_Y);
   const deckSprites: Phaser.GameObjects.Sprite[] = [];

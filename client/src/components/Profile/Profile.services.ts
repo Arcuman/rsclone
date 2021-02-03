@@ -12,6 +12,7 @@ import { store } from '@/redux/store/rootStore';
 import { StatusCodes } from 'http-status-codes';
 import { countCards } from '@/components/Card/Card.services';
 import { AUDIO_CONFIG, TINT_VALUE_CLICK, IS_MUTE_ON_LS_PARAM} from '@/constants/constants';
+import { ImageState } from '@/types/types';
 import {
   textDecoration,
   positionInfo,
@@ -196,7 +197,7 @@ const renderMuteButton = (scene: Phaser.Scene, isMuteOn:boolean): void =>{
     X: scene.cameras.main.width - positionMute.OFFSET_X,
     Y: positionMute.Y,
   };
-  let image =  MENU_IMAGES.MUTE_OFF_BUTTON;
+  let image:ImageState =  MENU_IMAGES.MUTE_OFF_BUTTON;
   if (isMuteOn){
     image = MENU_IMAGES.MUTE_ON_BUTTON;
   }

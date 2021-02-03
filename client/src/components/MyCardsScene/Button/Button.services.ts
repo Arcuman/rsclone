@@ -127,6 +127,11 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
   const arrowButtonSave = scene.getArrowButton();
   
   if (name === CREATE_BUTTON ) {
+    const audio = scene.sound.add( AUDIO.DECK_CREATE.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
     createNewDeck(scene); 
   } else if ( name === EDIT_BUTTON) {
     if (currentPageDecks === false) {
@@ -137,9 +142,14 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
       renderDecksBlock(scene);
     }
   } else if ( name === DONE_BUTTON) {
+    const audio = scene.sound.add( AUDIO.DECK_SAVE.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
+    audio.play();
+
     if (currentPageDecks === false) {
       if (statusDecksPage === CREATE_NEW_DECK) {
-        //    
+        //   
       } else if ( statusDecksPage === CARDS_VIEW_DECK ) {
         makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
         scene.setCurrentPageDecks(true);

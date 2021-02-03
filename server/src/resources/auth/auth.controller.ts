@@ -21,7 +21,7 @@ import { AuthUser } from './auth.model';
 
 const LocalStrategy = require('passport-local').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 passport.use(
   'local',
   new LocalStrategy(
@@ -29,7 +29,7 @@ passport.use(
       usernameField: AUTH_FORM_FIELDS.usernameField,
       passwordField: AUTH_FORM_FIELDS.passwordField,
     },
-    async (username: string, password: string, done: any) => {
+    async (username: string, password: string, done: any)=> {
       try {
         const user = await usersService.checkUserAuth(username, password);
 
@@ -46,7 +46,7 @@ passport.use(
     },
   ),
 );
-
+// @typescript-eslint/no-explicit-any
 passport.use(
   'bearer',
   new BearerStrategy(async (token: string, done: any) => {

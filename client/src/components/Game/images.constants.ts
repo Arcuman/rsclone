@@ -1,3 +1,5 @@
+import {menuImages} from '@/types/types';
+
 export const IMAGES = {
   MENU_BACKGROUND: {
     NAME: 'menu-background',
@@ -133,7 +135,7 @@ export const IMAGES = {
   },
 };
 
-export const MENU_IMAGES = {
+export const MENU_IMAGES:menuImages = {
   MENU_START_GAME: {
     IDLE: 'start-game-button-ru.png',
     HOVER: 'start-game-button-hover-ru.png',

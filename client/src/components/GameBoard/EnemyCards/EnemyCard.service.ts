@@ -5,7 +5,7 @@ import { IGameBoardScene } from '@/components/GameBoard/GameBoard.model';
 import { IMAGE_CARD_SIZE } from '@/components/Card/constants';
 import { ENEMY_CARD } from '@/components/GameBoard/EnemyCards/constant';
 
-export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: boolean) {
+export function onHandCardPlay(scene: IGameBoardScene, card: Card, isPlayerOne: boolean):void {
   if (scene.getIsPlayerOne() !== isPlayerOne) {
     scene.getEnemyCards().pop()!.destroy();
 

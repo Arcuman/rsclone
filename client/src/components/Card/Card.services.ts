@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Phaser from 'phaser';
 import { StatusCodes } from 'http-status-codes';
 import { getRequestInit, API_INFO_URLS } from '@/services/api.services';
@@ -26,7 +25,8 @@ import {
   CARD_ID_FIELD,
   CARD_MANA_FIELD,
   SIZE_TINY_CARD,
-  CARD_IS_PLAYED_FIELD, MAX_TABLE_SIZE,
+  CARD_IS_PLAYED_FIELD,
+  MAX_TABLE_SIZE,
 } from './constants';
 import { Card } from './Card.model';
 
@@ -91,14 +91,18 @@ export const setScalableCard = (
   cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
     cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     cardContainer.setDepth(DEPTH_CLICK_CARD);
   });
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
     cardAudio.play();
     cardContainer.setScale(scale);
     cardContainer.setDepth(DEPTH_NORMAL_CARD);
@@ -114,7 +118,9 @@ export const setScalableCardInContainer = (
   cardContainer.setInteractive({ cursor: CURSOR_POINTER });
   cardContainer.removeListener('pointerover');
   cardContainer.on('pointerover', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
+    const cardAudio = scene.sound.add(AUDIO.CARD_OVER_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
     cardAudio.play();
     cardContainer.setScale(SIZE_NORMAL_CARD);
     generalСontainer.bringToTop(cardContainer);
@@ -122,11 +128,13 @@ export const setScalableCardInContainer = (
 
   cardContainer.removeListener('pointerout');
   cardContainer.on('pointerout', () => {
-    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {volume: AUDIO_CONFIG.volume.card});
+    const cardAudio = scene.sound.add(AUDIO.CARD_AWAY_AUDIO.NAME, {
+      volume: AUDIO_CONFIG.volume.card,
+    });
     cardAudio.play();
     cardContainer.setScale(scale);
   });
-  
+
   cardContainer.on('pointerdown', () => {
     addCardInDeck(scene, cardContainer);
   });
@@ -188,6 +196,7 @@ export const setDropEventOnTableCard = (
   );
 
   cardContainer.removeListener('dragend');
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
@@ -204,8 +213,10 @@ export const setDropEventOnHandCard = (
   cardContainer.on(
     'drop',
     (pointer: Phaser.GameObjects.GameObject, dropZone: Phaser.GameObjects.Zone) => {
-      if (scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne()
-        || <number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD)  === MAX_TABLE_SIZE) {
+      if (
+        scene.getEndTurnButton().getData(IS_PLAYER_ONE_TURN_FIELD) !== scene.getIsPlayerOne() ||
+        <number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD) === MAX_TABLE_SIZE
+      ) {
         setStartDragCoordinates(cardContainer);
         return;
       }
@@ -225,10 +236,21 @@ export const setDropEventOnHandCard = (
       const socket = scene.getSocket();
       socket.emit(HAND_CARD_PLAY, cardContainer.getData(CARD_ID_FIELD));
 
-      scene.setPlayerMana(
+      const newMana =
         <number>scene.getPlayerMana().getData(MANA_COUNT_FIELD) -
-          <number>cardContainer.getData(CARD_MANA_FIELD),
-      );
+        <number>cardContainer.getData(CARD_MANA_FIELD);
+
+      let audioManaName;
+      if (newMana > 0) {
+        audioManaName = AUDIO.MANA_EXPEND.NAME;
+      } else {
+        audioManaName = AUDIO.MANA_EMPTY.NAME;
+      }
+      
+      const audio = scene.sound.add(audioManaName, { volume: AUDIO_CONFIG.volume.button });
+      audio.play();
+
+      scene.setPlayerMana(newMana);
 
       const deletedIndexCard = scene
         .getPlayerCards()
@@ -259,10 +281,15 @@ export const setDraggableCard = (
   cardContainer.on(
     'dragend',
     (pointer: Phaser.GameObjects.GameObject, dragX: number, dragY: number, dropped: boolean) => {
-      console.log(<number>scene.getPlayerTableZone().getData(ZONE_COUNT_CARDS_FIELD));
-      if (!dropped ) {
+      if (!dropped) {
         setStartDragCoordinates(cardContainer);
-      } else if (scene.getPlayerTableCards().findIndex((card)=> card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD)) !== -1 ){
+      } else if (
+        scene
+          .getPlayerTableCards()
+          .findIndex(
+            card => card.getData(CARD_ID_FIELD) === cardContainer.getData(CARD_ID_FIELD),
+          ) !== -1
+      ) {
         setDropEventOnTableCard(scene, cardContainer);
       }
     },

@@ -73,4 +73,5 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getWarningMessage():  Phaser.GameObjects.Text;
   setWarningMessage(value:  Phaser.GameObjects.Text): void;
+  
 }

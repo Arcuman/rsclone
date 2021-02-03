@@ -69,27 +69,21 @@ export function createBaseCard(data: CardCreateInfo): Phaser.GameObjects.Contain
 
     cardContainer.setData(CARD_HEALTH_FIELD, card.health);
     cardContainer.setData(CARD_IS_ACTIVE_FIELD, card.isActive);
-    cardContainer.on(
-      `changedata-${CARD_HEALTH_FIELD}`,
-      (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
-        textHealth.setText(cardContainer.getData(CARD_HEALTH_FIELD));
-      },
-    );
+    cardContainer.on(`changedata-${CARD_HEALTH_FIELD}`, () => {
+      textHealth.setText(cardContainer.getData(CARD_HEALTH_FIELD));
+    });
   }
   cardContainer.setData(CARD_ID_FIELD, card.id);
   cardContainer.setData(CARD_MANA_FIELD, card.manaCost);
   cardContainer.setData(CARD_IS_PLAYED_FIELD, CARD_IS_PLAYED_FIELD_INIT);
 
-  cardContainer.on(
-    `changedata-${CARD_IS_PLAYED_FIELD}`,
-    (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
-      if (cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
-        scene.input.setDraggable(cardContainer, false);
-      } else {
-        scene.input.setDraggable(cardContainer);
-      }
-    },
-  );
+  cardContainer.on(`changedata-${CARD_IS_PLAYED_FIELD}`, () => {
+    if (cardContainer.getData(CARD_IS_PLAYED_FIELD)) {
+      scene.input.setDraggable(cardContainer, false);
+    } else {
+      scene.input.setDraggable(cardContainer);
+    }
+  });
 
   cardContainer.setSize(spriteCard.width, spriteCard.height);
   cardContainer.setScale(SIZE_LITTLE_CARD);
@@ -113,6 +107,7 @@ export function createScalableCard(data: CardCreateInfo): Phaser.GameObjects.Con
   cardContainer.setScale(SIZE_TINY_CARD);
   return cardContainer;
 }
+
 export function createLargeScalableCard(data: CardCreateInfo): Phaser.GameObjects.Container {
   const cardContainer = createBaseCard(data);
   setScalableCard(data.scene, cardContainer, SIZE_LARGE_CARD);

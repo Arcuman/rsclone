@@ -38,12 +38,9 @@ export const createAvatar = (data: AvatarCreateInfo): Phaser.GameObjects.Contain
   const cardContainer: Phaser.GameObjects.Container = scene.add.container(posX, posY, avatarLayers);
 
   cardContainer.setData(PLAYER_HEALTH_FIELD, health);
-  cardContainer.on(
-    'changedata',
-    (gameObject: Phaser.GameObjects.Text, key: string, value: string) => {
-      textHealth.setText(cardContainer.getData(PLAYER_HEALTH_FIELD));
-    },
-  );
+  cardContainer.on('changedata', () => {
+    textHealth.setText(cardContainer.getData(PLAYER_HEALTH_FIELD));
+  });
   cardContainer.setSize(spriteCard.width, spriteCard.height);
   cardContainer.setScale(SIZE_AVATAR, SIZE_AVATAR);
   return cardContainer;
