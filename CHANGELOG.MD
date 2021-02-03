@@ -1,4 +1,4 @@
-## 3 Feb, 2021 
+## [commit](https://github.com/Arcuman/rsclone/tree/a11f38f507ffc7a14a513e25d4ec757b3d91ea56) on 3 Feb, 2021 
 ### Added
 @Ilya-Baklanov
 - added mana crystal
@@ -11,7 +11,7 @@
 - write instruction for start
 - add database dump
 
-## 31 Jan- 2 Feb, 2021 ##
+##  [commit](https://github.com/Arcuman/rsclone/tree/b099cb2384dbc09525acff47d1b14dc6820fb04e) on 31 Jan- 2 Feb, 2021 ##
 
 ### Added
 @annastartseva
