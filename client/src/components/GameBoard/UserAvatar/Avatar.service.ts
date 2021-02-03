@@ -10,7 +10,7 @@ export function createEnemyAvatar(
   health: number,
 ): Phaser.GameObjects.Container {
   const { ENEMY_X, ENEMY_Y } = avatarPosition;
-  const cardImg = IMAGES.AVATAR.NAME;
+  const cardImg = IMAGES.ENEMY_AVATAR.NAME;
   const enemyAvatar = createAvatar({
     scene,
     posX: ENEMY_X,
