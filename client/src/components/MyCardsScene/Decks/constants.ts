@@ -4,22 +4,22 @@ import { NewDeckInput } from './Decks.model';
 
 export const positionNewDeck: PositionDeckContainer = {
   IMG_X: 105,
-  IMG_Y: 0,
+  IMG_Y: 30,
 };
 
 export const positionDeckName: PositionText = {
   TEXT_X: -30,
-  TEXT_Y: 70,
+  TEXT_Y: 90,
 };
 
 export const positionNewDeckName: PositionText = {
   TEXT_X: -30,
-  TEXT_Y: 90,
+  TEXT_Y: 140,
 };
 
 export const positionNewDeckInput: PositionText = {
   TEXT_X: 1200,
-  TEXT_Y: 350,
+  TEXT_Y: 400,
 };
 
 export const newDeckText: TextDecoration = {

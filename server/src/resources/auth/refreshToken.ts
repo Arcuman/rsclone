@@ -31,7 +31,7 @@ export const createCookieData = (value: string): Cookie => ({
   value,
   options: {
     // локальное
-    domain:'localhost',
+    domain: 'localhost',
     //
     path: '/',
     maxAge: getRefTokenExpiresInMilliseconds(),
@@ -42,7 +42,7 @@ export const createCookieData = (value: string): Cookie => ({
     signed: false,
     // для heroku
     // sameSite: 'none',
-    sameSite:true,
+    sameSite: true,
   },
 });
 

@@ -21,6 +21,16 @@ export interface StateCardsOfDecks {
   TOTAL_PAGE: number;
 }
 
+export interface ControlButton {
+  DECKS_LEFT: Phaser.GameObjects.Image | null;
+  DECKS_RIGHT: Phaser.GameObjects.Image | null;
+  CARDS_RIGHT: Phaser.GameObjects.Image | null;
+  CARDS_LEFT: Phaser.GameObjects.Image | null;
+  CREATE_BUTTON: Phaser.GameObjects.Image | null;
+  EDIT_BUTTON: Phaser.GameObjects.Image | null;
+  DONE_BUTTON: Phaser.GameObjects.Image | null;
+}
+
 export interface IMyCardsScene extends Phaser.Scene{
   getUserCards(): Card[];
   setUserCards(value: Card[]): void;
@@ -39,4 +49,28 @@ export interface IMyCardsScene extends Phaser.Scene{
 
   getStateCardsOfDecks(): StateCardsOfDecks;
   setStateCardsOfDecks(value: StateCardsOfDecks): void;
+
+  getCurrentPageDecks(): boolean;
+  setCurrentPageDecks(value: boolean): void;
+
+  getArrowButton(): ControlButton;
+  setArrowButton(value: ControlButton): void;
+
+  getstatusDecksPage(): string;
+  setstatusDecksPage(value: string): void;
+
+  getNewDeck(): Deck;
+  setNewDeck(value: Deck): void;
+
+  getOpenDeckId(): number;
+  setOpenDeckId(value: number): void; 
+
+  getDeckNameInput():  Phaser.GameObjects.Text;
+  setDeckNameInput(value:  Phaser.GameObjects.Text): void;
+
+  getNewCardsArray():  Card[];
+  setNewCardsArray(value:  Card[]): void;
+
+  getWarningMessage():  Phaser.GameObjects.Text;
+  setWarningMessage(value:  Phaser.GameObjects.Text): void;
 }

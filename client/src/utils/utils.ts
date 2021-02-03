@@ -1,5 +1,9 @@
 import { TextDecoration } from '@/types/types';
 import Phaser from 'phaser';
+import { TINT_VALUE_DISABLE } from '@/constants/constants';
+import { IMyCardsScene } from '@/components/MyCardsScene/MyCards.model';
+import { renderContainer } from '@/components/MyCardsScene/MyCards.render';
+import { NAME_DECKS, decksContainerPosition, cardsContainerPosition, NAME_CARDS } from '@/components/MyCardsScene/constants';
 
 export function deleteOldMain(): void {
   const oldMain: HTMLElement | null = document.body.querySelector('.main');
@@ -74,4 +78,32 @@ export const setShadow = (
   shadow.alpha = alphaValue;
 
   return shadow;
+};
+
+export const makeDisableButton = (button: Phaser.GameObjects.Image): void => {
+  button.disableInteractive();
+  button.setTint(TINT_VALUE_DISABLE);
+};
+
+export const makeEnableButton = (button: Phaser.GameObjects.Image): void => {
+  button.setInteractive();
+  button.clearTint();
+};
+
+export const clearDecksContainer = (scene:  IMyCardsScene): Phaser.GameObjects.Container => {
+  const decksContainerOld = scene.getDecksContainer();
+  decksContainerOld.destroy();
+  const decksContainer = renderContainer(scene, NAME_DECKS, decksContainerPosition);
+  scene.setDecksContainer(decksContainer);
+
+  return decksContainer;
+};
+
+export const clearCardsContainer = (scene:  IMyCardsScene): Phaser.GameObjects.Container => {
+  const cardsContainerOld = scene.getMyCardsContainer();
+  cardsContainerOld.destroy();
+  const myCardsContainer = renderContainer(scene, NAME_CARDS, cardsContainerPosition);
+  scene.setMyCardsContainer(myCardsContainer);
+
+  return myCardsContainer;
 };

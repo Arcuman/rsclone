@@ -5,6 +5,7 @@ import { setColoredDeck, setClickableDeck } from '@/components/Deck/Deck.service
 import { createDeck, createDeckName } from '@/components/Deck/Deck.render';
 import { Deck } from '@/components/Deck/Deck.model';
 import { createDeleteButton } from '@/components/MyCardsScene/Button/Button.render';
+import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 import { 
   CARDS_POS_UP_Y,
   CARDS_POS_DOWN_Y,
@@ -21,8 +22,10 @@ import {
   NUMBER_CARDS_ON_PAGE,
   decksPosition,
   ORIGIN_HALF,
+  CARDS_EDIT_DECK,
+  DECKS_VIEW_DECK,
+  DECKS_EDIT_DECK,
 } from './constants';
-import { CardsPosition, CardsContainerPosition, IMyCardsScene } from './MyCards.model';
 
 function getPositionY(index: number, name: string): number {
   const weightId = Math.floor(index / NUMBER_CARDS_IN_ROW);
@@ -73,7 +76,6 @@ export const renderMyCards = (
   cardsPositionInfo: CardsPosition,
   cardsContainer: Phaser.GameObjects.Container,
 ): void => {
-  let cardsOnOnePage = [];
   let currentPage = 1;
   if (name === NAME_DECKS) {
     const stateCardsOfDecks = scene.getStateCardsOfDecks();
@@ -81,7 +83,7 @@ export const renderMyCards = (
   } else if (name === NAME_CARDS) {
     currentPage = scene.getMyCardsCurrentPage();
   }
-  cardsOnOnePage = allCards.filter((item, id) =>
+  const cardsOnOnePage = allCards.filter((item, id) =>
     id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
       ? item
       : '',
@@ -97,15 +99,18 @@ export const renderMyCards = (
       card: item,
     });
     card.setScale(CARDS_SCALE, CARDS_SCALE);
-
-    if (name === NAME_DECKS) {
-      const deleteButton = createDeleteButton(scene, item.id);
+    card.name = item.name;
+    
+    if (name === NAME_DECKS && scene.getstatusDecksPage() === CARDS_EDIT_DECK) {
+      const deleteButton = createDeleteButton(scene, item.id, CARDS_EDIT_DECK);
       card.add(deleteButton);
     }
     
     cardsContainer.add(card);
-   
-    setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
+
+    if (scene.getstatusDecksPage() !== CARDS_EDIT_DECK) {
+      setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
+    }
   });
 };
 
@@ -114,15 +119,30 @@ export const renderDeck = (
   userDecks: Deck[],
   decksContainer: Phaser.GameObjects.Container,
 ): void => {
-  userDecks.forEach((item, id) => {    
+  const statusDecksPage = scene.getstatusDecksPage();
+  const stateCardsOfDecks = scene.getStateCardsOfDecks();
+  const currentPage = stateCardsOfDecks.CURRENT_PAGE;
+  const cardsOnOnePage = userDecks.filter((item, id) =>
+    id >= NUMBER_CARDS_ON_PAGE * (currentPage - 1) && id < NUMBER_CARDS_ON_PAGE * currentPage
+      ? item
+      : '',
+  );
+  
+  cardsOnOnePage.forEach((item, id) => {    
     const posX = getPositionX(id, decksPosition);
     const posY = getPositionY(id, NAME_DECKS);
     
     const userDeck = createDeck(scene, {IMG_X: posX, IMG_Y: posY}, NUMBER_CARDS_IN_DECK);
     const lastCardInDeck = userDeck.last;
     setColoredDeck(scene, <Phaser.GameObjects.Sprite>lastCardInDeck);
-
-    setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
+    
+    if ( statusDecksPage === DECKS_VIEW_DECK ) {
+      setClickableDeck(scene, item, <Phaser.GameObjects.Sprite>lastCardInDeck, TINT_VALUE_CLICK);
+    } else if ( statusDecksPage === DECKS_EDIT_DECK) {
+      const deleteButton = createDeleteButton(scene, <number>item.user_deck_id, DECKS_EDIT_DECK);
+      userDeck.add(deleteButton);
+    }
+   
     const namePosX = decksContainer.width + NAME_OFFSET_X;
     const userDeckName = createDeckName(scene, item, {TEXT_X: namePosX, TEXT_Y: NAME_POS_Y} ).setOrigin(ORIGIN_HALF, ORIGIN_HALF);
 
