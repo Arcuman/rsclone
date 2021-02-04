@@ -29,6 +29,7 @@ import {
   WARNING_MAX_CARDS,
   WARNING_ADD_CARDS,
   WARNING_EMPTY,
+  WARNING_DUPLICATE,
 } from './constants';
 
 export const openDeck = async (scene: IMyCardsScene, userDeck: Deck): Promise<void> => {
@@ -194,8 +195,7 @@ export const deleteCardFromDeck = (scene: IMyCardsScene, idCard: number): void =
 export const addCardInDeck = (
   scene: IMyCardsScene,
   cardContainer: Phaser.GameObjects.Container,
-): void => {
-
+): void => {  
   if (scene.getstatusDecksPage() === CARDS_EDIT_DECK && !scene.getCurrentPageDecks()) {
     const cardName = cardContainer.name;
     const userCards = scene.getUserCards();
@@ -206,17 +206,16 @@ export const addCardInDeck = (
 
     if (newCards.length < 10) {
       const haveCard = newCards.find(item => item.id === card.id);
-
-      if (!haveCard) {
+     
+      if (!haveCard) {       
         newCards.push(card);
 
         const audio = scene.sound.add( AUDIO.CARD_DROP_AUDIO.NAME, {
           volume: AUDIO_CONFIG.volume.card,
         });
-        audio.play();
-         
-      } else {
-        warningMessage.text = 'Такая карта уже есть в колоде. \n  Выберите другую карту.';
+        audio.play();         
+      } else {       
+        warningMessage.text = WARNING_DUPLICATE;
         setTimeout( () => {
           warningMessage.text = WARNING_EMPTY;
         }, 3000);

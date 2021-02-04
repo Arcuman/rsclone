@@ -108,11 +108,7 @@ export const renderMyCards = (
     
     cardsContainer.add(card);
 
-    if (scene.getstatusDecksPage() !== CARDS_EDIT_DECK) {
-      setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
-    }
-
-    if (name === NAME_CARDS) {
+    if (scene.getstatusDecksPage() !== CARDS_EDIT_DECK || name === NAME_CARDS) {
       setScalableCardInContainer(scene, card, CARDS_SCALE, cardsContainer);
     }
   });

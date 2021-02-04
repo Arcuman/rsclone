@@ -107,15 +107,15 @@ export const createNewDeck = (scene: IMyCardsScene): void => {
       volume: AUDIO_CONFIG.volume.card,
     });
     audio.play();
-
+   
     textInput.setText('');
-
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment
     // @ts-ignore
     const editor = scene.rexUI.edit(textInput);
+    
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unused-expressions
     editor.inputText.node;
-
+   
     const enterDown = scene.input.keyboard.addKey('Enter');
 
     const click = scene.input.addListener('pointerup', () => {
@@ -140,10 +140,10 @@ export const saveNewDeck = async (scene: IMyCardsScene): Promise<void> => {
 
     scene.setCurrentPageDecks(false);
     scene.setstatusDecksPage(CARDS_EDIT_DECK);
-
+    
     const textInput = scene.getDeckNameInput();
-    textInput.destroy();
-
+    textInput.destroy();   
+    
     const arrowButtonSave = scene.getArrowButton();
     makeDisableButton(<Phaser.GameObjects.Image>arrowButtonSave.DONE_BUTTON);
 

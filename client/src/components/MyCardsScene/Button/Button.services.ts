@@ -148,9 +148,7 @@ export const choiceAction = (scene:  IMyCardsScene, name: string): void => {
     audio.play();
 
     if (currentPageDecks === false) {
-      if (statusDecksPage === CREATE_NEW_DECK) {
-        //   
-      } else if ( statusDecksPage === CARDS_VIEW_DECK ) {
+      if ( statusDecksPage === CARDS_VIEW_DECK ) {
         makeEnableButton(<Phaser.GameObjects.Image>arrowButtonSave.CREATE_BUTTON);
         scene.setCurrentPageDecks(true);
         scene.setstatusDecksPage(DECKS_VIEW_DECK);
