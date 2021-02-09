@@ -1,0 +1,790 @@
+openapi: 3.0.0
+info:
+  title:  Card Game
+  description: Card game with heroes and magic
+  version: 1.0.0
+
+servers:
+  - url: /
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        name:
+          type: string
+        login:
+          type: string
+    UserProfile:
+      type: object
+      properties:
+        profile_id:
+          type: integer
+        user_id:
+          type: integer
+        nickName:
+          type: string
+        level_id:
+          type: integer
+        exp:
+          type: integer
+        cur_user_deck_id:
+          type: integer
+    Deck:
+      type: object
+      properties:
+        user_deck_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+        isinitial:
+          type: boolean
+        cards_count:
+          type: integer
+        cards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Card"
+    DeckInfo:
+      type: object
+      properties:
+        user_deck_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+        isinitial:
+          type: boolean
+        cards_count:
+          type: integer
+    Card:
+      required:
+        - title
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        attack:
+          type: integer
+        manaCost:
+          type: integer
+        health: 
+          type: integer
+        isinitial:
+          type: boolean
+        isActive:
+          type: boolean
+        image:
+          type: string
+    Level:
+      type: object
+      properties:
+        level_id:
+          type: integer
+        level:
+          type: integer
+        exp_to_lvl:
+          type: integer
+        exp_total:
+          type: integer
+          
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: Gets all users (remove password from response)
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Creates a new user (remove password from response)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                  description: The user's name
+                login:
+                  type: string
+                  description: The user's login
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - name
+      responses:
+        200:
+          description: The user has been created.
+          content: 
+            text/json:
+              schema:
+                type: integer
+                title: user_id
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: Gets a user by ID
+        e.g. “/users/123” (remove password from response)
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: User not found
+    put:
+      tags:
+        - Users
+      summary: Update a user
+      description: Updates a user by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                  description: The user's name
+                login:
+                  type: string
+                  description: The user's login
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - name
+      responses:
+        200:
+          description: The user has been updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Deletes user by ID. 
+      responses:
+        204:
+          description: The user has been deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: User not found
+  /users/{userId}/profile:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Users
+      summary: Get user profile
+      description: Gets a user profile by user ID
+        e.g. “/users/123/profile”
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: User not found
+    put:
+      tags:
+        - Users
+      summary: Update  user's profile
+      description: Updates user's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                nickName:
+                  type: string
+                level_id:
+                  type: integer
+                exp:
+                  type: integer
+                cur_user_deck_id:
+                  type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /decks:
+    get:
+      tags:
+        - Decks
+      summary: Get all decks
+      description: Returns all decks
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeckInfo"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Decks
+      summary: Create deck
+      description: Creates a new deck, user_id get from Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                isinitial:
+                  type: boolean
+                cards:
+                  type: array
+                  items:
+                    type: object
+                    title: cardId
+                    properties:
+                      id:
+                        type: integer
+              required:
+                - user_id
+                - name
+      responses:
+        200:
+          description: The deck has been created.
+          content:
+             text/json:
+              schema:
+                type: integer
+                title: user_id
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /decks/{deckId}:
+    parameters:
+      - name: deckId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Decks
+      summary: Get deck by id
+      description: Gets the Deck by ID (e.g. “/decks/123”)
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deck"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Deck not found
+    put:
+      tags:
+        - Decks
+      summary: Update deck
+      description: Updates a Deck by ID. user_id get from Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                isinitial:
+                  type: boolean
+                cards:
+                  type: array
+                  items:
+                    type: object
+                    title: cardId
+                    properties:
+                      id:
+                        type: integer
+              required:
+                - user_id
+                - name
+      responses:
+        200:
+          description: The board has been updated.
+          content:
+             text/json:
+              schema:
+                $ref: "#/components/schemas/Deck"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Decks
+      summary: Delete deck
+      description: Deletes a Deck by ID.
+        
+      responses:
+        204:
+          description: The deck has been deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Deck not found
+  /cards:
+    get:
+      tags:
+        - Card
+      summary: Get all user's cards, data of user get from Authorization
+      description: Returns all user's cards
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Card
+      summary: Create a new card
+      description: Create a new card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                  description: The card's name
+                attack:
+                  type: integer
+                  description: The card's attack value
+                manaCost:
+                  type: integer
+                  description: The card's manaCost value
+                health:
+                  type: integer
+                  description: The card's health value
+                isinitial:
+                  type: boolean
+                  description: Is card is initial. Used for creating first(initial) deck for new User.
+                isActive:
+                  type: boolean
+                  description: Is card is active. Not active card has only manaCost and doesn't lay on table board in game.
+                image:
+                  type: string
+                  description: The card's image
+              required:
+                - name
+                - attack
+                - manaCost
+                - health
+                - isActive
+                
+      responses:
+        200:
+          description: The card has been created.
+          content:
+            application/json:
+              schema:
+                type: integer
+                title: card_id           
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /cards/all:
+    get:
+      tags:
+        - Card
+      summary: Get all cards
+      description: Get all cards
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /cards/{cardId}:
+    parameters:
+      - name: cardId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Card
+      summary: Get card by id
+      description: Gets the Card by id (e.g. “/cards/123”)
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Card not found  
+    put:
+      tags:
+        - Card
+      summary: Update Card
+      description: Updates the Card by id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string
+                  description: The card's name
+                attack:
+                  type: integer
+                  description: The card's attack value
+                manaCost:
+                  type: integer
+                  description: The card's manaCost value
+                health:
+                  type: integer
+                  description: The card's health value
+                isinitial:
+                  type: boolean
+                  description: Is card is initial. Used for creating first(initial) deck for new User.
+                isActive:
+                  type: boolean
+                  description: Is card is active. Not active card has only manaCost and doesn't lay on table board in game.
+                image:
+                  type: string
+                  description: The card's image
+              required:
+                - name
+                - attack
+                - manaCost
+                - health
+                - isActive
+      responses:
+        200:
+          description: The card has been updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Card not found
+    delete:
+      tags:
+        - Card
+      summary: Delete Card
+      description: Deletes Card by id.
+      responses:
+        204:
+          description: The card has been deleted
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Card not found
+  /level/{levelId}:
+    parameters:
+      - name: levelId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Level
+      summary: Get level by ID
+      description: Gets a level by ID
+        e.g. “/level/123”
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Level"
+        400:
+          description: Bad request
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: Level not found
+  /login:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Login
+      description: Logins a user and returns a JWT-token, create refresh token session, set refresh token in http-only cookie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+                password:
+                  type: string
+                  description: Password
+              required:
+                - user
+                - login
+      responses:
+        200:
+          description: Successful login.
+          content:
+            application/json:
+              schema:
+                type: object
+                title: example   
+                properties:
+                  user:
+                    type: object
+                    description: User data
+                    properties:
+                      user_id:
+                        type: integer
+                        description: User id
+                      login:
+                        type: string
+                        description: User login
+                      name:
+                        type: string
+                        description: User name
+                  accessToken:
+                    type: string
+                    description: JWT Access Token
+        403:
+          description: Forbidden. Bad login/password combination
+  /logout:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Logout
+      description: Logout user and delete refresh token session, send empty cookie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+              required:
+                - login
+      responses:
+        200:
+          description: Successful logout.
+        400:
+          description: Bad Request. Login doesn't exist
+  /register:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Register
+      description: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+                name:
+                  type: string
+                  description: User nickName
+                password:
+                  type: string
+                  description: Password
+              required:
+                - name
+                - login
+                - password
+      responses:
+        200:
+          description: The user has been created.
+        400:
+          description: Bad Request.
+        403:
+          description: Incorrect login or password
+        460:
+          description: Login already exists
+  /refresh-tokens:
+    post:
+      tags:
+        - Auth
+      security:
+        []
+      summary: Refresh user tokens information
+      description: Refresh user tokens information. Get refresh token from Cookie. Delete old refresh token session. Create refresh token session. Send new access token, set in http-only cookie new refresh token.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+      responses:
+        200:
+          description: All new auth data create and send successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                title: example   
+                properties:
+                  user:
+                    type: object
+                    description: User data
+                    properties:
+                      user_id:
+                        type: integer
+                        description: User id
+                      login:
+                        type: string
+                        description: User login
+                      name:
+                        type: string
+                        description: User name
+                  accessToken:
+                    type: string
+                    description: JWT Access Token
+        400:
+          description: Bad Request.

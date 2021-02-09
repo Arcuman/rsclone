@@ -1,0 +1,59 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "createDefaultProgram": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {    
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        }
+      }
+    ],
+    "@typescript-eslint/quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "@typescript-eslint/semi": ["error", "always"],
+    "comma-dangle": ["error", "always-multiline"],
+    "max-classes-per-file": "off",
+    "no-console": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-redeclare": "error",
+    "no-return-await": "error",
+    "prefer-const": "error",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-floating-promises": 0,
+    "import/prefer-default-export": "off",
+    "no-non-null-assertion": "off",
+    "@typescript-eslint/no-non-null-assertion": 0
+  }
+}

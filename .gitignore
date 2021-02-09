@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+dist/
+build/
+.idea/
+.vscode/
+.env
+.env.local
+remoute.env
+logs
+debug.log
+client/src/assets/audio.zip

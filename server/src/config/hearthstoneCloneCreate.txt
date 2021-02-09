@@ -1,0 +1,160 @@
+-- Database: hearthstoneClone
+
+DROP DATABASE "hearthstoneClone";
+DROP TABLE public."Users";
+DROP TABLE public."UserProfiles";
+DROP TABLE public."UserDecks";
+DROP TABLE public."Cards";
+DROP TABLE public."UserCards";
+DROP TABLE public."UserDeckCards";
+DROP TABLE public."Effects";
+DROP TABLE public."CardEffects";
+
+CREATE DATABASE "hearthstoneClone"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+CREATE TABLE public."Users"
+(
+    user_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    login character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "Users_pkey" PRIMARY KEY (user_id)
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Users"
+    OWNER to postgres;
+	
+	
+CREATE TABLE public."UserProfiles"
+(
+    user_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "nickName" character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    level integer NOT NULL DEFAULT 1,
+    exp integer NOT NULL DEFAULT 0,
+    cur_user_deck_id integer,
+    CONSTRAINT "UserProfiles_pkey" PRIMARY KEY (user_id),
+    CONSTRAINT "UserProfiles_user_id_fkey" FOREIGN KEY (user_id)
+        REFERENCES public."Users" (user_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."UserProfiles"
+    OWNER to postgres;
+	
+CREATE TABLE public."UserDecks"
+(
+    user_deck_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    user_id integer NOT NULL,
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "UserDecks_pkey" PRIMARY KEY (user_deck_id),
+    CONSTRAINT "UserDecks_user_id_fkey" FOREIGN KEY (user_id)
+        REFERENCES public."UserProfiles" (user_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."UserDecks"
+    OWNER to postgres;
+
+CREATE TABLE public."Cards"
+(
+    card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "isActive" boolean NOT NULL,
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    attack integer NOT NULL,
+    manacost integer NOT NULL,
+    health integer NOT NULL,
+    CONSTRAINT "Cards_pkey" PRIMARY KEY (card_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Cards"
+    OWNER to postgres;
+	
+CREATE TABLE public."UserCards"
+(
+    user_card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    card_id integer NOT NULL,
+    user_id integer NOT NULL,
+    CONSTRAINT "UserCards_pkey" PRIMARY KEY (user_card_id),
+    CONSTRAINT "UserCards_card_id_fkey" FOREIGN KEY (card_id)
+        REFERENCES public."Cards" (card_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT "UserCards_user_id_fkey" FOREIGN KEY (user_id)
+        REFERENCES public."UserProfiles" (user_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."UserCards"
+    OWNER to postgres;
+	
+CREATE TABLE public."UserDeckCards"
+(
+    user_deck_card_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    card_id integer NOT NULL,
+    user_deck_id integer NOT NULL,
+    CONSTRAINT "UserDeckCards_pkey" PRIMARY KEY (user_deck_card_id),
+    CONSTRAINT "UserDeckCards_card_id_fkey" FOREIGN KEY (card_id)
+        REFERENCES public."Cards" (card_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT "UserDeckCards_user_deck_id_fkey" FOREIGN KEY (user_deck_id)
+        REFERENCES public."UserDecks" (user_deck_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."UserDeckCards"
+    OWNER to postgres;
+	
+CREATE TABLE public."Effects"
+(
+    effect_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    name character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "Effects_pkey" PRIMARY KEY (effect_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Effects"
+    OWNER to postgres;
+
+CREATE TABLE public."CardEffects"
+(
+    card_effect_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    card_id integer NOT NULL,
+    effect_id integer NOT NULL,
+    CONSTRAINT "CardEffects_pkey" PRIMARY KEY (card_effect_id),
+    CONSTRAINT "CardEffects_card_id_fkey" FOREIGN KEY (card_id)
+        REFERENCES public."Cards" (card_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT "CardEffects_effect_id_fkey" FOREIGN KEY (effect_id)
+        REFERENCES public."Effects" (effect_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."CardEffects"
+    OWNER to postgres;
